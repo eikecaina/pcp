@@ -1,92 +1,145 @@
-# WTPC-Frontend
+# Boilerplate WMO Next.js
 
+## 📝 Table of Contents
 
+- [About](#about)
+- [Getting Started](#getting-started)
 
-## Getting started
+## 🧐 About
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+Este é o projeto base (boilerplate) de desenvolvimento de aplicações web criado pela Seção de Otimização e Automatização de Processos (SOAP) do Departamento de Pesquisa e Desenvolvimento de Produto da WMO.
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+Este projeto tem como objetivo providenciar uma estrutura inicial padronizada e com estruturas comuns nas aplicações já configuradas e/ou desenvolvidas. Com ele pretendemos agilizar o processo inicial de novos desenvolvimentos, além de manter algumas boas práticas de organização, segurança, etc. para também manter uma certa similaridade entre projetos, dessa forma faciliando o compartilhamento de conhecimento e mão-de-obra.
 
-## Add your files
+Recursos incluídos neste repositório:
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+- [Typescript](https://www.typescriptlang.org/): superset do JavaScript com tipagem estática, completamente opcional, porém recomendado.
+- [React](https://reactjs.org/): biblioteca de desenvolvimento de interface web em componentes através do JavaScript;
+- [Next.js](https://nextjs.org/): framework desenvolvido em cima do React com vários recursos comuns integrados, incluindo possibilidade de renderização em servidor e desenvolvimento de APIs;
+- [Ant Design](https://ant.design/): biblioteca de interfaces React com vários componentes complexos comuns já estilizados;
+- Layout padrão: com recursos básicos integrados e expansíveis;
+- Autenticação: utilizando o AD da WEG, com login automático por cookies JWT de tempo limitado;
+- Navegação: por rotas em URL;
+- i18n: etrutura de localização por tradução de chaves;
+- CI/CD: deploy automatizado para ambientes de QA e produção para frontend e APIs.
+
+## 🏁 Getting Started
+
+### Instalação
+
+Para instalar as bibliotecas da aplicação basta rodar o seguinte comando na pasta do projeto:
 
 ```
-cd existing_repo
-git remote add origin https://gitlab.weg.net/dse/sim/wtpc/wtpc-frontend.git
-git branch -M master
-git push -uf origin master
+npm install
 ```
 
-## Integrate with your tools
+OBS: Algumas das bibliotecas que utilizamos dentro deste e outros projetos estão localizadas somente dentro do registro de pacotes interno da WEG, por isso é necessário configurar a variável de ambiente `NPM_TOKEN` no seu sistema para que seja possível acessar estes pacotes. Este procedimento só precisa ser executado uma vez, sendo que este token pessoal já será utilizado para todas as aplicações que seguem este padrão.
 
-- [ ] [Set up project integrations](https://gitlab.weg.net/dse/sim/wtpc/wtpc-frontend/-/settings/integrations)
+#### Adquirindo o token npm
 
-## Collaborate with your team
+Para adiquirir um token de acesso o procedimento é bem simples:
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+1. Execute o seguinte comando na aplicação de prompt de sua preferência:
 
-## Test and Deploy
+```sh
+npm login --registry=https://nexus3.weg.net/repository/npm-group/
+```
 
-Use the built-in continuous integration in GitLab.
+2. Preencha os dados requisitados nos prompts (login, senha, e email WEG);
+3. Navegue até a pasta `$HOME` do seu sistema (tipicamente `C:\Users\<seu login>`) e encontre um arquivo `.npmrc`;
+4. Abra este aquivo em um editor de texto, e veja que nele há uma linha similar a esta:
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+```
+//nexus3.weg.net/repository/npm-group/:_authToken=<seu token npm>
+```
 
-***
+5. Adicione este valor a uma variável de ambiente (`NPM_TOKEN`) para o seu usuário em sua máquina.
 
-# Editing this README
+### Rodando a aplicação
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+Antes de rodar a aplicação pela primeira vez você precisa criar um arquivo chamado `.env` na pasta raiz do projeto, nele você colocará quaisquer configurações de variáves de ambiente que a aplicação precisa para funcionar. Em produção estas variáveis de ambiente serão determinadas pela configuração do projeto no GitLab. Este arquivo não deve ser commitado junto ao código pois pode conter informações sigilosas de segurança.
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+Como referência criamos o arquivo `example.env` com a única variável que a aplicação base precisa inicialmente o `TOKEN_KEY`, uma chave que segura o cookie que utilizamos para autenticação, pode ser qualquer string, sugerimos gerar aleatóriamente (por exemplo: [aqui](https://www.uuidgenerator.net/)) e trocar com certa frequência.
 
-## Name
-Choose a self-explaining name for your project.
+Criamos alguns comandos para rodar a aplicação tanto em desenvolvimento quanto em produção:
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+- `npm run dev`: roda a aplicação com _refresh_ automático na alteração de qualquer parte do código. Abra seu browser de preferência na url `localhost:3000` para visualizar a interface;
+- `npm run build`: compila a aplicação para uma versão final otimizada, utilizado durante o deploy;
+- `npm start`: roda a aplicação compilada pelo comando aterior, útil para testar a velocidade da aplicação como em produção, já que o sistema em `dev` é bem mais lento;
+- `npm run format`: formata todos os arquivos do repositório segundo o padrão setado em `.prettierrc`, recomendamos instalar a extensão `Prettier` no VSCode se estiver utilizando, para formatar autimaticamente os arquivos ao fazer alterações;
+- `npm run check-types`: busca por qualquer erro de tipagem estática, caso esteja usando o Typescript. Se seu editor de texto tiver integração com a linguagem, já mostrará os erros diretamente na interface.
+- `npm run commit`: roda a CLI do `commitzen`, que gera uma mensagem de commit formatada interativamente. O uso é opcional.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+## Recursos
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+### Navegação
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Para navegação utilizamos a estrutura fornecida pelo Next.js ([referência](https://nextjs.org/docs/routing/introduction)).
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Cada arquivo na pasta `src/pages` representa uma rota (URL), para criar uma nova página é só criar um novo arquivo ou pasta dentro desta pasta.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+Um exemplo de arquivo inicial está disponível em `examples/page.tsx`.
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+Para adicionar um item no menu lateral, você deve adicionar sua configuração ao arquivo `src/configs/nav.tsx` seguindo o padrão já existente. A tradução do item deve ser registrado no arquivo de tradução `layout.json`.
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+### Traduções
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+O controle de traduções é feito utilizando o padrão `i18n` ([referência](https://www.i18next.com/)).
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Na pasta `public/locales` temos uma pasta para cada língua com múltiplos arquivos de tradução, é daqui que todas as traduções de cada língua serão determinadas.
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+Um exemplo de utilização está disponível em `examples/Component/index.ts`.
 
-## License
-For open source projects, say how it is licensed.
+Você pode carregar estes arquivos dinâmica (carregado quando necessário) ou estaticamente (carregado junto com a página na hora do _build_). Para carregar estaticamente você deve adicionar o nome do arquivo na chamada da função `getServerSideTranslations` da sua página (exemplo em `examples/page.tsx`), os outros arquivos serão carregados dinâmicamente.
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Na parte superior direita da página há um seletor de língua padrão, este componente está localizado em `src/components/layout/Header/LanguageChanger.tsx`.
+
+Para configurar mais línguas:
+
+1. Adicionar o nome da língua (exemplo `zh-CN` para a língua chinesa) ao arquivo `next.config.js` na pasta raiz do projeto (`i18n.locales`);
+2. Adicionar um arquivo `.png` da bandeira do país, com o mesmo nome da língua, à pasta `public/assets/langFlags`. Você pode encontrar elas [aqui](https://github.com/hampusborgos/country-flags/tree/main/png100px);
+3. Criar uma pasta, com o mesmo nome da língua, na pasta `public/locales`, contendo os arquivos de tradução.
+
+### Autenticação
+
+O processo de autenticação utiliza o AD da WEG para validar a identidade do usuário, este processo foi abstraído a um microserviço externo ao projeto criado pela equipe. Junto com a API criamos a biblioteca `@wmo-dev/login-utils`, que utiliza desse serviço e oferece algumas utilidades ao `React`.
+
+Dentro da pasta `src/api/auth` criamos três rotas de autenticação, `login`, `logout` e `token`, através delas que o frontend se comunica com o serviço de login. Qualquer necessidade extra no processo de login é dado nestas rotas.
+
+Em específico na rota de `login` é onde podemos registrar novos "claims" dentro do token de acesso que o sistema grava nos cookies do navegador. Por padrão o serviço retorna o seguinte JSON:
+
+```json
+{
+  "username": "login do usuário",
+  "name": "nome completo do usuário",
+  "role": "user"
+}
+```
+
+A biblioteca `@wmo-dev/login-utils` providencia uma função chamada `createLoginHandler` onde você pode criar seu próprio _handler_ de login, onde você conseguirá alterar estas _claims_ (trocar o `role` por exemplo) e adicionar outras referentes à sua aplicação.
+
+```javascript
+import { createLoginHandler } from "@wmo-dev/login-utils/handlers";
+
+const login = createLoginHandler(async (info) => {
+  // Aqui poderíamos buscar o role do usuário em uma base de dados
+  const role = await getRole(info.username);
+
+  return { ...info, role };
+});
+```
+
+No lado do frontend, a biblioteca providencia dois utilitários, um _hook_ onde é possível acessar os _claims_ do login (`useAuth`), e um _high order component_ que envolve um componente, limitando a visualização dele dependendo das configurações de autenticação.
+
+```javascript
+import { useAuth } from "@wmo-dev/login-utils";
+const { user } = useAuth();
+```
+
+```javascript
+import { withAuth } from "@wmo-dev/login-utils";
+const ComponenteProtegido = withAuth({
+  fallback: () => <span>Não Autorizado</span>,
+  // roles: ["admin"] // caso só alguns roles tenham acesso
+})(Componente);
+```

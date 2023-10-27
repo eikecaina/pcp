@@ -1,0 +1,43 @@
+{
+  "name": "nextjs-boilerplate",
+  "version": "2.0.3",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "format": "prettier --write .",
+    "check-types": "tsc --pretty",
+    "commit": "cz"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^4.5.0",
+    "@emotion/core": "^11.0.0",
+    "@emotion/react": "^11.1.5",
+    "@emotion/styled": "^11.1.5",
+    "@wmo-dev/language-selector": "^1.2.1",
+    "@wmo-dev/login-utils": "^3.3.0",
+    "antd": "^5.1.6",
+    "i18next-http-backend": "^1.4.0",
+    "next": "^12.1.6",
+    "next-i18next": "^11.0.0",
+    "polished": "^4.1.1",
+    "react": "^18.1.0",
+    "react-cookie": "^4.0.3",
+    "react-dom": "^18.1.0",
+    "react-hook-form": "^7.32.0"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.3",
+    "@types/react": "^17.0.2",
+    "@typescript-eslint/eslint-plugin": "^4.15.1",
+    "@typescript-eslint/parser": "^4.15.1",
+    "commitizen": "^4.2.3",
+    "cz-conventional-changelog": "^3.3.0",
+    "eslint": "^7.20.0",
+    "eslint-config-prettier": "^7.2.0",
+    "eslint-plugin-react": "^7.22.0",
+    "prettier": "^2.2.1",
+    "typescript": "^4.1.5"
+  }
+}
