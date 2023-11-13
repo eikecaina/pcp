@@ -1,4 +1,4 @@
-import { HomeOutlined, LockOutlined } from "@ant-design/icons";
+import { ContainerOutlined, HomeOutlined, LockOutlined } from "@ant-design/icons";
 
 export const DEFAULT_ROUTE = "/";
 
@@ -14,6 +14,11 @@ export const MENUS: NavEntry[] = [
     name: "menus.home",
     icon: HomeOutlined,
     path: "/",
+  },
+  {
+    name: "WTCP",
+    icon: ContainerOutlined,
+    path: '/wtcp',
   },
   {
     name: "menus.protected",
