@@ -1,9 +1,7 @@
 import React from "react";
 
-import { BoxStyle, Logo } from "./styled";
-import { WtcpMenu } from "./styled";
-import { HeaderWtcpMenu } from "./styled";
-import { InfoBoxSmall, InfoBoxMedium, InfoBoxLarge, InfoBox } from "./styled";
+import { Logo } from "./styled";
+import { WtpcMenu } from "./styled";
 
 import { BoxLogo } from "./styled";
 
@@ -14,7 +12,11 @@ import {
 }
     from "@ant-design/icons";
 
-const Wtcp: React.FC = () => {
+    interface Prop {
+        className: string;
+    }
+
+const HeaderWtpc: React.FC<Prop> = ({ className }) => {
     const boxesLogo = Array.from({ length: 4 }, (_, i) => (
         <BoxLogo key={i} />
     ));
@@ -34,30 +36,20 @@ const Wtcp: React.FC = () => {
     ];
 
     const menuButtons = menuButtonsInfo.map((button, i) => (
-        <Button className="menu-wtcp" type="primary" size="small" key={i} title={button.title}>
+        <Button className="menu-wtpc" type="primary" size="small" key={i} title={button.title}>
             {button.icon}
-            {i === 7 && <DownOutlined style={{ fontSize: '12px' }} />}
         </Button>
     ));
 
     return (
-        <BoxStyle>
-            <HeaderWtcpMenu>
-                <WtcpMenu>
-                    <>{menuButtons}</>
-                </WtcpMenu>
-                <Logo>
-                    <>{boxesLogo}</>
-                    <img src="/assets/images/WEGLogo.png" alt="WEGLogo" style={{ padding: '10px' }} />
-                </Logo>
-            </HeaderWtcpMenu>
-            <InfoBox>
-                <InfoBoxLarge></InfoBoxLarge>
-                <InfoBoxMedium></InfoBoxMedium>
-                <InfoBoxMedium></InfoBoxMedium>
-            </InfoBox>
-        </BoxStyle>
+        <WtpcMenu className={className}>
+            <>{menuButtons}</>
+            {/*<Logo>
+                <>{boxesLogo}</>
+                <img src="/assets/images/WEGLogo.png" alt="WEGLogo" style={{ padding: '10px' }} />
+            </Logo>*/}
+        </WtpcMenu>
     );
 };
 
-export default Wtcp;
+export default HeaderWtpc;

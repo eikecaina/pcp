@@ -1,10 +1,11 @@
 import { NextPage, GetStaticProps } from "next";
 
 import { getServerSideTranslations } from "configs/language/server";
-import BoxStyle from "components/layout/Wtcp/Header/Menu";
+import ContainerMainWtpc from "components/layout/Wtpc/";
 
-const Wtcp: NextPage = () => {
-  return <BoxStyle/>;
+
+const Wtpc: NextPage = () => {
+  return <ContainerMainWtpc/>;
 };
 
 export const getStaticProps: GetStaticProps = async (req) => {
@@ -17,6 +18,6 @@ export const getStaticProps: GetStaticProps = async (req) => {
   };
 };
 
-export default Wtcp;
+export default Wtpc;
 
 

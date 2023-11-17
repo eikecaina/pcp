@@ -16,9 +16,9 @@ export const MENUS: NavEntry[] = [
     path: "/",
   },
   {
-    name: "WTCP",
+    name: "WTPC",
     icon: ContainerOutlined,
-    path: '/wtcp',
+    path: '/wtpc',
   },
   {
     name: "menus.protected",

@@ -31,6 +31,9 @@ export const ContentWrapper = styled.main`
   overflow-x: auto;
 
   & > div {
+    width: 100%;
+    height: 100%;
+
     background-color: ${({ theme }) => theme.color.light.bg};
     color: ${({ theme }) => theme.color.light.text};
 
@@ -54,3 +57,5 @@ export const SpinnerWrapper = styled.div`
   justify-items: center;
   align-items: center;
 `;
+
+
