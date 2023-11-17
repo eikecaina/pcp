@@ -12,9 +12,9 @@ import {
 }
     from "@ant-design/icons";
 
-    interface Prop {
-        className: string;
-    }
+interface Prop {
+    className: string;
+}
 
 const HeaderWtpc: React.FC<Prop> = ({ className }) => {
     const boxesLogo = Array.from({ length: 4 }, (_, i) => (
@@ -28,7 +28,7 @@ const HeaderWtpc: React.FC<Prop> = ({ className }) => {
         { id: 4, title: 'Consumir', icon: <CheckCircleOutlined /> },
         { id: 5, title: 'Excluir', icon: <CloseCircleOutlined /> },
         { id: 6, title: 'PCP', icon: <CalendarOutlined /> },
-        { id: 7, title: 'Configurações', icon: <SettingOutlined style={{ width: '15px' }} /> },
+        { id: 7, title: 'Configurações', icon: <SettingOutlined /> },
         { id: 8, title: 'Informações', icon: <InfoCircleOutlined /> },
         { id: 9, title: 'Ajuda', icon: <QuestionCircleOutlined /> },
         { id: 10, title: 'Idioma', icon: <FlagOutlined /> },
@@ -42,13 +42,16 @@ const HeaderWtpc: React.FC<Prop> = ({ className }) => {
     ));
 
     return (
-        <WtpcMenu className={className}>
-            <>{menuButtons}</>
-            {/*<Logo>
-                <>{boxesLogo}</>
-                <img src="/assets/images/WEGLogo.png" alt="WEGLogo" style={{ padding: '10px' }} />
-            </Logo>*/}
-        </WtpcMenu>
+        <>
+            <WtpcMenu className={className}>
+                <>{menuButtons}</>
+                <Logo>
+                    <>{boxesLogo}</>
+                    <img src="/assets/images/WEGLogo.png" alt="WEGLogo" style={{ padding: '10px' }} />
+                </Logo>
+            </WtpcMenu>
+
+        </>
     );
 };
 

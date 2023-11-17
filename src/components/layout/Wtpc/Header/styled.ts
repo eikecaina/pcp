@@ -5,14 +5,12 @@ export const WtpcMenu = styled.div`
     .menu-wtpc {
         height: 40px;
         font-size: 20px;
+        width: 50px
     }
 
-    display: grid;
+    display: flex;
     height: 40px;
     gap: 5px;
-    
-    grid-template-rows: 100%;
-    grid-template-columns: repeat(11, 44px);
 `;
 
 export const ChangeColor = keyframes`
@@ -31,16 +29,16 @@ export const ChangeColor = keyframes`
 `;
 
 export const Logo = styled.div`
-    margin: -5px 0 0 auto;
+    margin: 0 0 0 auto;
     float: left;
     align-items: center;
     justify-content: center;
-    display: grid;
+    display: flex;
 `;
 
 export const BoxLogo = styled.div`
     width: 45px;
-    height: 30px;
+    height: 40px;
     background: #3498db;
     margin: 10px;
     animation: ${ChangeColor} 7s infinite alternate;

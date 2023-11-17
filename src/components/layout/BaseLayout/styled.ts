@@ -33,6 +33,9 @@ export const ContentWrapper = styled.main`
   & > div {
     width: 100%;
     height: 100%;
+    border-radius: 10px;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1;
 
     background-color: ${({ theme }) => theme.color.light.bg};
     color: ${({ theme }) => theme.color.light.text};

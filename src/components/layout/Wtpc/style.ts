@@ -6,16 +6,15 @@ export const ContainerMainWtpc = styled.div`
 
     gap: 10px;
     display: grid;
-    grid-template-rows: 35px 200px 310px 200px;
-    grid-template-columns: 540px 540px 550px;
+    grid-template-rows: 40px 200px 305px 200px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     grid-template-areas: 
-    'header header header'
+    'header header logo'
     'general-quotation item-config delivery-prep'
     'product-config quotation quotation'
     'product-config critic-material critic-material';
     text-align: center;
    
-
     .header-menu-wtpc {
         grid-area: header;
     }
@@ -45,5 +44,7 @@ export const ContainerMainWtpc = styled.div`
 `;
 
 export const ContainerContents = styled(ContainerMainWtpc)`
-    border: 1px solid black;
+    border-radius: 5px;
+    background-color: #e9e9e9;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
 `;
