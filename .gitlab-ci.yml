@@ -1,0 +1,33 @@
+include:
+  - project: "devops/templates/javascript-ci-templates"
+    ref: k8s
+    file: "express-node16.yml"
+
+variables:
+  DOCKER_CONTAINER_PORT: "3000"
+  DOCKER_IMAGE_NAME: $FRONTEND_IMAGE_NAME
+  DOCKER_CONTAINER_NAME: "${DEPLOY_NAME}-fe"
+
+deploy:qa:
+  variables:
+    APP_ENV: "qa"
+    HPA_MAX: 3
+    K8S_CPU_REQ: 100m
+    K8S_CPU_LIM: 110m
+    K8S_MEM_REQ: 100Mi
+    K8S_MEM_LIM: 500Mi
+    NAMESPACE: dev-shared-soap
+  tags:
+    - docker
+
+deploy:prd:
+  variables:
+    APP_ENV: "prd"
+    HPA_MAX: 3
+    K8S_CPU_REQ: 100m
+    K8S_CPU_LIM: 110m
+    K8S_MEM_REQ: 100Mi
+    K8S_MEM_LIM: 500Mi
+    NAMESPACE: prd-shared-soap
+  tags:
+    - docker
