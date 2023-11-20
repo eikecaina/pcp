@@ -1,12 +1,13 @@
-import { NextPage, GetStaticProps } from "next";
+import { GetStaticProps } from "next";
 
 import { getServerSideTranslations } from "configs/language/server";
-import ContainerMainWtpc from "components/layout/Wtpc/";
+import BoxContent from "components/layout/Wtpc/BoxContent";
 
 
-const Wtpc: NextPage = () => {
-  return <ContainerMainWtpc/>;
-};
+
+const Wtpc: React.FC = () => (
+ <BoxContent></BoxContent>
+);
 
 export const getStaticProps: GetStaticProps = async (req) => {
   const translations = await getServerSideTranslations(req.locale);

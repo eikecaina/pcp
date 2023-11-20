@@ -18,7 +18,7 @@
     "@vitejs/plugin-react-swc": "^3.4.1",
     "@wmo-dev/language-selector": "^1.2.1",
     "@wmo-dev/login-utils": "^3.3.0",
-    "antd": "^5.1.6",
+    "antd": "^5.11.2",
     "i18next-http-backend": "^1.4.0",
     "next": "^12.1.6",
     "next-i18next": "^11.0.0",
