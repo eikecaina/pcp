@@ -9,7 +9,7 @@ export const ContainerMainWtpc = styled.div`
     grid-template-rows: 40px 200px 305px 200px;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     grid-template-areas: 
-    'header header logo'
+    'header header header'
     'general-quotation item-config delivery-prep'
     'product-config quotation quotation'
     'product-config critic-material critic-material';
