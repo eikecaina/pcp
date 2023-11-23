@@ -18,7 +18,7 @@
     "@vitejs/plugin-react-swc": "^3.4.1",
     "@wmo-dev/language-selector": "^1.2.1",
     "@wmo-dev/login-utils": "^3.3.0",
-    "antd": "^5.11.2",
+    "antd": "^5.11.3",
     "i18next-http-backend": "^1.4.0",
     "next": "^12.1.6",
     "next-i18next": "^11.0.0",
@@ -27,6 +27,7 @@
     "react-cookie": "^4.0.3",
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.32.0",
+    "react-i18next": "^13.5.0",
     "vite": "^4.5.0",
     "vite-plugin": "^0.0.0",
     "vite-tsconfig-paths": "^4.2.1"

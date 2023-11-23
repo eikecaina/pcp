@@ -1,11 +1,8 @@
-import { Card, Col, Form, Row, Button, Select, Space, Input, Modal, Radio, message, Collapse, RadioChangeEvent } from 'antd';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
-import { useState } from 'react';
+import { Card, Col, Form, Row, Button, Select, Space, Input, Modal, Radio, message, Collapse, RadioChangeEvent, FloatButton, TourProps, Tour } from 'antd';
+import { ExclamationCircleOutlined, FileOutlined, PrinterOutlined } from '@ant-design/icons';
+import { useRef, useState } from 'react';
 
 const { Panel } = Collapse;
-
-
-
 
 const successMsg = () => {
     message.success('Item Criado');
@@ -55,8 +52,31 @@ const ItensConfig: React.FC = () => {
         setValue(e.target.value);
     };
 
+    const refs = [useRef(null), useRef(null), useRef(null)];
+
+    const [open, setOpen] = useState<boolean>(false);
+
+    const steps: TourProps['steps'] = [
+        {
+            title: 'Crie mais itens',
+            description: 'Ao clicar, você adiciona mais um item para a cotação atual',
+            target: () => refs[0].current,
+        },
+        {
+            title: 'Configure o item',
+            description: 'Configure o item atual selecionado na lista',
+            target: () => refs[1].current,
+        },
+        {
+            title: 'Excluir o item',
+            description: 'Exclue o item atual selecionado, cuidado!',
+            target: () => refs[2].current,
+        },
+    ];
+
 
     return (
+
         <Card title="Dados gerais Cotação">
             <Row gutter={20}>
                 <Col span={12}>
@@ -86,23 +106,23 @@ const ItensConfig: React.FC = () => {
                         </Row>
 
                         <Row>
-                            <Col span={6}>
+                            <Col span={8} push={1}>
                                 <Form.Item>
-                                    <Button type="primary" onClick={successMsg} style={{ backgroundColor: '#95de64' }}>
+                                    <Button ref={refs[0]} type="primary" onClick={successMsg} style={{ backgroundColor: '#95de64' }}>
                                         Novo Item
                                     </Button>
                                 </Form.Item>
                             </Col>
-                            <Col span={6}>
+                            <Col span={10} push={1}>
                                 <Form.Item>
-                                    <Button type="primary" onClick={configItem} style={{ backgroundColor: '#bfbfbf' }}>
+                                    <Button ref={refs[1]} type="primary" onClick={configItem} style={{ backgroundColor: '#bfbfbf' }}>
                                         Configuração
                                     </Button>
                                 </Form.Item>
                             </Col>
                             <Col span={5}>
                                 <Form.Item>
-                                    <Button onClick={confirmDelete} type="primary">
+                                    <Button ref={refs[2]} onClick={confirmDelete} type="primary">
                                         Excluir Item
                                     </Button>
                                 </Form.Item>
@@ -146,7 +166,7 @@ const ItensConfig: React.FC = () => {
                 <Col span={8}></Col>
                 <Col span={12}>
                     <Row>
-                        <Collapse style={{ width: '100%' }} >
+                        <Collapse style={{ width: '100%'}} >
                             <Panel key={'1'} header={'Meio de operação'}>
                                 <Radio.Group onChange={onChange} value={value}>
                                     <Radio value={1}>Óleo</Radio>
@@ -177,6 +197,20 @@ const ItensConfig: React.FC = () => {
                     </Row>
                 </Col>
             </Row>
+            <FloatButton
+                shape="circle"
+                type="primary"
+                style={{ right: 50, top: 820 }}
+                icon={<PrinterOutlined />}
+            />
+            <FloatButton
+                onClick={() => setOpen(true)}
+                shape="circle"
+                type="primary"
+                style={{ right: 100, top: 820, }}
+                icon={<FileOutlined />}
+            />
+            <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
         </Card>
     )
 }
