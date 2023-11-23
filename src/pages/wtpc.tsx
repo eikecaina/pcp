@@ -1,12 +1,12 @@
 import { GetStaticProps } from "next";
 
 import { getServerSideTranslations } from "configs/language/server";
-import BoxContent from "components/layout/Wtpc/BoxContent";
+import RenderContent from "components/layout/Wtpc/RenderContent";
 
 
 
 const Wtpc: React.FC = () => (
- <BoxContent></BoxContent>
+ <RenderContent></RenderContent>
 );
 
 export const getStaticProps: GetStaticProps = async (req) => {
