@@ -2,8 +2,6 @@ import { Card, Col, Form, Row, Button, Select, Space, Input, Modal, Radio, messa
 import { ExclamationCircleOutlined, FileOutlined, PrinterOutlined } from '@ant-design/icons';
 import { useRef, useState } from 'react';
 
-const { Panel } = Collapse;
-
 const successMsg = () => {
     message.success('Item Criado');
 };
@@ -44,13 +42,6 @@ const confirmDelete = () => {
 };
 
 const ItensConfig: React.FC = () => {
-
-    const [value, setValue] = useState(1);
-
-    const onChange = (e: RadioChangeEvent) => {
-        console.log('radio checked', e.target.value);
-        setValue(e.target.value);
-    };
 
     const refs = [useRef(null), useRef(null), useRef(null)];
 
@@ -163,38 +154,11 @@ const ItensConfig: React.FC = () => {
                         </Row>
                     </Form>
                 </Col>
-                <Col span={8}></Col>
+                <Col span={8}>
+
+                </Col>
                 <Col span={12}>
-                    <Row>
-                        <Collapse style={{ width: '100%'}} >
-                            <Panel key={'1'} header={'Meio de operação'}>
-                                <Radio.Group onChange={onChange} value={value}>
-                                    <Radio value={1}>Óleo</Radio>
-                                    <Radio value={2}>Seco</Radio>
-                                </Radio.Group>
-                            </Panel>
-                            <Panel key={'2'} header={'Potência (kVA)'}>
-                                <Radio.Group onChange={onChange} value={value}>
-                                    <Radio value={3}>1000</Radio>
-                                    <Radio value={4}>2000</Radio>
-                                    <Radio value={5}>3000</Radio>
-                                    <Radio value={6}>4000</Radio>
-                                    <Radio value={7}>5000</Radio>
-                                    <Radio value={8}>6000</Radio>
-                                    <Radio value={9}>7000</Radio>
-                                    <Radio value={10}>8000</Radio>
-                                    <Radio value={11}>9000</Radio>
-                                    <Radio value={12}>10000</Radio>
-                                </Radio.Group>
-                            </Panel>
-                            <Panel key={'3'} header={'Classe de tensão (kV)'}>
-                                <Radio.Group onChange={onChange} value={value}>
-                                    <Radio value={13}>0 - 15</Radio>
-                                    <Radio value={14}>15 - 25</Radio>
-                                </Radio.Group>
-                            </Panel>
-                        </Collapse>
-                    </Row>
+
                 </Col>
             </Row>
             <FloatButton

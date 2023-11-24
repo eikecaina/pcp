@@ -1,4 +1,4 @@
-import { ContainerOutlined, HomeOutlined, LockOutlined } from "@ant-design/icons";
+import { ContainerOutlined, EyeOutlined, HomeOutlined, LockOutlined } from "@ant-design/icons";
 
 export const DEFAULT_ROUTE = "/";
 
@@ -18,11 +18,16 @@ export const MENUS: NavEntry[] = [
   {
     name: "WTPC",
     icon: ContainerOutlined,
-    path: '/wtpc',
+    path: '/wtpc/itemConfig',
   },
   {
     name: "menus.protected",
     icon: LockOutlined,
     path: "/protected",
+  },
+  {
+    name: "AG-GRID",
+    icon: EyeOutlined,
+    path: "/wtpc/agGrid",
   },
 ];

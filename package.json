@@ -18,6 +18,8 @@
     "@vitejs/plugin-react-swc": "^3.4.1",
     "@wmo-dev/language-selector": "^1.2.1",
     "@wmo-dev/login-utils": "^3.3.0",
+    "ag-grid-community": "^30.2.1",
+    "ag-grid-react": "^30.2.1",
     "antd": "^5.11.3",
     "i18next-http-backend": "^1.4.0",
     "next": "^12.1.6",
