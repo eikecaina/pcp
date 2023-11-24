@@ -1,13 +1,13 @@
 import { ColDef } from 'ag-grid-community';
 import { AgGridReact } from "ag-grid-react";
-import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback, RefObject } from 'react';
 
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.css";
 
 const AgGridPage = () => {
 
-    const gridRef = useRef();
+    const gridRef = useRef<AgGridReact>(null);
 
     const [rowData, setRowData] = useState([
         { make: '', model: '', price: '' },
@@ -32,11 +32,11 @@ const AgGridPage = () => {
         sortable: true,
     }), [])
 
-    const pushMeClicked = useCallback((e) => {
-        if (gridRef.current) {
-            (gridRef.current as any).api.deselectAll();
+    const pushMeClicked = useCallback(() => {
+        if (gridRef.current && gridRef.current) {
+          gridRef.current.api.deselectAll();
         }
-    }, [gridRef]);
+      }, []);
 
     return (
 

@@ -1,6 +1,6 @@
-import { Card, Col, Form, Row, Button, Select, Space, Input, Modal, Radio, message, Collapse, RadioChangeEvent, FloatButton, TourProps, Tour } from 'antd';
+import { Card, Col, Form, Row, Button, Select, Space, Input, Modal, Radio, message, FloatButton, TourProps, Tour } from 'antd';
 import { ExclamationCircleOutlined, FileOutlined, PrinterOutlined } from '@ant-design/icons';
-import { useRef, useState } from 'react';
+import {  useRef, useState } from 'react';
 
 const successMsg = () => {
     message.success('Item Criado');
@@ -42,6 +42,9 @@ const confirmDelete = () => {
 };
 
 const ItensConfig: React.FC = () => {
+
+   
+
 
     const refs = [useRef(null), useRef(null), useRef(null)];
 
@@ -96,24 +99,24 @@ const ItensConfig: React.FC = () => {
                             </Col>
                         </Row>
 
-                        <Row>
-                            <Col span={8} push={1}>
+                        <Row gutter={10}>
+                            <Col span={8}>
                                 <Form.Item>
-                                    <Button ref={refs[0]} type="primary" onClick={successMsg} style={{ backgroundColor: '#95de64' }}>
+                                    <Button ref={refs[0]} type="primary" onClick={successMsg} style={{ backgroundColor: '#95de64', width: '100%' }}>
                                         Novo Item
                                     </Button>
                                 </Form.Item>
                             </Col>
-                            <Col span={10} push={1}>
+                            <Col span={9}>
                                 <Form.Item>
-                                    <Button ref={refs[1]} type="primary" onClick={configItem} style={{ backgroundColor: '#bfbfbf' }}>
+                                    <Button ref={refs[1]} type="primary" onClick={configItem} style={{ backgroundColor: '#bfbfbf', width: '100%' }}>
                                         Configuração
                                     </Button>
                                 </Form.Item>
                             </Col>
-                            <Col span={5}>
+                            <Col span={7}>
                                 <Form.Item>
-                                    <Button ref={refs[2]} onClick={confirmDelete} type="primary">
+                                    <Button style={{ width: '100%' }} ref={refs[2]} onClick={confirmDelete} type="primary">
                                         Excluir Item
                                     </Button>
                                 </Form.Item>
@@ -154,11 +157,11 @@ const ItensConfig: React.FC = () => {
                         </Row>
                     </Form>
                 </Col>
-                <Col span={8}>
-
+                <Col span={12}>
+                    
                 </Col>
                 <Col span={12}>
-
+                    
                 </Col>
             </Row>
             <FloatButton
