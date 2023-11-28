@@ -10,24 +10,11 @@ interface NavEntry {
 }
 
 export const MENUS: NavEntry[] = [
-  {
-    name: "menus.home",
-    icon: HomeOutlined,
-    path: "/",
-  },
+
   {
     name: "WTPC",
     icon: ContainerOutlined,
-    path: '/wtpc/itemConfig',
+    path: '/itemConfig',
   },
-  {
-    name: "menus.protected",
-    icon: LockOutlined,
-    path: "/protected",
-  },
-  {
-    name: "AG-GRID",
-    icon: EyeOutlined,
-    path: "/wtpc/agGrid",
-  },
+  
 ];
