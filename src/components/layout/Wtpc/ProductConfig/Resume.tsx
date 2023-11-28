@@ -22,8 +22,6 @@ const details = [
     '007 [05/12/2023] TS - ENG - Criar ECM (1 dia)',
 ];
 
-
-
 const ResumeData: React.FC = () => {
 
     const [data, setData] = useState(quotation);
@@ -46,8 +44,8 @@ const ResumeData: React.FC = () => {
             size="small"
             header={
                 <Row>
-                    <Button onClick={handleResumoClick}>Resumo</Button>
-                    <Button style={{ margin: '0 10px 0 10px' }} onClick={handleResumidoClick}>Resumido</Button>
+                    <Button onClick={handleResumoClick}>Cotação</Button>
+                    <Button onClick={handleResumidoClick} style={{ margin: '0 10px 0 10px' }}>Resumido</Button>
                     <Button onClick={handleDetalhadoClick}>Detalhado</Button>
                 </Row>
             }

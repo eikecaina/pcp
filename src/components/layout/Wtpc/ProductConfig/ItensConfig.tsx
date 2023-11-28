@@ -1,4 +1,4 @@
-import { Card, Col, Form, Row, Button, Select, Space, Input, Modal, Radio, message, FloatButton, TourProps, Tour, Checkbox, List, Avatar, Flex } from 'antd';
+import { Card, Col, Form, Row, Button, Select, Input, Modal, Radio, message, FloatButton, TourProps, Tour, Checkbox } from 'antd';
 import { ExclamationCircleOutlined, FileOutlined, PrinterOutlined } from '@ant-design/icons';
 import { useRef, useState } from 'react';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
@@ -58,7 +58,6 @@ const ItensConfig: React.FC = () => {
     const handleMeioOperacaoChange = (value) => {
         setMeioOperacao(value);
 
-        // Configurar a visibilidade dos selects com base na opção selecionada
         setShowPotencia(value === 'Óleo');
         setShowClasseTensao(value === 'Seco');
     };
@@ -266,8 +265,8 @@ const ItensConfig: React.FC = () => {
             />
             <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
 
-            <Card style={{ maxWidth: '100%' }}>
-                <Form layout='vertical'>
+            <Card style={{ maxWidth: '100%', height: 475 }}>
+                <Form style={{ overflowY: 'auto' }} layout='vertical'>
                     <Form.Item label='Meio de operação'>
                         <Select
                             options={[
@@ -297,6 +296,7 @@ const ItensConfig: React.FC = () => {
                     )}
                 </Form>
             </Card>
+            <Button style={{ float: 'right', marginTop: 10 }} type='primary'>Calcular</Button>
         </Card>
     )
 }
