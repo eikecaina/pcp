@@ -1,14 +1,16 @@
-import { Card, Col, Form, Row, Button, Select, Input, Modal, Radio, message, FloatButton, TourProps, Tour, Checkbox } from 'antd';
-import { ExclamationCircleOutlined, FileOutlined, PrinterOutlined } from '@ant-design/icons';
-import { useRef, useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { Card, Col, Form, Row, Button, Select, Input, Modal, Radio, message, FloatButton, TourProps, Tour, Checkbox, InputNumber, DatePickerProps, DatePicker } from 'antd';
+import { ExclamationCircleOutlined, FileOutlined, PrinterOutlined, QuestionCircleOutlined, SaveOutlined } from '@ant-design/icons';
 import { CheckboxChangeEvent } from 'antd/es/checkbox';
+import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
 const successMsg = () => {
     message.success('Item Criado');
 };
 
 const excludeMsg = () => {
-    message.error('Item Excluido')
+    message.error('Item Excluido');
 };
 
 const confirmDelete = () => {
@@ -20,8 +22,6 @@ const confirmDelete = () => {
         cancelText: 'Cancelar',
         onOk: excludeMsg,
     });
-
-
 };
 
 const listDates = () => {
@@ -41,25 +41,29 @@ const listDates = () => {
     return (
         <ul style={{ listStyle: 'none' }}>
             {datasExample.map((item, index) => (
-                <li key={index}>{item.data + ' - ' + item.peça + " peças"}</li>
+                <li key={index}>{item.data + ' - ' + item.peça + ' peças'}</li>
             ))}
         </ul>
     );
 };
 
+const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 
+dayjs.extend(customParseFormat);
 
 const ItensConfig: React.FC = () => {
+    const [operetion, setOperetion] = useState('');
+    const [showPower, setShowPower] = useState(false);
+    const [showVoltage, setShowVoltage] = useState(false);
 
-    const [meioOperacao, setMeioOperacao] = useState('');
-    const [showPotencia, setShowPotencia] = useState(false);
-    const [showClasseTensao, setShowClasseTensao] = useState(false);
+    const [selectOptions, setSelectOptions] = useState([
+        { value: '10' },
+    ]);
 
-    const handleMeioOperacaoChange = (value) => {
-        setMeioOperacao(value);
-
-        setShowPotencia(value === 'Óleo');
-        setShowClasseTensao(value === 'Seco');
+    const handleOperetionChange = (value) => {
+        setOperetion(value);
+        setShowPower(value === 'Óleo');
+        setShowVoltage(value === 'Seco');
     };
 
     const onChange = (e: CheckboxChangeEvent) => {
@@ -74,7 +78,7 @@ const ItensConfig: React.FC = () => {
         Modal.confirm({
             title: 'Configurações',
             width: 990,
-            content:
+            content: (
                 <Card>
                     <Row gutter={10}>
                         <Col span={12}>
@@ -87,62 +91,71 @@ const ItensConfig: React.FC = () => {
                                         <Radio value={2}>Aprovação em dias corridos</Radio>
                                     </Form.Item>
                                 </Radio.Group>
-                                <Form.Item
-                                    label="Dias">
-                                    <Input
-                                        style={{ width: 50 }}
-                                    />
+                                <Form.Item label="Dias">
+                                    <InputNumber min={0} maxLength={3} controls={false} style={{ width: 50 }} />
                                 </Form.Item>
-                                <Form.Item
-                                    label="Numero do Claim"
-                                >
-                                    <Input />
+                                <Form.Item label="Numero do Claim">
+                                    <InputNumber controls={false} />
                                 </Form.Item>
-                                <Form.Item
-                                    label="Numero do novo material"
-                                >
-                                    <Input />
+                                <Form.Item label="Numero do novo material">
+                                    <InputNumber controls={false} />
                                 </Form.Item>
-                                <Form.Item
-                                    label={<Checkbox onChange={onChange}>Repetição do material</Checkbox>}>
+                                <Form.Item label={<Checkbox onChange={onChange}>Repetição do material</Checkbox>}>
                                     <Input />
                                 </Form.Item>
                             </Card>
                         </Col>
                         <Col span={12}>
                             <Card title="Configuração de entrega">
-                                <Form.Item
-                                    label="Entrega em">
-                                    <Input />
+                                <Form.Item label="Entrega em">
+                                    <DatePicker style={{ width: '100%' }} defaultValue={dayjs('01/01/2015', dateFormatList[0])} format={dateFormatList} />
                                 </Form.Item>
-                                <Form.Item
-                                    label="Quantidade"
-                                    rules={[{ required: true, message: 'Por favor, selecione o Item!' }]}
-                                >
-                                    <Input />
+                                <Form.Item label="Quantidade" rules={[{ required: true, message: 'Por favor, selecione o Item!' }]}>
+                                    <InputNumber style={{ width: '100%' }} controls={false} />
                                 </Form.Item>
                                 <Row justify={'space-evenly'}>
-                                    <Button type="primary" onClick={successMsg} style={{ backgroundColor: '#95de64', }}>
+                                    <Button type="primary" onClick={successMsg} style={{ backgroundColor: '#95de64' }}>
                                         Salvar
                                     </Button>
                                     <Button onClick={confirmDelete} type="primary">
                                         Limpar
                                     </Button>
                                 </Row>
-                                <Card title="Lista de entregas" style={{ marginTop: 15, overflowY: 'auto', maxHeight: '178px' }}
+                                <Card
+                                    title="Lista de entregas"
+                                    style={{ marginTop: 15, overflowY: 'auto', maxHeight: '178px' }}
                                     bodyStyle={{ padding: 0, margin: 0 }}
-                                    headStyle={{ position: 'fixed', background: '#fff', padding: '12px 16px', borderBottom: '1px solid #e8e8e8', width: 372 }}>
+                                    headStyle={{
+                                        position: 'fixed',
+                                        background: '#fff',
+                                        padding: '12px 16px',
+                                        borderBottom: '1px solid #e8e8e8',
+                                        width: 372,
+                                    }}
+                                >
                                     {listDates()}
                                 </Card>
                             </Card>
                         </Col>
                     </Row>
                 </Card>
-            ,
+            ),
             okText: 'Confirmar',
             cancelText: 'Cancelar',
         });
-    }
+    };
+
+    const addOptions = () => {
+        const lastOptionValue = parseInt(selectOptions[selectOptions.length - 1].value, 10);
+
+        const newOptions = Array.from({ length: 1 }, (_, index) => ({
+            value: `${lastOptionValue + (index + 1) * 10}`,
+        }));
+
+        setSelectOptions((prevOptions) => [...prevOptions, ...newOptions]);
+
+        successMsg();
+    };
 
     const steps: TourProps['steps'] = [
         {
@@ -162,24 +175,16 @@ const ItensConfig: React.FC = () => {
         },
     ];
 
-
     return (
-
         <Card title="Configuração de itens gerais" style={{ height: '100%' }}>
             <Row>
                 <Col span={24}>
                     <Form>
                         <Row gutter={5}>
                             <Col span={12}>
-                                <Form.Item
-
-                                    label="Cliente"
-                                    name="cliente"
-                                    rules={[{ required: true, message: 'Por favor, insira o Cliente!' }]}
-                                >
+                                <Form.Item label="Cliente" name="cliente" rules={[{ required: true, message: 'Por favor, insira o Cliente!' }]}>
                                     <Input />
                                 </Form.Item>
-
                             </Col>
                             <Col span={12}>
                                 <Form.Item
@@ -187,38 +192,19 @@ const ItensConfig: React.FC = () => {
                                     name="item"
                                     rules={[{ required: true, message: 'Por favor, selecione o Item!' }]}
                                 >
-                                    <Select defaultValue={10} options={[
-                                        { value: '10' },
-                                        { value: '20' },
-                                        { value: '30' },
-                                        { value: '40' },
-                                        { value: '50' },
-                                        { value: '60' },
-                                    ]}
-
-                                    >
-                                    </Select>
-
+                                    <Select defaultValue={10} options={selectOptions} />
                                 </Form.Item>
                             </Col>
                         </Row>
 
                         <Row align="middle" gutter={5}>
                             <Col span={12}>
-                                <Form.Item
-                                    label="Cotação"
-                                    name="cotacao"
-                                    rules={[{ required: true, message: 'Por favor, insira a Cotação!' }]}
-                                >
+                                <Form.Item label="Cotação" name="cotacao" rules={[{ required: true, message: 'Por favor, insira a Cotação!' }]}>
                                     <Input />
                                 </Form.Item>
                             </Col>
                             <Col span={12}>
-                                <Form.Item
-                                    label="ODV"
-                                    name="odv"
-                                    rules={[{ required: true, message: 'Por favor, insira o ODV!' }]}
-                                >
+                                <Form.Item label="ODV" name="odv" rules={[{ required: true, message: 'Por favor, insira o ODV!' }]}>
                                     <Input />
                                 </Form.Item>
                             </Col>
@@ -226,7 +212,7 @@ const ItensConfig: React.FC = () => {
                         <Row gutter={10}>
                             <Col span={8}>
                                 <Form.Item>
-                                    <Button ref={refs[0]} type="primary" onClick={successMsg} style={{ backgroundColor: '#95de64', width: '100%' }}>
+                                    <Button ref={refs[0]} type="primary" onClick={addOptions} style={{ backgroundColor: '#95de64', width: '100%' }}>
                                         Novo Item
                                     </Button>
                                 </Form.Item>
@@ -248,58 +234,40 @@ const ItensConfig: React.FC = () => {
                         </Row>
                     </Form>
                 </Col>
-
             </Row>
-            <FloatButton
-                shape="circle"
-                type="primary"
-                style={{ right: 50, top: 820 }}
-                icon={<PrinterOutlined />}
-            />
-            <FloatButton
-                onClick={() => setOpen(true)}
-                shape="circle"
-                type="primary"
-                style={{ right: 100, top: 820, }}
-                icon={<FileOutlined />}
-            />
+            <FloatButton.Group shape='square' style={{ right: 50, bottom: 90 }}>
+                <FloatButton type="default" icon={<PrinterOutlined />} />
+                <FloatButton type="default" icon={<SaveOutlined />} />
+                <FloatButton
+                    onClick={() => setOpen(true)}                 
+                    type="default"
+                    icon={<QuestionCircleOutlined />}
+                />
+            </FloatButton.Group>
             <Tour open={open} onClose={() => setOpen(false)} steps={steps} />
 
             <Card style={{ maxWidth: '100%', height: 475 }}>
-                <Form style={{ overflowY: 'auto' }} layout='vertical'>
-                    <Form.Item label='Meio de operação'>
-                        <Select
-                            options={[
-                                { value: 'Óleo' },
-                                { value: 'Seco' },
-                            ]}
-                            onChange={handleMeioOperacaoChange}
-                        />
+                <Form style={{ overflowY: 'auto' }} layout="vertical">
+                    <Form.Item label="Meio de operação">
+                        <Select options={[{ value: 'Óleo' }, { value: 'Seco' }]} onChange={handleOperetionChange} />
                     </Form.Item>
-                    {showPotencia && (
-                        <Form.Item label='Potência em kVA'>
-                            <Select
-                                options={[
-                                    { value: '0 a 15' },
-                                ]}
-                            />
+                    {showPower && (
+                        <Form.Item label="Potência em kVA">
+                            <Select options={[{ value: '0 a 15' }]} />
                         </Form.Item>
                     )}
-                    {showClasseTensao && (
-                        <Form.Item label='Classe de tensão'>
-                            <Select
-                                options={[
-                                    { value: '15 a 36' },
-                                ]}
-                            />
+                    {showVoltage && (
+                        <Form.Item label="Classe de tensão">
+                            <Select options={[{ value: '15 a 36' }]} />
                         </Form.Item>
                     )}
                 </Form>
             </Card>
-            <Button style={{ float: 'right', marginTop: 10 }} type='primary'>Calcular</Button>
+            <Button style={{ float: 'right', marginTop: 10 }} type="primary">
+                Calcular
+            </Button>
         </Card>
-    )
-}
+    );
+};
 
-
-export default ItensConfig
+export default ItensConfig;

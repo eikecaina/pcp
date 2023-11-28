@@ -5,7 +5,7 @@ import RenderContent from "components/layout/Wtpc/RenderContent";
 
 
 
-const Wtpc: React.FC = () => (
+const NewQuotation: React.FC = () => (
  <RenderContent></RenderContent>
 );
 
@@ -19,6 +19,6 @@ export const getStaticProps: GetStaticProps = async (req) => {
   };
 };
 
-export default Wtpc;
+export default NewQuotation;
 
 

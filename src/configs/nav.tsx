@@ -1,4 +1,4 @@
-import { ContainerOutlined, EyeOutlined, HomeOutlined, LockOutlined } from "@ant-design/icons";
+import { ContainerOutlined, EyeOutlined, FolderOpenOutlined, HomeOutlined, LockOutlined } from "@ant-design/icons";
 
 export const DEFAULT_ROUTE = "/";
 
@@ -12,9 +12,13 @@ interface NavEntry {
 export const MENUS: NavEntry[] = [
 
   {
-    name: "WTPC",
+    name: "Nova Cotação",
     icon: ContainerOutlined,
-    path: '/itemConfig',
+    path: '/newQuotation',
   },
-  
+  {
+    name: "Abrir Cotação",
+    icon: FolderOpenOutlined,
+    path: '/openQuotation',
+  }
 ];
