@@ -1,5 +1,7 @@
 import { Button, Card, List, Row, Typography } from "antd";
 import { useState } from "react";
+import TutorialTour from '../TutorialTour';
+
 
 const quotation = [
     'Dia - Data Inicial  -  Data Final  -  Processo (duração)',
@@ -24,6 +26,8 @@ const details = [
 
 const ResumeData: React.FC = () => {
 
+    const { refs, steps } = TutorialTour();
+
     const [data, setData] = useState(quotation);
 
     const handleResumoClick = () => {
@@ -39,29 +43,26 @@ const ResumeData: React.FC = () => {
     };
     return (
 
-        <List
-            style={{ height: '100%', overflowY: 'auto', maxHeight: '100%', width: '100%' }}
-            size="small"
-            header={
-                <Row>
-                    <Button onClick={handleResumoClick}>Cotação</Button>
-                    <Button onClick={handleResumidoClick} style={{ margin: '0 10px 0 10px' }}>Resumido</Button>
-                    <Button onClick={handleDetalhadoClick}>Detalhado</Button>
-                </Row>
-            }
-            bordered
-            dataSource={data}
-            renderItem={(item) => (
-                <List.Item>
-                    <Typography.Text mark>[DATA]</Typography.Text> {item}
-                </List.Item>
-            )}
-        />
-
+        
+            <List
+                style={{ height: '100%', overflowY: 'auto', maxHeight: '100%', width: '100%' }}
+                size="small"
+                header={
+                    <Row>
+                        <Button onClick={handleResumoClick}>Cotação</Button>
+                        <Button onClick={handleResumidoClick} style={{ margin: '0 10px 0 10px' }}>Resumido</Button>
+                        <Button onClick={handleDetalhadoClick}>Detalhado</Button>
+                    </Row>
+                }
+                bordered
+                dataSource={data}
+                renderItem={(item) => (
+                    <List.Item>
+                        <Typography.Text mark>[DATA]</Typography.Text> {item}
+                    </List.Item>
+                )}
+            />
+  
     );
 }
 export default ResumeData;
-
-function setData(details: string[]) {
-    throw new Error("Function not implemented.");
-}
