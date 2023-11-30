@@ -6,7 +6,7 @@ interface CustomInputNumberProps extends InputNumberProps {
   maxLength?: number;
 }
 
-const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ min, maxLength, style, ...restProps  }) => {
+const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ min, maxLength, style, ...restProps }) => {
 
   const [inputValue, setInputValue] = useState<number | undefined>(undefined);
 

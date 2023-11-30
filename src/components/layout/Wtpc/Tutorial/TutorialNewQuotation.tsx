@@ -38,7 +38,7 @@ const TutorialTour = () => {
         },
         {
             title: 'Cotação',
-            description: 'Calcule a cotação com todos os itens configurados',
+            description: 'Exibe um resumo de toda a cotação',
             target: () => refs[6].current,
         },
     ];

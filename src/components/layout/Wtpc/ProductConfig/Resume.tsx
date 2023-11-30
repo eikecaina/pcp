@@ -1,6 +1,6 @@
-import { Button, Card, List, Row, Typography } from "antd";
+import { Button, List, Row, Typography } from "antd";
 import { useState } from "react";
-import TutorialTour from '../TutorialTour';
+
 
 
 const quotation = [
@@ -24,45 +24,38 @@ const details = [
     '007 [05/12/2023] TS - ENG - Criar ECM (1 dia)',
 ];
 
-const ResumeData: React.FC = () => {
-
-    const { refs, steps } = TutorialTour();
+const Resume: React.FC = () => {
 
     const [data, setData] = useState(quotation);
-
     const handleResumoClick = () => {
         setData(quotation);
     };
-
     const handleResumidoClick = () => {
         setData(resume);
     };
-
     const handleDetalhadoClick = () => {
         setData(details);
     };
     return (
+        <List
+            style={{ height: '100%', overflowY: 'auto', maxHeight: '100%', width: '100%' }}
+            size="small"
+            header={
+                <Row>
+                    <Button onClick={handleResumoClick}>Cotação</Button>
+                    <Button onClick={handleResumidoClick} style={{ margin: '0 10px 0 10px' }}>Resumido</Button>
+                    <Button onClick={handleDetalhadoClick}>Detalhado</Button>
+                </Row>
+            }
+            bordered
+            dataSource={data}
+            renderItem={(item) => (
+                <List.Item>
+                    <Typography.Text mark>[DATA]</Typography.Text> {item}
+                </List.Item>
+            )}
+        />
 
-        
-            <List
-                style={{ height: '100%', overflowY: 'auto', maxHeight: '100%', width: '100%' }}
-                size="small"
-                header={
-                    <Row>
-                        <Button onClick={handleResumoClick}>Cotação</Button>
-                        <Button onClick={handleResumidoClick} style={{ margin: '0 10px 0 10px' }}>Resumido</Button>
-                        <Button onClick={handleDetalhadoClick}>Detalhado</Button>
-                    </Row>
-                }
-                bordered
-                dataSource={data}
-                renderItem={(item) => (
-                    <List.Item>
-                        <Typography.Text mark>[DATA]</Typography.Text> {item}
-                    </List.Item>
-                )}
-            />
-  
     );
 }
-export default ResumeData;
+export default Resume;
