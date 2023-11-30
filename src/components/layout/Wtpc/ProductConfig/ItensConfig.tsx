@@ -32,15 +32,22 @@ const ItensConfig: React.FC = () => {
     const { refs, steps } = TutorialTour();
     const [openTour, setOpenTour] = useState(false);
 
-    const [operetion, setOperetion] = useState('');
     const [showPower, setShowPower] = useState(false);
     const [showVoltage, setShowVoltage] = useState(false);
-    const [selectOptions, setSelectOptions] = useState([{ value: '10' }]);
-    const handleOperetionChange = (value) => {
-        setOperetion(value);
-        setShowPower(value === 'Óleo');
-        setShowVoltage(value === 'Seco');
+    const [showMaterial, setShowMaterial] = useState(false);
+
+    const handleOperetion = (value) => {
+        if (value === 'Óleo') {
+            setShowPower(true);
+        } else if (value === '0 a 15') {
+            setShowVoltage(true);
+        } else if (value === '15 a 36') {
+            setShowMaterial(true);
+        }
     };
+
+    const [selectOptions, setSelectOptions] = useState([{ value: '10' }]);
+
     const addOptions = () => {
         const lastOptionValue = parseInt(selectOptions[selectOptions.length - 1].value, 10);
 
@@ -150,19 +157,24 @@ const ItensConfig: React.FC = () => {
                     </FloatButton.Group>
 
 
-                    <Card ref={refs[4]} style={{ maxWidth: '100%', height: 475 }}>
-                        <Form style={{ overflowY: 'auto' }} layout="vertical">
+                    <Card ref={refs[4]} style={{ overflowY: 'auto', maxWidth: '100%', height: 475 }}>
+                        <Form layout="vertical">
                             <Form.Item label="Meio de operação">
-                                <Select options={[{ value: 'Óleo' }, { value: 'Seco' }]} onChange={handleOperetionChange} />
+                                <Select options={[{ value: 'Óleo' }, { value: 'Seco' }]} onChange={handleOperetion} />
                             </Form.Item>
                             {showPower && (
                                 <Form.Item label="Potência em kVA">
-                                    <Select options={[{ value: '0 a 15' }]} />
+                                    <Select options={[{ value: '0 a 15' }]} onChange={handleOperetion} />
                                 </Form.Item>
                             )}
                             {showVoltage && (
                                 <Form.Item label="Classe de tensão">
-                                    <Select options={[{ value: '15 a 36' }]} />
+                                    <Select options={[{ value: '15 a 36' }]} onChange={handleOperetion} />
+                                </Form.Item>
+                            )}
+                            {showMaterial && (
+                                <Form.Item label="Materiais críticos">
+                                    <Select options={[{ value: 'Bucha' }]} />
                                 </Form.Item>
                             )}
                         </Form>

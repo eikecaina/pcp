@@ -1,9 +1,10 @@
+import SearchQuotation from "components/layout/Wtpc/OpenQuotation/SearchQuotation";
 import { getServerSideTranslations } from "configs/language/server";
 import { GetStaticProps } from "next";
 
 const OpenQuotation: React.FC = () => {
     return (
-        <div>Teste</div>
+        <SearchQuotation/>
     );
 }
 export const getStaticProps: GetStaticProps = async (req) => {
