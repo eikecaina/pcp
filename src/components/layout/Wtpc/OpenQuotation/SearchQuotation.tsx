@@ -3,6 +3,7 @@ import "ag-grid-community/styles/ag-grid.css"; // Core CSS
 import 'ag-grid-community/styles/ag-theme-alpine.min.css'; // Theme
 import { ColDef } from 'ag-grid-community';
 import { useEffect, useMemo, useState } from 'react';
+import axios from 'axios';
 
 
 const SearchQuotation: React.FC = () => {
@@ -31,14 +32,22 @@ const SearchQuotation: React.FC = () => {
     }), []);
 
     useEffect(() => {
-        fetch('https://www.ag-grid.com/example-assets/space-mission-data.json')
-            .then(result => result.json())
-            .then(rowData => setRowData(rowData))
-    }, [])
+        const fetchData = async () => {
+            try {
+                const response = await axios.get('https://www.ag-grid.com/example-assets/space-mission-data.json');
+                const rowData = response.data;
+                setRowData(rowData);
+            } catch (error) {
+                console.error('Erro ao buscar dados:', error);
+            }
+        };
+
+        fetchData();
+    }, []);
 
     return (
 
-        <div className='ag-theme-alpine-dark' style={containerStyle}>
+        <div className='ag-theme-alpine' style={containerStyle}>
             <div style={gridStyle} >
 
                 <AgGridReact
