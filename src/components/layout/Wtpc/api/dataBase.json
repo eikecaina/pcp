@@ -1,0 +1,396 @@
+{
+  "registros": [
+    {
+      "tipo": "cotacao",
+      "dados": [
+        {
+          "dia": "085",
+          "data_inicial": "21/02/2024",
+          "data_final": "23/02/2024",
+          "processo": "TS - PROD Ensaios",
+          "duracao": "3 dias"
+        },
+        {
+          "dia": "098",
+          "data_inicial": "05/03/2024",
+          "data_final": "05/03/2024",
+          "processo": "1 peça(s) liberada(s) para embarque"
+        },
+        {
+          "dia": "105",
+          "data_inicial": "12/04/2024",
+          "data_final": "15/04/2024",
+          "processo": "Montagem de Equipamento",
+          "duracao": "4 dias"
+        },
+        {
+          "dia": "120",
+          "data_inicial": "28/04/2024",
+          "data_final": "30/04/2024",
+          "processo": "Teste de Qualidade",
+          "duracao": "3 dias"
+        },
+        {
+          "dia": "135",
+          "data_inicial": "14/05/2024",
+          "data_final": "16/05/2024",
+          "processo": "Inspeção Final",
+          "duracao": "3 dias"
+        },
+        {
+          "dia": "150",
+          "data_inicial": "30/05/2024",
+          "data_final": "01/06/2024",
+          "processo": "Embalagem e Envio",
+          "duracao": "3 dias"
+        },
+        {
+          "dia": "165",
+          "data_inicial": "15/06/2024",
+          "data_final": "17/06/2024",
+          "processo": "Treinamento de Equipe",
+          "duracao": "3 dias"
+        },
+        {
+          "dia": "180",
+          "data_inicial": "01/07/2024",
+          "data_final": "03/07/2024",
+          "processo": "Manutenção Preventiva",
+          "duracao": "3 dias"
+        },
+        {
+          "dia": "195",
+          "data_inicial": "16/07/2024",
+          "data_final": "18/07/2024",
+          "processo": "Desenvolvimento de Novo Produto",
+          "duracao": "3 dias"
+        },
+        {
+          "dia": "210",
+          "data_inicial": "31/07/2024",
+          "data_final": "02/08/2024",
+          "processo": "Auditoria Interna",
+          "duracao": "3 dias"
+        },
+        {
+          "dia": "225",
+          "data_inicial": "15/08/2024",
+          "data_final": "17/08/2024",
+          "processo": "Atualização de Software",
+          "duracao": "3 dias"
+        }
+      ]
+    },
+    {
+      "tipo": "detalhado",
+      "dados": [
+        {
+          "dia": "001",
+          "data_inicial": "15/01/2025",
+          "data_final": "20/01/2025",
+          "processo": "Corte e Preparação do Núcleo",
+          "descricao": "Realização do corte preciso das lâminas de silício e preparação do núcleo para o transformador."
+        },
+        {
+          "dia": "002",
+          "data_inicial": "18/01/2025",
+          "data_final": "22/01/2025",
+          "processo": "Enrolamento do Primário",
+          "descricao": "Enrolamento do fio de cobre no primário do transformador, seguindo as especificações técnicas."
+        },
+        {
+          "dia": "003",
+          "data_inicial": "21/01/2025",
+          "data_final": "25/01/2025",
+          "processo": "Isolamento e Impregnação do Primário",
+          "descricao": "Aplicação de material isolante e impregnação para garantir a resistência elétrica e mecânica do primário."
+        },
+        {
+          "dia": "004",
+          "data_inicial": "24/01/2025",
+          "data_final": "28/01/2025",
+          "processo": "Montagem do Secundário",
+          "descricao": "Montagem da bobina secundária e conexão aos terminais, seguindo os requisitos de projeto."
+        },
+        {
+          "dia": "005",
+          "data_inicial": "27/01/2025",
+          "data_final": "01/02/2025",
+          "processo": "Testes de Funcionamento Preliminares",
+          "descricao": "Realização de testes preliminares para verificar o funcionamento básico do transformador."
+        },
+        {
+          "dia": "006",
+          "data_inicial": "30/01/2025",
+          "data_final": "04/02/2025",
+          "processo": "Envolvimento em Resina Epóxi",
+          "descricao": "Aplicação de resina epóxi para isolar completamente as bobinas e proteger contra umidade e poeira."
+        },
+        {
+          "dia": "007",
+          "data_inicial": "02/02/2025",
+          "data_final": "06/02/2025",
+          "processo": "Ensaio de Resistência e Isolamento",
+          "descricao": "Realização de ensaios elétricos para garantir a resistência e isolamento conforme normas técnicas."
+        },
+        {
+          "dia": "008",
+          "data_inicial": "05/02/2025",
+          "data_final": "09/02/2025",
+          "processo": "Montagem Final e Testes de Carga",
+          "descricao": "Montagem final do transformador e realização de testes de carga para simular condições reais de operação."
+        },
+        {
+          "dia": "009",
+          "data_inicial": "08/02/2025",
+          "data_final": "12/02/2025",
+          "processo": "Pintura e Acabamento",
+          "descricao": "Aplicação de pintura final e acabamento estético, garantindo durabilidade e aspecto visual adequado."
+        },
+        {
+          "dia": "010",
+          "data_inicial": "11/02/2025",
+          "data_final": "15/02/2025",
+          "processo": "Embalagem e Preparação para Envio",
+          "descricao": "Embalagem segura do transformador e preparação para o envio ao cliente."
+        }
+      ]
+    },
+    {
+      "tipo": "resumido",
+      "dados": [
+        {
+          "dia": "001",
+          "data_inicial": "15/01/2025",
+          "data_final": "20/01/2025",
+          "processo": "Início da Produção",
+          "descricao": "Início da produção do transformador."
+        },
+        {
+          "dia": "002",
+          "data_inicial": "18/01/2025",
+          "data_final": "22/01/2025",
+          "processo": "Enrolamento das Bobinas",
+          "descricao": "Enrolamento das bobinas primárias e secundárias."
+        },
+        {
+          "dia": "003",
+          "data_inicial": "21/01/2025",
+          "data_final": "25/01/2025",
+          "processo": "Impregnação e Isolamento",
+          "descricao": "Impregnação das bobinas e isolamento para garantir a durabilidade do transformador."
+        },
+        {
+          "dia": "004",
+          "data_inicial": "24/01/2025",
+          "data_final": "28/01/2025",
+          "processo": "Montagem Final",
+          "descricao": "Montagem final do transformador, incluindo a instalação do núcleo e dos terminais."
+        },
+        {
+          "dia": "005",
+          "data_inicial": "27/01/2025",
+          "data_final": "01/02/2025",
+          "processo": "Testes de Qualidade",
+          "descricao": "Realização de testes de qualidade para garantir a conformidade com os padrões."
+        },
+        {
+          "dia": "006",
+          "data_inicial": "30/01/2025",
+          "data_final": "04/02/2025",
+          "processo": "Envolvimento em Resina",
+          "descricao": "Envolvimento das bobinas em resina para proteção e isolamento."
+        },
+        {
+          "dia": "007",
+          "data_inicial": "02/02/2025",
+          "data_final": "06/02/2025",
+          "processo": "Testes de Funcionamento",
+          "descricao": "Realização de testes de funcionamento para garantir a eficiência do transformador."
+        },
+        {
+          "dia": "008",
+          "data_inicial": "05/02/2025",
+          "data_final": "09/02/2025",
+          "processo": "Inspeção Final",
+          "descricao": "Inspeção final antes do envio para o cliente."
+        },
+        {
+          "dia": "009",
+          "data_inicial": "08/02/2025",
+          "data_final": "12/02/2025",
+          "processo": "Embalagem e Envio",
+          "descricao": "Embalagem cuidadosa e envio do transformador ao cliente."
+        },
+        {
+          "dia": "010",
+          "data_inicial": "11/02/2025",
+          "data_final": "15/02/2025",
+          "processo": "Entrega ao Cliente",
+          "descricao": "Entrega do transformador ao cliente, concluindo o processo de fabricação."
+        }
+      ]
+    },
+    {
+      "tipo": "open-quotation",
+      "dados": [
+        {
+          "quotation": "789456213",
+          "salesOrder": "0123992139",
+          "client": "TECHMASTER SOLUTIONS",
+          "create": "09/10/2023"
+        },
+        {
+          "quotation": "456789123",
+          "salesOrder": "0987654321",
+          "client": "GLOBAL INNOVATIONS INC.",
+          "create": "15/11/2023"
+        },
+        {
+          "quotation": "987654321",
+          "salesOrder": "0123456789",
+          "client": "PRIME LOGISTICS GROUP",
+          "create": "20/12/2023"
+        },
+        {
+          "quotation": "321654987",
+          "salesOrder": "1357924680",
+          "client": "QUANTUM DYNAMICS LTD.",
+          "create": "05/01/2024"
+        },
+        {
+          "quotation": "654321987",
+          "salesOrder": "9876543210",
+          "client": "VISIONARY MARKETING AGENCY",
+          "create": "18/02/2024"
+        },
+        {
+          "quotation": "789321456",
+          "salesOrder": "0123456789",
+          "client": "SUMMIT ENTERPRISES LLC",
+          "create": "22/03/2024"
+        },
+        {
+          "quotation": "159357852",
+          "salesOrder": "3216549870",
+          "client": "PRECISION BUILDERS CO.",
+          "create": "07/04/2024"
+        },
+        {
+          "quotation": "852963741",
+          "salesOrder": "4567890123",
+          "client": "HARMONY FOODS INTERNATIONAL",
+          "create": "14/05/2024"
+        },
+        {
+          "quotation": "753159852",
+          "salesOrder": "0123456789",
+          "client": "STELLAR DESIGNS AND CO.",
+          "create": "29/06/2024"
+        },
+        {
+          "quotation": "456852974",
+          "salesOrder": "9876543210",
+          "client": "QUANTUMLEAP TECHNOLOGIES",
+          "create": "03/08/2024"
+        },
+        {
+          "quotation": "622343452",
+          "salesOrder": "7545746456",
+          "client": "SUMMIT FINANCIAL SERVICES",
+          "create": "03/08/2024"
+        },
+        {
+          "quotation": "987654321",
+          "salesOrder": "5678901234",
+          "client": "INFINITE TECH SOLUTIONS",
+          "create": "12/11/2024"
+        },
+        {
+          "quotation": "123456789",
+          "salesOrder": "9876543210",
+          "client": "NEXUS CONSULTING GROUP",
+          "create": "05/04/2024"
+        },
+        {
+          "quotation": "456789012",
+          "salesOrder": "2345678901",
+          "client": "PRIMA INDUSTRIES",
+          "create": "21/09/2024"
+        },
+        {
+          "quotation": "789012345",
+          "salesOrder": "0123456789",
+          "client": "VECTOR MARKETING",
+          "create": "07/02/2024"
+        },
+        {
+          "quotation": "543210987",
+          "salesOrder": "9012345678",
+          "client": "SYNERGY TECH SOLUTIONS",
+          "create": "18/05/2024"
+        },
+        {
+          "quotation": "321098765",
+          "salesOrder": "2345678901",
+          "client": "NOVA MARKETING CONSULTANCY",
+          "create": "29/10/2024"
+        },
+        {
+          "quotation": "876543210",
+          "salesOrder": "3456789012",
+          "client": "GLOBE ENTERPRISES",
+          "create": "03/03/2024"
+        },
+        {
+          "quotation": "234567890",
+          "salesOrder": "9876543210",
+          "client": "UNIVERSAL TECH SYSTEMS",
+          "create": "15/06/2024"
+        },
+        {
+          "quotation": "654321098",
+          "salesOrder": "4567890123",
+          "client": "ELITE MARKETING SOLUTIONS",
+          "create": "24/11/2024"
+        },
+        {
+          "quotation": "345678901",
+          "salesOrder": "8901234567",
+          "client": "PRIME TECH CONSULTING",
+          "create": "09/04/2024"
+        },
+        {
+          "quotation": "654321098",
+          "salesOrder": "4567890123",
+          "client": "OPTIMUM INDUSTRIES",
+          "create": "11/07/2024"
+        },
+        {
+          "quotation": "765432109",
+          "salesOrder": "5432109876",
+          "client": "QUANTUM TECH SOLUTIONS",
+          "create": "28/12/2024"
+        },
+        {
+          "quotation": "234567890",
+          "salesOrder": "9876543210",
+          "client": "INFINITE MARKETING GROUP",
+          "create": "05/05/2024"
+        },
+        {
+          "quotation": "543210987",
+          "salesOrder": "9012345678",
+          "client": "SYNERGY CONSULTING",
+          "create": "16/08/2024"
+        },
+        {
+          "quotation": "987654321",
+          "salesOrder": "5678901234",
+          "client": "GLOBE TECH SOLUTIONS",
+          "create": "01/01/2025"
+        }                                                                                               
+      ]
+    }
+  ]
+}

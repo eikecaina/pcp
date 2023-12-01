@@ -44,9 +44,14 @@ const listDates = () => {
     ];
 
     return (
-        <ul style={{ listStyle: 'none' }}>
+        <ul style={{ listStyle: 'none', padding: 0, margin: 0, }}>
             {datasExample.map((item, index) => (
-                <li key={index}>{item.data + ' - ' + item.peça + ' peças'}</li>
+                <li style={{ 
+                    marginBottom: 3, 
+                    background: index % 2 === 0 ? 'white' : '#f0f0f0',
+                    padding: 2
+                }} 
+                key={index}>{item.data + ' - ' + item.peça + ' peças'}</li>
             ))}
         </ul>
     );
@@ -64,60 +69,52 @@ const ConfigModal = () => {
             <Card>
                 <Row gutter={10}>
                     <Col span={12}>
-                        
-                            <Radio.Group>
-                                <Form.Item>
-                                    <Radio value={1}>Certificado</Radio>
-                                </Form.Item>
-                                <Form.Item>
-                                    <Radio value={2}>Aprovação em dias corridos</Radio>
-                                </Form.Item>
-                            </Radio.Group>
-                            <Form.Item label="Dias">
-                                <CustomInputNumber min={0} maxLength={3} style={{ width: 50 }} />
+
+                        <Radio.Group>
+                            <Form.Item>
+                                <Radio value={1}>Certificado</Radio>
                             </Form.Item>
-                            <Form.Item label="Numero do Claim">
-                                <CustomInputNumber style={{ width: '100%' }} />
+                            <Form.Item>
+                                <Radio value={2}>Aprovação em dias corridos</Radio>
                             </Form.Item>
-                            <Form.Item label="Numero do novo material">
-                                <CustomInputNumber style={{ width: '100%' }} />
-                            </Form.Item>
-                            <Form.Item label={<Checkbox onChange={onChange}>Repetição do material</Checkbox>}>
-                                <CustomInputNumber style={{ width: '100%' }} />
-                            </Form.Item>
-                        
+                        </Radio.Group>
+                        <Form.Item label="Dias">
+                            <CustomInputNumber min={0} maxLength={3} style={{ width: 50 }} />
+                        </Form.Item>
+                        <Form.Item label="Numero do Claim">
+                            <CustomInputNumber style={{ width: '100%' }} />
+                        </Form.Item>
+                        <Form.Item label="Numero do novo material">
+                            <CustomInputNumber style={{ width: '100%' }} />
+                        </Form.Item>
+                        <Form.Item label={<Checkbox onChange={onChange}>Repetição do material</Checkbox>}>
+                            <CustomInputNumber style={{ width: '100%' }} />
+                        </Form.Item>
+
                     </Col>
                     <Col span={12}>
-                        
-                            <Form.Item label="Entrega em">
-                                <DatePicker style={{ width: '100%' }} defaultValue={dayjs('00/00/0000', dateFormatList[0])} format={dateFormatList} />
-                            </Form.Item>
-                            <Form.Item label="Quantidade" rules={[{ required: true, message: 'Por favor, selecione o Item!' }]}>
-                                <CustomInputNumber style={{ width: '100%' }} />
-                            </Form.Item>
-                            <Row justify={'space-evenly'}>
-                                <Button type="primary" onClick={successMsg} style={{ backgroundColor: '#95de64' }}>
-                                    Salvar
-                                </Button>
-                                <Button onClick={confirmDelete} type="primary">
-                                    Limpar
-                                </Button>
-                            </Row>
-                            <Card
-                                title="Lista de entregas"
-                                style={{ marginTop: 15, overflowY: 'auto', maxHeight: '178px' }}
-                                bodyStyle={{ padding: 0, margin: 0 }}
-                                headStyle={{
-                                    position: 'fixed',
-                                    background: '#fff',
-                                    padding: '12px 16px',
-                                    borderBottom: '1px solid #e8e8e8',
-                                    width: 372,
-                                }}
-                            >
-                                {listDates()}
-                            </Card>
-                        
+
+                        <Form.Item label="Entrega em">
+                            <DatePicker style={{ width: '100%' }} defaultValue={dayjs('00/00/0000', dateFormatList[0])} format={dateFormatList} />
+                        </Form.Item>
+                        <Form.Item label="Quantidade" rules={[{ required: true, message: 'Por favor, selecione o Item!' }]}>
+                            <CustomInputNumber style={{ width: '100%' }} />
+                        </Form.Item>
+                        <Row justify={'space-evenly'}>
+                            <Button type="primary" onClick={successMsg} style={{ backgroundColor: '#95de64' }}>
+                                Salvar
+                            </Button>
+                            <Button onClick={confirmDelete} type="primary">
+                                Limpar
+                            </Button>
+                        </Row>
+                        <Card
+                            style={{ marginTop: 15, overflowY: 'auto', maxHeight: '178px', maxWidth: '100%' }}
+                            bodyStyle={{ padding: 0, margin: 0 }}
+                        >
+                            {listDates()}
+                        </Card>
+
                     </Col>
                 </Row>
             </Card>

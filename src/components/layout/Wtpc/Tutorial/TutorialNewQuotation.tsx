@@ -2,7 +2,7 @@ import { TourProps } from 'antd';
 import { useRef } from 'react';
 
 const TutorialTour = () => {
-    
+
     const refs = Array.from({ length: 15 }, () => useRef(null));
 
     const steps: TourProps['steps'] = [

@@ -1,41 +1,48 @@
 import { Button, List, Row, Typography } from "antd";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-
-
-const quotation = [
-    'Dia - Data Inicial  -  Data Final  -  Processo (duração)',
-    '085 [21/02/2024] [23/02/2024] TS - PROD Ensaios (3 dias)',
-    '098 [05/03/2024] [05/03/2024] 1 peça(s) liberada(s) para embarque',
-];
-const resume = [
-    'Dia - Data Inicial  -  Data Final  -  Processo (duração)',
-    '091 [27/02/2024] [04/03/2024] TS - PROD Tempo de Espera (5 dias)',
-    '098 [05/03/2024] [05/03/2024] 1 peça(s) liberada(s) para embarque',
-];
-const details = [
-    '000 [28/11/2023] ',
-    '001 [29/11/2023] TS - CONT Avaliação da Adm. Contratos (1 dia)',
-    '002 [30/11/2023] TS - PCP Planejar PCP (1 dia)',
-    '003 [01/12/2023] TS - ENG Gestão Técnica (2 dias)',
-    '004 [02/12/2023] Sábado',
-    '005 [03/12/2023] Domingo',
-    '006 [04/12/2023] ',
-    '007 [05/12/2023] TS - ENG - Criar ECM (1 dia)',
-];
+const axios = require('axios');
 
 const Resume: React.FC = () => {
+    const [data, setData] = useState<any[]>([]);
+    const [cotacaoData, setcotacaoData] = useState<any[]>([]);
+    const [resumidoData, setResumidoData] = useState<any[]>([]);
+    const [detalhadoData, setDetalhadoData] = useState<any[]>([]);
 
-    const [data, setData] = useState(quotation);
+    async function axiosData() {
+        try {
+            const response = await axios.get('http://localhost:8080/');
+            
+            const cotacao = response.data.registros.find(item => item.tipo === 'cotacao')?.dados || [];
+            const resumido = response.data.registros.find(item => item.tipo === 'resumido')?.dados || [];
+            const detalhado = response.data.registros.find(item => item.tipo === 'detalhado')?.dados || [];
+            
+            setcotacaoData(cotacao);
+            setResumidoData(resumido);
+            setDetalhadoData(detalhado);
+
+            setData(cotacao);
+        } catch (error) {
+            console.error('Erro ao acessar a API:', error.message);
+        }
+    }
+
+    useEffect(() => {
+        axiosData();
+    }, []);
+
     const handleResumoClick = () => {
-        setData(quotation);
+        setData(cotacaoData);
     };
+
     const handleResumidoClick = () => {
-        setData(resume);
+        setData(resumidoData);
     };
+
     const handleDetalhadoClick = () => {
-        setData(details);
+        setData(detalhadoData);
     };
+
     return (
         <List
             style={{ height: '100%', overflowY: 'auto', maxHeight: '100%', width: '100%' }}
@@ -49,13 +56,13 @@ const Resume: React.FC = () => {
             }
             bordered
             dataSource={data}
-            renderItem={(item) => (
-                <List.Item>
-                    <Typography.Text mark>[DATA]</Typography.Text> {item}
+            renderItem={(item, index) => (
+                <List.Item style={{ background: index % 2 === 0 ? 'white' : '#f0f0f0', }}>
+                    <Typography.Text mark>[DATA]</Typography.Text> {`${item.dia} [${item.data_inicial}] [${item.data_final}] ${item.processo} (${item.duracao || 'Sem duração'})`}
                 </List.Item>
             )}
         />
-
     );
 }
+
 export default Resume;

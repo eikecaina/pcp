@@ -1,6 +1,6 @@
-import { AgGridReact } from 'ag-grid-react'; // React Grid Logic
-import "ag-grid-community/styles/ag-grid.css"; // Core CSS
-import 'ag-grid-community/styles/ag-theme-alpine.min.css'; // Theme
+import { AgGridReact } from 'ag-grid-react';
+import "ag-grid-community/styles/ag-grid.css";
+import 'ag-grid-community/styles/ag-theme-alpine.min.css';
 import { ColDef } from 'ag-grid-community';
 import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
@@ -8,16 +8,13 @@ import axios from 'axios';
 
 const SearchQuotation: React.FC = () => {
     const [rowData, setRowData] = useState([
-        { editable: '',mission: '', company: '', location: '', date: '', time: '', rocket: '' },
+        { quotation: '', salesOrder: '', client: '', create: '' },
     ]);
     const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-        { headerName: 'Editavel', field: 'editable', maxWidth: 150 },
-        { headerName: 'Missão', field: 'mission' },
-        { headerName: 'Companhia', field: 'company' },
-        { headerName: 'Data', field: 'date' },
-        { headerName: 'Tempo', field: 'time' },
-        { headerName: 'Foguete', field: 'rocket' },
-        { headerName: 'Custo', field: 'price' },
+        { headerName: 'Cliente', field: 'client', flex: 2 },
+        { headerName: 'Cotação', field: 'quotation' },
+        { headerName: 'Ordem de Venda', field: 'salesOrder' },
+        { headerName: 'Criada em', field: 'create' },
     ]);
     const containerStyle = useMemo(() => ({ width: '100%', height: '100%' }), []);
     const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
@@ -34,8 +31,8 @@ const SearchQuotation: React.FC = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const response = await axios.get('https://www.ag-grid.com/example-assets/space-mission-data.json');
-                const rowData = response.data;
+                const response = await axios.get('http://localhost:8080/');
+                const rowData = response.data.registros.find(item => item.tipo === 'open-quotation')?.dados || []; 
                 setRowData(rowData);
             } catch (error) {
                 console.error('Erro ao buscar dados:', error);
@@ -61,8 +58,6 @@ const SearchQuotation: React.FC = () => {
 
             </div>
         </div>
-
-
     )
 }
 
