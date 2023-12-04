@@ -1,4 +1,4 @@
-import { ContainerOutlined, EyeOutlined, FolderOpenOutlined, HomeOutlined, LockOutlined } from "@ant-design/icons";
+import { ContainerOutlined, FolderOpenOutlined, CalendarOutlined } from "@ant-design/icons";
 
 export const DEFAULT_ROUTE = "/";
 
@@ -7,6 +7,17 @@ interface NavEntry {
   icon: React.FC; // Icone que será mostrado ao lado do item
   path: string; // Caminho da sua página
   roles?: string[]; // Define a quais tipos de usuários esta opção estará disponível
+  children?: NavEntry[],
+}
+
+function getItem(
+  name: string,
+  path?: string,
+  icon?: React.FC,
+  children?: NavEntry[],
+  roles?: string[]
+): NavEntry {
+  return { name, path, icon, roles, children } as NavEntry;
 }
 
 export const MENUS: NavEntry[] = [
@@ -20,5 +31,12 @@ export const MENUS: NavEntry[] = [
     name: "Abrir Cotação",
     icon: FolderOpenOutlined,
     path: '/openQuotation',
+  },
+  {
+    name: "PCP",
+    icon: CalendarOutlined,
+    path: '/pcp',
   }
+
 ];
+
