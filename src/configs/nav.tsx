@@ -4,20 +4,10 @@ export const DEFAULT_ROUTE = "/";
 
 interface NavEntry {
   name: string; // Chave de tradução para o arquivo layout.json
-  icon: React.FC; // Icone que será mostrado ao lado do item
+  icon?: React.FC; // Icone que será mostrado ao lado do item
   path: string; // Caminho da sua página
   roles?: string[]; // Define a quais tipos de usuários esta opção estará disponível
   children?: NavEntry[],
-}
-
-function getItem(
-  name: string,
-  path?: string,
-  icon?: React.FC,
-  children?: NavEntry[],
-  roles?: string[]
-): NavEntry {
-  return { name, path, icon, roles, children } as NavEntry;
 }
 
 export const MENUS: NavEntry[] = [
@@ -36,6 +26,28 @@ export const MENUS: NavEntry[] = [
     name: "PCP",
     icon: CalendarOutlined,
     path: '/pcp',
+    children: [
+      {
+        name: "Data",
+        path: '/pcp/pcpData',
+        
+      },
+      {
+        name: "Processos e Recursos",
+        path: '/teste',
+        
+      },
+      {
+        name: "Relatórios",
+        path: '/ssssa',
+        
+      },
+      {
+        name: "Recursos Consolidados",
+        path: '/rrrr',
+        
+      },
+    ]
   }
 
 ];

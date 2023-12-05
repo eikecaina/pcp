@@ -1,10 +1,10 @@
 import { GetStaticProps } from "next";
 
 import { getServerSideTranslations } from "configs/language/server";
-import OpenPcp from "components/layout/Wtpc/Pcp/OpenPcp";
+import PcpData from "components/layout/Wtpc/Pcp/PcpData";
 
 const Pcp: React.FC = () => (
-    <OpenPcp />
+    <PcpData />
 );
 
 export const getStaticProps: GetStaticProps = async (req) => {

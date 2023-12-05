@@ -14,6 +14,8 @@ export interface SiderProps {
   className?: string;
 }
 
+const { SubMenu } = Menu;
+
 export const Sider: React.FC<SiderProps> = ({ className }) => {
   const { t } = useTranslation("layout");
 
@@ -50,18 +52,41 @@ export const Sider: React.FC<SiderProps> = ({ className }) => {
     >
       <Menu
         selectedKeys={current ? [current] : undefined}
-        items={userMenus.map((menu) => ({
-          label: (
-            <Link href={menu.path} passHref>
-              <a>
-                <span>{t(menu.name)}</span>
-              </a>
-            </Link>
-          ),
-          key: menu.path,
-          icon: <menu.icon />,
-        }))}
-      ></Menu>
+        mode="vertical"
+        theme="light"
+      >
+        {userMenus.map((menu) => {
+          if (menu.children && menu.children.length > 0) {
+            return (
+              <SubMenu
+                key={menu.path}
+                icon={<menu.icon />}
+                title={<span>{t(menu.name)}</span>}
+              >
+                {menu.children.map((submenu) => (
+                  <Menu.Item key={submenu.path}>
+                    <Link href={submenu.path} passHref>
+                      <a>
+                        <span>{t(submenu.name)}</span>
+                      </a>
+                    </Link>
+                  </Menu.Item>
+                ))}
+              </SubMenu>
+            );
+          } else {
+            return (
+              <Menu.Item key={menu.path} icon={<menu.icon />}>
+                <Link href={menu.path} passHref>
+                  <a>
+                    <span>{t(menu.name)}</span>
+                  </a>
+                </Link>
+              </Menu.Item>
+            );
+          }
+        })}
+      </Menu>
     </Layout.Sider>
   );
 };

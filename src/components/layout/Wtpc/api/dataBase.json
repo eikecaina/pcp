@@ -415,7 +415,375 @@
           "salesOrder": "5678901234",
           "client": "GLOBE TECH SOLUTIONS",
           "create": "01/01/2025"
-        }                                                                                          
+        }
+      ]
+    },
+    {
+      "tipo": "data-example",
+      "dados": [
+        {
+          "dia": "08/04/2025",
+          "quantidade": "(Quantidade: 25)"
+        },
+        {
+          "dia": "15/04/2025",
+          "quantidade": "(Quantidade: 30)"
+        },
+        {
+          "dia": "22/04/2025",
+          "quantidade": "(Quantidade: 15)"
+        },
+        {
+          "dia": "29/04/2025",
+          "quantidade": "(Quantidade: 22)"
+        },
+        {
+          "dia": "06/05/2025",
+          "quantidade": "(Quantidade: 18)"
+        },
+        {
+          "dia": "13/05/2025",
+          "quantidade": "(Quantidade: 27)"
+        },
+        {
+          "dia": "20/05/2025",
+          "quantidade": "(Quantidade: 19)"
+        },
+        {
+          "dia": "27/05/2025",
+          "quantidade": "(Quantidade: 14)"
+        },
+        {
+          "dia": "03/06/2025",
+          "quantidade": "(Quantidade: 21)"
+        },
+        {
+          "dia": "10/06/2025",
+          "quantidade": "(Quantidade: 16)"
+        },
+        {
+          "dia": "17/06/2025",
+          "quantidade": "(Quantidade: 23)"
+        },
+        {
+          "dia": "24/06/2025",
+          "quantidade": "(Quantidade: 20)"
+        },
+        {
+          "dia": "01/07/2025",
+          "quantidade": "(Quantidade: 26)"
+        },
+        {
+          "dia": "08/07/2025",
+          "quantidade": "(Quantidade: 29)"
+        },
+        {
+          "dia": "15/07/2025",
+          "quantidade": "(Quantidade: 17)"
+        },
+        {
+          "dia": "22/07/2025",
+          "quantidade": "(Quantidade: 24)"
+        }
+      ]
+    },
+    {
+      "tipo": "processos",
+      "dados": [
+        {
+          "title": "MF - CONT Avaliação da Adm. Contratos",
+          "key": "0-0",
+          "children": [
+            {
+              "title": "06/12/2023 até 06/12/2023",
+              "key": "0-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "0-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - PROD Avaliação da Adm. Contratos",
+          "key": "1-0",
+          "children": [
+            {
+              "title": "07/12/2023 até 07/12/2023",
+              "key": "1-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "1-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - ENG Avaliação da Adm. Contratos",
+          "key": "2-0",
+          "children": [
+            {
+              "title": "08/12/2023 até 08/12/2023",
+              "key": "2-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "2-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - CONT Avaliação da Adm. Contratos",
+          "key": "3-0",
+          "children": [
+            {
+              "title": "09/12/2023 até 09/12/2023",
+              "key": "3-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "3-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - PCP Avaliação da Adm. Contratos",
+          "key": "4-0",
+          "children": [
+            {
+              "title": "10/12/2023 até 10/12/2023",
+              "key": "4-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "4-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - PROD Avaliação da Adm. Contratos",
+          "key": "5-0",
+          "children": [
+            {
+              "title": "11/12/2023 até 11/12/2023",
+              "key": "5-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "5-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - ENG Avaliação da Adm. Contratos",
+          "key": "6-0",
+          "children": [
+            {
+              "title": "12/12/2023 até 12/12/2023",
+              "key": "6-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "6-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - CONT Avaliação da Adm. Contratos",
+          "key": "7-0",
+          "children": [
+            {
+              "title": "13/12/2023 até 13/12/2023",
+              "key": "7-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "7-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - PCP Avaliação da Adm. Contratos",
+          "key": "8-0",
+          "children": [
+            {
+              "title": "14/12/2023 até 14/12/2023",
+              "key": "8-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "8-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - PROD Avaliação da Adm. Contratos",
+          "key": "9-0",
+          "children": [
+            {
+              "title": "15/12/2023 até 15/12/2023",
+              "key": "9-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "9-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - ENG Avaliação da Adm. Contratos",
+          "key": "10-0",
+          "children": [
+            {
+              "title": "16/12/2023 até 16/12/2023",
+              "key": "10-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "10-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - PROD Avaliação da Adm. Roteiro",
+          "key": "11-0",
+          "children": [
+            {
+              "title": "17/12/2023 até 17/12/2023",
+              "key": "11-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "11-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - ENG Avaliação da Adm. Embarque",
+          "key": "12-0",
+          "children": [
+            {
+              "title": "18/12/2023 até 18/12/2023",
+              "key": "12-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "12-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - CONT Avaliação da Adm. Cálculo Meia",
+          "key": "13-0",
+          "children": [
+            {
+              "title": "19/12/2023 até 19/12/2023",
+              "key": "13-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "13-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - PCP Avaliação da Adm. Cálculo",
+          "key": "14-0",
+          "children": [
+            {
+              "title": "20/12/2023 até 20/12/2023",
+              "key": "14-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "14-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - PROD Avaliação da Adm. Controle",
+          "key": "15-0",
+          "children": [
+            {
+              "title": "21/12/2023 até 21/12/2023",
+              "key": "15-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "15-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - ENG Avaliação da Adm. Roteiro",
+          "key": "16-0",
+          "children": [
+            {
+              "title": "22/12/2023 até 22/12/2023",
+              "key": "16-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "16-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - CONT Avaliação da Adm. Embarque",
+          "key": "17-0",
+          "children": [
+            {
+              "title": "23/12/2023 até 23/12/2023",
+              "key": "17-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "17-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - PCP Avaliação da Adm. Cálculo Meia",
+          "key": "18-0",
+          "children": [
+            {
+              "title": "24/12/2023 até 24/12/2023",
+              "key": "18-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "18-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - PROD Avaliação da Adm. Cálculo",
+          "key": "19-0",
+          "children": [
+            {
+              "title": "25/12/2023 até 25/12/2023",
+              "key": "19-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "19-0-1"
+            }
+          ]
+        },
+        {
+          "title": "MF - ENG Avaliação da Adm. Controle",
+          "key": "20-0",
+          "children": [
+            {
+              "title": "26/12/2023 até 26/12/2023",
+              "key": "20-0-0"
+            },
+            {
+              "title": "1440 minutos",
+              "key": "20-0-1"
+            }
+          ]
+        }
       ]
     }
   ]
