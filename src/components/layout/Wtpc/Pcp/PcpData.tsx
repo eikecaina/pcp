@@ -1,8 +1,11 @@
-import { CarryOutOutlined, FlagOutlined, FormOutlined } from '@ant-design/icons'
-import { Button, Card, Checkbox, Col, Divider, Form, Input, List, Row, Tree } from 'antd'
+import { FlagOutlined } from '@ant-design/icons'
+import { Button, Card, Checkbox, Col, Divider, Form, Input, List, Radio, Row, Space, Tree, DatePicker, Select } from 'antd'
 const { TextArea } = Input;
 import axios from 'axios';
 import React, { useEffect, useState } from 'react'
+import { } from 'antd';
+
+const { RangePicker } = DatePicker;
 
 
 interface DataNode {
@@ -140,7 +143,7 @@ const PcpData: React.FC = () => {
                         treeData={treeData}
                     />
 
-                    <Card bordered={false} style={{ position: 'fixed', width: '100%', maxWidth: 362, margin: '50px 0 0 0' }}>
+                    <Card bordered={false} style={{ width: '100%', maxWidth: 362, margin: '52px 0 0 0' }}>
 
                         <Row gutter={110}>
                             <Col span={12}>
@@ -156,11 +159,42 @@ const PcpData: React.FC = () => {
 
             </Col>
             <Col span={10}>
-                <Card style={{ height: '100%', minHeight: 725, overflowY: "auto" }}>
-                    <Card>
 
-                    </Card>
+                <Card bodyStyle={{ padding: 0 }} style={{ width: '100%', height: '100%', minHeight: 725, overflowY: "auto" }}>
+                    <Divider orientation='left'>Planejamento</Divider>
+                    <div style={{ margin: 20 }}>
+                        <Form>
+                            <Radio.Group>
+                                <Space direction='vertical'>
+                                    <Radio value={1}>
+                                        Automático
+                                    </Radio>
+                                    <Radio value={2}>
+                                        Manual
+                                    </Radio>
+                                </Space>
+                            </Radio.Group>
+                        </Form>
+
+                        <Form>
+                            <Form.Item label="Data">
+                                <RangePicker placeholder={["Início", "Fim"]} />
+                            </Form.Item>
+                        </Form>
+                        <Form style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+
+                            <Form.Item label="Duração">
+                                <Input />
+                            </Form.Item>
+                            <Form.Item>
+                                <Select />
+                            </Form.Item>
+                        </Form>
+                    </div>
+
+                    <Divider orientation='left'>Consumo</Divider>
                 </Card>
+
             </Col>
         </Row>
 
