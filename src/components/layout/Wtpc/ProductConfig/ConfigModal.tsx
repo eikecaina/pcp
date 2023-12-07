@@ -1,4 +1,4 @@
-import { Button, Card, Checkbox, Col, DatePicker, Form, Modal, Radio, Row, message } from "antd";
+import { Button, Card, Checkbox, Col, DatePicker, Form, Modal, Radio, Row, Space, message } from "antd";
 import CustomInputNumber from "../CustomInputNumber";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import customParseFormat from 'dayjs/plugin/customParseFormat';
@@ -46,19 +46,18 @@ const listDates = () => {
     return (
         <ul style={{ listStyle: 'none', padding: 0, margin: 0, }}>
             {datasExample.map((item, index) => (
-                <li style={{ 
-                    marginBottom: 3, 
+                <li style={{
+                    marginBottom: 3,
                     background: index % 2 === 0 ? 'white' : '#f0f0f0',
                     padding: 2
-                }} 
-                key={index}>{item.data + ' - ' + item.peça + ' peças'}</li>
+                }}
+                    key={index}>{item.data + ' - ' + item.peça + ' peças'}</li>
             ))}
         </ul>
     );
 };
 
 const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
-
 dayjs.extend(customParseFormat);
 
 const ConfigModal = () => {
@@ -71,12 +70,10 @@ const ConfigModal = () => {
                     <Col span={12}>
 
                         <Radio.Group>
-                            <Form.Item>
+                            <Space direction="vertical" style={{ marginBottom: 20 }}>
                                 <Radio value={1}>Certificado</Radio>
-                            </Form.Item>
-                            <Form.Item>
                                 <Radio value={2}>Aprovação em dias corridos</Radio>
-                            </Form.Item>
+                            </Space>
                         </Radio.Group>
                         <Form.Item label="Dias">
                             <CustomInputNumber min={0} maxLength={3} style={{ width: 50 }} />
@@ -101,10 +98,10 @@ const ConfigModal = () => {
                             <CustomInputNumber style={{ width: '100%' }} />
                         </Form.Item>
                         <Row justify={'space-evenly'}>
-                            <Button type="primary" onClick={successMsg} style={{ backgroundColor: '#95de64' }}>
+                            <Button type="primary" onClick={successMsg} style={{ width: '100%', maxWidth: 150, textAlign: 'center', backgroundColor: '#95de64' }}>
                                 Salvar
                             </Button>
-                            <Button onClick={confirmDelete} type="primary">
+                            <Button style={{ width: '100%', maxWidth: 150, textAlign: 'center' }} onClick={confirmDelete} type="primary">
                                 Limpar
                             </Button>
                         </Row>

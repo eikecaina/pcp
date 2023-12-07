@@ -1,11 +1,13 @@
-import { FlagOutlined } from '@ant-design/icons'
-import { Button, Card, Checkbox, Col, Divider, Form, Input, List, Radio, Row, Space, Tree, DatePicker, Select } from 'antd'
-const { TextArea } = Input;
-import axios from 'axios';
 import React, { useEffect, useState } from 'react'
-import { } from 'antd';
+import { ExclamationCircleOutlined, FlagOutlined } from '@ant-design/icons'
+import { Button, Card, Checkbox, Col, Divider, Form, Input, List, Radio, Row, Space, Tree, DatePicker, Select, Modal } from 'antd'
+import CustomInputNumber from '../CustomInputNumber';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 
-const { RangePicker } = DatePicker;
+const { TextArea } = Input;
+
+import dayjs from 'dayjs';
+import axios from 'axios';
 
 
 interface DataNode {
@@ -15,15 +17,21 @@ interface DataNode {
     children?: DataNode[];
 }
 
+
+dayjs.extend(customParseFormat);
+const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
+
 const PcpData: React.FC = () => {
     const [dataExample, setDataExample] = useState<any[]>([]);
     const [treeData, setTreeData] = useState<DataNode[]>([]);
+    const [resourceExample, setResourceExample] = useState<any[]>([]);
 
     async function axiosData() {
         try {
             const response = await axios.get('http://localhost:8080/');
             const dataExample = response.data.registros.find(item => item.tipo === "data-example")?.dados || [];
             const treeData = response.data.registros.find(item => item.tipo === "processos")?.dados || [];
+            const resourceExample = response.data.registros.find(item => item.tipo === "resources")?.dados || [];
 
             const procPcpData: DataNode[] = treeData.map((item, index) => {
                 return {
@@ -44,6 +52,7 @@ const PcpData: React.FC = () => {
 
             setDataExample(dataExample);
             setTreeData(procPcpData)
+            setResourceExample(resourceExample);
         } catch (error) {
             console.error('Erro ao acessar a API:', error.message);
         }
@@ -54,10 +63,9 @@ const PcpData: React.FC = () => {
     }, []);
 
     return (
-
         <Row gutter={6} style={{ height: '100%', maxHeight: 800 }}>
-            <Col span={9}>
-                <Card bodyStyle={{ padding: 0 }} style={{ height: '100%', maxHeight: '100%', padding: 0, width: '100%' }}>
+            <Col span={8}>
+                <Card bodyStyle={{ padding: 0 }} style={{ height: '100%', maxHeight: 780, padding: 0, width: '100%' }}>
                     <Divider orientation='left'>Entregas</Divider>
                     <Card bodyStyle={{ padding: 0, margin: 0 }} style={{ height: '100%', maxHeight: 718, margin: '0 5px 0 5px', overflowY: "auto" }}>
                         <List
@@ -77,7 +85,7 @@ const PcpData: React.FC = () => {
                         </List>
                     </Card>
                     <Divider orientation='left'>Detalhes</Divider>
-                    <Card bodyStyle={{ padding: '0 10px 0 10px', overflowY: 'auto', maxHeight: 408 }} bordered={false}>
+                    <Card bodyStyle={{ padding: '0 10px 0 10px', overflowY: 'auto', maxHeight: 407 }} bordered={false}>
                         <Form layout='vertical'>
                             <Form.Item
                                 label="Observações:"
@@ -123,78 +131,127 @@ const PcpData: React.FC = () => {
                                 <Input />
                             </Form.Item>
                         </Form>
+
                         <Form.Item
                             label="Inspeção:"
                         >
                             <Checkbox></Checkbox>
                         </Form.Item>
-                        <Button type='primary' style={{ float: 'right', marginBottom: 5, width: '100%', maxWidth: 100 }}>Salvar</Button>
                     </Card>
 
                 </Card>
             </Col>
-            <Col span={5}>
-                <Card bodyStyle={{ padding: 0 }} style={{ padding: 0, width: '100%', height: '100%', maxHeight: '100%' }}>
+            <Col span={8}>
+                <Card bodyStyle={{ padding: 0 }} style={{ padding: 0, width: '100%', height: '100%', maxHeight: 790 }}>
                     <Divider orientation='left'>Processos</Divider>
                     <Tree
-                        style={{ overflowY: "auto", height: '100%', maxHeight: 585 }}
+                        style={{ overflowY: "auto", height: '100%', maxHeight: 655, minHeight: 705 }}
                         showLine={true}
                         defaultExpandedKeys={['0-0-0']}
                         treeData={treeData}
                     />
-
-                    <Card bordered={false} style={{ width: '100%', maxWidth: 362, margin: '52px 0 0 0' }}>
-
-                        <Row gutter={110}>
-                            <Col span={12}>
-                                <Button style={{ width: '100%', maxWidth: 100, background: 'rgb(149, 222, 100)' }} type='primary'>Confirmar</Button>
-                            </Col>
-                            <Col span={12}>
-                                <Button style={{ width: '100%', maxWidth: 100, backgroundColor: '#ff4d4f' }} type='primary'>Excluir</Button>
-                            </Col>
-                        </Row>
-                    </Card>
-
                 </Card>
 
             </Col>
-            <Col span={10}>
+            <Col span={8}>
 
-                <Card bodyStyle={{ padding: 0 }} style={{ width: '100%', height: '100%', minHeight: 725, overflowY: "auto" }}>
+                <Card bordered={false} bodyStyle={{ padding: 0 }} style={{ width: '100%', height: '100%', minHeight: 725, maxHeight: 775 }}>
                     <Divider orientation='left'>Planejamento</Divider>
-                    <div style={{ margin: 20 }}>
-                        <Form>
-                            <Radio.Group>
-                                <Space direction='vertical'>
-                                    <Radio value={1}>
-                                        Automático
-                                    </Radio>
-                                    <Radio value={2}>
-                                        Manual
-                                    </Radio>
-                                </Space>
-                            </Radio.Group>
-                        </Form>
+                    <Form style={{ margin: 15 }}>
+                        <Radio.Group
+                            defaultValue={1}
+                        >
+                            <Space direction="vertical" style={{ marginBottom: 15 }}>
+                                <Radio value={1} disabled>Automático</Radio>
+                                <Radio value={2} disabled>Manual</Radio>
+                            </Space>
+                        </Radio.Group>
 
-                        <Form>
-                            <Form.Item label="Data">
-                                <RangePicker placeholder={["Início", "Fim"]} />
+                        <Form.Item style={{ marginBottom: 0 }}>
+                            <Form.Item
+                                style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                                label="Inicio"
+                                rules={[{ required: true }]}
+                            >
+                                <DatePicker defaultValue={dayjs('00/00/0000', dateFormatList[0])} format={dateFormatList[0]} disabled style={{ width: '100%' }} />
                             </Form.Item>
-                        </Form>
-                        <Form style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <Form.Item
+                                style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
+                                rules={[{ required: true }]}
 
-                            <Form.Item label="Duração">
-                                <Input />
+                            >
+                                <DatePicker defaultValue={dayjs('00/00/0000', dateFormatList[0])} format={dateFormatList[0]} disabled style={{ width: '100%' }} />
                             </Form.Item>
-                            <Form.Item>
-                                <Select />
+                        </Form.Item>
+                        <Form.Item
+                            label="Duração"
+                            style={{ display: 'inline-block', width: 'calc(60% - 8px)' }}
+                        >
+                            <CustomInputNumber value={1102} disabled style={{ width: '100%' }} />
+                        </Form.Item>
+                        <Form.Item
+                            style={{ display: 'inline-block', width: 'calc(40% - 8px)', margin: '0 8px' }}
+                        >
+                            <Select value={"Minutos"} disabled />
+                        </Form.Item>
+                        <Form.Item
+                            label="Recurso"
+                            style={{ display: 'inline-block', width: '99%' }}
+                        >
+                            <Input value={"TS - Elétrico - Rodrigo (lauffer)"} disabled style={{ width: '100%' }} />
+                        </Form.Item>
+                    </Form>
+                    <Divider orientation='left'>Consumo</Divider>
+                    <div style={{ overflowY: 'auto', maxHeight: 425 }}>
+                        <Form style={{ margin: 10 }}>
+                            <div style={{ height: '100%', maxHeight: 718, overflowY: "auto", marginBottom: 15 }}>
+                                <List
+                                    style={{ height: 213 }}
+                                    dataSource={resourceExample}
+                                    renderItem={(item, index) => (
+                                        <List.Item
+                                            style={{
+                                                background: index % 2 === 0 ? 'white' : '#f0f0f0',
+                                                padding: 10,
+                                            }}
+                                        >
+                                            <ExclamationCircleOutlined style={{ marginRight: 10, color: ' #FFBF00' }} />
+                                            {`${item.data} ${item.consume}`}
+                                        </List.Item>
+                                    )}>
+                                </List>
+                            </div>
+                            <Form.Item
+                                label="Recurso"
+                                style={{ display: 'inline-block', width: 'calc(60% - 8px)' }}
+                            >
+                                <Input value={"TS - Elétrico - Rodrigo (lauffer)"} disabled style={{ width: '100%' }} />
+                            </Form.Item>
+                            <Form.Item
+                                label="Fim"
+                                style={{ display: 'inline-block', width: 'calc(40% - 8px)', margin: '0 8px' }}
+                            >
+                                <DatePicker defaultValue={dayjs('07/12/2024', dateFormatList[0])} format={dateFormatList[0]} disabled style={{ width: '100%' }} />
+                            </Form.Item>
+                            <Form.Item
+                                label="Consumo em minutos"
+                                style={{ display: 'inline-block', width: 'calc(100% - 8px)' }}
+                            >
+                                <CustomInputNumber value={"420"} disabled style={{ width: '100%' }} />
+                            </Form.Item>
+
+                            <Form.Item
+                                label="Notas"
+                            >
+                                <TextArea
+                                    value={"Abatimento com cálculo automático por Vendas."}
+                                    disabled
+                                    style={{ height: 50, resize: 'none' }}
+                                />
                             </Form.Item>
                         </Form>
                     </div>
-
-                    <Divider orientation='left'>Consumo</Divider>
                 </Card>
-
             </Col>
         </Row>
 

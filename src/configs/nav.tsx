@@ -18,11 +18,6 @@ export const MENUS: NavEntry[] = [
     path: '/newQuotation',
   },
   {
-    name: "Abrir Cotação",
-    icon: FolderOpenOutlined,
-    path: '/openQuotation',
-  },
-  {
     name: "PCP",
     icon: CalendarOutlined,
     path: '/pcp',

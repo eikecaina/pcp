@@ -785,6 +785,75 @@
           ]
         }
       ]
+    },
+    {
+      "tipo": "resources",
+      "dados": [
+        {
+          "data": "20/12/2022",
+          "consume": "(Consumo 7 horas)"
+        },
+        {
+          "data": "21/12/2022",
+          "consume": "(Consumo 5 minutos)"
+        },
+        {
+          "data": "22/12/2022",
+          "consume": "(Consumo 3 horas)"
+        },
+        {
+          "data": "23/12/2022",
+          "consume": "(Consumo 1 hora)"
+        },
+        {
+          "data": "24/12/2022",
+          "consume": "(Consumo 2 horas)"
+        },
+        {
+          "data": "25/12/2022",
+          "consume": "(Consumo 4 minutos)"
+        },
+        {
+          "data": "26/12/2022",
+          "consume": "(Consumo 6 horas)"
+        },
+        {
+          "data": "27/12/2022",
+          "consume": "(Consumo 45 minutos)"
+        },
+        {
+          "data": "28/12/2022",
+          "consume": "(Consumo 3 horas)"
+        },
+        {
+          "data": "29/12/2022",
+          "consume": "(Consumo 1 hora)"
+        },
+        {
+          "data": "30/12/2022",
+          "consume": "(Consumo 8 horas)"
+        },
+        {
+          "data": "31/12/2022",
+          "consume": "(Consumo 2 minutos)"
+        },
+        {
+          "data": "01/01/2023",
+          "consume": "(Consumo 4 horas)"
+        },
+        {
+          "data": "02/01/2023",
+          "consume": "(Consumo 6 horas)"
+        },
+        {
+          "data": "03/01/2023",
+          "consume": "(Consumo 1 hora)"
+        },
+        {
+          "data": "04/01/2023",
+          "consume": "(Consumo 3 horas)"
+        }
+      ]
     }
   ]
 }
