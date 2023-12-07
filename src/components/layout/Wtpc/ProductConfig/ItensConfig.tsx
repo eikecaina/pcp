@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { Card, Col, Form, Row, Button, Select, Input, Modal, message, FloatButton, Tour, Space } from 'antd';
-import { ExclamationCircleOutlined, PlusOutlined, PrinterOutlined, QuestionCircleOutlined, SaveOutlined, SearchOutlined } from '@ant-design/icons';
+import { CalendarOutlined, ExclamationCircleOutlined, PlusOutlined, PrinterOutlined, QuestionCircleOutlined, SaveOutlined, SearchOutlined } from '@ant-design/icons';
 import CustomInputNumber from '../CustomInputNumber';
 import ConfigModal from './ConfigModal';
 import TutorialTour from '../Tutorial/TutorialNewQuotation';
 import Resume from './Resume';
 import SearchQuotation from '../OpenQuotation/SearchQuotation';
+
 
 const ItensConfig: React.FC = () => {
     const { refs, steps } = TutorialTour();
@@ -142,7 +143,10 @@ const ItensConfig: React.FC = () => {
                         </Col>
                     </Row>
                     <FloatButton.Group shape='square' style={{ right: 50, bottom: 90 }}>
-                        <FloatButton type="default" icon={<PrinterOutlined />} />
+                        <FloatButton type='default'
+                            onClick={() => window.location.href = '/pcp/pcpData'}
+                            icon={<CalendarOutlined />}
+                        />
                         <FloatButton type="default" icon={<SaveOutlined />} />
                         <FloatButton
                             onClick={() => setOpenTour(true)}

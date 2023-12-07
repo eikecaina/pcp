@@ -63,13 +63,13 @@ const PcpData: React.FC = () => {
     }, []);
 
     return (
-        <Row gutter={6} style={{ height: '100%', maxHeight: 800 }}>
+        <Row gutter={6} style={{ height: '100%', maxHeight: 770 }}>
             <Col span={8}>
-                <Card bodyStyle={{ padding: 0 }} style={{ height: '100%', maxHeight: 780, padding: 0, width: '100%' }}>
+                <Card bodyStyle={{ padding: 0 }} style={{ height: '100%', maxHeight: '100%', padding: 0, width: '100%' }}>
                     <Divider orientation='left'>Entregas</Divider>
-                    <Card bodyStyle={{ padding: 0, margin: 0 }} style={{ height: '100%', maxHeight: 718, margin: '0 5px 0 5px', overflowY: "auto" }}>
+                    <Card bodyStyle={{ padding: 0, margin: 0 }} style={{ height: '100%', maxHeight: 372, margin: '0 5px 0 5px', overflowY: "auto" }}>
                         <List
-                            style={{ height: 250 }}
+                            style={{ height: 235 }}
                             dataSource={dataExample}
                             renderItem={(item, index) => (
                                 <List.Item
@@ -85,7 +85,7 @@ const PcpData: React.FC = () => {
                         </List>
                     </Card>
                     <Divider orientation='left'>Detalhes</Divider>
-                    <Card bodyStyle={{ padding: '0 10px 0 10px', overflowY: 'auto', maxHeight: 407 }} bordered={false}>
+                    <div style={{ overflowY: 'auto', maxHeight: 372, padding: 10 }}>
                         <Form layout='vertical'>
                             <Form.Item
                                 label="Observações:"
@@ -137,25 +137,34 @@ const PcpData: React.FC = () => {
                         >
                             <Checkbox></Checkbox>
                         </Form.Item>
+                    </div>
+                    <Card bodyStyle={{ padding: 10, margin: 0, float: 'right'}} bordered={false}>
+                        <Button type='primary' style={{ backgroundColor: '#95de64' }}>Salvar</Button>
                     </Card>
-
                 </Card>
             </Col>
             <Col span={8}>
-                <Card bodyStyle={{ padding: 0 }} style={{ padding: 0, width: '100%', height: '100%', maxHeight: 790 }}>
+                <Card bodyStyle={{ padding: 0 }} style={{ padding: 0, width: '100%', height: '100%' }}>
                     <Divider orientation='left'>Processos</Divider>
                     <Tree
-                        style={{ overflowY: "auto", height: '100%', maxHeight: 655, minHeight: 705 }}
+                        style={{ overflowY: "auto", height: 665, maxHeight: 665 }}
                         showLine={true}
                         defaultExpandedKeys={['0-0-0']}
                         treeData={treeData}
                     />
+                    <div style={{ padding: 10 }}>
+                        <div style={{ width: '100%', display: 'flex', alignContent: 'center', justifyContent: 'space-evenly' }}>
+                            <Button type='primary' style={{ width: 'calc(30% - 8px)', backgroundColor: '#95de64' }}>Confirmar</Button>
+                            <Button type='primary' style={{ width: 'calc(30% - 8px)', backgroundColor: '#f5222d' }}>Excluir</Button>
+                        </div>
+                    </div>
+
                 </Card>
 
             </Col>
             <Col span={8}>
 
-                <Card bordered={false} bodyStyle={{ padding: 0 }} style={{ width: '100%', height: '100%', minHeight: 725, maxHeight: 775 }}>
+                <Card bodyStyle={{ padding: 0 }} style={{ width: '100%', height: '100%', minHeight: 775, maxHeight: 777 }}>
                     <Divider orientation='left'>Planejamento</Divider>
                     <Form style={{ margin: 15 }}>
                         <Radio.Group
@@ -202,7 +211,7 @@ const PcpData: React.FC = () => {
                         </Form.Item>
                     </Form>
                     <Divider orientation='left'>Consumo</Divider>
-                    <div style={{ overflowY: 'auto', maxHeight: 425 }}>
+                    <div style={{ overflowY: 'auto', maxHeight: 372 }}>
                         <Form style={{ margin: 10 }}>
                             <div style={{ height: '100%', maxHeight: 718, overflowY: "auto", marginBottom: 15 }}>
                                 <List
@@ -251,6 +260,9 @@ const PcpData: React.FC = () => {
                             </Form.Item>
                         </Form>
                     </div>
+                    <Card bodyStyle={{ padding: 10, margin: 0, float: "right" }} bordered={false}>
+                        <Button type='primary' style={{ backgroundColor: '#bfbfbf' }}>Editar</Button>
+                    </Card>
                 </Card>
             </Col>
         </Row>
