@@ -76,7 +76,7 @@ const Resume: React.FC = () => {
 
     return (
         <Card bodyStyle={{ padding: 0, height: '100%', minHeight: 774 }}>
-            <Tabs tabBarStyle={{ margin: 0 }} tabBarGutter={0} type="card" style={{ height: '100%', width: '100%', overflowY: 'auto', margin: 0 }} defaultActiveKey="1" items={items} />
+            <Tabs tabBarStyle={{ padding: '0 0 0 15px' }} tabBarGutter={20} type="line" style={{ height: '100%', width: '100%', overflowY: 'auto', margin: 0 }} defaultActiveKey="1" items={items} />
         </Card>
     );
 }

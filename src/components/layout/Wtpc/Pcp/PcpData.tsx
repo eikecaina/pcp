@@ -63,11 +63,11 @@ const PcpData: React.FC = () => {
     }, []);
 
     return (
-        <Row gutter={6} style={{ height: '100%', maxHeight: 770 }}>
-            <Col span={8}>
-                <Card bodyStyle={{ padding: 0 }} style={{ height: '100%', maxHeight: '100%', padding: 0, width: '100%' }}>
+        <Row gutter={6} style={{ height: '100%', maxHeight: 714 }}>
+            <Col span={9}>
+                <Card bodyStyle={{ padding: 0 }} style={{ height: '100%', borderTop: 'none', maxHeight: 714, padding: 0, width: '100%' }}>
                     <Divider orientation='left'>Entregas</Divider>
-                    <Card bodyStyle={{ padding: 0, margin: 0 }} style={{ height: '100%', maxHeight: 372, margin: '0 5px 0 5px', overflowY: "auto" }}>
+                    <div style={{ height: '100%', borderTop: 'none', maxHeight: 165, margin: '0 5px 0 5px', overflowY: "auto" }}>
                         <List
                             style={{ height: 235 }}
                             dataSource={dataExample}
@@ -83,71 +83,85 @@ const PcpData: React.FC = () => {
                                 </List.Item>
                             )}>
                         </List>
-                    </Card>
+                    </div>
                     <Divider orientation='left'>Detalhes</Divider>
-                    <div style={{ overflowY: 'auto', maxHeight: 372, padding: 10 }}>
+                    <div style={{ overflowY: 'auto', height: '100%', maxHeight: 387, padding: 10 }}>
                         <Form layout='vertical'>
+
                             <Form.Item
-                                label="Observações:"
+                                style={{ display: 'inline-block', width: 'calc(33.33% - 8px)' }}
+                                label="OV"
+                                colon={false}
+                            >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
+                                style={{ display: 'inline-block', width: 'calc(33.33% - 8px)', margin: '0 8px' }}
+                                label="Item OV"
+                            >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
+                                style={{ display: 'inline-block', width: 'calc(33.33% - 8px)' }}
+                                label="Potência"
+                            >
+                                <Input />
+                            </Form.Item>
+
+                            <Form.Item
+                                style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                                label="Ordem de produção"
+                            >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
+                                style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
+                                label="Claim de planejamento"
+                            >
+                                <Input />
+                            </Form.Item>
+
+                            <Form.Item
+                                style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                                label="Classe de tensão"
+                            >
+                                <Input />
+                            </Form.Item>
+
+                            <Form.Item
+                                style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
+                                label="Item FERT"
+                            >
+                                <Input />
+                            </Form.Item>
+                            <Form.Item
+                                label="Observações"
                             >
                                 <TextArea
                                     placeholder="Digite suas observações aqui"
                                     autoSize={{ minRows: 2, maxRows: 6 }}
                                 />
                             </Form.Item>
-                            <Form.Item
-                                label="OV:"
-                            >
-                                <Input />
-                            </Form.Item>
-                            <Form.Item
-                                label="Item OV:"
-                            >
-                                <Input />
-                            </Form.Item>
-                            <Form.Item
-                                label="Potência:"
-                            >
-                                <Input />
-                            </Form.Item>
-                            <Form.Item
-                                label="Classe de tensão:"
-                            >
-                                <Input />
-                            </Form.Item>
-                            <Form.Item
-                                label="Claim de planejamento:"
-                            >
-                                <Input />
-                            </Form.Item>
-                            <Form.Item
-                                label="Item FERT:"
-                            >
-                                <Input />
-                            </Form.Item>
-                            <Form.Item
-                                label="Ordem de produção:"
-                            >
-                                <Input />
-                            </Form.Item>
                         </Form>
-
+                    </div>
+                    <div style={{ margin: 10, display: 'flex', justifyContent: 'space-between' }}>
                         <Form.Item
-                            label="Inspeção:"
+                            colon={false}
+                            label="Inspeção"
                         >
                             <Checkbox></Checkbox>
                         </Form.Item>
+                        <Form.Item>
+                            <Button type='primary' style={{ backgroundColor: '#95de64' }}>Salvar</Button>
+                        </Form.Item>
                     </div>
-                    <Card bodyStyle={{ padding: 10, margin: 0, float: 'right'}} bordered={false}>
-                        <Button type='primary' style={{ backgroundColor: '#95de64' }}>Salvar</Button>
-                    </Card>
                 </Card>
             </Col>
             <Col span={8}>
-                <Card bodyStyle={{ padding: 0 }} style={{ padding: 0, width: '100%', height: '100%' }}>
+                <Card bodyStyle={{ padding: 0 }} style={{ borderTop: 'none', padding: 0, width: '100%', height: '100%', maxHeight: 714 }}>
                     <Divider orientation='left'>Processos</Divider>
                     <Tree
-                        style={{ overflowY: "auto", height: 665, maxHeight: 665 }}
+                        style={{ overflowY: "auto", height: 665, maxHeight: 607 }}
                         showLine={true}
                         defaultExpandedKeys={['0-0-0']}
                         treeData={treeData}
@@ -162,9 +176,9 @@ const PcpData: React.FC = () => {
                 </Card>
 
             </Col>
-            <Col span={8}>
+            <Col span={7}>
 
-                <Card bodyStyle={{ padding: 0 }} style={{ width: '100%', height: '100%', minHeight: 775, maxHeight: 777 }}>
+                <Card bodyStyle={{ padding: 0 }} style={{ width: '100%', borderTop: 'none', height: '100%', maxHeight: 714 }}>
                     <Divider orientation='left'>Planejamento</Divider>
                     <Form style={{ margin: 15 }}>
                         <Radio.Group
@@ -210,10 +224,10 @@ const PcpData: React.FC = () => {
                             <Input value={"TS - Elétrico - Rodrigo (lauffer)"} disabled style={{ width: '100%' }} />
                         </Form.Item>
                     </Form>
-                    <Divider orientation='left'>Consumo</Divider>
-                    <div style={{ overflowY: 'auto', maxHeight: 372 }}>
+                    <Divider orientation='left' style={{ margin: 0 }}>Consumo</Divider>
+                    <div style={{ maxHeight: 334 }}>
                         <Form style={{ margin: 10 }}>
-                            <div style={{ height: '100%', maxHeight: 718, overflowY: "auto", marginBottom: 15 }}>
+                            <div style={{ height: '100%', maxHeight: 123, overflowY: "auto", marginBottom: 15 }}>
                                 <List
                                     style={{ height: 213 }}
                                     dataSource={resourceExample}
@@ -265,7 +279,7 @@ const PcpData: React.FC = () => {
                     </Card>
                 </Card>
             </Col>
-        </Row>
+        </Row >
 
     )
 }

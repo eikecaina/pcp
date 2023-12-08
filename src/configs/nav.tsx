@@ -17,33 +17,5 @@ export const MENUS: NavEntry[] = [
     icon: ContainerOutlined,
     path: '/newQuotation',
   },
-  {
-    name: "PCP",
-    icon: CalendarOutlined,
-    path: '/pcp',
-    children: [
-      {
-        name: "Data",
-        path: '/pcp/pcpData',
-        
-      },
-      {
-        name: "Processos e Recursos",
-        path: '/teste',
-        
-      },
-      {
-        name: "Relatórios",
-        path: '/ssssa',
-        
-      },
-      {
-        name: "Recursos Consolidados",
-        path: '/rrrr',
-        
-      },
-    ]
-  }
-
 ];
 
