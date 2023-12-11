@@ -34,7 +34,7 @@ const items: TabsProps['items'] = [
 
 const PcpPage: React.FC = () => {
     return (
-        <Tabs tabBarStyle={{ margin: 0 }} type='card' defaultActiveKey="1" items={items} onChange={onChange} />
+        <Tabs tabBarStyle={{ margin: 0 }} defaultActiveKey="1" items={items} onChange={onChange} />
     )
 }
 

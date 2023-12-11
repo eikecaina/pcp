@@ -1,9 +1,32 @@
-import { Button, Card, List, Row, Tabs, TabsProps, Typography } from "antd";
+import { Card, List, Tabs, TabsProps, Typography } from "antd";
 import { useEffect, useState } from "react";
+import { Button, Drawer, theme } from 'antd';
 
 const axios = require('axios');
 
 const Resume: React.FC = () => {
+    const { token } = theme.useToken();
+    const [open, setOpen] = useState(false);
+
+    const showDrawer = () => {
+        setOpen(true);
+    };
+
+    const onClose = () => {
+        setOpen(false);
+    };
+
+    const containerStyle: React.CSSProperties = {
+        position: 'relative',
+        height: 200,
+        padding: 48,
+        overflow: 'hidden',
+        textAlign: 'center',
+        background: token.colorFillAlter,
+        border: `1px solid ${token.colorBorderSecondary}`,
+        borderRadius: token.borderRadiusLG,
+      };
+
     const [cotacaoData, setcotacaoData] = useState<any[]>([]);
     const [resumidoData, setResumidoData] = useState<any[]>([]);
     const [detalhadoData, setDetalhadoData] = useState<any[]>([]);

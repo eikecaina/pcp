@@ -63,9 +63,9 @@ const PcpData: React.FC = () => {
     }, []);
 
     return (
-        <Row gutter={6} style={{ height: '100%', maxHeight: 714 }}>
+        <Row gutter={6}>
             <Col span={9}>
-                <Card bodyStyle={{ padding: 0 }} style={{ height: '100%', borderTop: 'none', maxHeight: 714, padding: 0, width: '100%' }}>
+                <Card bodyStyle={{ padding: 0 }} style={{ height: '100%', borderTop: 'none', maxHeight: 214, padding: 0, width: '100%', borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
                     <Divider orientation='left'>Entregas</Divider>
                     <div style={{ height: '100%', borderTop: 'none', maxHeight: 165, margin: '0 5px 0 5px', overflowY: "auto" }}>
                         <List
@@ -103,19 +103,6 @@ const PcpData: React.FC = () => {
                             </Form.Item>
                             <Form.Item
                                 style={{ display: 'inline-block', width: 'calc(33.33% - 8px)' }}
-                                label="Potência"
-                            >
-                                <Input />
-                            </Form.Item>
-
-                            <Form.Item
-                                style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-                                label="Ordem de produção"
-                            >
-                                <Input />
-                            </Form.Item>
-                            <Form.Item
-                                style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
                                 label="Claim de planejamento"
                             >
                                 <Input />
@@ -123,18 +110,34 @@ const PcpData: React.FC = () => {
 
                             <Form.Item
                                 style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-                                label="Classe de tensão"
+                                label="Item FERT"
                             >
                                 <Input />
                             </Form.Item>
 
                             <Form.Item
                                 style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px' }}
-                                label="Item FERT"
+                                label="Ordem de produção"
                             >
                                 <Input />
                             </Form.Item>
                             <Form.Item
+                                style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
+                                label="Potência"
+                            >
+                                <Input />
+                            </Form.Item>
+
+                            <Form.Item
+                                style={{ display: 'inline-block', width: 'calc(50% - 8px)', margin: '0 8px'  }}
+                                label="Classe de tensão"
+                            >
+                                <Input />
+                            </Form.Item>
+
+                           
+                            <Form.Item
+                            style={{ margin: '0 8px 20px 0px' }}
                                 label="Observações"
                             >
                                 <TextArea
@@ -158,7 +161,7 @@ const PcpData: React.FC = () => {
                 </Card>
             </Col>
             <Col span={8}>
-                <Card bodyStyle={{ padding: 0 }} style={{ borderTop: 'none', padding: 0, width: '100%', height: '100%', maxHeight: 714 }}>
+                <Card bodyStyle={{ padding: 0 }} style={{ borderTop: 'none', padding: 0, width: '100%', height: '100%', maxHeight: 714, borderTopLeftRadius: 0, borderTopRightRadius: 0  }}>
                     <Divider orientation='left'>Processos</Divider>
                     <Tree
                         style={{ overflowY: "auto", height: 665, maxHeight: 607 }}
@@ -178,7 +181,7 @@ const PcpData: React.FC = () => {
             </Col>
             <Col span={7}>
 
-                <Card bodyStyle={{ padding: 0 }} style={{ width: '100%', borderTop: 'none', height: '100%', maxHeight: 714 }}>
+                <Card bodyStyle={{ padding: 0 }} style={{ width: '100%', borderTop: 'none', height: '100%', maxHeight: 714, borderTopLeftRadius: 0, borderTopRightRadius: 0  }}>
                     <Divider orientation='left'>Planejamento</Divider>
                     <Form style={{ margin: 15 }}>
                         <Radio.Group

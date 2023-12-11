@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { Card, Col, Form, Row, Button, Select, Input, Modal, message, FloatButton, Space } from 'antd';
-import { CalendarOutlined, ExclamationCircleOutlined, FolderOpenOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { Card, Col, Form, Row, Button, Select, Input, Modal, message, FloatButton, Space, Drawer } from 'antd';
+import { CalendarOutlined, ExclamationCircleOutlined, FolderOpenOutlined, MinusOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
 import CustomInputNumber from '../CustomInputNumber';
 import ConfigModal from './ConfigModal';
 
 import Resume from './Resume';
 import SearchQuotation from '../OpenQuotation/SearchQuotation';
-import Link from 'next/link';
+import PcpPage from '../Pcp/PcpPage';
 
 
 const ItensConfig: React.FC = () => {
@@ -16,6 +16,15 @@ const ItensConfig: React.FC = () => {
     const [selectOptions, setSelectOptions] = useState([{ value: '10' }]);
     const [selectedItem, setSelectedItem] = useState(10);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isDrawerVisible, setIsDrawerVisible] = useState(false);
+
+    const openDrawer = () => {
+        setIsDrawerVisible(true);
+    };
+
+    const closeDrawer = () => {
+        setIsDrawerVisible(false);
+    };
 
     const handleOpenModal = () => {
         setIsModalOpen(true);
@@ -68,15 +77,20 @@ const ItensConfig: React.FC = () => {
             setShowMaterial(true);
         }
     };
+    const [isModalConfigOpen, setIsModalConfigOpen] = useState(false);
+
+    const openModalConfig = () => {
+        setIsModalConfigOpen(true);
+    };
+
 
     return (
         <Row gutter={8}>
-            <Col span={10} style={{ height: '100%', minHeight: 776 }}>
+            <Col span={7} style={{ height: '100%', minHeight: 776 }}>
                 <Card bodyStyle={{ padding: 10 }} title="Configuração de itens gerais">
                     <Row>
                         <Col span={24}>
                             <Form layout='vertical'>
-
                                 <Form.Item
                                     style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
                                     label="Cliente"
@@ -96,8 +110,9 @@ const ItensConfig: React.FC = () => {
                                     rules={[{ required: true, message: 'Por favor, selecione o Item!' }]}
                                 >
                                     <Space.Compact style={{ width: '100%' }}>
+                                        <Button type='primary' onClick={addOptions} ><PlusOutlined /></Button>
                                         <Select value={selectedItem} onChange={(value) => setSelectedItem(value)} options={selectOptions} />
-                                        <Button type='primary' onClick={addOptions} style={{ backgroundColor: '#95de64' }}><PlusOutlined /></Button>
+                                        <Button type='primary' onClick={confirmDelete} ><MinusOutlined /></Button>
                                     </Space.Compact>
                                 </Form.Item>
 
@@ -117,37 +132,37 @@ const ItensConfig: React.FC = () => {
                                     <CustomInputNumber style={{ width: '100%' }} />
                                 </Form.Item>
 
-
                                 <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
                                     <Form.Item
                                         style={{ display: 'inline-block', width: 'calc(28% - 8px)' }}
                                     >
-                                        <Button type="primary" onClick={ConfigModal} style={{ backgroundColor: '#95de64', width: '100%' }}>
+                                        <Button type="primary" onClick={openModalConfig} style={{ backgroundColor: '#95de64', width: '100%' }}>
                                             Configuração
                                         </Button>
                                     </Form.Item>
-
-                                    <Form.Item
-                                        style={{ display: 'inline-block', width: 'calc(28% - 8px)', margin: '0 8px' }}
-                                    >
-                                        <Button onClick={confirmDelete} type="primary" style={{ backgroundColor: '#f5222d', width: '100%' }}>
-                                            Excluir Item
-                                        </Button>
-                                    </Form.Item>
                                 </div>
-
+                                {isModalConfigOpen && <ConfigModal setIsModalConfigOpen={setIsModalConfigOpen} />}
                             </Form>
                         </Col>
                     </Row>
-                    <FloatButton.Group
-                        trigger='hover'
-                        icon={<FolderOpenOutlined />}
-                        style={{ right: 50, bottom: 90 }}
-                    >
-                        <Link href={'/pcp/pcpPage'}>
-                            <FloatButton tooltip={<div>PCP</div>} type='default' icon={<CalendarOutlined />} />
-                        </Link>
+                    <FloatButton.Group trigger="hover" icon={<FolderOpenOutlined />} style={{ right: 50, bottom: 90 }}>
+                        <FloatButton
+                            tooltip={<div>PCP</div>}
+                            type="default"
+                            icon={<CalendarOutlined />}
+                            onClick={openDrawer}
+                        />
                     </FloatButton.Group>
+
+                    <Drawer
+                        width={'100%'}
+                        title="PCP"
+                        placement="right"
+                        onClose={closeDrawer}
+                        open={isDrawerVisible}
+                    >
+                        <PcpPage />
+                    </Drawer>
 
 
                     <Card style={{ overflowY: 'auto', height: 427 }}>
@@ -179,7 +194,7 @@ const ItensConfig: React.FC = () => {
                     </div>
                 </Card>
             </Col>
-            <Col span={14}>
+            <Col span={17}>
                 <div
                     style={{ height: '100%', overflowY: 'auto', maxHeight: '100%', width: '100%' }}
                 >

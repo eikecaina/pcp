@@ -1,12 +1,16 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { useEffect, useState } from 'react';
 import { AgChartsReact } from 'ag-charts-react';
+import { Calendar, CalendarProps, Card, Col, Divider, Form, List, Radio, Row, Select, theme } from 'antd';
+import { Dayjs } from 'dayjs';
+
+const onPanelChange = (value: Dayjs, mode: CalendarProps<Dayjs>['mode']) => {
+    console.log(value.format('DD/MM/YYYY'), mode);
+};
 
 const PcpProcessResources: React.FC = () => {
+    const { token } = theme.useToken();
 
-    // Chart Options: Control & configure the chart
     const [chartOptions, setChartOptions] = React.useState({
-        // Data: Data to be displayed in the chart
         data: [
             { month: 'Jan', avgTemp: 2.3, iceCreamSales: 162000 },
             { month: 'Mar', avgTemp: 6.3, iceCreamSales: 402000 },
@@ -15,17 +19,23 @@ const PcpProcessResources: React.FC = () => {
             { month: 'Sep', avgTemp: 14.5, iceCreamSales: 950000 },
             { month: 'Nov', avgTemp: 1.9, iceCreamSales: 600000 },
         ],
-        // Series: Defines which chart type and data to use
+
         series: [{ type: 'bar', xKey: 'month', yKey: 'iceCreamSales' }],
     });
-
     return (
-        <div style={{ width: 400 }}>
+        <Row>
+            <Col span={12}>
 
-            <AgChartsReact options={chartOptions as any} />
-        </div>
+            </Col>
+            <Col span={12}>
+                <div style={{ width: '100%', height: '100%', maxHeight: 250 }}>
+                    <AgChartsReact options={chartOptions as any} />
+                    <AgChartsReact options={chartOptions as any} />
+                    <AgChartsReact options={chartOptions as any} />
+                </div>
+            </Col>
+        </Row >
     );
 }
-
 
 export default PcpProcessResources;

@@ -4,6 +4,7 @@ import { CheckboxChangeEvent } from "antd/es/checkbox";
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 import dayjs from 'dayjs';
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { useState } from "react";
 
 
 const successMsg = () => {
@@ -60,23 +61,43 @@ const listDates = () => {
 const dateFormatList = ['DD/MM/YYYY', 'DD/MM/YY', 'DD-MM-YYYY', 'DD-MM-YY'];
 dayjs.extend(customParseFormat);
 
-const ConfigModal = () => {
-    Modal.confirm({
-        title: 'Configurações',
-        width: 990,
-        content: (
-            <Card>
-                <Row gutter={10}>
-                    <Col span={12}>
+interface ConfigModalProps {
+    setIsModalConfigOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-                        <Radio.Group>
+const ConfigModal: React.FC<ConfigModalProps> = ({ setIsModalConfigOpen }) => {
+    const [disabelInput, setDisabelInput] = useState(1);
+
+    const handleCancel = () => {
+        setIsModalConfigOpen(false);
+    };
+
+    const handleOk = () => {
+        setIsModalConfigOpen(false); // Fechar o modal após a confirmação
+    };
+
+    return (
+        <Modal
+            title="Configurações"
+            open={true}
+            onCancel={handleCancel}
+            onOk={handleOk}
+            width={990}
+            okText="Confirmar"
+            cancelText="Cancelar"
+
+        >
+            <Row gutter={10}>
+                <Col span={12}>
+                    <Card title="Configuração de item" style={{ height: '100%' }}>
+                        <Radio.Group onChange={(e) => setDisabelInput(e.target.value)} value={disabelInput}>
                             <Space direction="vertical" style={{ marginBottom: 20 }}>
                                 <Radio value={1}>Certificado</Radio>
                                 <Radio value={2}>Aprovação em dias corridos</Radio>
                             </Space>
                         </Radio.Group>
                         <Form.Item label="Dias">
-                            <CustomInputNumber min={0} maxLength={3} style={{ width: 50 }} />
+                            <CustomInputNumber disabled={disabelInput !== 2} min={0} maxLength={3} style={{ width: 50 }} />
                         </Form.Item>
                         <Form.Item label="Numero do Claim">
                             <CustomInputNumber style={{ width: '100%' }} />
@@ -87,10 +108,11 @@ const ConfigModal = () => {
                         <Form.Item label={<Checkbox onChange={onChange}>Repetição do material</Checkbox>}>
                             <CustomInputNumber style={{ width: '100%' }} />
                         </Form.Item>
+                    </Card>
+                </Col>
 
-                    </Col>
-                    <Col span={12}>
-
+                <Col span={12}>
+                    <Card title="Entrega">
                         <Form.Item label="Entrega em">
                             <DatePicker style={{ width: '100%' }} defaultValue={dayjs('00/00/0000', dateFormatList[0])} format={dateFormatList} />
                         </Form.Item>
@@ -111,14 +133,11 @@ const ConfigModal = () => {
                         >
                             {listDates()}
                         </Card>
-
-                    </Col>
-                </Row>
-            </Card>
-        ),
-        okText: 'Confirmar',
-        cancelText: 'Cancelar',
-    });
+                    </Card>
+                </Col>
+            </Row >
+        </Modal>
+    )
 };
 
 export default ConfigModal
