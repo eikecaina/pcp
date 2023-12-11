@@ -65,7 +65,7 @@ const PcpData: React.FC = () => {
     return (
         <Row gutter={6}>
             <Col span={9}>
-                <Card bodyStyle={{ padding: 0 }} style={{ height: '100%', borderTop: 'none', maxHeight: 214, padding: 0, width: '100%', borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
+                <Card bodyStyle={{ padding: 0 }} style={{ height: '100%', borderTop: 'none', maxHeight: 714, padding: 0, width: '100%', borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
                     <Divider orientation='left'>Entregas</Divider>
                     <div style={{ height: '100%', borderTop: 'none', maxHeight: 165, margin: '0 5px 0 5px', overflowY: "auto" }}>
                         <List
