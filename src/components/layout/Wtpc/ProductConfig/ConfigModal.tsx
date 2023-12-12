@@ -73,8 +73,14 @@ const ConfigModal: React.FC<ConfigModalProps> = ({ setIsModalConfigOpen }) => {
     };
 
     const handleOk = () => {
-        setIsModalConfigOpen(false); // Fechar o modal após a confirmação
+        setIsModalConfigOpen(false);
     };
+
+    const [repMaterial, setRepMaterial] = useState(false);
+
+    const handleRepMaterial = () => {
+        setRepMaterial(true);
+    }
 
     return (
         <Modal
@@ -96,22 +102,24 @@ const ConfigModal: React.FC<ConfigModalProps> = ({ setIsModalConfigOpen }) => {
                                 <Radio value={2}>Aprovação em dias corridos</Radio>
                             </Space>
                         </Radio.Group>
-                        <Form.Item label="Dias">
-                            <CustomInputNumber disabled={disabelInput !== 2} min={0} maxLength={3} style={{ width: 50 }} />
-                        </Form.Item>
-                        <Form.Item label="Numero do Claim">
-                            <CustomInputNumber style={{ width: '100%' }} />
-                        </Form.Item>
-                        <Form.Item label="Numero do novo material">
-                            <CustomInputNumber style={{ width: '100%' }} />
-                        </Form.Item>
-                        <Form.Item label={<Checkbox onChange={onChange}>Repetição do material</Checkbox>}>
-                            <CustomInputNumber style={{ width: '100%' }} />
-                        </Form.Item>
+                        <Form layout="vertical">
+                            <Form.Item label="Dias">
+                                <CustomInputNumber disabled={disabelInput !== 2} min={0} maxLength={3} style={{ width: 50 }} />
+                            </Form.Item>
+                            <Form.Item label="Número do Claim">
+                                <CustomInputNumber style={{ width: '100%' }} />
+                            </Form.Item>
+                            <Form.Item label="Número do novo material">
+                                <CustomInputNumber style={{ width: '100%' }} />
+                            </Form.Item>
+                            <Form.Item label={<Checkbox checked={repMaterial} onChange={(e) => setRepMaterial(e.target.checked)}>Repetição do material</Checkbox>}>
+                                <CustomInputNumber disabled={!repMaterial} style={{ width: '100%' }} />
+                            </Form.Item>
+                        </Form>
                     </Card>
                 </Col>
 
-                <Col span={12}>
+                <Col span={12} style={{ height: '100%' }}>
                     <Card title="Entrega">
                         <Form.Item label="Entrega em">
                             <DatePicker style={{ width: '100%' }} defaultValue={dayjs('00/00/0000', dateFormatList[0])} format={dateFormatList} />
@@ -128,7 +136,7 @@ const ConfigModal: React.FC<ConfigModalProps> = ({ setIsModalConfigOpen }) => {
                             </Button>
                         </Row>
                         <Card
-                            style={{ marginTop: 15, overflowY: 'auto', maxHeight: '178px', maxWidth: '100%' }}
+                            style={{ marginTop: 15, overflowY: 'auto', height: '100%', maxHeight: 257, maxWidth: '100%' }}
                             bodyStyle={{ padding: 0, margin: 0 }}
                         >
                             {listDates()}

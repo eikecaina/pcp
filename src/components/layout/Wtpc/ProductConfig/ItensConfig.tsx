@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Col, Form, Row, Button, Select, Input, Modal, message, FloatButton, Space, Drawer } from 'antd';
-import { CalendarOutlined, ExclamationCircleOutlined, FolderOpenOutlined, MinusOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons';
+import { CalendarOutlined, ExclamationCircleOutlined, FolderOpenOutlined, MinusOutlined, PlusOutlined, SearchOutlined, SettingOutlined } from '@ant-design/icons';
 import CustomInputNumber from '../CustomInputNumber';
 import ConfigModal from './ConfigModal';
 
@@ -86,8 +86,19 @@ const ItensConfig: React.FC = () => {
 
     return (
         <Row gutter={8}>
-            <Col span={7} style={{ height: '100%', minHeight: 776 }}>
-                <Card bodyStyle={{ padding: 10 }} title="Configuração de itens gerais">
+            <Col span={8} style={{ height: '100%', minHeight: 776 }}>
+                <Card
+                    style={{ height: 776 }}
+                    bodyStyle={{ padding: 10 }}
+                    title={
+                        <div>Configurações de Itens
+                            <Button title='Configuração do Item' type='default' onClick={openModalConfig} style={{ float: 'right' }}>
+                                <SettingOutlined />
+                            </Button>
+                        </div>
+                    }
+                >
+                    {isModalConfigOpen && <ConfigModal setIsModalConfigOpen={setIsModalConfigOpen} />}
                     <Row>
                         <Col span={24}>
                             <Form layout='vertical'>
@@ -131,17 +142,6 @@ const ItensConfig: React.FC = () => {
                                     rules={[{ required: true, message: 'Por favor, insira o ODV!' }]}>
                                     <CustomInputNumber style={{ width: '100%' }} />
                                 </Form.Item>
-
-                                <div style={{ display: 'flex', justifyContent: 'space-evenly' }}>
-                                    <Form.Item
-                                        style={{ display: 'inline-block', width: 'calc(28% - 8px)' }}
-                                    >
-                                        <Button type="primary" onClick={openModalConfig} style={{ backgroundColor: '#95de64', width: '100%' }}>
-                                            Configuração
-                                        </Button>
-                                    </Form.Item>
-                                </div>
-                                {isModalConfigOpen && <ConfigModal setIsModalConfigOpen={setIsModalConfigOpen} />}
                             </Form>
                         </Col>
                     </Row>
@@ -165,7 +165,7 @@ const ItensConfig: React.FC = () => {
                     </Drawer>
 
 
-                    <Card style={{ overflowY: 'auto', height: 427 }}>
+                    <Card style={{ overflowY: 'auto', height: 487 }}>
                         <Form layout="vertical">
                             <Form.Item colon={false} label="Meio de operação">
                                 <Select style={{ width: '100%', maxWidth: 350 }} options={[{ value: 'Óleo' }, { value: 'Seco' }]} onChange={handleOperetion} />
@@ -194,7 +194,7 @@ const ItensConfig: React.FC = () => {
                     </div>
                 </Card>
             </Col>
-            <Col span={17}>
+            <Col span={16}>
                 <div
                     style={{ height: '100%', overflowY: 'auto', maxHeight: '100%', width: '100%' }}
                 >

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ExclamationCircleOutlined, FlagOutlined } from '@ant-design/icons'
-import { Button, Card, Checkbox, Col, Divider, Form, Input, List, Radio, Row, Space, Tree, DatePicker, Select, Modal } from 'antd'
+import { Button, Card, Checkbox, Col, Divider, Form, Input, List, Radio, Row, Space, Tree, DatePicker, Select } from 'antd'
 import CustomInputNumber from '../CustomInputNumber';
 import customParseFormat from 'dayjs/plugin/customParseFormat';
 
@@ -33,7 +33,7 @@ const PcpData: React.FC = () => {
             const treeData = response.data.registros.find(item => item.tipo === "processos")?.dados || [];
             const resourceExample = response.data.registros.find(item => item.tipo === "resources")?.dados || [];
 
-            const procPcpData: DataNode[] = treeData.map((item, index) => {
+            const procPcpData: DataNode[] = treeData.map((item) => {
                 return {
                     title: `${item.title}`,
                     key: `${item.key}`,
@@ -64,7 +64,7 @@ const PcpData: React.FC = () => {
 
     return (
         <Row gutter={6}>
-            <Col span={9}>
+            <Col span={8}>
                 <Card bodyStyle={{ padding: 0 }} style={{ height: '100%', borderTop: 'none', maxHeight: 714, padding: 0, width: '100%', borderTopLeftRadius: 0, borderTopRightRadius: 0 }}>
                     <Divider orientation='left'>Entregas</Divider>
                     <div style={{ height: '100%', borderTop: 'none', maxHeight: 165, margin: '0 5px 0 5px', overflowY: "auto" }}>
@@ -103,14 +103,14 @@ const PcpData: React.FC = () => {
                             </Form.Item>
                             <Form.Item
                                 style={{ display: 'inline-block', width: 'calc(33.33% - 8px)' }}
-                                label="Claim de planejamento"
+                                label="Item FERT "
                             >
                                 <Input />
                             </Form.Item>
 
                             <Form.Item
                                 style={{ display: 'inline-block', width: 'calc(50% - 8px)' }}
-                                label="Item FERT"
+                                label="Claim de planejamento"
                             >
                                 <Input />
                             </Form.Item>
@@ -147,7 +147,7 @@ const PcpData: React.FC = () => {
                             </Form.Item>
                         </Form>
                     </div>
-                    <div style={{ margin: 10, display: 'flex', justifyContent: 'space-between' }}>
+                    <div style={{ margin: 15, display: 'flex', justifyContent: 'space-between' }}>
                         <Form.Item
                             colon={false}
                             label="Inspeção"
@@ -179,7 +179,7 @@ const PcpData: React.FC = () => {
                 </Card>
 
             </Col>
-            <Col span={7}>
+            <Col span={8}>
 
                 <Card bodyStyle={{ padding: 0 }} style={{ width: '100%', borderTop: 'none', height: '100%', maxHeight: 714, borderTopLeftRadius: 0, borderTopRightRadius: 0  }}>
                     <Divider orientation='left'>Planejamento</Divider>
@@ -249,13 +249,13 @@ const PcpData: React.FC = () => {
                             </div>
                             <Form.Item
                                 label="Recurso"
-                                style={{ display: 'inline-block', width: 'calc(60% - 8px)' }}
+                                style={{ display: 'inline-block', width: 'calc(59% - 8px)' }}
                             >
                                 <Input value={"TS - Elétrico - Rodrigo (lauffer)"} disabled style={{ width: '100%' }} />
                             </Form.Item>
                             <Form.Item
                                 label="Fim"
-                                style={{ display: 'inline-block', width: 'calc(40% - 8px)', margin: '0 8px' }}
+                                style={{ display: 'inline-block', width: 'calc(41% - 8px)', margin: '0 8px' }}
                             >
                                 <DatePicker defaultValue={dayjs('07/12/2024', dateFormatList[0])} format={dateFormatList[0]} disabled style={{ width: '100%' }} />
                             </Form.Item>

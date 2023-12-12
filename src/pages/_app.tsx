@@ -1,6 +1,8 @@
 import { NextPage } from "next";
 import { AppProps } from "next/app";
 import Head from "next/head";
+import { ConfigProvider } from 'antd';
+import ptBR from 'antd/locale/pt_BR'
 
 import { withAuthProvider } from "@wmo-dev/login-utils";
 
@@ -11,7 +13,7 @@ import { withTranslations } from "hocs/withTranslations";
 
 const App: NextPage<AppProps> = ({ Component, pageProps }) => {
   return (
-    <>
+    <ConfigProvider locale={ptBR}>
       <Head>
         <meta name="google" content="notranslate" />
         <title>{process.env.SITE_NAME}</title>
@@ -20,7 +22,7 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => {
       <BaseLayout>
         <Component {...pageProps} />
       </BaseLayout>
-    </>
+    </ConfigProvider>
   );
 };
 
