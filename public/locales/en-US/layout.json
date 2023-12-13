@@ -1,7 +1,8 @@
 {
   "menus": {
     "home": "Home",
-    "protected": "Protected"
+    "protected": "Protected",
+    "new-quotation": "New Quotation"
   },
   "userCard": {
     "greeting": "Hello",

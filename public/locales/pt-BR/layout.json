@@ -1,7 +1,8 @@
 {
   "menus": {
     "home": "Início",
-    "protected": "Protegido"
+    "protected": "Protegido",
+    "new-quotation": "Nova Cotação"
   },
   "userCard": {
     "greeting": "Olá",
