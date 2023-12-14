@@ -1,6 +1,6 @@
 import React from 'react';
 import { Tabs } from 'antd';
-import type { TabsProps } from 'antd';
+import { TabsProps } from 'antd';
 import PcpData from './PcpData';
 import PcpProcessResources from './PcpProcessResources';
 

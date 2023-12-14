@@ -5,7 +5,6 @@ import {
     AgCartesianChartOptions,
     AgCartesianSeriesOptions,
     AgCartesianSeriesTooltipRendererParams,
-    AgCharts,
     AgLineSeriesOptions,
 } from 'ag-charts-community';
 import React, { useCallback, useRef, useState } from 'react';

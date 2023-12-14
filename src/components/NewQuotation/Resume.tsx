@@ -1,5 +1,5 @@
 import { Card, Tabs, TabsProps } from "antd";
-import { Cotacao, Detalhado } from "./ResumeData";
+import { Cotacao, Detalhado, Resumido } from "./ResumeData";
 const Resume: React.FC = () => {
   const items: TabsProps["items"] = [
     {
@@ -10,7 +10,7 @@ const Resume: React.FC = () => {
     {
       key: "2",
       label: "Resumo",
-      children: <Resume />,
+      children: <Resumido />,
     },
     {
       key: "3",

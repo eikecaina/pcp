@@ -1,16 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { Card, Col, Input, Row } from "antd";
+import React from "react";
+import { Card, Col, Row } from "antd";
 
-import { PcpDelivery, PcpDetails } from "./PcpDeliveryDetails";
+import { PcpDetails } from "./PcpDetails";
+import { PcpDelivery } from "./PcpDelivery";
 import { PcpProcess } from "./PcpProcessTree";
-import { PcpConsum, PcpPlanning } from "./PcpPlanningConsum";
-
-interface DataNode {
-  title: string;
-  key: string;
-  icon?: React.ReactNode;
-  children?: DataNode[];
-}
+import { PcpPlanning } from "./PcpPlanning";
+import { PcpConsum } from "./PcpConsum";
 
 const PcpData: React.FC = () => {
   return (
