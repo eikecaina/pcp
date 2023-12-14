@@ -16,12 +16,12 @@ export const DataFetcher: React.FC<Props> = ({ apiUrl, tipo, children }) => {
       const response = await axios.get(apiUrl);
 
       const dataResponse =
-        response.data.jsonData.registros.find((item) => item.tipo === tipo)
+        response.data.jsonData.registros.find((item: { tipo: string; }) => item.tipo === tipo)
           ?.dados || [];
 
       setData(dataResponse);
     } catch (error) {
-      console.error("Erro ao acessar a API:", error.message);
+      console.error("Erro ao acessar a API:");
     }
   }
 
