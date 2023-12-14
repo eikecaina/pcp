@@ -1,12 +1,10 @@
 import { GetStaticProps } from "next";
 
 import { getServerSideTranslations } from "configs/language/server";
-import ItensConfig from "components/layout/Wtpc/ProductConfig/ItensConfig";
-
-
+import Quotation from "components/NewQuotation/Quotation";
 
 const NewQuotation: React.FC = () => (
-  <ItensConfig></ItensConfig>
+  <Quotation/>
 );
 
 export const getStaticProps: GetStaticProps = async (req) => {

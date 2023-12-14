@@ -1,0 +1,859 @@
+{
+    "registros": [
+      {
+        "tipo": "cotacao",
+        "dados": [
+          {
+            "dia": "085",
+            "data_inicial": "21/02/2024",
+            "data_final": "23/02/2024",
+            "processo": "TS - PROD Ensaios",
+            "duracao": "3 dias"
+          },
+          {
+            "dia": "098",
+            "data_inicial": "05/03/2024",
+            "data_final": "05/03/2024",
+            "processo": "1 peça(s) liberada(s) para embarque"
+          },
+          {
+            "dia": "105",
+            "data_inicial": "12/04/2024",
+            "data_final": "15/04/2024",
+            "processo": "Montagem de Equipamento",
+            "duracao": "4 dias"
+          },
+          {
+            "dia": "120",
+            "data_inicial": "28/04/2024",
+            "data_final": "30/04/2024",
+            "processo": "Teste de Qualidade",
+            "duracao": "3 dias"
+          },
+          {
+            "dia": "135",
+            "data_inicial": "14/05/2024",
+            "data_final": "16/05/2024",
+            "processo": "Inspeção Final",
+            "duracao": "3 dias"
+          },
+          {
+            "dia": "150",
+            "data_inicial": "30/05/2024",
+            "data_final": "01/06/2024",
+            "processo": "Embalagem e Envio",
+            "duracao": "3 dias"
+          },
+          {
+            "dia": "165",
+            "data_inicial": "15/06/2024",
+            "data_final": "17/06/2024",
+            "processo": "Treinamento de Equipe",
+            "duracao": "3 dias"
+          },
+          {
+            "dia": "180",
+            "data_inicial": "01/07/2024",
+            "data_final": "03/07/2024",
+            "processo": "Manutenção Preventiva",
+            "duracao": "3 dias"
+          },
+          {
+            "dia": "195",
+            "data_inicial": "16/07/2024",
+            "data_final": "18/07/2024",
+            "processo": "Desenvolvimento de Novo Produto",
+            "duracao": "3 dias"
+          },
+          {
+            "dia": "210",
+            "data_inicial": "31/07/2024",
+            "data_final": "02/08/2024",
+            "processo": "Auditoria Interna",
+            "duracao": "3 dias"
+          },
+          {
+            "dia": "225",
+            "data_inicial": "15/08/2024",
+            "data_final": "17/08/2024",
+            "processo": "Atualização de Software",
+            "duracao": "3 dias"
+          }
+        ]
+      },
+      {
+        "tipo": "detalhado",
+        "dados": [
+          {
+            "dia": "001",
+            "data_inicial": "15/01/2025",
+            "data_final": "20/01/2025",
+            "processo": "Corte e Preparação do Núcleo",
+            "descricao": "Realização do corte preciso das lâminas de silício e preparação do núcleo para o transformador."
+          },
+          {
+            "dia": "002",
+            "data_inicial": "18/01/2025",
+            "data_final": "22/01/2025",
+            "processo": "Enrolamento do Primário",
+            "descricao": "Enrolamento do fio de cobre no primário do transformador, seguindo as especificações técnicas."
+          },
+          {
+            "dia": "003",
+            "data_inicial": "21/01/2025",
+            "data_final": "25/01/2025",
+            "processo": "Isolamento e Impregnação do Primário",
+            "descricao": "Aplicação de material isolante e impregnação para garantir a resistência elétrica e mecânica do primário."
+          },
+          {
+            "dia": "004",
+            "data_inicial": "24/01/2025",
+            "data_final": "28/01/2025",
+            "processo": "Montagem do Secundário",
+            "descricao": "Montagem da bobina secundária e conexão aos terminais, seguindo os requisitos de projeto."
+          },
+          {
+            "dia": "005",
+            "data_inicial": "27/01/2025",
+            "data_final": "01/02/2025",
+            "processo": "Testes de Funcionamento Preliminares",
+            "descricao": "Realização de testes preliminares para verificar o funcionamento básico do transformador."
+          },
+          {
+            "dia": "006",
+            "data_inicial": "30/01/2025",
+            "data_final": "04/02/2025",
+            "processo": "Envolvimento em Resina Epóxi",
+            "descricao": "Aplicação de resina epóxi para isolar completamente as bobinas e proteger contra umidade e poeira."
+          },
+          {
+            "dia": "007",
+            "data_inicial": "02/02/2025",
+            "data_final": "06/02/2025",
+            "processo": "Ensaio de Resistência e Isolamento",
+            "descricao": "Realização de ensaios elétricos para garantir a resistência e isolamento conforme normas técnicas."
+          },
+          {
+            "dia": "008",
+            "data_inicial": "05/02/2025",
+            "data_final": "09/02/2025",
+            "processo": "Montagem Final e Testes de Carga",
+            "descricao": "Montagem final do transformador e realização de testes de carga para simular condições reais de operação."
+          },
+          {
+            "dia": "009",
+            "data_inicial": "08/02/2025",
+            "data_final": "12/02/2025",
+            "processo": "Pintura e Acabamento",
+            "descricao": "Aplicação de pintura final e acabamento estético, garantindo durabilidade e aspecto visual adequado."
+          },
+          {
+            "dia": "010",
+            "data_inicial": "11/02/2025",
+            "data_final": "15/02/2025",
+            "processo": "Embalagem e Preparação para Envio",
+            "descricao": "Embalagem segura do transformador e preparação para o envio ao cliente."
+          }
+        ]
+      },
+      {
+        "tipo": "resumido",
+        "dados": [
+          {
+            "dia": "001",
+            "data_inicial": "15/01/2025",
+            "data_final": "20/01/2025",
+            "processo": "Início da Produção",
+            "descricao": "Início da produção do transformador."
+          },
+          {
+            "dia": "002",
+            "data_inicial": "18/01/2025",
+            "data_final": "22/01/2025",
+            "processo": "Enrolamento das Bobinas",
+            "descricao": "Enrolamento das bobinas primárias e secundárias."
+          },
+          {
+            "dia": "003",
+            "data_inicial": "21/01/2025",
+            "data_final": "25/01/2025",
+            "processo": "Impregnação e Isolamento",
+            "descricao": "Impregnação das bobinas e isolamento para garantir a durabilidade do transformador."
+          },
+          {
+            "dia": "004",
+            "data_inicial": "24/01/2025",
+            "data_final": "28/01/2025",
+            "processo": "Montagem Final",
+            "descricao": "Montagem final do transformador, incluindo a instalação do núcleo e dos terminais."
+          },
+          {
+            "dia": "005",
+            "data_inicial": "27/01/2025",
+            "data_final": "01/02/2025",
+            "processo": "Testes de Qualidade",
+            "descricao": "Realização de testes de qualidade para garantir a conformidade com os padrões."
+          },
+          {
+            "dia": "006",
+            "data_inicial": "30/01/2025",
+            "data_final": "04/02/2025",
+            "processo": "Envolvimento em Resina",
+            "descricao": "Envolvimento das bobinas em resina para proteção e isolamento."
+          },
+          {
+            "dia": "007",
+            "data_inicial": "02/02/2025",
+            "data_final": "06/02/2025",
+            "processo": "Testes de Funcionamento",
+            "descricao": "Realização de testes de funcionamento para garantir a eficiência do transformador."
+          },
+          {
+            "dia": "008",
+            "data_inicial": "05/02/2025",
+            "data_final": "09/02/2025",
+            "processo": "Inspeção Final",
+            "descricao": "Inspeção final antes do envio para o cliente."
+          },
+          {
+            "dia": "009",
+            "data_inicial": "08/02/2025",
+            "data_final": "12/02/2025",
+            "processo": "Embalagem e Envio",
+            "descricao": "Embalagem cuidadosa e envio do transformador ao cliente."
+          },
+          {
+            "dia": "010",
+            "data_inicial": "11/02/2025",
+            "data_final": "15/02/2025",
+            "processo": "Entrega ao Cliente",
+            "descricao": "Entrega do transformador ao cliente, concluindo o processo de fabricação."
+          }
+        ]
+      },
+      {
+        "tipo": "open-quotation",
+        "dados": [
+          {
+            "user": "a-andrew",
+            "quotation": "789456213",
+            "salesOrder": "0123992139",
+            "client": "TECHMASTER SOLUTIONS",
+            "create": "09/10/2023"
+          },
+          {
+            "user": "b-bella",
+            "quotation": "456789123",
+            "salesOrder": "0987654321",
+            "client": "GLOBAL INNOVATIONS INC.",
+            "create": "15/11/2023"
+          },
+          {
+            "user": "e-eike",
+            "quotation": "987654321",
+            "salesOrder": "0123456789",
+            "client": "PRIME LOGISTICS GROUP",
+            "create": "20/12/2023"
+          },
+          {
+            "user": "Esdras",
+            "quotation": "321654987",
+            "salesOrder": "1357924680",
+            "client": "QUANTUM DYNAMICS LTD.",
+            "create": "05/01/2024"
+          },
+          {
+            "user": "Esdras",
+            "quotation": "654321987",
+            "salesOrder": "9876543210",
+            "client": "VISIONARY MARKETING AGENCY",
+            "create": "18/02/2024"
+          },
+          {
+            "user": "Esdras",
+            "quotation": "789321456",
+            "salesOrder": "0123456789",
+            "client": "SUMMIT ENTERPRISES LLC",
+            "create": "22/03/2024"
+          },
+          {
+            "user": "Esdras",
+            "quotation": "159357852",
+            "salesOrder": "3216549870",
+            "client": "PRECISION BUILDERS CO.",
+            "create": "07/04/2024"
+          },
+          {
+            "user": "Esdras",
+            "quotation": "852963741",
+            "salesOrder": "4567890123",
+            "client": "HARMONY FOODS INTERNATIONAL",
+            "create": "14/05/2024"
+          },
+          {
+            "user": "e-eike",
+            "quotation": "753159852",
+            "salesOrder": "0123456789",
+            "client": "STELLAR DESIGNS AND CO.",
+            "create": "29/06/2024"
+          },
+          {
+            "user": "e-eike",
+            "quotation": "456852974",
+            "salesOrder": "9876543210",
+            "client": "QUANTUMLEAP TECHNOLOGIES",
+            "create": "03/08/2024"
+          },
+          {
+            "user": "l-lucas",
+            "quotation": "622343452",
+            "salesOrder": "7545746456",
+            "client": "SUMMIT FINANCIAL SERVICES",
+            "create": "03/08/2024"
+          },
+          {
+            "user": "l-lucas",
+            "quotation": "987654321",
+            "salesOrder": "5678901234",
+            "client": "INFINITE TECH SOLUTIONS",
+            "create": "12/11/2024"
+          },
+          {
+            "user": "Esdras",
+            "quotation": "123456789",
+            "salesOrder": "9876543210",
+            "client": "NEXUS CONSULTING GROUP",
+            "create": "05/04/2024"
+          },
+          {
+            "user": "l-lucas",
+            "quotation": "456789012",
+            "salesOrder": "2345678901",
+            "client": "PRIMA INDUSTRIES",
+            "create": "21/09/2024"
+          },
+          {
+            "user": "e-emily",
+            "quotation": "789012345",
+            "salesOrder": "0123456789",
+            "client": "VECTOR MARKETING",
+            "create": "07/02/2024"
+          },
+          {
+            "user": "e-emily",
+            "quotation": "543210987",
+            "salesOrder": "9012345678",
+            "client": "SYNERGY TECH SOLUTIONS",
+            "create": "18/05/2024"
+          },
+          {
+            "user": "t-thomas",
+            "quotation": "321098765",
+            "salesOrder": "2345678901",
+            "client": "NOVA MARKETING CONSULTANCY",
+            "create": "29/10/2024"
+          },
+          {
+            "user": "Pedro Paulo",
+            "quotation": "876543210",
+            "salesOrder": "3456789012",
+            "client": "GLOBE ENTERPRISES",
+            "create": "03/03/2024"
+          },
+          {
+            "user": "t-thomas",
+            "quotation": "234567890",
+            "salesOrder": "9876543210",
+            "client": "UNIVERSAL TECH SYSTEMS",
+            "create": "15/06/2024"
+          },
+          {
+            "user": "Pedro Paulo",
+            "quotation": "654321098",
+            "salesOrder": "4567890123",
+            "client": "ELITE MARKETING SOLUTIONS",
+            "create": "24/11/2024"
+          },
+          {
+            "user": "e-eike",
+            "quotation": "345678901",
+            "salesOrder": "8901234567",
+            "client": "PRIME TECH CONSULTING",
+            "create": "09/04/2024"
+          },
+          {
+            "user": "João Pontes",
+            "quotation": "654321098",
+            "salesOrder": "4567890123",
+            "client": "OPTIMUM INDUSTRIES",
+            "create": "11/07/2024"
+          },
+          {
+            "user": "João Pontes",
+            "quotation": "765432109",
+            "salesOrder": "5432109876",
+            "client": "QUANTUM TECH SOLUTIONS",
+            "create": "28/12/2024"
+          },
+          {
+            "user": "João Pontes",
+            "quotation": "234567890",
+            "salesOrder": "9876543210",
+            "client": "INFINITE MARKETING GROUP",
+            "create": "05/05/2024"
+          },
+          {
+            "user": "Pedro Paulo",
+            "quotation": "543210987",
+            "salesOrder": "9012345678",
+            "client": "SYNERGY CONSULTING",
+            "create": "16/08/2024"
+          },
+          {
+            "user": "Pedro Paulo",
+            "quotation": "987654321",
+            "salesOrder": "5678901234",
+            "client": "GLOBE TECH SOLUTIONS",
+            "create": "01/01/2025"
+          }
+        ]
+      },
+      {
+        "tipo": "data-example",
+        "dados": [
+          {
+            "dia": "08/04/2025",
+            "quantidade": "(Quantidade: 25)"
+          },
+          {
+            "dia": "15/04/2025",
+            "quantidade": "(Quantidade: 30)"
+          },
+          {
+            "dia": "22/04/2025",
+            "quantidade": "(Quantidade: 15)"
+          },
+          {
+            "dia": "29/04/2025",
+            "quantidade": "(Quantidade: 22)"
+          },
+          {
+            "dia": "06/05/2025",
+            "quantidade": "(Quantidade: 18)"
+          },
+          {
+            "dia": "13/05/2025",
+            "quantidade": "(Quantidade: 27)"
+          },
+          {
+            "dia": "20/05/2025",
+            "quantidade": "(Quantidade: 19)"
+          },
+          {
+            "dia": "27/05/2025",
+            "quantidade": "(Quantidade: 14)"
+          },
+          {
+            "dia": "03/06/2025",
+            "quantidade": "(Quantidade: 21)"
+          },
+          {
+            "dia": "10/06/2025",
+            "quantidade": "(Quantidade: 16)"
+          },
+          {
+            "dia": "17/06/2025",
+            "quantidade": "(Quantidade: 23)"
+          },
+          {
+            "dia": "24/06/2025",
+            "quantidade": "(Quantidade: 20)"
+          },
+          {
+            "dia": "01/07/2025",
+            "quantidade": "(Quantidade: 26)"
+          },
+          {
+            "dia": "08/07/2025",
+            "quantidade": "(Quantidade: 29)"
+          },
+          {
+            "dia": "15/07/2025",
+            "quantidade": "(Quantidade: 17)"
+          },
+          {
+            "dia": "22/07/2025",
+            "quantidade": "(Quantidade: 24)"
+          }
+        ]
+      },
+      {
+        "tipo": "processos",
+        "dados": [
+          {
+            "title": "MF - CONT Avaliação da Adm. Contratos",
+            "key": "0-0",
+            "children": [
+              {
+                "title": "06/12/2023 até 06/12/2023",
+                "key": "0-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "0-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - PROD Avaliação da Adm. Contratos",
+            "key": "1-0",
+            "children": [
+              {
+                "title": "07/12/2023 até 07/12/2023",
+                "key": "1-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "1-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - ENG Avaliação da Adm. Contratos",
+            "key": "2-0",
+            "children": [
+              {
+                "title": "08/12/2023 até 08/12/2023",
+                "key": "2-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "2-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - CONT Avaliação da Adm. Contratos",
+            "key": "3-0",
+            "children": [
+              {
+                "title": "09/12/2023 até 09/12/2023",
+                "key": "3-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "3-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - PCP Avaliação da Adm. Contratos",
+            "key": "4-0",
+            "children": [
+              {
+                "title": "10/12/2023 até 10/12/2023",
+                "key": "4-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "4-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - PROD Avaliação da Adm. Contratos",
+            "key": "5-0",
+            "children": [
+              {
+                "title": "11/12/2023 até 11/12/2023",
+                "key": "5-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "5-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - ENG Avaliação da Adm. Contratos",
+            "key": "6-0",
+            "children": [
+              {
+                "title": "12/12/2023 até 12/12/2023",
+                "key": "6-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "6-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - CONT Avaliação da Adm. Contratos",
+            "key": "7-0",
+            "children": [
+              {
+                "title": "13/12/2023 até 13/12/2023",
+                "key": "7-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "7-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - PCP Avaliação da Adm. Contratos",
+            "key": "8-0",
+            "children": [
+              {
+                "title": "14/12/2023 até 14/12/2023",
+                "key": "8-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "8-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - PROD Avaliação da Adm. Contratos",
+            "key": "9-0",
+            "children": [
+              {
+                "title": "15/12/2023 até 15/12/2023",
+                "key": "9-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "9-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - ENG Avaliação da Adm. Contratos",
+            "key": "10-0",
+            "children": [
+              {
+                "title": "16/12/2023 até 16/12/2023",
+                "key": "10-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "10-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - PROD Avaliação da Adm. Roteiro",
+            "key": "11-0",
+            "children": [
+              {
+                "title": "17/12/2023 até 17/12/2023",
+                "key": "11-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "11-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - ENG Avaliação da Adm. Embarque",
+            "key": "12-0",
+            "children": [
+              {
+                "title": "18/12/2023 até 18/12/2023",
+                "key": "12-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "12-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - CONT Avaliação da Adm. Cálculo Meia",
+            "key": "13-0",
+            "children": [
+              {
+                "title": "19/12/2023 até 19/12/2023",
+                "key": "13-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "13-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - PCP Avaliação da Adm. Cálculo",
+            "key": "14-0",
+            "children": [
+              {
+                "title": "20/12/2023 até 20/12/2023",
+                "key": "14-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "14-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - PROD Avaliação da Adm. Controle",
+            "key": "15-0",
+            "children": [
+              {
+                "title": "21/12/2023 até 21/12/2023",
+                "key": "15-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "15-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - ENG Avaliação da Adm. Roteiro",
+            "key": "16-0",
+            "children": [
+              {
+                "title": "22/12/2023 até 22/12/2023",
+                "key": "16-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "16-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - CONT Avaliação da Adm. Embarque",
+            "key": "17-0",
+            "children": [
+              {
+                "title": "23/12/2023 até 23/12/2023",
+                "key": "17-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "17-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - PCP Avaliação da Adm. Cálculo Meia",
+            "key": "18-0",
+            "children": [
+              {
+                "title": "24/12/2023 até 24/12/2023",
+                "key": "18-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "18-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - PROD Avaliação da Adm. Cálculo",
+            "key": "19-0",
+            "children": [
+              {
+                "title": "25/12/2023 até 25/12/2023",
+                "key": "19-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "19-0-1"
+              }
+            ]
+          },
+          {
+            "title": "MF - ENG Avaliação da Adm. Controle",
+            "key": "20-0",
+            "children": [
+              {
+                "title": "26/12/2023 até 26/12/2023",
+                "key": "20-0-0"
+              },
+              {
+                "title": "1440 minutos",
+                "key": "20-0-1"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "tipo": "resources",
+        "dados": [
+          {
+            "data": "20/12/2022",
+            "consume": "(Consumo 7 horas)"
+          },
+          {
+            "data": "21/12/2022",
+            "consume": "(Consumo 5 minutos)"
+          },
+          {
+            "data": "22/12/2022",
+            "consume": "(Consumo 3 horas)"
+          },
+          {
+            "data": "23/12/2022",
+            "consume": "(Consumo 1 hora)"
+          },
+          {
+            "data": "24/12/2022",
+            "consume": "(Consumo 2 horas)"
+          },
+          {
+            "data": "25/12/2022",
+            "consume": "(Consumo 4 minutos)"
+          },
+          {
+            "data": "26/12/2022",
+            "consume": "(Consumo 6 horas)"
+          },
+          {
+            "data": "27/12/2022",
+            "consume": "(Consumo 45 minutos)"
+          },
+          {
+            "data": "28/12/2022",
+            "consume": "(Consumo 3 horas)"
+          },
+          {
+            "data": "29/12/2022",
+            "consume": "(Consumo 1 hora)"
+          },
+          {
+            "data": "30/12/2022",
+            "consume": "(Consumo 8 horas)"
+          },
+          {
+            "data": "31/12/2022",
+            "consume": "(Consumo 2 minutos)"
+          },
+          {
+            "data": "01/01/2023",
+            "consume": "(Consumo 4 horas)"
+          },
+          {
+            "data": "02/01/2023",
+            "consume": "(Consumo 6 horas)"
+          },
+          {
+            "data": "03/01/2023",
+            "consume": "(Consumo 1 hora)"
+          },
+          {
+            "data": "04/01/2023",
+            "consume": "(Consumo 3 horas)"
+          }
+        ]
+      }
+    ]
+}  

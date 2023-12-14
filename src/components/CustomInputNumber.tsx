@@ -40,5 +40,3 @@ const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ min, maxLength, s
 
 
 export default CustomInputNumber;
-
-

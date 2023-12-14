@@ -11,11 +11,6 @@ import {
 import React, { useCallback, useRef, useState } from 'react';
 import { Calendar, Card, Col, Divider, Form, Radio, Row, Select } from 'antd';
 
-const headerRender = ({ value, type, onChange, onTypeChange }) => {
-    const start = 0;
-    const end = 12;
-}
-
 const PcpProcessResources: React.FC = () => {
     const chartRef = useRef<AgChartsReact>(null);
     const [options, setOptions] = useState<AgCartesianChartOptions>({
@@ -78,7 +73,7 @@ const PcpProcessResources: React.FC = () => {
 
     return (
         <Row gutter={15}>
-            <Col span={12}>
+            <Col span={14}>
                 <Card bodyStyle={{ padding: '5px 0 5px 0' }}>
                     <Divider orientation='left'>Grupos</Divider>
                     <div style={{ padding: '0px 15px 0px 15px' }}>
@@ -89,7 +84,7 @@ const PcpProcessResources: React.FC = () => {
                                     <Calendar fullscreen={false} />
                                 </div>
                             </Col>
-                            <Col span={14}>
+                            <Col span={12}>
                                 <Form.Item
                                     label="Tipo"
                                     style={{ width: '100%', maxWidth: 350 }}
@@ -111,22 +106,18 @@ const PcpProcessResources: React.FC = () => {
                                 </Form.Item>
                             </Col>
                         </Row>
-                        <Row>
-                            <Col span={12}>
-                                <Form.Item>
-                                    <Radio>Processo</Radio>
-                                </Form.Item>
-                            </Col>
-                            <Col span={12}>
-                                <Form.Item>
-                                    <Radio>Recurso</Radio>
-                                </Form.Item>
-                            </Col>
-                        </Row>
+                        <Radio.Group>
+                            <Form.Item>
+                                <Radio></Radio>
+                            </Form.Item>
+                            <Form.Item>
+                                <Radio></Radio>
+                            </Form.Item>
+                        </Radio.Group>
                     </div>
                 </Card>
             </Col>
-            <Col span={12} style={{ height: '100%', minHeight: '100%' }}>
+            <Col span={10} style={{ height: '100%', minHeight: '100%' }}>
                 <AgChartsReact ref={chartRef} options={options as any} />
             </Col>
         </Row>

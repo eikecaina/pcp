@@ -4,23 +4,12 @@ import 'ag-grid-community/styles/ag-theme-alpine.min.css';
 import { ColDef } from 'ag-grid-community';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import axios from 'axios';
-import { Button, Modal } from 'antd';
-
-
-
-
-interface ButtonRendererProps {
-    onClick: () => void;
-}
+import {  Modal } from 'antd';
 
 interface SearchQuotationProps {
     isModalOpen: boolean;
     setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
-
-const ButtonRenderer: React.FC<ButtonRendererProps> = ({ onClick }) => {
-    return <Button type="primary" onClick={onClick}>Abrir</Button>;
-};
 
 const SearchQuotation: React.FC<SearchQuotationProps> = ({ isModalOpen, setModalIsOpen }) => {
 
@@ -35,7 +24,7 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({ isModalOpen, setModal
         { headerName: 'Ordem de Venda', field: 'salesOrder' },
         { headerName: 'Criada em', field: 'create' },
     ]);
-    const containerStyle = useMemo(() => ({ width: '100%', height: '75vh' }), []);
+    const containerStyle = useMemo(() => ({ width: '100%', height: '60vh' }), []);
     const gridStyle = useMemo(() => ({ height: '100%', width: '100%' }), []);
     const defaultColDef = useMemo(() => ({
         sortable: true,
@@ -70,7 +59,7 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({ isModalOpen, setModal
 
     return (
         <Modal
-            width={1300}
+            width={'100%'}
             open={isModalOpen}
             onOk={handleOk}
             onCancel={handleCancel}
