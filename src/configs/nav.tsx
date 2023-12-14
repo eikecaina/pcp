@@ -18,7 +18,7 @@ export const MENUS: NavEntry[] = [
   {
     name: "menus.new-quotation",
     icon: FileAddOutlined,
-    path: "/new-quotation",
+    path: "/wtpc",
   },
   {
     name: "menus.protected",

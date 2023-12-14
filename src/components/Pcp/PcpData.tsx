@@ -28,10 +28,10 @@ const PcpData: React.FC = () => {
 
     async function axiosData() {
         try {
-            const response = await axios.get('http://localhost:8080/');
-            const dataExample = response.data.registros.find(item => item.tipo === "data-example")?.dados || [];
-            const treeData = response.data.registros.find(item => item.tipo === "processos")?.dados || [];
-            const resourceExample = response.data.registros.find(item => item.tipo === "resources")?.dados || [];
+            const response = await axios.get("http://localhost:3000/api/getData");
+            const dataExample = response.data.jsonData.registros.find(item => item.tipo === "data-example")?.dados || [];
+            const treeData = response.data.jsonData.registros.find(item => item.tipo === "processos")?.dados || [];
+            const resourceExample = response.data.jsonData.registros.find(item => item.tipo === "resources")?.dados || [];
 
             const procPcpData: DataNode[] = treeData.map((item) => {
                 return {

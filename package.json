@@ -8,7 +8,8 @@
     "start": "next start",
     "format": "prettier --write .",
     "check-types": "tsc --pretty",
-    "commit": "cz"
+    "commit": "cz",
+    "start-dev": "concurrently \"npm run dev\" \"cd src/pages/api && npm start\""
   },
   "dependencies": {
     "@ant-design/icons": "^4.5.0",
@@ -22,6 +23,8 @@
     "ag-grid-community": "^31.0.1",
     "ag-grid-react": "^31.0.1",
     "antd": "^5.1.6",
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
     "i18next-http-backend": "^1.4.0",
     "next": "^12.1.6",
     "next-i18next": "^11.0.0",
@@ -37,6 +40,7 @@
     "@typescript-eslint/eslint-plugin": "^4.15.1",
     "@typescript-eslint/parser": "^4.15.1",
     "commitizen": "^4.2.3",
+    "concurrently": "^8.2.2",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.20.0",
     "eslint-config-prettier": "^7.2.0",

@@ -9,6 +9,7 @@ import {
 import {
   Button,
   Card,
+  Divider,
   Drawer,
   FloatButton,
   Form,
@@ -23,6 +24,7 @@ import {
 import React, { useState } from "react";
 import SearchQuotation from "./OpenQuotation/SearchQuotation";
 import PcpPage from "components/Pcp/PcpPage";
+import ConfigModal from "./ConfigModal/ConfigModal";
 
 export const GeneralData: React.FC = () => {
   const [selectOptions, setSelectOptions] = useState([{ value: "10" }]);
@@ -73,7 +75,7 @@ export const GeneralData: React.FC = () => {
   };
 
   return (
-    <Row>
+    <Row style={{ padding: 10 }}>
       <Form layout="vertical">
         <Form.Item
           style={{
@@ -151,6 +153,11 @@ export const ProductConfig: React.FC = () => {
   const [showPower, setShowPower] = useState(false);
   const [showVoltage, setShowVoltage] = useState(false);
   const [showMaterial, setShowMaterial] = useState(false);
+  const [isModalConfigOpen, setIsModalConfigOpen] = useState(false);
+
+  const openModalConfig = () => {
+    setIsModalConfigOpen(true);
+  };
 
   const handleOperetion = (value) => {
     if (value === "Óleo") {
@@ -161,14 +168,13 @@ export const ProductConfig: React.FC = () => {
       setShowMaterial(true);
     }
   };
-  const [isModalConfigOpen, setIsModalConfigOpen] = useState(false);
 
-  const openModalConfig = () => {
-    setIsModalConfigOpen(true);
-  };
   return (
     <>
-      <Card style={{ overflowY: "auto", marginBottom: 50 }}>
+      <Divider orientation="left" style={{ marginTop: "10px 0 0px 0" }}>
+        Configuração de produto
+      </Divider>
+      <div style={{ overflowY: "auto", marginBottom: 50, padding: 10 }}>
         <Form layout="vertical">
           <Form.Item colon={false} label="Meio de operação">
             <Select
@@ -204,17 +210,37 @@ export const ProductConfig: React.FC = () => {
             </Form.Item>
           )}
         </Form>
-      </Card>
-      <div
+      </div>
+
+      <Button
         style={{
           position: "absolute",
           bottom: 0,
           right: 5,
           margin: 7,
+          justifyContent: "space-between",
         }}
+        type="primary"
       >
-        <Button type="primary">Calcular</Button>
-      </div>
+        Calcular
+      </Button>
+
+      <Button
+        style={{
+          position: "absolute",
+          bottom: 0,
+          left: 5,
+          margin: 7,
+          justifyContent: "space-between",
+        }}
+        onClick={openModalConfig}
+        type="primary"
+      >
+        Configuração
+      </Button>
+      {isModalConfigOpen && (
+            <ConfigModal setIsModalConfigOpen={setIsModalConfigOpen} />
+          )}
     </>
   );
 };
