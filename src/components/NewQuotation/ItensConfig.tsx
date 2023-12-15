@@ -159,7 +159,7 @@ export const ProductConfig: React.FC = () => {
     setIsModalConfigOpen(true);
   };
 
-  const handleOperetion = (value) => {
+  const handleOperetion = (value: string) => {
     if (value === "Óleo") {
       setShowPower(true);
     } else if (value === "0 a 15") {

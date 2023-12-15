@@ -1,16 +1,11 @@
 import { AgChartsReact } from "ag-charts-react";
 import {
+  AgChartOptions,
   AgBarSeriesOptions,
-  AgCartesianAxisOptions,
-  AgCartesianChartOptions,
-  AgCartesianSeriesOptions,
-  AgCartesianSeriesTooltipRendererParams,
   AgLineSeriesOptions,
 } from "ag-charts-community";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import {
-  Button,
-  Calendar,
   Card,
   Col,
   Divider,
@@ -21,129 +16,37 @@ import {
   Select,
   theme,
 } from "antd";
+import { DataFetcherUniversity } from "components/DataFetcherJson";
+import { DatePicker } from "antd";
+const { RangePicker } = DatePicker;
 
 const PcpProcessResources: React.FC = () => {
   const chartRef = useRef<AgChartsReact>(null);
-  const [options, setOptions] = useState<AgCartesianChartOptions>({
+  const [options, setOptions] = useState<AgChartOptions>({
     data: [
-      {
-        year: "2001",
-        adults: 24,
-        men: 22,
-        women: 25,
-        children: 13,
-        portions: 3.4,
-      },
-      {
-        year: "2003",
-        adults: 24,
-        men: 22,
-        women: 26,
-        children: 11,
-        portions: 3.4,
-      },
-      {
-        year: "2005",
-        adults: 28,
-        men: 26,
-        women: 30,
-        children: 17,
-        portions: 3.7,
-      },
-      {
-        year: "2007",
-        adults: 29,
-        men: 25,
-        women: 31,
-        children: 21,
-        portions: 3.8,
-      },
-      {
-        year: "2009",
-        adults: 26,
-        men: 25,
-        women: 28,
-        children: 21,
-        portions: 3.5,
-      },
-      {
-        year: "2011",
-        adults: 27,
-        men: 24,
-        women: 29,
-        children: 18,
-        portions: 3.6,
-      },
-      {
-        year: "2013",
-        adults: 26,
-        men: 25,
-        women: 28,
-        children: 16,
-        portions: 3.6,
-      },
-      {
-        year: "2015",
-        adults: 26,
-        men: 24,
-        women: 27,
-        children: 20,
-        portions: 3.5,
-      },
-      {
-        year: "2017",
-        adults: 29,
-        men: 26,
-        women: 32,
-        children: 18,
-        portions: 3.8,
-      },
+      { month: "Jan", avgTemp: 2.3, iceCreamSales: 162000 },
+      { month: "Feb", avgTemp: 16.2, iceCreamSales: 800000 },
+      { month: "Mar", avgTemp: 6.3, iceCreamSales: 302000 },
+      { month: "Apr", avgTemp: 22.8, iceCreamSales: 654000 },
+      { month: "May", avgTemp: 14.5, iceCreamSales: 950000 },
+      { month: "Jun", avgTemp: 8.9, iceCreamSales: 700200 },
+      { month: "Jul", avgTemp: 8.9, iceCreamSales: 400000 },
+      { month: "Aug", avgTemp: 8.9, iceCreamSales: 157892 },
+      { month: "Set", avgTemp: 8.9, iceCreamSales: 300200 },
+      { month: "Out", avgTemp: 8.9, iceCreamSales: 100000 },
+      { month: "Nov", avgTemp: 8.9, iceCreamSales: 204000 },
+      { month: "Dez", avgTemp: 8.9, iceCreamSales: 500000 },
     ],
-    title: {
-      text: "Fruit & Vegetable Consumption",
-    },
-    series: BAR_AND_LINE,
-    axes: [
+
+    series: [
       {
-        type: "category",
-        position: "bottom",
-      },
-      {
-        // primary y axis
-        type: "number",
-        position: "left",
-        keys: ["women", "men", "children", "adults"],
-        title: {
-          text: "Adults Who Eat 5 A Day (%)",
-        },
-      },
-      {
-        // secondary y axis
-        type: "number",
-        position: "right",
-        keys: ["portions"],
-        title: {
-          text: "Portions Consumed (Per Day)",
-        },
-      },
-    ] as AgCartesianAxisOptions[],
+        type: "bar",
+        xKey: "month",
+        yKey: "iceCreamSales",
+      } as AgBarSeriesOptions,
+      { type: "line", xKey: "month", yKey: "avgTemp" } as AgLineSeriesOptions,
+    ],
   });
-
-  const barLine = useCallback(() => {
-    const clone = { ...options };
-
-    clone.series = BAR_AND_LINE;
-
-    setOptions(clone);
-  }, [options]);
-
-  const areaBar = useCallback(() => {
-    const clone = { ...options };
-
-    clone.series = AREA_AND_BAR;
-
-    setOptions(clone);
-  }, [options]);
 
   const { token } = theme.useToken();
 
@@ -153,116 +56,120 @@ const PcpProcessResources: React.FC = () => {
     borderRadius: token.borderRadiusLG,
   };
 
+  const handleItemClick = () => {
+    console.log("Item clicado:");
+  };
+
   return (
     <Row gutter={15}>
       <Col span={14}>
-        <Card bodyStyle={{ padding: "5px 0 5px 0" }}>
+        <Card bodyStyle={{ padding: "5px 0 5px 0" }} style={{ height: "100%" }}>
           <Divider orientation="left">Grupos</Divider>
-          <div style={{ padding: "0px 15px 0px 15px" }}>
-            <Row gutter={15}>
-              <Col span={12} style={{ width: "100%", maxWidth: 350 }}>
-                <div>
-                  <Calendar style={wrapperStyle} fullscreen={false} />
-                </div>
-              </Col>
-              <Col span={12}>
-                <Form layout="vertical">
-                  <Form.Item
-                    label="Tipo"
-                    style={{ width: "100%", maxWidth: 350 }}
-                  >
-                    <Select
-                      defaultValue={"Transformador de Distribuição"}
-                      options={[
-                        {
-                          value: "Transformador de Distribuição",
-                        },
-                        {
-                          value: "Transformador a Seco",
-                        },
-                        {
-                          value: "Transformador de Meia Força",
-                        },
-                      ]}
-                    />
-                  </Form.Item>
-                </Form>
-              </Col>
-            </Row>
-          </div>
-          <Row gutter={15} style={{ marginTop: 10 }}>
+
+          <Row gutter={15} style={{ margin: 5 }}>
             <Col span={12}>
               <Radio>Processo</Radio>
-              <Card bodyStyle={{ padding: 0 }}>
-                <List>
-                  <List.Item>
-                    <Button type="text">Lista 1</Button>
-                  </List.Item>
-                  <List.Item>
-                    <Button type="text">Lista 1</Button>
-                  </List.Item>
-                </List>
+              <Card
+                style={{
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                  maxHeight: 300,
+                  maxWidth: "100%",
+                }}
+                bodyStyle={{ padding: 0 }}
+              >
+                <DataFetcherUniversity apiUrl="http://universities.hipolabs.com/search?country=United+States&limit=10">
+                  {(universityData) => (
+                    <List
+                      dataSource={universityData}
+                      renderItem={(item, index) => (
+                        <List.Item
+                          style={{
+                            background: index % 2 === 0 ? "white" : "#f0f0f0",
+                          }}
+                        >
+                          {`${item.name} (${item.alpha_two_code})`}
+                        </List.Item>
+                      )}
+                    />
+                  )}
+                </DataFetcherUniversity>
               </Card>
             </Col>
             <Col span={12}>
               <Radio>Recurso</Radio>
-              <Card>
-                <List>Lista 2</List>
+              <Card
+                style={{
+                  overflowY: "auto",
+                  overflowX: "hidden",
+                  maxHeight: 300,
+                  maxWidth: "100%",
+                }}
+                bodyStyle={{ padding: 0 }}
+              >
+                <DataFetcherUniversity apiUrl="http://universities.hipolabs.com/search?country=United+States&limit=30">
+                  {(universityData) => (
+                    <List
+                      dataSource={universityData}
+                      renderItem={(item, index) => (
+                        <List.Item
+                          onClick={handleItemClick}
+                          style={{
+                            background: index % 2 === 0 ? "white" : "#f0f0f0",
+                          }}
+                        >
+                          {`${item.name} (${item.alpha_two_code})`}
+                        </List.Item>
+                      )}
+                    />
+                  )}
+                </DataFetcherUniversity>
               </Card>
             </Col>
           </Row>
         </Card>
       </Col>
       <Col span={10} style={{ height: "100%", minHeight: "100%" }}>
-        <AgChartsReact ref={chartRef} options={options as any} />
+        <div style={{ padding: "0px 15px 0px 15px" }}>
+          <Form layout="vertical">
+            <Form.Item
+              label="Tipo"
+              style={{
+                display: "inline-block",
+                width: "calc(50% - 8px)",
+              }}
+            >
+              <Select
+                defaultValue={"Transformador de Distribuição"}
+                options={[
+                  {
+                    value: "Transformador de Distribuição",
+                  },
+                  {
+                    value: "Transformador a Seco",
+                  },
+                  {
+                    value: "Transformador de Meia Força",
+                  },
+                ]}
+              />
+            </Form.Item>
+            <Form.Item
+              label="Selecione a data"
+              colon={false}
+              style={{
+                display: "inline-block",
+                width: "calc(50% - 8px)",
+                margin: "0 8px",
+              }}
+            >
+              <RangePicker />
+            </Form.Item>
+          </Form>
+        </div>
+        <AgChartsReact options={options} />
       </Col>
     </Row>
   );
 };
-function tooltipRenderer({
-  datum,
-  xKey,
-  yKey,
-}: AgCartesianSeriesTooltipRendererParams) {
-  return { content: `${datum[xKey]}: ${datum[yKey]}%` };
-}
-const WOMEN: AgBarSeriesOptions = {
-  type: "bar",
-  xKey: "year",
-  yKey: "women",
-  yName: "Women",
-  grouped: true,
-  tooltip: {
-    renderer: tooltipRenderer,
-  },
-};
-const MEN: AgBarSeriesOptions = {
-  type: "bar",
-  xKey: "year",
-  yKey: "men",
-  yName: "Men",
-  grouped: true,
-  tooltip: {
-    renderer: tooltipRenderer,
-  },
-};
-const PORTIONS: AgLineSeriesOptions = {
-  type: "line",
-  xKey: "year",
-  yKey: "portions",
-  yName: "Portions",
-  tooltip: {
-    renderer: tooltipRenderer,
-  },
-};
-const BAR_AND_LINE: AgCartesianSeriesOptions[] = [
-  { ...WOMEN, type: "bar" },
-  { ...MEN, type: "bar" },
-  { ...PORTIONS, type: "line" },
-];
-const AREA_AND_BAR: AgCartesianSeriesOptions[] = [
-  { ...PORTIONS, type: "area" },
-  { ...WOMEN, type: "bar" },
-  { ...MEN, type: "bar" },
-];
 export default PcpProcessResources;
