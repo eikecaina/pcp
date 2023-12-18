@@ -4,11 +4,6 @@ import { TabsProps } from 'antd';
 import PcpData from './PcpData';
 import PcpProcessResources from './PcpProcessResources';
 
-
-const onChange = (key: string) => {
-    console.log(key);
-};
-
 const items: TabsProps['items'] = [
     {
         key: '1',
@@ -34,7 +29,7 @@ const items: TabsProps['items'] = [
 
 const PcpPage: React.FC = () => {
     return (
-        <Tabs tabBarStyle={{ margin: 0 }} defaultActiveKey="1" items={items} onChange={onChange} />
+        <Tabs tabBarStyle={{ margin: 0 }} defaultActiveKey="1" items={items} />
     )
 }
 
