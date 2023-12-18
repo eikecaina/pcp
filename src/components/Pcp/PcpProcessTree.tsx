@@ -3,13 +3,19 @@ import { DataFetcher } from "components/DataFetcherJson";
 
 export const PcpProcess: React.FC = () => {
   return (
-          
     <DataFetcher apiUrl="http://localhost:3000/api/getData" tipo="processos">
       {(treeData) => (
         <>
           <Divider orientation="left">Processos</Divider>
           <Tree
-            style={{ overflowY: "auto", height: 665, maxHeight: 607 }}
+            style={{
+              overflowY: "auto",
+              height: '100%',
+              minHeight: 607,
+              textOverflow: "ellipsis",
+              overflow: "hidden",
+              whiteSpace: "nowrap",
+            }}
             showLine={true}
             defaultExpandedKeys={["0-0-0"]}
             treeData={treeData}

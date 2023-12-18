@@ -2,7 +2,8 @@
   "menus": {
     "home": "Home",
     "protected": "Protected",
-    "weg": "wtpc"
+    "weg": "wtpc",
+    "newquotation": "New Quotation"
   },
   "userCard": {
     "greeting": "Hello",

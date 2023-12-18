@@ -13,7 +13,7 @@ interface NavEntry {
 export const MENUS: NavEntry[] = [
 
   {
-    name: "Nova Cotação",
+    name: "menus.newquotation",
     icon: ContainerOutlined,
     path: '/newQuotation',
   },
