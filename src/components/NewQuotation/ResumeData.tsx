@@ -19,7 +19,7 @@ export const Cotacao: React.FC = () => {
             <List.Item
               style={{ background: index % 2 === 0 ? "white" : "#f0f0f0" }}
             >
-              <Typography.Text mark>[DATA]</Typography.Text>
+              <Typography.Text mark>[DIA]</Typography.Text>
               {`${item.dia} [${item.data_inicial}] [${item.data_final}] ${
                 item.processo
               } (${item.duracao || "Sem duração"})`}
@@ -48,7 +48,7 @@ export const Resumido: React.FC = () => {
             <List.Item
               style={{ background: index % 2 === 0 ? "white" : "#f0f0f0" }}
             >
-              <Typography.Text mark>[DATA]</Typography.Text>
+              <Typography.Text mark>[DIA]</Typography.Text>
               {`${item.dia} [${item.data_inicial}] [${item.data_final}] ${
                 item.processo
               } (${item.duracao || "Sem duração"})`}

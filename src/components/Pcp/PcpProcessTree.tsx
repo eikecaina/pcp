@@ -11,6 +11,7 @@ export const PcpProcess: React.FC = () => {
             style={{
               overflowY: "auto",
               height: '100%',
+              maxHeight: 607,
               minHeight: 607,
               textOverflow: "ellipsis",
               overflow: "hidden",

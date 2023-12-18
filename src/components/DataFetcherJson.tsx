@@ -4,7 +4,7 @@ const axios = require("axios");
 
 interface dataExampleProps {
   apiUrl: string;
-  tipo: string;
+  tipo?: string;
   children: (data: any[]) => React.ReactNode;
 }
 
