@@ -30,6 +30,56 @@
     "message": "Sorry, you are not authorized to see this page, please login:"
   },
   "generalButtons": {
-    "calc": "Calc"
+    "calcButton": "Calc",
+    "configButton": "Configuration",
+    "openButton": "Open",
+    "cancelButton": "Cancel",
+    "saveButton": "Save",
+    "confirmButton": "Confirm",
+    "deleteButton": "Delete",
+    "editButton": "Edit",
+    "newButton": "New",
+    "quotation": "Quotation",
+    "resume": "Resume",
+    "details": "Details"
+  },
+  "titles" : {
+    "itensConfig": "Item Setting",
+    "productConfig": "Product Configuration",
+    "deliveries": "Deliveries",
+    "details": "Details",
+    "process": "Process",
+    "planning": "Planning",
+    "consum": "Consum",
+    "group": "Groups",
+    "config": "Settings"
+  },
+  "labels" : {
+    "client": "Client",
+    "item": "Item",
+    "quotation": "Quotation",
+    "operation": "Means of operation",
+    "salesOrder": "SO",
+    "itemSo": "Item SO",
+    "itemFert": "Item Fert",
+    "claimPlanning": "Claim Planning",
+    "productionOrder": "Production Order",
+    "power": "Power",
+    "voltage": "Voltage",
+    "observation": "Observation",
+    "inspection": "Inspection",
+    "automatic": "Automatic",
+    "manual": "Manual",
+    "start": "Start",
+    "duration": "Duration",
+    "resource": "Resource",
+    "end": "End",
+    "minutesConsum": "Consum Minutes",
+    "notes": "Notes",
+    "type": "Type",
+    "selectDate": "Select the date",
+    "control": "Control",
+    "processResource": "Processes and Resources Consumed",
+    "secondsConsum" : "Consum Seconds"
   }
 }

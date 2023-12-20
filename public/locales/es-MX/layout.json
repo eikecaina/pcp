@@ -1,0 +1,85 @@
+{
+    "menus": {
+    "home": "Inicio",
+    "protected": "Protegido",
+    "newquotation": "Nueva Cotización"
+    },
+    "userCard": {
+    "greeting": "Hola",
+    "menus": {
+    "logout": "Cerrar sesión"
+    }
+    },
+    "footer": {
+    "copyright": "© {{siteName}} - Desarrollado por el Departamento de Investigación y Desarrollo - WMO"
+    },
+    "login": {
+    "title": "Inicio de sesión",
+    "username": "Nombre de usuario",
+    "password": "Contraseña",
+    "okButton": "Iniciar sesión",
+    "cancelButton": "Cancelar",
+    "errors": {
+    "emptyUsername": "¡El nombre de usuario no puede estar vacío!",
+    "emptyPassword": "¡La contraseña no puede estar vacía!",
+    "unauthorized": "No autorizado!"
+    }
+    },
+    "unauthorized": {
+    "button": "Iniciar sesión",
+    "message": "Lo siento, no tienes autorización para ver esta página. Por favor, inicia sesión:"
+    },
+    "generalButtons": {
+    "calcButton": "Calcular",
+    "configButton": "Configurar",
+    "openButton": "Abrir",
+    "cancelButton": "Cancelar",
+    "saveButton": "Guardar",
+    "confirmButton": "Confirmar",
+    "deleteButton": "Eliminar",
+    "editButton": "Editar",
+    "newButton": "Nuevo",
+    "quotation": "Cotización",
+    "resume": "Resumen",
+    "details": "Detalles"
+    },
+    "titles" : {
+    "itensConfig": "Configuración de Ítems",
+    "productConfig": "Configuración de Producto",
+    "deliveries": "Entregas",
+    "details": "Detalles",
+    "process": "Proceso",
+    "planning": "Planificación",
+    "consum": "Consumo",
+    "group": "Grupos",
+    "config": "Configuración"
+    },
+    "labels" : {
+    "client": "Cliente",
+    "item": "Ítem",
+    "quotation": "Cotización",
+    "operation": "Medios de operación",
+    "salesOrder": "SO",
+    "itemSo": "Ítem SO",
+    "itemFert": "Ítem Fert",
+    "claimPlanning": "Planificación de reclamaciones",
+    "productionOrder": "Orden de producción",
+    "power": "Potencia",
+    "voltage": "Voltaje",
+    "observation": "Observación",
+    "inspection": "Inspección",
+    "automatic": "Automático",
+    "manual": "Manual",
+    "start": "Inicio",
+    "duration": "Duración",
+    "resource": "Recurso",
+    "end": "Fin",
+    "minutesConsum": "Consumo de minutos",
+    "notes": "Notas",
+    "type": "Tipo",
+    "selectDate": "Seleccionar la fecha",
+    "control": "Control",
+    "processResource": "Procesos y Recursos Consumidos",
+    "secondsConsum" : "Consumo de segundos"
+    }
+    }

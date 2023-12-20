@@ -30,6 +30,56 @@
     "message": "Desculpe, você não está autorizado a visualizar esta página, por favor faça o login:"
   },
   "generalButtons": {
-    "calc": "Calcular"
+    "calcButton": "Calcular",
+    "configButton": "Configuração",
+    "openButton": "Abrir",
+    "cancelButton": "Cancelar",
+    "saveButton": "Salvar",
+    "confirmButton": "Confirmar",
+    "deleteButton": "Excluir",
+    "editButton": "Editar",
+    "newButton": "Novo",
+    "quotation": "Cotação",
+    "resume": "Resumo",
+    "details": "Detalhes"
+  },
+  "titles": {
+    "itensConfig": "Configurações de Item",
+    "productConfig": "Configuração de Produto",
+    "deliveries": "Entregas",
+    "details": "Detalhes",
+    "process": "Processos",
+    "planning": "Planejamento",
+    "consum": "Consumo",
+    "group": "Grupos",
+    "config": "Configurações"
+  },
+  "labels": {
+    "client": "Cliente",
+    "item": "Item",
+    "quotation": "Cotação",
+    "operation": "Meio de operação",
+    "salesOrder": "OV",
+    "itemSo": "Item OV",
+    "itemFert": "Item Fert",
+    "claimPlanning": "Planejamento de Reclamações",
+    "productionOrder": "Ordem de Produção",
+    "power": "Potência",
+    "voltage": "Voltagem",
+    "observation": "Observação",
+    "inspection": "Inspeção",
+    "automatic": "Automático",
+    "manual": "Manual",
+    "start": "Início",
+    "duration": "Duração",
+    "resource": "Recurso",
+    "end": "Fim",
+    "minutesConsum": "Consumo de Minutos",
+    "notes": "Notas",
+    "type": "Tipo",
+    "selectDate": "Selecione a data",
+    "control": "Controle",
+    "processResource": "Processos e Recursos Consumidos",
+    "secondsConsum": "Consumo de Segundos"
   }
 }

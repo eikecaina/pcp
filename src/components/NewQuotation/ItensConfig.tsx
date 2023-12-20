@@ -225,7 +225,7 @@ export const ProductConfig: React.FC = () => {
         }}
         type="primary"
       >
-       {t('generalButtons.calc')}
+       {t('generalButtons.calcButton')}
       </Button>
 
       <Button
@@ -239,7 +239,7 @@ export const ProductConfig: React.FC = () => {
         onClick={openModalConfig}
         type="primary"
       >
-        Configuração
+        {t('generalButtons.configButton')}
       </Button>
       {isModalConfigOpen && (
         <ConfigModal setIsModalConfigOpen={setIsModalConfigOpen} />
