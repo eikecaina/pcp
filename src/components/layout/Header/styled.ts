@@ -51,6 +51,8 @@ export const UserCardWrapper = styled.div`
 export const LanguageChangerWrapper = styled.div`
   display: grid;
 
+  z-index: 999;
+
   padding: 0 ${({ theme }) => theme.spacing.md};
 
   align-items: center;

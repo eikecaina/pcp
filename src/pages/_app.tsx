@@ -1,8 +1,8 @@
 import { NextPage } from "next";
 import { AppProps } from "next/app";
 import Head from "next/head";
-import { ConfigProvider } from 'antd';
-import ptBR from 'antd/locale/pt_BR'
+import { ConfigProvider } from "antd";
+import ptBR from "antd/locale/pt_BR";
 
 import { withAuthProvider } from "@wmo-dev/login-utils";
 
@@ -27,3 +27,5 @@ const App: NextPage<AppProps> = ({ Component, pageProps }) => {
 };
 
 export default withHOCs(withTheme, withTranslations, withAuthProvider())(App);
+
+

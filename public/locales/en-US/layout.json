@@ -28,5 +28,8 @@
   "unauthorized": {
     "button": "Login",
     "message": "Sorry, you are not authorized to see this page, please login:"
+  },
+  "generalButtons": {
+    "calc": "Calc"
   }
 }

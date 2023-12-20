@@ -2,8 +2,7 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.min.css";
 import { ColDef } from "ag-grid-community";
-import { useEffect, useMemo, useRef, useState } from "react";
-import axios from "axios";
+import {  useMemo,  useState } from "react";
 import { Modal } from "antd";
 import { DataFetcher } from "components/DataFetcherJson";
 
@@ -16,17 +15,6 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
   isModalOpen,
   setModalIsOpen,
 }) => {
-  const [rowData, setRowData] = useState([
-    {
-      quotation: "",
-      salesOrder: "",
-      user: "",
-      client: "",
-      create: "",
-      open: "",
-    },
-  ]);
-
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     { headerName: "Usuário", field: "user" },
     { headerName: "Cliente", field: "client" },

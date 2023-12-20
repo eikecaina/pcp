@@ -4,6 +4,7 @@ module.exports = {
   i18n: {
     defaultLocale: "en-US",
     locales: ["en-US", "pt-BR"],
+    localeDetection: true,
   },
   env: {
     SITE_NAME: "Nextjs Boileplate",

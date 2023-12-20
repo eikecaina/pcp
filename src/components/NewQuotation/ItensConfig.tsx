@@ -25,6 +25,9 @@ import React, { useState } from "react";
 import ConfigModal from "./ConfigModal/ConfigModal";
 import PcpPage from "components/Pcp/PcpPage";
 import SearchQuotation from "./OpenQuotation/SearchQuotation";
+import { useTranslation } from "next-i18next";
+
+
 
 export const GeneralData: React.FC = () => {
   const [selectOptions, setSelectOptions] = useState([{ value: "10" }]);
@@ -168,7 +171,7 @@ export const ProductConfig: React.FC = () => {
       setShowMaterial(true);
     }
   };
-
+  const { t } = useTranslation("layout");
   return (
     <>
       <Divider orientation="left" style={{ marginTop: "10px 0 0px 0" }}>
@@ -222,7 +225,7 @@ export const ProductConfig: React.FC = () => {
         }}
         type="primary"
       >
-        Calcular
+       {t('generalButtons.calc')}
       </Button>
 
       <Button
