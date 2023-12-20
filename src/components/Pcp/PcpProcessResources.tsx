@@ -1,18 +1,23 @@
 import { AgChartsReact } from "ag-charts-react";
-import { AgChartOptions } from "ag-charts-community";
+import {
+  AgBarSeriesOptions,
+  AgCategoryAxisOptions,
+  AgChartOptions,
+  AgCharts,
+  AgLineSeriesOptions,
+  AgNumberAxisOptions,
+} from "ag-charts-community";
 import React, { useState } from "react";
 import {
+  Button,
   Card,
   Col,
   Divider,
   Form,
   Input,
-  List,
   Radio,
   Row,
   Select,
-  Space,
-  theme,
 } from "antd";
 import { DataFetcherUniversity } from "components/DataFetcherJson";
 import { DatePicker } from "antd";
@@ -20,7 +25,6 @@ import { RadioChangeEvent } from "antd/lib";
 
 const { RangePicker } = DatePicker;
 
-import dayjs from "dayjs";
 import CustomInputNumber from "components/CustomInputNumber";
 const weekFormat = "DD/MM/YYYY";
 
@@ -42,17 +46,35 @@ const PcpProcessResources: React.FC = () => {
       { month: "Nov", avgTemp: 8.9, iceCreamSales: 204000 },
       { month: "Dez", avgTemp: 8.9, iceCreamSales: 500000 },
     ],
-
+    
     series: [
       {
         type: "bar",
         xKey: "month",
         yKey: "iceCreamSales",
-      },
+      } as AgBarSeriesOptions,
+      { type: "line", xKey: "month", yKey: "avgTemp" } as AgLineSeriesOptions,
     ],
+    axes: [
+      {
+        type: "category",
+        position: "bottom",
+      } as AgCategoryAxisOptions,
+      {
+        type: "number",
+        position: "left",
+        keys: ["iceCreamSales"],
+      } as AgNumberAxisOptions,
+      {
+        type: "number",
+        position: "right",
+        keys: ["avgTemp"],
+      } as AgNumberAxisOptions,
+    ],
+    legend: {
+      position: "bottom",
+    },
   });
-
-  const { token } = theme.useToken();
 
   const [selectedRadio, setSelectedRadio] = useState(1);
 
@@ -68,7 +90,7 @@ const PcpProcessResources: React.FC = () => {
 
   return (
     <Row gutter={15}>
-      <Col span={14}>
+      <Col span={12}>
         <Card bodyStyle={{ padding: 0 }}>
           <Divider orientation="left">Grupos</Divider>
           <div style={{ padding: "5px 10px 5px 10px" }}>
@@ -108,182 +130,197 @@ const PcpProcessResources: React.FC = () => {
             </Form>
             <div>
               <Radio.Group
-                style={{ width: "100%", margin: "0 5px" }}
+                style={{ width: "100%" }}
                 onChange={handleRadioChange}
                 value={selectedRadio}
               >
                 <Radio
                   value={1}
-                  style={{ display: "inline-block", width: "calc(50% - 8px)" }}
+                  style={{ display: "inline-block", width: "calc(51% - 8px)" }}
                 >
                   Processo
                 </Radio>
                 <Radio
                   value={2}
-                  style={{ display: "inline-block", width: "calc(50% - 8px)" }}
+                  style={{ display: "inline-block", width: "calc(49% - 8px)" }}
                 >
                   Recurso
                 </Radio>
               </Radio.Group>
-              <Row gutter={15}>
-                <Col span={12}>
-                    <DataFetcherUniversity apiUrl="http://universities.hipolabs.com/search?country=United+States&limit=10">
-                      {(universityData) => (
-                        <Select
-                          placeholder="Selecione o processo"
-                          showSearch
-                          style={{
-                            width: "100%",
-                          }}
-                          onChange={(value) => handleSelectChange(value)}
-                          disabled={selectedRadio === 2}
-                        >
-                          {universityData.map((item) => (
-                            <Select.Option key={item.id} value={item.name}>
-                              {`${item.name} (${item.alpha_two_code})`}
-                            </Select.Option>
-                          ))}
-                        </Select>
-                      )}
-                    </DataFetcherUniversity>
-                </Col>
-                <Col span={12}>
-                  <div
-                    style={{
-                      overflowY: "auto",
-                      overflowX: "hidden",
-                    }}
-                  >
-                    <DataFetcherUniversity apiUrl="http://universities.hipolabs.com/search?country=United+States&limit=30">
-                      {(universityData) => (
-                        <Select
-                          placeholder="Selecione o recurso"
-                          showSearch
-                          style={{
-                            width: "100%",
-                          }}
-                          
-                          onChange={(value) => handleSelectChange(value)}
-                          disabled={selectedRadio === 1}
-                        >
-                          {universityData.map((item) => (
-                            <Select.Option key={item.id} value={item.name}>
-                              {`${item.name} (${item.alpha_two_code})`}
-                            </Select.Option>
-                          ))}
-                        </Select>
-                      )}
-                    </DataFetcherUniversity>
-                  </div>
-                </Col>
-              </Row>
+
+              <Form.Item
+                style={{
+                  display: "inline-block",
+                  width: "calc(50% - 8px)",
+                  margin: "0 16px 0 0",
+                }}
+              >
+                <DataFetcherUniversity apiUrl="http://universities.hipolabs.com/search?country=United+States&limit=10">
+                  {(universityData) => (
+                    <Select
+                      placeholder="Selecione o processo"
+                      showSearch
+                      onChange={(value) => handleSelectChange(value)}
+                      disabled={selectedRadio === 2}
+                    >
+                      {universityData.map((item) => (
+                        <Select.Option key={item.id} value={item.name}>
+                          {`${item.name} (${item.alpha_two_code})`}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  )}
+                </DataFetcherUniversity>
+              </Form.Item>
+              <Form.Item
+                style={{
+                  display: "inline-block",
+                  width: "calc(50% - 8px)",
+                }}
+              >
+                <DataFetcherUniversity apiUrl="http://universities.hipolabs.com/search?country=United+States&limit=30">
+                  {(universityData) => (
+                    <Select
+                      placeholder="Selecione o recurso"
+                      showSearch
+                      onChange={(value) => handleSelectChange(value)}
+                      disabled={selectedRadio === 1}
+                    >
+                      {universityData.map((item) => (
+                        <Select.Option key={item.id} value={item.name}>
+                          {`${item.name} (${item.alpha_two_code})`}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  )}
+                </DataFetcherUniversity>
+              </Form.Item>
             </div>
-            <div style={{ padding: "10px 0" }}>
-              <Row gutter={15}>
-                <Col span={12}>
+            <div>
+              <Form layout="vertical">
+                <Form.Item
+                  label="Controle"
+                  style={{
+                    margin: "0 16px 0 0",
+                    display: "inline-block",
+                    width: "calc(50% - 8px)",
+                  }}
+                >
                   <DataFetcherUniversity apiUrl="http://universities.hipolabs.com/search?country=United+States&limit=30">
                     {(universityData) => (
-                      <Form layout="vertical">
-                        <Form.Item label="Controle">
-                          <Select
-                            placeholder="Selecione o recurso"
-                            style={{
-                              width: "100%",
-                            }}                          
-                          >
-                            {universityData.map((item) => (
-                              <Select.Option key={item.id} value={item.name}>
-                                {`${item.name} (${item.alpha_two_code})`}
-                              </Select.Option>
-                            ))}
-                          </Select>
-                        </Form.Item>
-                      </Form>
+                      <Select>
+                        {universityData.map((item) => (
+                          <Select.Option key={item.id} value={item.name}>
+                            {`${item.name} (${item.alpha_two_code})`}
+                          </Select.Option>
+                        ))}
+                      </Select>
                     )}
                   </DataFetcherUniversity>
-                  <div></div>
-                </Col>
-                <Col span={12}>
-                  <Form layout="vertical">
-                    <Form.Item
-                      label="Cliente"
-                      style={{
-                        width: "100%",
-                      }}
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      label="Cotação"
-                      style={{
-                        display: "inline-block",
-                        width: "calc(50% - 8px)",
-                        margin: "0 16px 0 0",
-                      }}
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item
-                      label="OV"
-                      style={{
-                        display: "inline-block",
-                        width: "calc(50% - 8px)",
-                      }}
-                    >
-                      <Input />
-                    </Form.Item>
-                    <Form.Item label="Processos e Recursos Consumidos">
-                      <Select
-                        style={{
-                          display: "inline-block",
-                          width: "calc(50% - 8px)",
-                        }}
-                      />
-                      <Select
-                        style={{
-                          display: "inline-block",
-                          width: "calc(50% - 8px)",
-                          margin: "0 0px 0 16px",
-                        }}
-                      />
-                    </Form.Item>
-                    <Form.Item
-                      label="Consumo em Segundos"
-                      style={{
-                        width: "calc(50% - 8px)",
-                        display: "inline-block",
-                        margin: "0px 16px 0 0px",
-                      }}
-                    >
-                      <CustomInputNumber style={{ width: "100%" }} />
-                    </Form.Item>
-                    <Form.Item
-                      label="Selecione a data"
-                      style={{
-                        display: "inline-block",
-                        width: "calc(50% - 8px)",
-                      }}
-                    >
-                      <DatePicker
-                        style={{ width: "100%" }}
-                        format={weekFormat}
-                      />
-                    </Form.Item>
-                    <Form.Item label="Notas">
-                      <TextArea
-                        value={"Abatimento com cálculo automático por Vendas."}
-                        disabled
-                        style={{ height: 50, resize: "none" }}
-                      />
-                    </Form.Item>
-                  </Form>
-                </Col>
-              </Row>
+                </Form.Item>
+                <Form.Item
+                  label="Cliente"
+                  style={{
+                    display: "inline-block",
+                    width: "calc(50% - 8px)",
+                  }}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="Cotação"
+                  style={{
+                    display: "inline-block",
+                    width: "calc(50% - 8px)",
+                    margin: "0 16px 0 0",
+                  }}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="OV"
+                  style={{
+                    display: "inline-block",
+                    width: "calc(50% - 8px)",
+                  }}
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item label="Processos e Recursos Consumidos">
+                  <Select
+                    style={{
+                      display: "inline-block",
+                      width: "calc(50% - 8px)",
+                    }}
+                  />
+                  <Select
+                    style={{
+                      display: "inline-block",
+                      width: "calc(50% - 8px)",
+                      margin: "0 0px 0 16px",
+                    }}
+                  />
+                </Form.Item>
+                <Form.Item
+                  label="Consumo em Segundos"
+                  style={{
+                    width: "calc(50% - 8px)",
+                    display: "inline-block",
+                    margin: "0px 16px 0 0px",
+                  }}
+                >
+                  <CustomInputNumber style={{ width: "100%" }} />
+                </Form.Item>
+                <Form.Item
+                  label="Selecione a data"
+                  style={{
+                    display: "inline-block",
+                    width: "calc(50% - 8px)",
+                  }}
+                >
+                  <DatePicker style={{ width: "100%" }} format={weekFormat} />
+                </Form.Item>
+                <Form.Item label="Notas">
+                  <TextArea style={{ height: 50, resize: "none" }} />
+                </Form.Item>
+              </Form>
+              <div
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Button
+                  style={{
+                    display: "inline-block",
+                    width: "calc(33.33% - 8px)",
+                  }}
+                >
+                  Novo
+                </Button>
+                <Button
+                  style={{
+                    display: "inline-block",
+                    width: "calc(33.33% - 8px)",
+                  }}
+                >
+                  Editar
+                </Button>
+                <Button
+                  style={{
+                    display: "inline-block",
+                    width: "calc(33.33% - 8px)",
+                  }}
+                >
+                  Excluir
+                </Button>
+              </div>
             </div>
           </div>
         </Card>
       </Col>
-      <Col span={10} style={{ height: 230 }}>
+      <Col span={12} style={{ height: 245 }}>
         <AgChartsReact options={options} />
 
         <AgChartsReact options={options} />

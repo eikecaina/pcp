@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Card, Checkbox, Col, DatePicker, Divider, Form, Input, List, Radio, Row, Select, Space, Tree } from "antd";
 
 import { DataFetcher } from "components/DataFetcherJson";
@@ -14,6 +14,14 @@ import dayjs from "dayjs";
 const { TextArea } = Input;
 
 const PcpData: React.FC = () => {
+
+  const [editForm, setEditForm] = useState(true);
+
+  const editPcpForm = () => {
+    setEditForm(!editForm);
+  }
+
+
   return (
     <Row gutter={6}>
       <Col span={8}>
@@ -260,10 +268,10 @@ const PcpData: React.FC = () => {
       <Form style={{ margin: 15 }}>
         <Radio.Group defaultValue={1}>
           <Space direction="vertical" style={{ marginBottom: 15 }}>
-            <Radio value={1} disabled>
+            <Radio value={1} disabled={editForm}  >
               Automático
             </Radio>
-            <Radio value={2} disabled>
+            <Radio value={2} disabled={editForm}  >
               Manual
             </Radio>
           </Space>
@@ -278,7 +286,7 @@ const PcpData: React.FC = () => {
             <DatePicker
               defaultValue={dayjs("00/00/0000", dateFormatList[0])}
               format={dateFormatList[0]}
-              disabled
+              disabled={editForm}      
               style={{ width: "100%" }}
             />
           </Form.Item>
@@ -293,7 +301,7 @@ const PcpData: React.FC = () => {
             <DatePicker
               defaultValue={dayjs("00/00/0000", dateFormatList[0])}
               format={dateFormatList[0]}
-              disabled
+              disabled={editForm}
               style={{ width: "100%" }}
             />
           </Form.Item>
@@ -302,7 +310,7 @@ const PcpData: React.FC = () => {
           label="Duração"
           style={{ display: "inline-block", width: "calc(60% - 8px)" }}
         >
-          <CustomInputNumber value={1102} disabled style={{ width: "100%" }} />
+          <CustomInputNumber value={1102} disabled={editForm}   style={{ width: "100%" }} />
         </Form.Item>
         <Form.Item
           style={{
@@ -311,7 +319,7 @@ const PcpData: React.FC = () => {
             margin: "0 8px",
           }}
         >
-          <Select value={"Minutos"} disabled />
+          <Select value={"Minutos"} disabled={editForm}   />
         </Form.Item>
         <Form.Item
           label="Recurso"
@@ -319,7 +327,7 @@ const PcpData: React.FC = () => {
         >
           <Input
             value={"TS - Elétrico - Rodrigo (lauffer)"}
-            disabled
+            disabled={editForm}  
             style={{ width: "100%" }}
           />
         </Form.Item>
@@ -365,7 +373,7 @@ const PcpData: React.FC = () => {
               >
                 <Input
                   value={"TS - Elétrico - Rodrigo (lauffer)"}
-                  disabled
+                  disabled={editForm}  
                   style={{ width: "100%" }}
                 />
               </Form.Item>
@@ -380,7 +388,7 @@ const PcpData: React.FC = () => {
                 <DatePicker
                   defaultValue={dayjs("07/12/2024", dateFormatList[0])}
                   format={dateFormatList[0]}
-                  disabled
+                  disabled={editForm}  
                   style={{ width: "100%" }}
                 />
               </Form.Item>
@@ -390,7 +398,7 @@ const PcpData: React.FC = () => {
               >
                 <CustomInputNumber
                   value={"420"}
-                  disabled
+                  disabled={editForm}  
                   style={{ width: "100%" }}
                 />
               </Form.Item>
@@ -398,7 +406,7 @@ const PcpData: React.FC = () => {
               <Form.Item label="Notas">
                 <TextArea
                   value={"Abatimento com cálculo automático por Vendas."}
-                  disabled
+                  disabled={editForm}  
                   style={{ height: 50, resize: "none", width: 'calc(100% - 8px)' }}
                 />
               </Form.Item>
@@ -408,7 +416,7 @@ const PcpData: React.FC = () => {
             bodyStyle={{ padding: 10, margin: 0, float: "right" }}
             bordered={false}
           >
-            <Button type="primary" style={{ backgroundColor: "#bfbfbf" }}>
+            <Button onClick={editPcpForm} type="primary">
               Editar
             </Button>
           </Card>
