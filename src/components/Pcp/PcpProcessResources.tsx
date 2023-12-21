@@ -33,7 +33,7 @@ const { TextArea } = Input;
 
 const PcpProcessResources: React.FC = () => {
   const { t } = useTranslation("layout");
-  
+
   const [options, setOptions] = useState<AgChartOptions>({
     data: [
       { month: "Jan", avgTemp: 2.3, iceCreamSales: 162000 },
@@ -94,12 +94,17 @@ const PcpProcessResources: React.FC = () => {
   return (
     <Row gutter={15}>
       <Col span={12}>
-        <Card bodyStyle={{ padding: 0 }}>
-          <Divider orientation="left">{t('titles.group')}</Divider>
+        <Card
+          bodyStyle={{
+            padding: 0,
+          }}
+          style={{ borderTopLeftRadius: 0, borderTopRightRadius: 0 }}
+        >
+          <Divider orientation="left">{t("titles.group")}</Divider>
           <div style={{ padding: "5px 10px 5px 10px" }}>
             <Form layout="vertical">
               <Form.Item
-                label="Tipo"
+                label={t('labels.type')}
                 style={{
                   width: "calc(50% - 8px)",
                   display: "inline-block",
@@ -122,7 +127,7 @@ const PcpProcessResources: React.FC = () => {
                 />
               </Form.Item>
               <Form.Item
-                label="Selecione a data"
+                label={t('labels.selectDate')}
                 style={{
                   display: "inline-block",
                   width: "calc(50% - 8px)",
@@ -141,13 +146,13 @@ const PcpProcessResources: React.FC = () => {
                   value={1}
                   style={{ display: "inline-block", width: "calc(51% - 8px)" }}
                 >
-                  Processo
+                  {t('labels.process')}
                 </Radio>
                 <Radio
                   value={2}
                   style={{ display: "inline-block", width: "calc(49% - 8px)" }}
                 >
-                  Recurso
+                  {t('labels.resource')}
                 </Radio>
               </Radio.Group>
 
@@ -202,7 +207,7 @@ const PcpProcessResources: React.FC = () => {
             <div>
               <Form layout="vertical">
                 <Form.Item
-                  label="Controle"
+                  label={t('labels.quotation')}
                   style={{
                     margin: "0 16px 0 0",
                     display: "inline-block",
@@ -222,7 +227,7 @@ const PcpProcessResources: React.FC = () => {
                   </DataFetcherUniversity>
                 </Form.Item>
                 <Form.Item
-                  label="Cliente"
+                  label={t('labels.client')}
                   style={{
                     display: "inline-block",
                     width: "calc(50% - 8px)",
@@ -231,7 +236,7 @@ const PcpProcessResources: React.FC = () => {
                   <Input />
                 </Form.Item>
                 <Form.Item
-                  label="Cotação"
+                  label={t('labels.quotation')}
                   style={{
                     display: "inline-block",
                     width: "calc(50% - 8px)",
@@ -241,7 +246,7 @@ const PcpProcessResources: React.FC = () => {
                   <Input />
                 </Form.Item>
                 <Form.Item
-                  label="OV"
+                  label={t('labels.salesOrder')}
                   style={{
                     display: "inline-block",
                     width: "calc(50% - 8px)",
@@ -249,7 +254,7 @@ const PcpProcessResources: React.FC = () => {
                 >
                   <Input />
                 </Form.Item>
-                <Form.Item label="Processos e Recursos Consumidos">
+                <Form.Item label={t('labels.processResource')}>
                   <Select
                     style={{
                       display: "inline-block",
@@ -265,7 +270,7 @@ const PcpProcessResources: React.FC = () => {
                   />
                 </Form.Item>
                 <Form.Item
-                  label="Consumo em Segundos"
+                  label={t('labels.minutesConsum')}
                   style={{
                     width: "calc(50% - 8px)",
                     display: "inline-block",
@@ -275,7 +280,7 @@ const PcpProcessResources: React.FC = () => {
                   <CustomInputNumber style={{ width: "100%" }} />
                 </Form.Item>
                 <Form.Item
-                  label="Selecione a data"
+                  label={t('labels.selectDate')}
                   style={{
                     display: "inline-block",
                     width: "calc(50% - 8px)",
@@ -283,7 +288,7 @@ const PcpProcessResources: React.FC = () => {
                 >
                   <DatePicker style={{ width: "100%" }} format={weekFormat} />
                 </Form.Item>
-                <Form.Item label="Notas">
+                <Form.Item label={t('labels.notes')}>
                   <TextArea style={{ height: 50, resize: "none" }} />
                 </Form.Item>
               </Form>
@@ -295,28 +300,31 @@ const PcpProcessResources: React.FC = () => {
                 }}
               >
                 <Button
+                  type="primary"
                   style={{
                     display: "inline-block",
                     width: "calc(33.33% - 8px)",
                   }}
                 >
-                  {t('generalButtons.newButton')}
+                  {t("generalButtons.newButton")}
                 </Button>
                 <Button
+                  type="primary"
                   style={{
                     display: "inline-block",
                     width: "calc(33.33% - 8px)",
                   }}
                 >
-                  {t('generalButtons.editButton')}
+                  {t("generalButtons.editButton")}
                 </Button>
                 <Button
+                  type="primary"
                   style={{
                     display: "inline-block",
                     width: "calc(33.33% - 8px)",
                   }}
                 >
-                  {t('generalButtons.deleteButton')}
+                  {t("generalButtons.deleteButton")}
                 </Button>
               </div>
             </div>

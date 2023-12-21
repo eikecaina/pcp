@@ -42,9 +42,13 @@
     "quotationButton": "Quotation",
     "resumeButton": "Resume",
     "detailsButton": "Details",
-    "cleanButton": "Clean"
+    "cleanButton": "Clean",
+    "dataButton": "Data",
+    "processResourcesButton": "Processes and Resources",
+    "reportsButton": "Reports",
+    "consolidatedresourcesButton": "Consolidated Resources"
   },
-  "titles" : {
+  "titles": {
     "itensConfig": "Item Setting",
     "productConfig": "Product Configuration",
     "deliveries": "Deliveries",
@@ -55,7 +59,7 @@
     "group": "Groups",
     "config": "Settings"
   },
-  "labels" : {
+  "labels": {
     "client": "Client",
     "item": "Item",
     "quotation": "Quotation",
@@ -75,12 +79,13 @@
     "duration": "Duration",
     "resource": "Resource",
     "end": "End",
+    "process": "Process",
     "minutesConsum": "Consum Minutes",
     "notes": "Notes",
     "type": "Type",
     "selectDate": "Select the date",
     "control": "Control",
     "processResource": "Processes and Resources Consumed",
-    "secondsConsum" : "Consum Seconds"
+    "secondsConsum": "Consum Seconds"
   }
 }

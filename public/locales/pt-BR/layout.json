@@ -42,7 +42,11 @@
     "quotationButton": "Cotação",
     "resumeButton": "Resumo",
     "detailsButton": "Detalhes",
-    "cleanButton": "Limpar"
+    "cleanButton": "Limpar",
+    "dataButton": "Data",
+    "processResourcesButton": "Processos e Recursos",
+    "reportsButton": "Relatórios",
+    "consolidatedresourcesButton": "Recursos consolidados"
   },
   "titles": {
     "itensConfig": "Configurações de Item",
@@ -62,6 +66,7 @@
     "operation": "Meio de operação",
     "salesOrder": "OV",
     "itemSo": "Item OV",
+    "process": "Processo",
     "itemFert": "Item FERT",
     "claimPlanning": "Claim de Planejamento",
     "productionOrder": "Ordem de Produção",

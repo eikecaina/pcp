@@ -128,7 +128,6 @@ export const DeliveryModal: React.FC = () => {
             type="primary"
             style={{
               width: "40%",
-              backgroundColor: "#95de64",
             }}
           >
             {t("generalButtons.saveButton")}

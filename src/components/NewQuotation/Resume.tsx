@@ -1,6 +1,7 @@
 import { Card, Tabs, TabsProps } from "antd";
 import { Cotacao, Detalhado, Resumido } from "./ResumeData";
 import { useTranslation } from "next-i18next";
+
 const Resume: React.FC = () => {
   const { t } = useTranslation("layout");
   const items: TabsProps["items"] = [

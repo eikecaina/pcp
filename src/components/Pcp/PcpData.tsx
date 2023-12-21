@@ -210,7 +210,7 @@ const PcpData: React.FC = () => {
                 <Checkbox></Checkbox>
               </Form.Item>
               <Form.Item>
-                <Button type="primary" style={{ backgroundColor: "#95de64" }}>
+                <Button type="primary">
                   {t("generalButtons.saveButton")}
                 </Button>
               </Form.Item>
@@ -265,7 +265,6 @@ const PcpData: React.FC = () => {
                       type="primary"
                       style={{
                         width: "calc(30% - 8px)",
-                        backgroundColor: "#95de64",
                       }}
                     >
                       {t("generalButtons.confirmButton")}
@@ -274,7 +273,6 @@ const PcpData: React.FC = () => {
                       type="primary"
                       style={{
                         width: "calc(30% - 8px)",
-                        backgroundColor: "#f5222d",
                       }}
                     >
                       {t("generalButtons.deleteButton")}

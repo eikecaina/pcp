@@ -1,36 +1,39 @@
-import React from 'react';
-import { Tabs } from 'antd';
-import { TabsProps } from 'antd';
-import PcpData from './PcpData';
-import PcpProcessResources from './PcpProcessResources';
+import React from "react";
+import { Tabs } from "antd";
+import { TabsProps } from "antd";
+import PcpData from "./PcpData";
+import PcpProcessResources from "./PcpProcessResources";
+import { useTranslation } from "next-i18next";
 
-const items: TabsProps['items'] = [
-    {
-        key: '1',
-        label: 'Data',
-        children: <PcpData />,
-    },
-    {
-        key: '2',
-        label: 'Processos e Recursos',
-        children: <PcpProcessResources />,
-    },
-    {
-        key: '3',
-        label: 'Relatórios',
-        children: 'Content of Tab Pane 3',
-    },
-    {
-        key: '4',
-        label: 'Recursos Consolidados',
-        children: 'Content of Tab Pane 4',
-    }
-];
 
 const PcpPage: React.FC = () => {
-    return (
-        <Tabs tabBarStyle={{ margin: 0 }} defaultActiveKey="1" items={items} />
-    )
-}
+  const { t } = useTranslation("layout");
+  const items: TabsProps["items"] = [
+    {
+      key: "1",
+      label: t("generalButtons.dataButton"),
+      children: <PcpData />,
+    },
+    {
+      key: "2",
+      label: t("generalButtons.processResourcesButton"),
+      children: <PcpProcessResources />,
+    },
+    {
+      key: "3",
+      label: t("generalButtons.reportsButton"),
+      children: "Content of Tab Pane 3",
+    },
+    {
+      key: "4",
+      label: t("generalButtons.consolidatedresourcesButton"),
+      children: "Content of Tab Pane 4",
+    },
+  ];
 
-export default PcpPage
+  return (
+    <Tabs tabBarStyle={{ margin: 0 }} defaultActiveKey="1" items={items} />
+  );
+};
+
+export default PcpPage;

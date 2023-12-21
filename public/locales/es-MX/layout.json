@@ -42,7 +42,11 @@
     "quotationButton": "Cotización",
     "resumeButton": "Resumen",
     "detailsButton": "Detalles",
-    "cleanButton": "Limpiar"
+    "cleanButton": "Limpiar",
+    "dataButton": "Datos",
+    "processResourcesButton": "Procesos y Recursos",
+    "reportsButton": "Informes",
+    "consolidatedresourcesButton": "Recursos Consolidados"
   },
   "titles": {
     "itensConfig": "Configuración de Ítems",
@@ -81,6 +85,7 @@
     "selectDate": "Seleccionar la fecha",
     "control": "Control",
     "processResource": "Procesos y Recursos Consumidos",
-    "secondsConsum": "Consumo de segundos"
+    "secondsConsum": "Consumo de segundos",
+    "process": "Proceso"
   }
 }
