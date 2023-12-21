@@ -1,5 +1,6 @@
 import { Col, Modal, Row, message } from "antd";
 import { DeliveryModal, ItemConfigModal } from "./ItemConfigModal";
+import { useTranslation } from "next-i18next";
 
 interface ConfigModalProps {
   setIsModalConfigOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -13,16 +14,16 @@ const ConfigModal: React.FC<ConfigModalProps> = ({ setIsModalConfigOpen }) => {
   const handleOk = () => {
     setIsModalConfigOpen(false);
   };
-
+  const { t } = useTranslation("layout");
   return (
     <Modal
-      title="Configurações"
+      title={t("titles.config")}
       open={true}
       onCancel={handleCancel}
       onOk={handleOk}
       width={990}
-      okText="Confirmar"
-      cancelText="Cancelar"
+      okText={t("generalButtons.confirmButton")}
+      cancelText={t("generalButtons.cancelButton")}
     >
       <Row gutter={10}>
         <Col span={12} style={{ height: "100%" }}>

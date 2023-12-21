@@ -1,20 +1,22 @@
 import { Card, Tabs, TabsProps } from "antd";
 import { Cotacao, Detalhado, Resumido } from "./ResumeData";
+import { useTranslation } from "next-i18next";
 const Resume: React.FC = () => {
+  const { t } = useTranslation("layout");
   const items: TabsProps["items"] = [
     {
       key: "1",
-      label: "Cotação",
+      label: t("generalButtons.quotationButton"),
       children: <Cotacao />,
     },
     {
       key: "2",
-      label: "Resumo",
+      label: t("generalButtons.resumeButton"),
       children: <Resumido />,
     },
     {
       key: "3",
-      label: "Detalhado",
+      label: t("generalButtons.detailsButton"),
       children: <Detalhado />,
     },
   ];

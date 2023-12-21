@@ -5,7 +5,6 @@ import {
   DatePicker,
   Divider,
   Form,
-  Modal,
   Radio,
   Row,
   Space,
@@ -14,15 +13,15 @@ import CustomInputNumber from "components/CustomInputNumber";
 import React, { useState } from "react";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { useTranslation } from "next-i18next";
 
 export const ItemConfigModal: React.FC = () => {
   const [disabelInput, setDisabelInput] = useState(1);
   const [repMaterial, setRepMaterial] = useState(false);
-
+  const { t } = useTranslation("layout");
   return (
-    <Card style={{ height: "100%", minHeight: 495 }} bodyStyle={{ padding: 0 }}>
-      <Divider orientation="left">Configuração de Item</Divider>
+    <Card style={{ height: "100%", minHeight: 420 }} bodyStyle={{ padding: 0 }}>
+      <Divider orientation="left">{t("titles.itensConfig")}</Divider>
       <div style={{ padding: 10 }}>
         <Radio.Group
           onChange={(e) => setDisabelInput(e.target.value)}
@@ -36,7 +35,7 @@ export const ItemConfigModal: React.FC = () => {
                 disabled={disabelInput === 1}
                 min={0}
                 maxLength={3}
-                style={{ width: 50, margin: '0 10px' }}
+                style={{ width: 50, margin: "0 10px" }}
               />
             </Radio>
           </Space>
@@ -70,16 +69,6 @@ export const ItemConfigModal: React.FC = () => {
 };
 
 export const DeliveryModal: React.FC = () => {
-  const confirmDelete = () => {
-    Modal.confirm({
-      title: "Excluir?",
-      icon: <ExclamationCircleOutlined />,
-      content: "Deseja excluir o Item?",
-      okText: "Confirmar",
-      cancelText: "Cancelar",
-    });
-  };
-
   const listDates = () => {
     const datasExample = [
       { data: "24/02/2024", peça: 1 },
@@ -95,7 +84,7 @@ export const DeliveryModal: React.FC = () => {
     ];
 
     return (
-      <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
+      <ul style={{ listStyle: "none", padding: 0, margin: 0, height: 180 }}>
         {datasExample.map((item, index) => (
           <li
             style={{
@@ -115,9 +104,11 @@ export const DeliveryModal: React.FC = () => {
   const dateFormatList = ["DD/MM/YYYY", "DD/MM/YY", "DD-MM-YYYY", "DD-MM-YY"];
   dayjs.extend(customParseFormat);
 
+  const { t } = useTranslation("layout");
+
   return (
-    <Card style={{ height: "100%", minHeight: 495 }} bodyStyle={{ padding: 0 }}>
-      <Divider orientation="left">Entrega</Divider>
+    <Card style={{ height: "100%", minHeight: 420 }} bodyStyle={{ padding: 0 }}>
+      <Divider orientation="left">{t("titles.deliveries")}</Divider>
       <div style={{ padding: 10 }}>
         <Form.Item label="Entrega em">
           <DatePicker
@@ -140,16 +131,15 @@ export const DeliveryModal: React.FC = () => {
               backgroundColor: "#95de64",
             }}
           >
-            Salvar
+            {t("generalButtons.saveButton")}
           </Button>
           <Button
             style={{
               width: "40%",
             }}
-            onClick={confirmDelete}
             type="primary"
           >
-            Limpar
+            {t("generalButtons.cleanButton")}
           </Button>
         </Row>
         <div

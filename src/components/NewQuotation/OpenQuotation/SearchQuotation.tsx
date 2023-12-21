@@ -5,6 +5,7 @@ import { ColDef } from "ag-grid-community";
 import {  useMemo,  useState } from "react";
 import { Modal } from "antd";
 import { DataFetcher } from "components/DataFetcherJson";
+import { useTranslation } from "next-i18next";
 
 interface SearchQuotationProps {
   isModalOpen: boolean;
@@ -42,7 +43,7 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
   const handleCancel = () => {
     setModalIsOpen(false);
   };
-
+  const { t } = useTranslation("layout");
   return (
     <Modal
       width={"100%"}
@@ -50,8 +51,8 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
       onOk={handleOk}
       onCancel={handleCancel}
       closable={false}
-      okText={"Abrir"}
-      cancelText={"Cancelar"}
+      okText={t("generalButtons.openButton")}
+      cancelText={t("generalButtons.cancelButton")}
     >
       <DataFetcher
         apiUrl="http://localhost:3000/api/getData"

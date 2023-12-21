@@ -27,8 +27,6 @@ import PcpPage from "components/Pcp/PcpPage";
 import SearchQuotation from "./OpenQuotation/SearchQuotation";
 import { useTranslation } from "next-i18next";
 
-
-
 export const GeneralData: React.FC = () => {
   const [selectOptions, setSelectOptions] = useState([{ value: "10" }]);
   const [selectedItem, setSelectedItem] = useState(10);
@@ -76,7 +74,7 @@ export const GeneralData: React.FC = () => {
       onOk: removeOptions,
     });
   };
-
+  const { t } = useTranslation("layout");
   return (
     <Row style={{ padding: 10 }}>
       <Form layout="vertical">
@@ -85,8 +83,7 @@ export const GeneralData: React.FC = () => {
             display: "inline-block",
             width: "calc(50% - 8px)",
           }}
-          label="Cliente"
-          name="cliente"
+          label={t('labels.client')}
           rules={[{ required: true, message: "Por favor, insira o Cliente!" }]}
         >
           <Space.Compact style={{ width: "100%" }}>
@@ -107,9 +104,7 @@ export const GeneralData: React.FC = () => {
             width: "calc(50% - 8px)",
             margin: "0 8px",
           }}
-          label="Item"
-          name="item"
-          rules={[{ required: true, message: "Por favor, selecione o Item!" }]}
+          label={t('labels.item')}
         >
           <Space.Compact style={{ width: "100%" }}>
             <Button type="primary" onClick={addOptions}>
@@ -128,9 +123,7 @@ export const GeneralData: React.FC = () => {
 
         <Form.Item
           style={{ display: "inline-block", width: "calc(50% - 8px)" }}
-          label="Cotação"
-          name="cotacao"
-          rules={[{ required: true, message: "Por favor, insira a Cotação!" }]}
+          label={t('labels.quotation')}
         >
           <InputNumber style={{ width: "100%" }} />
         </Form.Item>
@@ -141,9 +134,7 @@ export const GeneralData: React.FC = () => {
             width: "calc(50% - 8px)",
             margin: "0 8px",
           }}
-          label="ODV"
-          name="odv"
-          rules={[{ required: true, message: "Por favor, insira o ODV!" }]}
+          label={t('labels.salesOrder')}
         >
           <InputNumber style={{ width: "100%" }} />
         </Form.Item>
@@ -153,6 +144,9 @@ export const GeneralData: React.FC = () => {
 };
 
 export const ProductConfig: React.FC = () => {
+
+  const { t } = useTranslation("layout");
+  
   const [showPower, setShowPower] = useState(false);
   const [showVoltage, setShowVoltage] = useState(false);
   const [showMaterial, setShowMaterial] = useState(false);
@@ -171,15 +165,15 @@ export const ProductConfig: React.FC = () => {
       setShowMaterial(true);
     }
   };
-  const { t } = useTranslation("layout");
+  
   return (
     <>
       <Divider orientation="left" style={{ marginTop: "10px 0 0px 0" }}>
-        Configuração de produto
+        {t("titles.productConfig")}
       </Divider>
       <div style={{ overflowY: "auto", marginBottom: 50, padding: 10 }}>
         <Form layout="vertical">
-          <Form.Item colon={false} label="Meio de operação">
+          <Form.Item colon={false} label={t('labels.operation')}>
             <Select
               style={{ width: "100%", maxWidth: 350 }}
               options={[{ value: "Óleo" }, { value: "Seco" }]}

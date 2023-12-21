@@ -39,9 +39,10 @@
     "deleteButton": "Delete",
     "editButton": "Edit",
     "newButton": "New",
-    "quotation": "Quotation",
-    "resume": "Resume",
-    "details": "Details"
+    "quotationButton": "Quotation",
+    "resumeButton": "Resume",
+    "detailsButton": "Details",
+    "cleanButton": "Clean"
   },
   "titles" : {
     "itensConfig": "Item Setting",
@@ -61,7 +62,7 @@
     "operation": "Means of operation",
     "salesOrder": "SO",
     "itemSo": "Item SO",
-    "itemFert": "Item Fert",
+    "itemFert": "Item FERT",
     "claimPlanning": "Claim Planning",
     "productionOrder": "Production Order",
     "power": "Power",

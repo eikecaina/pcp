@@ -26,11 +26,14 @@ import { RadioChangeEvent } from "antd/lib";
 const { RangePicker } = DatePicker;
 
 import CustomInputNumber from "components/CustomInputNumber";
+import { useTranslation } from "next-i18next";
 const weekFormat = "DD/MM/YYYY";
 
 const { TextArea } = Input;
 
 const PcpProcessResources: React.FC = () => {
+  const { t } = useTranslation("layout");
+  
   const [options, setOptions] = useState<AgChartOptions>({
     data: [
       { month: "Jan", avgTemp: 2.3, iceCreamSales: 162000 },
@@ -46,7 +49,7 @@ const PcpProcessResources: React.FC = () => {
       { month: "Nov", avgTemp: 8.9, iceCreamSales: 204000 },
       { month: "Dez", avgTemp: 8.9, iceCreamSales: 500000 },
     ],
-    
+
     series: [
       {
         type: "bar",
@@ -92,7 +95,7 @@ const PcpProcessResources: React.FC = () => {
     <Row gutter={15}>
       <Col span={12}>
         <Card bodyStyle={{ padding: 0 }}>
-          <Divider orientation="left">Grupos</Divider>
+          <Divider orientation="left">{t('titles.group')}</Divider>
           <div style={{ padding: "5px 10px 5px 10px" }}>
             <Form layout="vertical">
               <Form.Item
@@ -297,7 +300,7 @@ const PcpProcessResources: React.FC = () => {
                     width: "calc(33.33% - 8px)",
                   }}
                 >
-                  Novo
+                  {t('generalButtons.newButton')}
                 </Button>
                 <Button
                   style={{
@@ -305,7 +308,7 @@ const PcpProcessResources: React.FC = () => {
                     width: "calc(33.33% - 8px)",
                   }}
                 >
-                  Editar
+                  {t('generalButtons.editButton')}
                 </Button>
                 <Button
                   style={{
@@ -313,7 +316,7 @@ const PcpProcessResources: React.FC = () => {
                     width: "calc(33.33% - 8px)",
                   }}
                 >
-                  Excluir
+                  {t('generalButtons.deleteButton')}
                 </Button>
               </div>
             </div>

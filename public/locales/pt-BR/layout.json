@@ -39,9 +39,10 @@
     "deleteButton": "Excluir",
     "editButton": "Editar",
     "newButton": "Novo",
-    "quotation": "Cotação",
-    "resume": "Resumo",
-    "details": "Detalhes"
+    "quotationButton": "Cotação",
+    "resumeButton": "Resumo",
+    "detailsButton": "Detalhes",
+    "cleanButton": "Limpar"
   },
   "titles": {
     "itensConfig": "Configurações de Item",
@@ -61,8 +62,8 @@
     "operation": "Meio de operação",
     "salesOrder": "OV",
     "itemSo": "Item OV",
-    "itemFert": "Item Fert",
-    "claimPlanning": "Planejamento de Reclamações",
+    "itemFert": "Item FERT",
+    "claimPlanning": "Claim de Planejamento",
     "productionOrder": "Ordem de Produção",
     "power": "Potência",
     "voltage": "Voltagem",
