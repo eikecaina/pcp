@@ -240,7 +240,7 @@ const PcpData: React.FC = () => {
                 <Divider orientation="left">{t('titles.process')}</Divider>
                 <Tree
                   style={{
-                    overflowY: "auto",
+                    overflowX: "auto",
                     height: "100%",
                     maxHeight: 607,
                     minHeight: 607,
