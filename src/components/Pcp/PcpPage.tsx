@@ -4,7 +4,7 @@ import { TabsProps } from "antd";
 import PcpData from "./PcpData";
 import PcpProcessResources from "./PcpProcessResources";
 import { useTranslation } from "next-i18next";
-
+import Reports from "./PcpReports";
 
 const PcpPage: React.FC = () => {
   const { t } = useTranslation("layout");
@@ -22,7 +22,7 @@ const PcpPage: React.FC = () => {
     {
       key: "3",
       label: t("generalButtons.reportsButton"),
-      children: "Content of Tab Pane 3",
+      children: <Reports />,
     },
     {
       key: "4",

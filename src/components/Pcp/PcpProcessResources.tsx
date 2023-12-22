@@ -3,7 +3,6 @@ import {
   AgBarSeriesOptions,
   AgCategoryAxisOptions,
   AgChartOptions,
-  AgCharts,
   AgLineSeriesOptions,
   AgNumberAxisOptions,
 } from "ag-charts-community";
