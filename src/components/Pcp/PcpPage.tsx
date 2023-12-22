@@ -5,6 +5,7 @@ import PcpData from "./PcpData";
 import PcpProcessResources from "./PcpProcessResources";
 import { useTranslation } from "next-i18next";
 import Reports from "./PcpReports";
+import PcpResources from "./PcpResources";
 
 const PcpPage: React.FC = () => {
   const { t } = useTranslation("layout");
@@ -27,7 +28,7 @@ const PcpPage: React.FC = () => {
     {
       key: "4",
       label: t("generalButtons.consolidatedresourcesButton"),
-      children: "Content of Tab Pane 4",
+      children: <PcpResources/>,
     },
   ];
 
