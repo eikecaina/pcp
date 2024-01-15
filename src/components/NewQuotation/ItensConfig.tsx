@@ -1,7 +1,10 @@
 import {
   CalendarOutlined,
+  EditOutlined,
   ExclamationCircleOutlined,
+  FileOutlined,
   FolderOpenOutlined,
+  MenuOutlined,
   MinusOutlined,
   PlusOutlined,
   SearchOutlined,
@@ -26,6 +29,7 @@ import ConfigModal from "./ConfigModal/ConfigModal";
 import PcpPage from "components/Pcp/PcpPage";
 import SearchQuotation from "./OpenQuotation/SearchQuotation";
 import { useTranslation } from "next-i18next";
+import CustomInputNumber from "components/CustomInputNumber";
 
 export const GeneralData: React.FC = () => {
   const [selectOptions, setSelectOptions] = useState([{ value: "10" }]);
@@ -83,7 +87,7 @@ export const GeneralData: React.FC = () => {
             display: "inline-block",
             width: "calc(50% - 8px)",
           }}
-          label={t('labels.client')}
+          label={t("labels.client")}
           rules={[{ required: true, message: "Por favor, insira o Cliente!" }]}
         >
           <Space.Compact style={{ width: "100%" }}>
@@ -104,28 +108,29 @@ export const GeneralData: React.FC = () => {
             width: "calc(50% - 8px)",
             margin: "0 8px",
           }}
-          label={t('labels.item')}
+          label={t("labels.item")}
         >
           <Space.Compact style={{ width: "100%" }}>
-            <Button type="primary" onClick={addOptions}>
-              <PlusOutlined />
+            <Button type="primary" onClick={confirmDelete}>
+              <MinusOutlined />
             </Button>
+
             <Select
               value={selectedItem}
               onChange={(value) => setSelectedItem(value)}
               options={selectOptions}
             />
-            <Button type="primary" onClick={confirmDelete}>
-              <MinusOutlined />
+            <Button type="primary" onClick={addOptions}>
+              <PlusOutlined />
             </Button>
           </Space.Compact>
         </Form.Item>
 
         <Form.Item
           style={{ display: "inline-block", width: "calc(50% - 8px)" }}
-          label={t('labels.quotation')}
+          label={t("labels.quotation")}
         >
-          <InputNumber style={{ width: "100%" }} />
+          <CustomInputNumber style={{ width: "100%" }} />
         </Form.Item>
 
         <Form.Item
@@ -134,9 +139,9 @@ export const GeneralData: React.FC = () => {
             width: "calc(50% - 8px)",
             margin: "0 8px",
           }}
-          label={t('labels.salesOrder')}
+          label={t("labels.salesOrder")}
         >
-          <InputNumber style={{ width: "100%" }} />
+          <CustomInputNumber style={{ width: "100%" }} />
         </Form.Item>
       </Form>
     </Row>
@@ -144,9 +149,8 @@ export const GeneralData: React.FC = () => {
 };
 
 export const ProductConfig: React.FC = () => {
-
   const { t } = useTranslation("layout");
-  
+
   const [showPower, setShowPower] = useState(false);
   const [showVoltage, setShowVoltage] = useState(false);
   const [showMaterial, setShowMaterial] = useState(false);
@@ -165,7 +169,7 @@ export const ProductConfig: React.FC = () => {
       setShowMaterial(true);
     }
   };
-  
+
   return (
     <>
       <Divider orientation="left" style={{ marginTop: "10px 0 0px 0" }}>
@@ -173,7 +177,7 @@ export const ProductConfig: React.FC = () => {
       </Divider>
       <div style={{ overflowY: "auto", marginBottom: 50, padding: 10 }}>
         <Form layout="vertical">
-          <Form.Item colon={false} label={t('labels.operation')}>
+          <Form.Item colon={false} label={t("labels.operation")}>
             <Select
               style={{ width: "100%", maxWidth: 350 }}
               options={[{ value: "Óleo" }, { value: "Seco" }]}
@@ -219,7 +223,7 @@ export const ProductConfig: React.FC = () => {
         }}
         type="primary"
       >
-       {t('generalButtons.calcButton')}
+        {t("generalButtons.calcButton")}
       </Button>
 
       <Button
@@ -233,7 +237,7 @@ export const ProductConfig: React.FC = () => {
         onClick={openModalConfig}
         type="primary"
       >
-        {t('generalButtons.configButton')}
+        {t("generalButtons.configButton")}
       </Button>
       {isModalConfigOpen && (
         <ConfigModal setIsModalConfigOpen={setIsModalConfigOpen} />
@@ -243,27 +247,55 @@ export const ProductConfig: React.FC = () => {
 };
 
 export const FloatMenu: React.FC = () => {
-  const [isDrawerVisible, setIsDrawerVisible] = useState(false);
+  const [isDrawerPcpVisible, setIsDrawerPcpVisible] = useState(false);
+  const [isDrawerMapVisible, setIsDrawerMapVisible] = useState(false);
+  const [isDrawerEditVisible, setIsDrawerEditVisible] = useState(false);
 
-  const openDrawer = () => {
-    setIsDrawerVisible(true);
+  const openDrawer = (drawerType: string) => {
+    if (drawerType === 'pcp') {
+      setIsDrawerPcpVisible(true);
+    } else if (drawerType === 'map') {
+      setIsDrawerMapVisible(true);
+    } else if (drawerType === 'edit') {
+      setIsDrawerEditVisible(true);
+    }
   };
 
-  const closeDrawer = () => {
-    setIsDrawerVisible(false);
+  const closeDrawer = (drawerType: string) => {
+    if (drawerType === 'pcp') {
+      setIsDrawerPcpVisible(false);
+    } else if (drawerType === 'map') {
+      setIsDrawerMapVisible(false);
+    } else if (drawerType === 'edit') {
+      setIsDrawerEditVisible(false);
+    }
   };
+  
+
   return (
     <>
       <FloatButton.Group
         trigger="hover"
-        icon={<FolderOpenOutlined />}
+        icon={<MenuOutlined />}
         style={{ right: 50, bottom: 90 }}
       >
         <FloatButton
           tooltip={<div>PCP</div>}
           type="default"
           icon={<CalendarOutlined />}
-          onClick={openDrawer}
+          onClick={() => openDrawer('pcp')}
+        />
+        <FloatButton
+          tooltip={<div>Mapa de Planejamento</div>}
+          type="default"
+          icon={<FileOutlined />}
+          onClick={() => openDrawer('map')}
+        />
+        <FloatButton
+          tooltip={<div>Editar Cotações</div>}
+          type="default"
+          icon={<EditOutlined />}
+          onClick={() => openDrawer('edit')}
         />
       </FloatButton.Group>
 
@@ -271,10 +303,28 @@ export const FloatMenu: React.FC = () => {
         width={"100%"}
         title="PCP"
         placement="right"
-        onClose={closeDrawer}
-        open={isDrawerVisible}
+        onClose={() => closeDrawer('pcp')}
+        open={isDrawerPcpVisible}
       >
         <PcpPage />
+      </Drawer>
+      <Drawer
+        width={"100%"}
+        title="Mapa de Planejamento"
+        placement="right"
+        onClose={() => closeDrawer('map')}
+        open={isDrawerMapVisible}
+      >
+        
+      </Drawer>
+      <Drawer
+        width={"100%"}
+        title="Editar Cotações"
+        placement="right"
+        onClose={() => closeDrawer('edit')}
+        open={isDrawerEditVisible}
+      >
+        
       </Drawer>
     </>
   );

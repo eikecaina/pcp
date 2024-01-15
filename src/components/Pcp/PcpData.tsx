@@ -58,7 +58,7 @@ const PcpData: React.FC = () => {
           >
             {(dataExample) => (
               <>
-                <Divider orientation="left">{t('titles.deliveries')}</Divider>
+                <Divider orientation="left">{t("titles.deliveries")}</Divider>
                 <div
                   style={{
                     height: "100%",
@@ -90,7 +90,7 @@ const PcpData: React.FC = () => {
             )}
           </DataFetcher>
           <>
-            <Divider orientation="left">{t('titles.details')}</Divider>
+            <Divider orientation="left">{t("titles.details")}</Divider>
             <div
               style={{
                 overflowY: "auto",
@@ -105,7 +105,7 @@ const PcpData: React.FC = () => {
                     display: "inline-block",
                     width: "calc(33.33% - 8px)",
                   }}
-                  label={t('labels.salesOrder')}
+                  label={t("labels.salesOrder")}
                   colon={false}
                 >
                   <Input />
@@ -116,7 +116,7 @@ const PcpData: React.FC = () => {
                     width: "calc(33.33% - 8px)",
                     margin: "0 8px",
                   }}
-                  label={t('labels.itemSo')}
+                  label={t("labels.itemSo")}
                 >
                   <Input />
                 </Form.Item>
@@ -125,7 +125,7 @@ const PcpData: React.FC = () => {
                     display: "inline-block",
                     width: "calc(33.33% - 8px)",
                   }}
-                  label={t('labels.itemFert')}
+                  label={t("labels.itemFert")}
                 >
                   <Input />
                 </Form.Item>
@@ -143,7 +143,7 @@ const PcpData: React.FC = () => {
                         whiteSpace: "nowrap",
                       }}
                     >
-                      {t('labels.claimPlanning')}
+                      {t("labels.claimPlanning")}
                     </span>
                   }
                 >
@@ -164,7 +164,7 @@ const PcpData: React.FC = () => {
                         whiteSpace: "nowrap",
                       }}
                     >
-                      {t('labels.productionOrder')}
+                      {t("labels.productionOrder")}
                     </span>
                   }
                 >
@@ -172,7 +172,7 @@ const PcpData: React.FC = () => {
                 </Form.Item>
                 <Form.Item
                   style={{ display: "inline-block", width: "calc(50% - 8px)" }}
-                  label={t('labels.power')}
+                  label={t("labels.power")}
                 >
                   <Input />
                 </Form.Item>
@@ -183,14 +183,14 @@ const PcpData: React.FC = () => {
                     width: "calc(50% - 8px)",
                     margin: "0 8px",
                   }}
-                  label={t('labels.voltage')}
+                  label={t("labels.voltage")}
                 >
                   <Input />
                 </Form.Item>
 
                 <Form.Item
                   style={{ margin: "0 8px 20px 0px" }}
-                  label={t('labels.observation')}
+                  label={t("labels.observation")}
                 >
                   <TextArea
                     placeholder="Digite suas observações aqui"
@@ -206,13 +206,11 @@ const PcpData: React.FC = () => {
                 justifyContent: "space-between",
               }}
             >
-              <Form.Item colon={false} label={t('labels.inspection')}>
+              <Form.Item colon={false} label={t("labels.inspection")}>
                 <Checkbox></Checkbox>
               </Form.Item>
               <Form.Item>
-                <Button type="primary">
-                  {t("generalButtons.saveButton")}
-                </Button>
+                <Button type="primary">{t("generalButtons.saveButton")}</Button>
               </Form.Item>
             </div>
           </>
@@ -237,7 +235,7 @@ const PcpData: React.FC = () => {
           >
             {(treeData) => (
               <>
-                <Divider orientation="left">{t('titles.process')}</Divider>
+                <Divider orientation="left">{t("titles.process")}</Divider>
                 <Tree
                   style={{
                     overflowX: "auto",
@@ -245,7 +243,6 @@ const PcpData: React.FC = () => {
                     maxHeight: 607,
                     minHeight: 607,
                     textOverflow: "ellipsis",
-                    overflow: "hidden",
                     whiteSpace: "nowrap",
                   }}
                   showLine={true}
@@ -267,7 +264,7 @@ const PcpData: React.FC = () => {
                         width: "calc(30% - 8px)",
                       }}
                     >
-                      {t("generalButtons.confirmButton")}
+                      {t("generalButtons.deleteButton")}
                     </Button>
                     <Button
                       type="primary"
@@ -275,7 +272,7 @@ const PcpData: React.FC = () => {
                         width: "calc(30% - 8px)",
                       }}
                     >
-                      {t("generalButtons.deleteButton")}
+                      {t("generalButtons.confirmButton")}
                     </Button>
                   </div>
                 </div>
@@ -297,15 +294,15 @@ const PcpData: React.FC = () => {
           }}
         >
           <>
-            <Divider orientation="left">{t('titles.planning')}</Divider>
+            <Divider orientation="left">{t("titles.planning")}</Divider>
             <Form style={{ margin: 15 }}>
               <Radio.Group defaultValue={1}>
                 <Space direction="vertical" style={{ marginBottom: 15 }}>
                   <Radio value={1} disabled={editForm}>
-                    {t('labels.automatic')}
+                    {t("labels.automatic")}
                   </Radio>
                   <Radio value={2} disabled={editForm}>
-                    {t('labels.manual')}
+                    {t("labels.manual")}
                   </Radio>
                 </Space>
               </Radio.Group>
@@ -313,7 +310,7 @@ const PcpData: React.FC = () => {
               <Form.Item style={{ marginBottom: 0 }}>
                 <Form.Item
                   style={{ display: "inline-block", width: "calc(50% - 8px)" }}
-                  label={t('labels.start')}
+                  label={t("labels.start")}
                   rules={[{ required: true }]}
                 >
                   <DatePicker
@@ -340,7 +337,7 @@ const PcpData: React.FC = () => {
                 </Form.Item>
               </Form.Item>
               <Form.Item
-                label={t('labels.duration')}
+                label={t("labels.duration")}
                 style={{ display: "inline-block", width: "calc(60% - 8px)" }}
               >
                 <CustomInputNumber
@@ -359,7 +356,7 @@ const PcpData: React.FC = () => {
                 <Select value={"Minutos"} disabled={editForm} />
               </Form.Item>
               <Form.Item
-                label={t('labels.resource')}
+                label={t("labels.resource")}
                 style={{ display: "inline-block", width: "calc(100% - 8px)" }}
               >
                 <Input
@@ -377,7 +374,7 @@ const PcpData: React.FC = () => {
             {(resourceExample) => (
               <>
                 <Divider orientation="left" style={{ margin: 0 }}>
-                  {t('titles.consum')}
+                  {t("titles.consum")}
                 </Divider>
                 <div style={{ maxHeight: 334 }}>
                   <Form style={{ margin: 10 }}>
@@ -408,7 +405,7 @@ const PcpData: React.FC = () => {
                       ></List>
                     </div>
                     <Form.Item
-                      label={t('labels.resource')}
+                      label={t("labels.resource")}
                       style={{
                         display: "inline-block",
                         width: "calc(59% - 8px)",
@@ -421,7 +418,7 @@ const PcpData: React.FC = () => {
                       />
                     </Form.Item>
                     <Form.Item
-                      label={t('labels.end')}
+                      label={t("labels.end")}
                       style={{
                         display: "inline-block",
                         width: "calc(41% - 8px)",
@@ -436,7 +433,7 @@ const PcpData: React.FC = () => {
                       />
                     </Form.Item>
                     <Form.Item
-                      label={t('labels.minutesConsum')}
+                      label={t("labels.minutesConsum")}
                       style={{
                         display: "inline-block",
                         width: "calc(100% - 8px)",
@@ -449,7 +446,7 @@ const PcpData: React.FC = () => {
                       />
                     </Form.Item>
 
-                    <Form.Item label={t('labels.notes')}>
+                    <Form.Item label={t("labels.notes")}>
                       <TextArea
                         value={"Abatimento com cálculo automático por Vendas."}
                         disabled={editForm}
