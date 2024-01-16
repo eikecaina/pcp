@@ -30,6 +30,7 @@ import PcpPage from "components/Pcp/PcpPage";
 import SearchQuotation from "./OpenQuotation/SearchQuotation";
 import { useTranslation } from "next-i18next";
 import CustomInputNumber from "components/CustomInputNumber";
+import PlanningMap from "components/Map/PlanningMap";
 
 export const GeneralData: React.FC = () => {
   const [selectOptions, setSelectOptions] = useState([{ value: "10" }]);
@@ -315,7 +316,7 @@ export const FloatMenu: React.FC = () => {
         onClose={() => closeDrawer('map')}
         open={isDrawerMapVisible}
       >
-        
+        <PlanningMap/>
       </Drawer>
       <Drawer
         width={"100%"}
