@@ -16,7 +16,6 @@ import {
   FloatButton,
   Form,
   Input,
-  InputNumber,
   Modal,
   Row,
   Select,
@@ -30,7 +29,8 @@ import PcpPage from "components/Pcp/PcpPage";
 import SearchQuotation from "./OpenQuotation/SearchQuotation";
 import { useTranslation } from "next-i18next";
 import CustomInputNumber from "components/CustomInputNumber";
-import PlanningMap from "components/Map/PlanningMap";
+import PlanningMap from "components/MapQuotation/PlanningMap";
+import EditQuotation from "components/MapQuotation/EditQuotation";
 
 export const GeneralData: React.FC = () => {
   const [selectOptions, setSelectOptions] = useState([{ value: "10" }]);
@@ -248,30 +248,33 @@ export const ProductConfig: React.FC = () => {
 };
 
 export const FloatMenu: React.FC = () => {
-  const [isDrawerPcpVisible, setIsDrawerPcpVisible] = useState(false);
-  const [isDrawerMapVisible, setIsDrawerMapVisible] = useState(false);
-  const [isDrawerEditVisible, setIsDrawerEditVisible] = useState(false);
+  const [isDrawerVisible, setIsDrawerVisible] = useState(false);
+  const [isModalMapOpen, setIsModalMapOpen] = useState(false);
+  const [isModalEditOpen, setIsEditModalOpen] = useState(true);
 
-  const openDrawer = (drawerType: string) => {
-    if (drawerType === 'pcp') {
-      setIsDrawerPcpVisible(true);
-    } else if (drawerType === 'map') {
-      setIsDrawerMapVisible(true);
-    } else if (drawerType === 'edit') {
-      setIsDrawerEditVisible(true);
+  const openDrawer = () => {
+    setIsDrawerVisible(true);
+  };
+
+  const closeDrawer = () => {
+    setIsDrawerVisible(false);
+  };
+
+  const openModal = (modalType: string) => {
+    if (modalType === "map") {
+      setIsModalMapOpen(true);
+    } else if (modalType === "edit") {
+      setIsEditModalOpen(true);
     }
   };
 
-  const closeDrawer = (drawerType: string) => {
-    if (drawerType === 'pcp') {
-      setIsDrawerPcpVisible(false);
-    } else if (drawerType === 'map') {
-      setIsDrawerMapVisible(false);
-    } else if (drawerType === 'edit') {
-      setIsDrawerEditVisible(false);
+  const closeModal = (modalType: string) => {
+    if (modalType === "map") {
+      setIsModalMapOpen(false);
+    } else if (modalType === "edit") {
+      setIsEditModalOpen(false);
     }
   };
-  
 
   return (
     <>
@@ -284,19 +287,19 @@ export const FloatMenu: React.FC = () => {
           tooltip={<div>PCP</div>}
           type="default"
           icon={<CalendarOutlined />}
-          onClick={() => openDrawer('pcp')}
+          onClick={openDrawer}
         />
         <FloatButton
           tooltip={<div>Mapa de Planejamento</div>}
           type="default"
           icon={<FileOutlined />}
-          onClick={() => openDrawer('map')}
+          onClick={() => openModal("map")}
         />
         <FloatButton
           tooltip={<div>Editar Cotações</div>}
           type="default"
           icon={<EditOutlined />}
-          onClick={() => openDrawer('edit')}
+          onClick={() => openModal("edit")}
         />
       </FloatButton.Group>
 
@@ -304,29 +307,20 @@ export const FloatMenu: React.FC = () => {
         width={"100%"}
         title="PCP"
         placement="right"
-        onClose={() => closeDrawer('pcp')}
-        open={isDrawerPcpVisible}
+        onClose={closeDrawer}
+        open={isDrawerVisible}
       >
         <PcpPage />
       </Drawer>
-      <Drawer
-        width={"100%"}
+      <Modal
         title="Mapa de Planejamento"
-        placement="right"
-        onClose={() => closeDrawer('map')}
-        open={isDrawerMapVisible}
+        width={"60%"}
+        open={isModalMapOpen}
+        onCancel={() => closeModal("map")}
       >
-        <PlanningMap/>
-      </Drawer>
-      <Drawer
-        width={"100%"}
-        title="Editar Cotações"
-        placement="right"
-        onClose={() => closeDrawer('edit')}
-        open={isDrawerEditVisible}
-      >
-        
-      </Drawer>
+        <PlanningMap />
+      </Modal>
+     
     </>
   );
 };

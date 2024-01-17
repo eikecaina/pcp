@@ -23,7 +23,7 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
     { headerName: "Ordem de Venda", field: "salesOrder" },
     { headerName: "Criada em", field: "create" },
   ]);
-  const containerStyle = useMemo(() => ({ width: "100%", height: "60vh" }), []);
+  const containerStyle = useMemo(() => ({ width: "100%", height: "70vh" }), []);
   const gridStyle = useMemo(() => ({ height: "100%", width: "100%" }), []);
   const defaultColDef = useMemo(
     () => ({
