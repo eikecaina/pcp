@@ -1,45 +1,22 @@
-import { Button, Card, Col, DatePicker, Form, Modal, Row, Select } from "antd";
+import { Button, Card, Col, DatePicker, Form, Row, Select } from "antd";
 import { BarGraph } from "./PcpGraphs";
-import { SettingOutlined } from "@ant-design/icons";
-import { useState } from "react";
+
 import { useTranslation } from "next-i18next";
+import { FilterFilled } from "@ant-design/icons";
 
 const { RangePicker } = DatePicker;
 
 const PcpResources: React.FC = () => {
   const { t } = useTranslation("layout");
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
+  const dateFormat = "DD/MM/YYYY";
 
   return (
-    <>
-      <Modal
-        title="Filtrar"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        okText={t("generalButtons.confirmButton")}
-        cancelText={t("generalButtons.cancelButton")}
-      >
-        <Form layout="vertical">
+    <Row>
+      <Col span={24}>
+        <Form style={{ display: "flex", marginTop: "8px" }}>
           <Form.Item
             label="Grupos"
-            style={{
-              display: "inline-block",
-              width: "calc(50% - 8px)",
-              margin: "0 16px 0 0",
-            }}
+            style={{ display: "inline-block", width: "30%" }}
           >
             <Select
               options={[
@@ -56,7 +33,8 @@ const PcpResources: React.FC = () => {
             label="Recursos"
             style={{
               display: "inline-block",
-              width: "calc(50% - 8px)",
+              width: "30%",
+              margin: "0 5px 0 5px",
             }}
           >
             <Select
@@ -74,20 +52,28 @@ const PcpResources: React.FC = () => {
               ]}
             />
           </Form.Item>
-
-          <RangePicker style={{ width: "100%" }} />
+          <Form.Item
+            style={{ display: "inline-block", width: "30%" }}
+            label="Data"
+          >
+            <RangePicker format={dateFormat} style={{ width: "100%" }} />
+          </Form.Item>
+          <Form.Item
+            style={{ display: "inline-block", width: "6%", marginLeft: 8 }}
+          >
+            <Button type="primary" icon={<FilterFilled />}>
+              Filtrar
+            </Button>
+          </Form.Item>
         </Form>
-      </Modal>
 
-      <Card style={{ height: 740 }}>
-        <Button type="primary" onClick={showModal} icon={<SettingOutlined />}>
-          Filtrar
-        </Button>
-        <Col style={{ height: 680 }}>
-          <BarGraph />
-        </Col>
-      </Card>
-    </>
+        <Card style={{ height: 740 }}>
+          <Col style={{ height: 680 }}>
+            <BarGraph />
+          </Col>
+        </Card>
+      </Col>
+    </Row>
   );
 };
 

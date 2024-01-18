@@ -1,7 +1,24 @@
-import { Checkbox, ColorPicker, DatePicker, Form, Table, theme } from "antd";
+import {
+  Button,
+  Checkbox,
+  ColorPicker,
+  DatePicker,
+  Form,
+  Input,
+  Select,
+  Table,
+  theme,
+} from "antd";
 import type { TableColumnsType, TableProps } from "antd";
 import type { ColorPickerProps } from "antd";
 import { generate, green, presetPalettes, red } from "@ant-design/colors";
+import {
+  CloseOutlined,
+  EditOutlined,
+  FileAddOutlined,
+  SaveOutlined,
+} from "@ant-design/icons";
+import { useState } from "react";
 
 type Presets = Required<ColorPickerProps>["presets"][number];
 
@@ -82,7 +99,6 @@ const PlanningMap: React.FC = () => {
         <ColorPicker
           presets={presets}
           size="small"
-          showText={(color) => <span>{color.toHexString()}</span>}
         />
       ),
     },
@@ -97,34 +113,75 @@ const PlanningMap: React.FC = () => {
         <ColorPicker
           presets={presets}
           size="small"
-          showText={(color) => <span>{color.toHexString()}</span>}
-        />
-      ),
-    },
-    {
-      key: "3",
-      exibir: <Checkbox />,
-      tempo: <Checkbox />,
-      name: "DT - PROD Bobinagem BT CHAPA",
-      abrev: "BT",
-      quebra: <Checkbox />,
-      cor: (
-        <ColorPicker
-          presets={presets}
-          size="small"
-          showText={(color) => <span>{color.toHexString()}</span>}
         />
       ),
     },
   ];
 
+  const [isDisableInput, setDisableInput] = useState(true);
+
+  const handleDisableInput = () => {
+    setDisableInput(!isDisableInput);
+  };
+  const weekFormat = "DD/MM/YYYY";
+
   return (
     <>
-      <Form.Item label="Data">
-        <RangePicker />
-      </Form.Item>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
+        <Form
+          style={{
+            marginTop: 5,
+            display: "flex",
+            width: "82%",
+          }}
+        >
+          <Form.Item label="Modelo" style={{ width: "33.33%" }}>
+            <Select defaultValue={"Mapa 1"} options={[{ value: "Mapa 1" }]} />
+          </Form.Item>
+          <Form.Item
+            label="Data"
+            style={{ width: "36.33%", margin: "0 7px 0 7px" }}
+          >
+            <RangePicker format={weekFormat} />
+          </Form.Item>
+          <Form.Item label="Nome" style={{ width: "33.33%" }}>
+            <Input defaultValue={"Mapa 1"} disabled={isDisableInput} />
+          </Form.Item>
+        </Form>
+        <div
+          style={{
+            marginTop: 5,
+            display: "flex",
+            width: "15%",
+            justifyContent: "space-between",
+          }}
+        >
+          <Button
+            title="Novo Modelo"
+            icon={<FileAddOutlined />}
+            type="primary"
+          ></Button>
+          <Button
+            onClick={handleDisableInput}
+            title="Editar"
+            icon={<EditOutlined />}
+            type="primary"
+          ></Button>
+          <Button
+            title="Salvar"
+            icon={<SaveOutlined />}
+            type="primary"
+          ></Button>
+          <Button
+            title="Excluir"
+            icon={<CloseOutlined />}
+            type="primary"
+          ></Button>
+        </div>
+      </div>
       <Table
-        style={{ maxHeight: 500, overflowX: "auto" }}
+        scroll={{ y: 400, x: "auto" }}
+        style={{ height: 470 }}
         pagination={false}
         dataSource={data}
         columns={columns}

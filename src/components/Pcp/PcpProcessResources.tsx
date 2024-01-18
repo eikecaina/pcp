@@ -191,14 +191,14 @@ const PcpProcessResources: React.FC = () => {
                   <Input />
                 </Form.Item>
                 <Form.Item
-                  label={t("labels.quotation")}
+                  label="Controle"
                   style={{
                     display: "inline-block",
                     width: "calc(50% - 8px)",
                     margin: "0 16px 0 0",
                   }}
                 >
-                  <Input />
+                  <Select />
                 </Form.Item>
                 <Form.Item
                   label={t("labels.salesOrder")}
@@ -225,7 +225,7 @@ const PcpProcessResources: React.FC = () => {
                   />
                 </Form.Item>
                 <Form.Item
-                  label={t("labels.minutesConsum")}
+                  label={t("labels.secondsConsum")}
                   style={{
                     width: "calc(50% - 8px)",
                     display: "inline-block",

@@ -2,7 +2,8 @@
   "menus": {
     "home": "Início",
     "protected": "Protegido",
-    "newquotation": "Nova Cotação"
+    "newquotation": "Nova Cotação",
+    "settings": "Configuração Geral"
   },
   "userCard": {
     "greeting": "Olá",
@@ -80,12 +81,12 @@
     "duration": "Duração",
     "resource": "Recurso",
     "end": "Fim",
-    "minutesConsum": "Consumo de Minutos",
+    "minutesConsum": "Consumo em Minutos",
     "notes": "Notas",
     "type": "Tipo",
     "selectDate": "Selecione a data",
     "control": "Controle",
     "processResource": "Processos e Recursos Consumidos",
-    "secondsConsum": "Consumo de Segundos"
+    "secondsConsum": "Consumo em Segundos"
   }
 }

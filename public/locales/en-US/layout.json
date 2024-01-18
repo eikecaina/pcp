@@ -2,7 +2,8 @@
   "menus": {
     "home": "Home",
     "protected": "Protected",
-    "newquotation": "New Quotation"
+    "newquotation": "New Quotation",
+    "settings": "Geral Settings"
   },
   "userCard": {
     "greeting": "Hello",

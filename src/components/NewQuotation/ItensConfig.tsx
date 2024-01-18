@@ -3,7 +3,6 @@ import {
   EditOutlined,
   ExclamationCircleOutlined,
   FileOutlined,
-  FolderOpenOutlined,
   MenuOutlined,
   MinusOutlined,
   PlusOutlined,
@@ -30,7 +29,6 @@ import SearchQuotation from "./OpenQuotation/SearchQuotation";
 import { useTranslation } from "next-i18next";
 import CustomInputNumber from "components/CustomInputNumber";
 import PlanningMap from "components/MapQuotation/PlanningMap";
-import EditQuotation from "components/MapQuotation/EditQuotation";
 
 export const GeneralData: React.FC = () => {
   const [selectOptions, setSelectOptions] = useState([{ value: "10" }]);
@@ -213,33 +211,30 @@ export const ProductConfig: React.FC = () => {
           )}
         </Form>
       </div>
-
-      <Button
+      <div
         style={{
           position: "absolute",
-          bottom: 0,
-          right: 5,
-          margin: 7,
-          justifyContent: "space-between",
+          display: "flex",
+          justifyContent: "space-evenly",
+          width: "100%",
+          bottom: 7,
         }}
-        type="primary"
       >
-        {t("generalButtons.calcButton")}
-      </Button>
+        <Button
+          style={{ width: "30%" }}
+          onClick={openModalConfig}
+          type="primary"
+        >
+          {t("generalButtons.configButton")}
+        </Button>
+        <Button style={{ width: "30%" }} type="primary">
+          {t("generalButtons.calcButton")}
+        </Button>
+        <Button style={{ width: "30%" }} type="primary">
+          Salvar
+        </Button>
+      </div>
 
-      <Button
-        style={{
-          position: "absolute",
-          bottom: 0,
-          left: 5,
-          margin: 7,
-          justifyContent: "space-between",
-        }}
-        onClick={openModalConfig}
-        type="primary"
-      >
-        {t("generalButtons.configButton")}
-      </Button>
       {isModalConfigOpen && (
         <ConfigModal setIsModalConfigOpen={setIsModalConfigOpen} />
       )}
@@ -250,7 +245,8 @@ export const ProductConfig: React.FC = () => {
 export const FloatMenu: React.FC = () => {
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [isModalMapOpen, setIsModalMapOpen] = useState(false);
-  const [isModalEditOpen, setIsEditModalOpen] = useState(true);
+  const [isModalEditOpen, setIsEditModalOpen] = useState(false);
+  const { t } = useTranslation("layout");
 
   const openDrawer = () => {
     setIsDrawerVisible(true);
@@ -260,20 +256,12 @@ export const FloatMenu: React.FC = () => {
     setIsDrawerVisible(false);
   };
 
-  const openModal = (modalType: string) => {
-    if (modalType === "map") {
-      setIsModalMapOpen(true);
-    } else if (modalType === "edit") {
-      setIsEditModalOpen(true);
-    }
+  const openModalMap = () => {
+    setIsModalMapOpen(true);
   };
 
-  const closeModal = (modalType: string) => {
-    if (modalType === "map") {
-      setIsModalMapOpen(false);
-    } else if (modalType === "edit") {
-      setIsEditModalOpen(false);
-    }
+  const closeModalMap = () => {
+    setIsModalMapOpen(false);
   };
 
   return (
@@ -293,13 +281,7 @@ export const FloatMenu: React.FC = () => {
           tooltip={<div>Mapa de Planejamento</div>}
           type="default"
           icon={<FileOutlined />}
-          onClick={() => openModal("map")}
-        />
-        <FloatButton
-          tooltip={<div>Editar Cotações</div>}
-          type="default"
-          icon={<EditOutlined />}
-          onClick={() => openModal("edit")}
+          onClick={openModalMap}
         />
       </FloatButton.Group>
 
@@ -314,13 +296,14 @@ export const FloatMenu: React.FC = () => {
       </Drawer>
       <Modal
         title="Mapa de Planejamento"
-        width={"60%"}
+        width={"1000px"}
         open={isModalMapOpen}
-        onCancel={() => closeModal("map")}
+        onCancel={closeModalMap}
+        okText={t("generalButtons.confirmButton")}
+        cancelText={t("generalButtons.cancelButton")}
       >
         <PlanningMap />
       </Modal>
-     
     </>
   );
 };

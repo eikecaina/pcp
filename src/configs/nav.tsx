@@ -1,4 +1,4 @@
-import { ContainerOutlined, FolderOpenOutlined, CalendarOutlined } from "@ant-design/icons";
+import { ContainerOutlined, SettingOutlined } from "@ant-design/icons";
 
 export const DEFAULT_ROUTE = "/";
 
@@ -11,11 +11,15 @@ interface NavEntry {
 }
 
 export const MENUS: NavEntry[] = [
-
   {
     name: "menus.newquotation",
     icon: ContainerOutlined,
     path: '/newQuotation',
+  },
+  {
+    name: "menus.settings",
+    icon: SettingOutlined,
+    path: '/geralSettings',
   },
 ];
 
