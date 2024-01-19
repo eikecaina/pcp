@@ -19,6 +19,7 @@ import {
   Row,
   Select,
   Space,
+  Tooltip,
   message,
 } from "antd";
 import React, { useState } from "react";
@@ -91,9 +92,11 @@ export const GeneralData: React.FC = () => {
         >
           <Space.Compact style={{ width: "100%" }}>
             <Input />
-            <Button style={{ borderRadius: 3 }} onClick={handleOpenModal}>
-              <SearchOutlined />
-            </Button>
+            <Tooltip title="Abrir Cotação">
+              <Button type="primary" style={{ borderRadius: 3 }} onClick={handleOpenModal}>
+                <SearchOutlined />
+              </Button>
+            </Tooltip>
             <SearchQuotation
               isModalOpen={isModalOpen}
               setModalIsOpen={setIsModalOpen}
@@ -110,18 +113,22 @@ export const GeneralData: React.FC = () => {
           label={t("labels.item")}
         >
           <Space.Compact style={{ width: "100%" }}>
-            <Button type="primary" onClick={confirmDelete}>
-              <MinusOutlined />
-            </Button>
+            <Tooltip title="Remover Item">
+              <Button type="primary" onClick={confirmDelete}>
+                <MinusOutlined />
+              </Button>
+            </Tooltip>
 
             <Select
               value={selectedItem}
               onChange={(value) => setSelectedItem(value)}
               options={selectOptions}
             />
-            <Button type="primary" onClick={addOptions}>
-              <PlusOutlined />
-            </Button>
+            <Tooltip title="Adicionar Item">
+              <Button type="primary" onClick={addOptions}>
+                <PlusOutlined />
+              </Button>
+            </Tooltip>
           </Space.Compact>
         </Form.Item>
 
@@ -174,11 +181,10 @@ export const ProductConfig: React.FC = () => {
       <Divider orientation="left" style={{ marginTop: "10px 0 0px 0" }}>
         {t("titles.productConfig")}
       </Divider>
-      <div style={{ overflowY: "auto", marginBottom: 50, padding: 10 }}>
+      <div style={{ overflowY: "auto", padding: 10, maxHeight: '40vh' }}>
         <Form layout="vertical">
           <Form.Item colon={false} label={t("labels.operation")}>
             <Select
-              style={{ width: "100%", maxWidth: 350 }}
               options={[{ value: "Óleo" }, { value: "Seco" }]}
               onChange={handleOperetion}
             />
@@ -186,7 +192,6 @@ export const ProductConfig: React.FC = () => {
           {showPower && (
             <Form.Item label="Potência em kVA" style={{ width: "100%" }}>
               <Select
-                style={{ width: "100%", maxWidth: 350 }}
                 options={[{ value: "0 a 15" }]}
                 onChange={handleOperetion}
               />
@@ -195,7 +200,6 @@ export const ProductConfig: React.FC = () => {
           {showVoltage && (
             <Form.Item label="Classe de tensão">
               <Select
-                style={{ width: "100%", maxWidth: 350 }}
                 options={[{ value: "15 a 36" }]}
                 onChange={handleOperetion}
               />
@@ -204,7 +208,6 @@ export const ProductConfig: React.FC = () => {
           {showMaterial && (
             <Form.Item label="Materiais críticos">
               <Select
-                style={{ width: "100%", maxWidth: 350 }}
                 options={[{ value: "Bucha" }]}
               />
             </Form.Item>
@@ -245,7 +248,6 @@ export const ProductConfig: React.FC = () => {
 export const FloatMenu: React.FC = () => {
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [isModalMapOpen, setIsModalMapOpen] = useState(false);
-  const [isModalEditOpen, setIsEditModalOpen] = useState(false);
   const { t } = useTranslation("layout");
 
   const openDrawer = () => {

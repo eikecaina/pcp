@@ -1,9 +1,10 @@
 import { GetStaticProps, NextPage } from "next";
 
 import { getServerSideTranslations } from "configs/language/server";
+import GeneralSettings from "components/Settings/GeneralSettings";
 
 const NewQuotation: NextPage = () => {
-  return <div>Teste</div>;
+  return <GeneralSettings/>;
 };
 
 

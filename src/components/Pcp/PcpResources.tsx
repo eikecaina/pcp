@@ -38,6 +38,7 @@ const PcpResources: React.FC = () => {
             }}
           >
             <Select
+              mode="multiple"
               defaultValue={"TS - Elétrico - Ruan NÃO USAR"}
               options={[
                 { value: "TS - Elétrico - Ruan NÃO USAR" },
@@ -67,11 +68,10 @@ const PcpResources: React.FC = () => {
           </Form.Item>
         </Form>
 
-        <Card style={{ height: 740 }}>
-          <Col style={{ height: 680 }}>
+          <Col style={{ height: 670 }}>
             <BarGraph />
           </Col>
-        </Card>
+        
       </Col>
     </Row>
   );

@@ -19,7 +19,7 @@ export const MENUS: NavEntry[] = [
   {
     name: "menus.settings",
     icon: SettingOutlined,
-    path: '/geralSettings',
+    path: '/generalSettings',
   },
 ];
 

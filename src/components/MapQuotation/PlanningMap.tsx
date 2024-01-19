@@ -7,6 +7,7 @@ import {
   Input,
   Select,
   Table,
+  Tooltip,
   theme,
 } from "antd";
 import type { TableColumnsType, TableProps } from "antd";
@@ -95,12 +96,7 @@ const PlanningMap: React.FC = () => {
       name: "DT - PROD Bobinagem AT",
       abrev: "AT",
       quebra: <Checkbox />,
-      cor: (
-        <ColorPicker
-          presets={presets}
-          size="small"
-        />
-      ),
+      cor: <ColorPicker presets={presets} size="small" />,
     },
     {
       key: "2",
@@ -109,12 +105,7 @@ const PlanningMap: React.FC = () => {
       name: "DT - PROD Fechamento",
       abrev: "FECH",
       quebra: <Checkbox />,
-      cor: (
-        <ColorPicker
-          presets={presets}
-          size="small"
-        />
-      ),
+      cor: <ColorPicker presets={presets} size="small" />,
     },
   ];
 
@@ -156,27 +147,22 @@ const PlanningMap: React.FC = () => {
             justifyContent: "space-between",
           }}
         >
-          <Button
-            title="Novo Modelo"
-            icon={<FileAddOutlined />}
-            type="primary"
-          ></Button>
-          <Button
-            onClick={handleDisableInput}
-            title="Editar"
-            icon={<EditOutlined />}
-            type="primary"
-          ></Button>
-          <Button
-            title="Salvar"
-            icon={<SaveOutlined />}
-            type="primary"
-          ></Button>
-          <Button
-            title="Excluir"
-            icon={<CloseOutlined />}
-            type="primary"
-          ></Button>
+          <Tooltip title="Novo Modelo">
+            <Button icon={<FileAddOutlined />} type="primary"></Button>
+          </Tooltip>
+          <Tooltip title="Editar">
+            <Button
+              onClick={handleDisableInput}
+              icon={<EditOutlined />}
+              type="primary"
+            ></Button>
+          </Tooltip>
+          <Tooltip title="Salvar">
+            <Button icon={<SaveOutlined />} type="primary"></Button>
+          </Tooltip>
+          <Tooltip title="Excluir">
+            <Button icon={<CloseOutlined />} type="primary"></Button>
+          </Tooltip>
         </div>
       </div>
       <Table
