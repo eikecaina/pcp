@@ -141,22 +141,12 @@ const PcpProcessResources: React.FC = () => {
                   width: "calc(50% - 8px)",
                 }}
               >
-                <DataFetcherUniversity apiUrl="http://universities.hipolabs.com/search?country=United+States&limit=30">
-                  {(universityData) => (
-                    <Select
-                      placeholder="Selecione o recurso"
-                      showSearch
-                      onChange={(value) => handleSelectChange(value)}
-                      disabled={selectedRadio === 1}
-                    >
-                      {universityData.map((item) => (
-                        <Select.Option key={item.id} value={item.name}>
-                          {`${item.name} (${item.alpha_two_code})`}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  )}
-                </DataFetcherUniversity>
+                <Select
+                  placeholder="Selecione o recurso"
+                  showSearch
+                  onChange={(value) => handleSelectChange(value)}
+                  disabled={selectedRadio === 1}
+                ></Select>
               </Form.Item>
             </div>
             <div>
@@ -169,17 +159,7 @@ const PcpProcessResources: React.FC = () => {
                     width: "calc(50% - 8px)",
                   }}
                 >
-                  <DataFetcherUniversity apiUrl="http://universities.hipolabs.com/search?country=United+States&limit=30">
-                    {(universityData) => (
-                      <Select>
-                        {universityData.map((item) => (
-                          <Select.Option key={item.id} value={item.name}>
-                            {`${item.name} (${item.alpha_two_code})`}
-                          </Select.Option>
-                        ))}
-                      </Select>
-                    )}
-                  </DataFetcherUniversity>
+                  <Select></Select>
                 </Form.Item>
                 <Form.Item
                   label={t("labels.client")}
@@ -290,7 +270,7 @@ const PcpProcessResources: React.FC = () => {
         <BarGraph />
 
         <BarGraph />
-        
+
         <BarGraph />
       </Col>
     </Row>

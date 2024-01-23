@@ -1,4 +1,5 @@
 import { AgChartsReact } from "ag-charts-react";
+
 import {
   AgBarSeriesOptions,
   AgCategoryAxisOptions,
@@ -51,9 +52,10 @@ export const BarGraph: React.FC = () => {
       } as AgNumberAxisOptions,
     ],
     legend: {
-      enabled: false
+      enabled: false,
     },
   });
+
   return <AgChartsReact options={options} />;
 };
 
