@@ -1,19 +1,15 @@
 import React, { useState } from 'react';
 import { InputNumber, InputNumberProps } from 'antd';
 
-interface CustomInputNumberProps extends InputNumberProps {
-  min?: number;
-  maxLength?: number;
-}
+const CustomInputNumber: React.FC<InputNumberProps> = ({...restProps }) => {
 
-const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ min, maxLength, style, ...restProps }) => {
+  const [inputValue, setInputValue] = useState<number | null>(null);
 
-  const [inputValue, setInputValue] = useState<number | undefined>(undefined);
-
-  const handleInputChange = (value: number | undefined) => {
-    setInputValue(value);
+  const handleInputChange = (value: number | null | string) => {
+    const newValue = typeof value === 'string' ? null : value;
+    setInputValue(newValue);
   };
-
+  
   const handleInputPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
     const keyCode = event.keyCode || event.which;
 
@@ -26,13 +22,10 @@ const CustomInputNumber: React.FC<CustomInputNumberProps> = ({ min, maxLength, s
 
   return (
     <InputNumber
-      controls={false}
+      controls={true}
       value={inputValue}
       onChange={handleInputChange}
       onKeyPress={handleInputPress}
-      min={min}
-      maxLength={maxLength}
-      style={style}
       {...restProps}
     />
   );

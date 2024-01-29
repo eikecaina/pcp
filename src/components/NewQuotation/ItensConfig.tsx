@@ -7,6 +7,7 @@ import {
   MinusOutlined,
   PlusOutlined,
   SearchOutlined,
+  SettingOutlined,
 } from "@ant-design/icons";
 import {
   Button,
@@ -30,6 +31,7 @@ import SearchQuotation from "./OpenQuotation/SearchQuotation";
 import { useTranslation } from "next-i18next";
 import CustomInputNumber from "components/CustomInputNumber";
 import PlanningMap from "components/MapQuotation/PlanningMap";
+import GeneralSettings from "components/Settings/GeneralSettings";
 
 export const GeneralData: React.FC = () => {
   const [selectOptions, setSelectOptions] = useState([{ value: "10" }]);
@@ -93,7 +95,11 @@ export const GeneralData: React.FC = () => {
           <Space.Compact style={{ width: "100%" }}>
             <Input />
             <Tooltip title="Abrir Cotação">
-              <Button type="primary" style={{ borderRadius: 3 }} onClick={handleOpenModal}>
+              <Button
+                type="primary"
+                style={{ borderRadius: 3 }}
+                onClick={handleOpenModal}
+              >
                 <SearchOutlined />
               </Button>
             </Tooltip>
@@ -181,7 +187,7 @@ export const ProductConfig: React.FC = () => {
       <Divider orientation="left" style={{ marginTop: "10px 0 0px 0" }}>
         {t("titles.productConfig")}
       </Divider>
-      <div style={{ overflowY: "auto", padding: 10, maxHeight: '40vh' }}>
+      <div style={{ overflowY: "auto", padding: 10, maxHeight: "40vh" }}>
         <Form layout="vertical">
           <Form.Item colon={false} label={t("labels.operation")}>
             <Select
@@ -207,9 +213,7 @@ export const ProductConfig: React.FC = () => {
           )}
           {showMaterial && (
             <Form.Item label="Materiais críticos">
-              <Select
-                options={[{ value: "Bucha" }]}
-              />
+              <Select options={[{ value: "Bucha" }]} />
             </Form.Item>
           )}
         </Form>
@@ -246,16 +250,25 @@ export const ProductConfig: React.FC = () => {
 };
 
 export const FloatMenu: React.FC = () => {
-  const [isDrawerVisible, setIsDrawerVisible] = useState(false);
+  const [isDrawerVisiblePcp, setIsDrawerVisiblePcp] = useState(false);
+  const [isDrawerVisibleGeneralConfig, setIsDrawerVisibleGeneralConfig] =
+    useState(false);
   const [isModalMapOpen, setIsModalMapOpen] = useState(false);
   const { t } = useTranslation("layout");
 
-  const openDrawer = () => {
-    setIsDrawerVisible(true);
+  const openDrawerPcp = () => {
+    setIsDrawerVisiblePcp(true);
   };
 
   const closeDrawer = () => {
-    setIsDrawerVisible(false);
+    setIsDrawerVisiblePcp(false);
+  };
+  const openDrawerConfig = () => {
+    setIsDrawerVisibleGeneralConfig(true);
+  };
+
+  const closeDrawerConfig = () => {
+    setIsDrawerVisibleGeneralConfig(false);
   };
 
   const openModalMap = () => {
@@ -274,16 +287,22 @@ export const FloatMenu: React.FC = () => {
         style={{ right: 50, bottom: 90 }}
       >
         <FloatButton
-          tooltip={<div>PCP</div>}
-          type="default"
-          icon={<CalendarOutlined />}
-          onClick={openDrawer}
-        />
-        <FloatButton
           tooltip={<div>Mapa de Planejamento</div>}
           type="default"
           icon={<FileOutlined />}
           onClick={openModalMap}
+        />
+        <FloatButton
+          tooltip={<div>PCP</div>}
+          type="default"
+          icon={<CalendarOutlined />}
+          onClick={openDrawerPcp}
+        />
+        <FloatButton
+          tooltip={<div> Configuração Geral</div>}
+          type="default"
+          icon={<SettingOutlined />}
+          onClick={openDrawerConfig}
         />
       </FloatButton.Group>
 
@@ -292,9 +311,18 @@ export const FloatMenu: React.FC = () => {
         title="PCP"
         placement="right"
         onClose={closeDrawer}
-        open={isDrawerVisible}
+        open={isDrawerVisiblePcp}
       >
         <PcpPage />
+      </Drawer>
+      <Drawer
+        width={"100%"}
+        title="Configuração Geral"
+        placement="right"
+        onClose={closeDrawerConfig}
+        open={isDrawerVisibleGeneralConfig}
+      >
+        <GeneralSettings />
       </Drawer>
       <Modal
         title="Mapa de Planejamento"

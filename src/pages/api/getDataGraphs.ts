@@ -10,7 +10,7 @@ export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<ResponseData>
 ) {
-  const jsonFilePath = "src/pages/api/dataBase.json";
+  const jsonFilePath = "src/pages/api/dataGraphs.json";
 
   try {
     const jsonData = JSON.parse(fs.readFileSync(jsonFilePath, "utf-8"));

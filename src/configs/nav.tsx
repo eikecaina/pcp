@@ -16,10 +16,5 @@ export const MENUS: NavEntry[] = [
     icon: ContainerOutlined,
     path: '/newQuotation',
   },
-  {
-    name: "menus.settings",
-    icon: SettingOutlined,
-    path: '/generalSettings',
-  },
 ];
 

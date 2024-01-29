@@ -1,5 +1,4 @@
-export function getData() {
-
+export function getDataPie() {
     return [
         { asset: 'Stocks', amount: 60000 },
         { asset: 'Bonds', amount: 40000 },
