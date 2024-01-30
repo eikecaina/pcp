@@ -1,5 +1,6 @@
 import {
   CloseOutlined,
+  DeleteOutlined,
   EditOutlined,
   ExclamationCircleOutlined,
   FileAddOutlined,
@@ -32,6 +33,7 @@ import {
 } from "antd";
 import type { TabsProps } from "antd";
 import CustomInputNumber from "components/CustomInputNumber";
+import dayjs from "dayjs";
 import { useState } from "react";
 
 const { TextArea } = Input;
@@ -62,94 +64,75 @@ export const CalendarSettings = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
+  const formStyle = (
+    width: string,
+    marginRight?: string
+  ): React.CSSProperties => ({
+    display: "inline-block",
+    width: width,
+    marginRight: marginRight,
+  });
+
   return (
     <>
       <Form layout="vertical">
         <Row gutter={5}>
           <Col span={24} style={{ display: "flex" }}>
             <Card style={{ width: "100%" }} bodyStyle={{ padding: 10 }}>
-              <div
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  marginBottom: 10,
-                }}
-              >
+              <div style={{ width: "100%", marginBottom: 5 }}>
                 <Button
+                onClick={openModal}
                   type="primary"
-                  icon={<FileAddOutlined />}
+                  icon={<PlusOutlined />}
                   style={{ marginRight: 5 }}
                 ></Button>
                 <Button
+                onClick={openModal}
                   type="primary"
                   icon={<EditOutlined />}
                   style={{ marginRight: 5 }}
                 ></Button>
-                <Button
-                  type="primary"
-                  icon={<SaveOutlined />}
-                  style={{ marginRight: 5 }}
-                ></Button>
-                <Button
-                  type="primary"
-                  icon={<CloseOutlined />}
-                  style={{ marginRight: 5 }}
-                ></Button>
-                <Button type="primary" icon={<LockOutlined />}></Button>
               </div>
               <Form.Item
                 label="Calendários"
-                style={{
-                  display: "inline-block",
-                  width: "calc(25% - 8px)",
-                  marginRight: 8,
-                }}
+                style={formStyle("calc(25% - 8px)", "8px")}
               >
                 <Select />
               </Form.Item>
               <Form.Item
-                style={{
-                  display: "inline-block",
-                  width: "calc(25% - 8px)",
-                  marginRight: "8px",
-                }}
+                style={formStyle("calc(25% - 8px)", "8px")}
                 label="Dias"
               >
                 <Space.Compact style={{ width: "100%" }}>
-                  <Tooltip title="Remover Item">
+                  <Tooltip title="Remover Dia">
                     <Button type="primary" onClick={deleteDay}>
-                      <MinusOutlined />
+                      <DeleteOutlined />
                     </Button>
                   </Tooltip>
 
-                  <Select />
-                  <Tooltip title="Adicionar Item">
+                  <Select
+                    defaultValue="Ferias"
+                    options={[{ value: "Ferias" }]}
+                  />
+
+                  <Tooltip title="Editar Dia">
                     <Button type="primary" onClick={openModal}>
-                      <PlusOutlined />
+                      <EditOutlined />
                     </Button>
                   </Tooltip>
                 </Space.Compact>
               </Form.Item>
-              <Form.Item
-                label="Nome"
-                style={{ display: "inline-block", width: "50%" }}
-              >
+              <Form.Item label="Nome" style={formStyle("50%")}>
                 <Input />
               </Form.Item>
               <Form.Item
                 label="Base"
-                style={{
-                  display: "inline-block",
-                  width: "calc(50% - 8px)",
-                  marginRight: 8,
-                }}
+                style={formStyle("calc(50% - 8px)", "8px")}
               >
                 <Select />
               </Form.Item>
-              <Form.Item
-                label="Descrição"
-                style={{ display: "inline-block", width: "50%" }}
-              >
+              <Form.Item label="Descrição" style={formStyle("50%")}>
                 <Input />
               </Form.Item>
               <Form.Item label="Obs" style={{ marginBottom: 0 }}>
@@ -172,83 +155,83 @@ export const CalendarSettings = () => {
         onCancel={handleCancel}
       >
         <Form style={{ marginTop: "10px" }} colon={false}>
-          <Radio.Group style={{ display: "flex" }}>
-            <Col span={12}>
-              <Card title="Ocorrência">
-                <Form.Item label={<Radio>Data</Radio>}>
-                  <DatePicker />
+          <div style={{ display: "flex" }}>
+            <Col span={8}>
+              <Card title="Ocorrência" bodyStyle={{ padding: 10 }}>
+                <div style={{ width: "100%" }}>
+                  <Form.Item label="Nome">
+                    <Input size="small" />
+                  </Form.Item>
+                  <Form.Item
+                    label="Data"
+                    style={formStyle("calc(78% - 5px)", "5px")}
+                  >
+                    <DatePicker
+                      size="small"
+                      defaultValue={dayjs()}
+                      format={"DD/MM/YYYY"}
+                      style={formStyle("80%")}
+                    />
+                  </Form.Item>
+                  <Form.Item
+                    label="Dia util"
+                    style={formStyle("calc(20% - 8px)", "8px")}
+                  >
+                    <Checkbox />
+                  </Form.Item>
+                </div>
+              </Card>
+            </Col>
+            <Col span={8}>
+              <Card title="Repetição" bodyStyle={{ padding: 10 }}>
+                <Form.Item style={formStyle("100%")} label="Nunca">
+                  <Checkbox />
                 </Form.Item>
-                <Form.Item label={<Radio>Baseado em</Radio>}>
-                  <Select />
-                  <CustomInputNumber size="small" min={0} max={50} />
-                  <Select />
-                  <Select />
+                <Form.Item style={formStyle("65%")} label="A cada">
+                  <CustomInputNumber
+                    defaultValue={1}
+                    min={1}
+                    size="small"
+                    style={formStyle("calc(45% - 8px)", "8px")}
+                  />
+                  <Select
+                    defaultValue={"Dia"}
+                    options={[
+                      { value: "Dia" },
+                      { value: "Semana" },
+                      { value: "Mês" },
+                      { value: "Ano" },
+                    ]}
+                    style={formStyle("55%")}
+                    size="small"
+                  />
                 </Form.Item>
               </Card>
             </Col>
-            <Col span={12}>
-              <Card title="Repetição">
-                <Form.Item>
-                  <Radio>Nunca</Radio>
-                  <Radio>A cada</Radio>
-                  <CustomInputNumber size="small" min={0} max={50} />
-                  <Select />
+            <Col span={8}>
+              <Card title="Término" bodyStyle={{ padding: 10 }}>
+                <Form.Item style={formStyle("100%")} label="Nunca">
+                  <Checkbox />
                 </Form.Item>
-                <Divider orientation="left">Finalização</Divider>
-                <Radio>Nunca</Radio>
-                <Form.Item label={<Radio>Em</Radio>}>
-                  <DatePicker />
-                  <Radio>Após</Radio>
-                  <CustomInputNumber />
+                <Form.Item
+                  style={formStyle("calc(50% - 6px)", "6px")}
+                  label="Em"
+                >
+                  <DatePicker format={"DD/MM/YYYY"} size="small" />
+                </Form.Item>
+                <Form.Item label="Após" style={formStyle("50%")}>
+                  <CustomInputNumber
+                    size="small"
+                    min={1}
+                    style={formStyle("40%", "8px")}
+                  />
+                  ocorrências
                 </Form.Item>
               </Card>
             </Col>
-          </Radio.Group>
+          </div>
         </Form>
       </Modal>
-
-      {/*<Form style={{ marginTop: "10px" }} colon={false}>
-        <Radio.Group style={{ display: "flex" }}>
-          <Col span={12}>
-            <Card title="Ocorrência">
-              <Form.Item label={<Radio>Data</Radio>}>
-                <DatePicker />
-              </Form.Item>
-              <Form.Item label={<Radio>Baseado em</Radio>}>
-                <Select />
-                <CustomInputNumber size="small" min={0} max={50} />
-                <Select />
-                <Select />
-              </Form.Item>
-            </Card>
-          </Col>
-          <Col span={12}>
-            <Card title="Repetição">
-              <Form.Item>
-                <Radio>Nunca</Radio>
-                <Radio>A cada</Radio>
-                <CustomInputNumber size="small" min={0} max={50} />
-                <Select />
-              </Form.Item>
-              <Divider orientation="left">Finalização</Divider>
-              <Radio>Nunca</Radio>
-              <Form.Item label={<Radio>Em</Radio>}>
-                <DatePicker />
-                <Radio>Após</Radio>
-                <CustomInputNumber />
-              </Form.Item>
-            </Card>
-          </Col>
-        </Radio.Group>
-              </Form>
-
-      <FloatButton.Group
-        trigger="click"
-        icon={<MenuOutlined />}
-        style={{ right: 50, bottom: 90 }}
-      >
-       
-      </FloatButton.Group>*/}
     </>
   );
 };

@@ -1,31 +1,24 @@
-import {
-  CalendarOutlined,
-  CloseOutlined,
-  EditOutlined,
-  FileAddOutlined,
-  LockOutlined,
-  MenuOutlined,
-  SaveOutlined,
-} from "@ant-design/icons";
-import { Drawer, FloatButton, Tabs, TabsProps } from "antd";
-import { useState } from "react";
-import { CalendarSettings, PageTabs } from "./CalendarSettings";
+import { Tabs, TabsProps } from "antd";
+import { CalendarSettings } from "./CalendarSettings";
+import GroupSettings from "./GroupSettings";
+import FamilySttings from "./FamilySettings";
+import CharacteristicsSettings from "./CharacteristicsSettings";
 
 const items: TabsProps["items"] = [
   {
     key: "1",
     label: "Grupos",
-    children: "Grupos",
+    children: <GroupSettings />,
   },
   {
     key: "2",
-    label: "Calendário",
-    children: <CalendarSettings />,
+    label: "Familias",
+    children: <FamilySttings />,
   },
   {
     key: "3",
     label: "Características",
-    children: "Características",
+    children: <CharacteristicsSettings />,
   },
   {
     key: "4",
@@ -62,10 +55,13 @@ const items: TabsProps["items"] = [
     label: "Materias Críticos(Impacto)",
     children: "Materias Críticos(Impacto)",
   },
+  {
+    key: "11",
+    label: "Calendário",
+    children: <CalendarSettings />,
+  },
 ];
 const GeneralSettings: React.FC = () => {
-  const [isDrawerVisible, setIsDrawerVisible] = useState(false);
-
   return <Tabs defaultActiveKey="1" items={items} />;
 };
 
