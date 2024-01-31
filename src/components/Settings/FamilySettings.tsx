@@ -18,7 +18,7 @@ const FamilySttings: React.FC = () => {
     <>
       <Form layout="vertical">
         <Card bodyStyle={{ padding: 10 }}>
-          <ButtonsComponent />
+          <ButtonsComponent new={true} edit={true} delete={true} save={true} />
           <Row gutter={10}>
             <Col span={24}>
               <div>

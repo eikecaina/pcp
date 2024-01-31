@@ -1,6 +1,4 @@
-import { DeleteOutlined } from "@ant-design/icons";
 import {
-  Button,
   Card,
   Col,
   DatePicker,
@@ -14,18 +12,22 @@ import {
 import ButtonsComponent from "./ButtonsComponent";
 import React from "react";
 import { formStyle } from "./Style";
-import TextArea from "antd/es/input/TextArea";
+
+const { TextArea } = Input;
 
 const GroupSettings: React.FC = () => {
   return (
     <>
-      <Card bodyStyle={{ padding: 10 }}>
-        <ButtonsComponent />
+      <Card bodyStyle={{ padding: 0 }}>
+        <div style={{ margin: 10 }}>
+          <ButtonsComponent new={true} edit={true} delete={true} save={true} />
+        </div>
         <Form layout="vertical">
-          <Row gutter={50}>
+          <Row gutter={10}>
             <Col span={12}>
-              <div>
-                <Divider orientation="left">Definição</Divider>
+              <Divider orientation="left">Definição</Divider>
+
+              <div style={{ margin: 10 }}>
                 <Form.Item
                   label="Tipo"
                   style={formStyle("calc(50% - 5px)", "5px")}
@@ -50,8 +52,8 @@ const GroupSettings: React.FC = () => {
               </div>
             </Col>
             <Col span={12}>
-              <div>
-                <Divider orientation="left">Bloqueio Temporario</Divider>
+              <Divider orientation="left">Bloqueio Temporario</Divider>
+              <div style={{ margin: 10 }}>
                 <Form.Item label="Estado">
                   <Select
                     options={[{ value: "Ativo" }, { value: "Bloqueado" }]}

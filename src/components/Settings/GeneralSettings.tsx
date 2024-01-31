@@ -3,6 +3,8 @@ import { CalendarSettings } from "./CalendarSettings";
 import GroupSettings from "./GroupSettings";
 import FamilySttings from "./FamilySettings";
 import CharacteristicsSettings from "./CharacteristicsSettings";
+import ValueSettings from "./ValueSettings";
+import ProcessSettings from "./ProcessSettings";
 
 const items: TabsProps["items"] = [
   {
@@ -23,12 +25,12 @@ const items: TabsProps["items"] = [
   {
     key: "4",
     label: "Valores",
-    children: "Valores",
+    children: <ValueSettings />,
   },
   {
     key: "5",
     label: "Processos",
-    children: "Processos",
+    children: <ProcessSettings />,
   },
   {
     key: "6",

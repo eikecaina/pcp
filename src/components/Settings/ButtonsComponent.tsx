@@ -7,41 +7,45 @@ import {
 import { Button, Tooltip } from "antd";
 import React from "react";
 
-const ButtonsComponent: React.FC = () => {
+interface Buttons {
+  new: boolean;
+  edit: boolean;
+  delete: boolean;
+  save: boolean;
+}
+
+const ButtonsComponent: React.FC<Buttons> = ({
+  new: showNew,
+  edit: showEdit,
+  delete: showDelete,
+  save: showSave,
+}) => {
   const buttonStyle: React.CSSProperties = {
     marginRight: 5,
   };
 
   return (
-    <div style={{ width: '100%', marginBottom: 10 }}>
-      <Tooltip title="Adicionar">
-        <Button
-          style={buttonStyle}
-          type="primary"
-          icon={<PlusOutlined />}
-        ></Button>
-      </Tooltip>
-      <Tooltip title="Editar">
-        <Button
-          style={buttonStyle}
-          type="primary"
-          icon={<EditOutlined />}
-        ></Button>
-      </Tooltip>
-      <Tooltip title="Salvar">
-        <Button
-          style={buttonStyle}
-          type="primary"
-          icon={<SaveOutlined />}
-        ></Button>
-      </Tooltip>
-      <Tooltip title="Excluir">
-        <Button
-          style={buttonStyle}
-          type="primary"
-          icon={<DeleteOutlined />}
-        ></Button>
-      </Tooltip>
+    <div style={{ width: "100%", marginBottom: 10 }}>
+      {showNew && (
+        <Tooltip title="Adicionar">
+          <Button style={buttonStyle} type="primary" icon={<PlusOutlined />} />
+        </Tooltip>
+      )}
+      {showEdit && (
+        <Tooltip title="Editar">
+          <Button style={buttonStyle} type="primary" icon={<EditOutlined />} />
+        </Tooltip>
+      )}
+      {showDelete && (
+        <Tooltip title="Excluir">
+          <Button style={buttonStyle} type="primary" icon={<DeleteOutlined />} />
+        </Tooltip>
+      )}
+      {showSave && (
+        <Tooltip title="Salvar">
+          <Button style={buttonStyle} type="primary" icon={<SaveOutlined />} />
+        </Tooltip>
+      )}
     </div>
   );
 };

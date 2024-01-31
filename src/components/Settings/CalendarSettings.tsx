@@ -1,19 +1,12 @@
 import {
-  CloseOutlined,
   DeleteOutlined,
   EditOutlined,
   ExclamationCircleOutlined,
-  FileAddOutlined,
-  LockOutlined,
-  MenuOutlined,
-  MinusOutlined,
   PlusOutlined,
-  SaveOutlined,
 } from "@ant-design/icons";
 import {
   Button,
   Calendar,
-  theme,
   Form,
   Input,
   Select,
@@ -21,12 +14,8 @@ import {
   Card,
   Row,
   Col,
-  Radio,
   Checkbox,
   DatePicker,
-  Divider,
-  Flex,
-  FloatButton,
   Modal,
   Tooltip,
   Space,
@@ -35,6 +24,7 @@ import type { TabsProps } from "antd";
 import CustomInputNumber from "components/CustomInputNumber";
 import dayjs from "dayjs";
 import { useState } from "react";
+import ButtonsComponent from "./ButtonsComponent";
 
 const { TextArea } = Input;
 
@@ -81,18 +71,7 @@ export const CalendarSettings = () => {
           <Col span={24} style={{ display: "flex" }}>
             <Card style={{ width: "100%" }} bodyStyle={{ padding: 10 }}>
               <div style={{ width: "100%", marginBottom: 5 }}>
-                <Button
-                onClick={openModal}
-                  type="primary"
-                  icon={<PlusOutlined />}
-                  style={{ marginRight: 5 }}
-                ></Button>
-                <Button
-                onClick={openModal}
-                  type="primary"
-                  icon={<EditOutlined />}
-                  style={{ marginRight: 5 }}
-                ></Button>
+                <ButtonsComponent new={true} edit={true} delete={false} save={false} />
               </div>
               <Form.Item
                 label="Calendários"
