@@ -105,7 +105,7 @@ const ProcessSettings: React.FC = () => {
                   {value === 3 ? (
                     <Form.Item
                       label="Características"
-                      style={{ marginTop: 20 }}
+                      style={{ marginTop: 20, marginBottom: 0 }}
                     >
                       <DataFetcher
                         apiUrl="http://localhost:3000/api/getData"
@@ -115,7 +115,7 @@ const ProcessSettings: React.FC = () => {
                           <>
                             <div
                               style={{
-                                height: "350px",
+                                height: "390px",
                                 overflowX: "auto",
                               }}
                             >

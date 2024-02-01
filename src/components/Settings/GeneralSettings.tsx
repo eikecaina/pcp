@@ -5,6 +5,7 @@ import FamilySttings from "./FamilySettings";
 import CharacteristicsSettings from "./CharacteristicsSettings";
 import ValueSettings from "./ValueSettings";
 import ProcessSettings from "./ProcessSettings";
+import ResourceSettings from "./ResourceSettings";
 
 const items: TabsProps["items"] = [
   {
@@ -40,7 +41,7 @@ const items: TabsProps["items"] = [
   {
     key: "7",
     label: "Recursos",
-    children: "Recursos",
+    children: <ResourceSettings />,
   },
   {
     key: "8",

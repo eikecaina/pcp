@@ -15,7 +15,7 @@ const CharacteristicsSettings: React.FC = () => {
         <Card bodyStyle={{ padding: 0 }}>
           <Row gutter={5}>
             <Col span={24}>
-              <Divider>Definição</Divider>
+              <Divider orientation="left">Definição</Divider>
               <div style={{ margin: 10 }}>
                 <Form.Item
                   label="Grupo"
