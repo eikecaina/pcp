@@ -9,9 +9,15 @@ import {
   Select,
   TimePicker,
 } from "antd";
-import ButtonsComponent from "./ButtonsComponent";
+
 import React from "react";
 import { formStyle } from "./Style";
+import {
+  DeleteButton,
+  EditButton,
+  NewButton,
+  SaveButton,
+} from "./ButtonsComponent";
 
 const { TextArea } = Input;
 
@@ -19,14 +25,10 @@ const GroupSettings: React.FC = () => {
   return (
     <>
       <Card bodyStyle={{ padding: 0 }}>
-        <div style={{ margin: 10 }}>
-          <ButtonsComponent new={true} edit={true} delete={true} save={true} />
-        </div>
         <Form layout="vertical">
           <Row gutter={10}>
             <Col span={12}>
               <Divider orientation="left">Definição</Divider>
-
               <div style={{ margin: 10 }}>
                 <Form.Item
                   label="Tipo"
@@ -75,6 +77,12 @@ const GroupSettings: React.FC = () => {
             </Col>
           </Row>
         </Form>
+        <div style={{ margin: 10, float: "right" }}>
+          <NewButton />
+          <EditButton />
+          <DeleteButton />
+          <SaveButton />
+        </div>
       </Card>
     </>
   );

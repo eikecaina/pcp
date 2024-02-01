@@ -5,49 +5,80 @@ import {
   SaveOutlined,
 } from "@ant-design/icons";
 import { Button, Tooltip } from "antd";
-import React from "react";
+import React, { FormEventHandler, MouseEventHandler } from "react";
 
 interface Buttons {
-  new: boolean;
-  edit: boolean;
-  delete: boolean;
-  save: boolean;
+  onChange?: FormEventHandler;
+  onClick?: MouseEventHandler;
 }
+const buttonStyle: React.CSSProperties = {
+  marginRight: 5,
+};
 
-const ButtonsComponent: React.FC<Buttons> = ({
-  new: showNew,
-  edit: showEdit,
-  delete: showDelete,
-  save: showSave,
+export const NewButton: React.FC<Buttons> = ({
+  onChange: onChange,
+  onClick: onClick,
 }) => {
-  const buttonStyle: React.CSSProperties = {
-    marginRight: 5,
-  };
-
   return (
-    <div style={{ width: "100%", marginBottom: 10 }}>
-      {showNew && (
-        <Tooltip title="Adicionar">
-          <Button style={buttonStyle} type="primary" icon={<PlusOutlined />} />
-        </Tooltip>
-      )}
-      {showEdit && (
-        <Tooltip title="Editar">
-          <Button style={buttonStyle} type="primary" icon={<EditOutlined />} />
-        </Tooltip>
-      )}
-      {showDelete && (
-        <Tooltip title="Excluir">
-          <Button style={buttonStyle} type="primary" icon={<DeleteOutlined />} />
-        </Tooltip>
-      )}
-      {showSave && (
-        <Tooltip title="Salvar">
-          <Button style={buttonStyle} type="primary" icon={<SaveOutlined />} />
-        </Tooltip>
-      )}
-    </div>
+    <Tooltip title="Adicionar">
+      <Button
+        onChange={onChange}
+        onClick={onClick}
+        style={buttonStyle}
+        type="primary"
+        icon={<PlusOutlined />}
+      />
+    </Tooltip>
   );
 };
 
-export default ButtonsComponent;
+export const EditButton: React.FC<Buttons> = ({
+  onChange: onChange,
+  onClick: onClick,
+}) => {
+  return (
+    <Tooltip title="Editar">
+      <Button
+        onChange={onChange}
+        onClick={onClick}
+        style={buttonStyle}
+        type="primary"
+        icon={<EditOutlined />}
+      />
+    </Tooltip>
+  );
+};
+
+export const DeleteButton: React.FC<Buttons> = ({
+  onChange: onChange,
+  onClick: onClick,
+}) => {
+  return (
+    <Tooltip title="Excluir">
+      <Button
+        onChange={onChange}
+        onClick={onClick}
+        style={buttonStyle}
+        type="primary"
+        icon={<DeleteOutlined />}
+      />
+    </Tooltip>
+  );
+};
+
+export const SaveButton: React.FC<Buttons> = ({
+  onChange: onChange,
+  onClick: onClick,
+}) => {
+  return (
+    <Tooltip title="Salvar">
+      <Button
+        onChange={onChange}
+        onClick={onClick}
+        style={buttonStyle}
+        type="primary"
+        icon={<SaveOutlined />}
+      />
+    </Tooltip>
+  );
+};

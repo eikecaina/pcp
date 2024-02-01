@@ -24,7 +24,12 @@ import type { TabsProps } from "antd";
 import CustomInputNumber from "components/CustomInputNumber";
 import dayjs from "dayjs";
 import { useState } from "react";
-import ButtonsComponent from "./ButtonsComponent";
+import {
+  DeleteButton,
+  EditButton,
+  NewButton,
+  SaveButton,
+} from "./ButtonsComponent";
 
 const { TextArea } = Input;
 
@@ -68,60 +73,67 @@ export const CalendarSettings = () => {
     <>
       <Form layout="vertical">
         <Row gutter={5}>
-          <Col span={24} style={{ display: "flex" }}>
-            <Card style={{ width: "100%" }} bodyStyle={{ padding: 10 }}>
-              <div style={{ width: "100%", marginBottom: 5 }}>
-                <ButtonsComponent new={true} edit={true} delete={false} save={false} />
+          <Col span={18} style={{ display: "flex" }}>
+            <Card style={{ width: "100%" }} bodyStyle={{ padding: 0 }}>
+              <div style={{ margin: 10 }}>
+                <Form.Item
+                  label="Calendários"
+                  style={formStyle("calc(25% - 8px)", "8px")}
+                >
+                  <Select />
+                </Form.Item>
+                <Form.Item
+                  style={formStyle("calc(25% - 8px)", "8px")}
+                  label="Dias"
+                >
+                  <Space.Compact style={{ width: "100%" }}>
+                    <Tooltip title="Remover Dia">
+                      <Button type="primary" onClick={deleteDay}>
+                        <DeleteOutlined />
+                      </Button>
+                    </Tooltip>
+
+                    <Select
+                      defaultValue="Ferias"
+                      options={[{ value: "Ferias" }]}
+                    />
+
+                    <Tooltip title="Editar Dia">
+                      <Button type="primary" onClick={openModal}>
+                        <EditOutlined />
+                      </Button>
+                    </Tooltip>
+                  </Space.Compact>
+                </Form.Item>
+                <Form.Item label="Nome" style={formStyle("50%")}>
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  label="Base"
+                  style={formStyle("calc(50% - 8px)", "8px")}
+                >
+                  <Select />
+                </Form.Item>
+                <Form.Item label="Descrição" style={formStyle("50%")}>
+                  <Input />
+                </Form.Item>
+                <Form.Item label="Obs" style={{ marginBottom: 0 }}>
+                  <TextArea style={{ resize: "none", height: "99px" }} />
+                </Form.Item>
               </div>
-              <Form.Item
-                label="Calendários"
-                style={formStyle("calc(25% - 8px)", "8px")}
-              >
-                <Select />
-              </Form.Item>
-              <Form.Item
-                style={formStyle("calc(25% - 8px)", "8px")}
-                label="Dias"
-              >
-                <Space.Compact style={{ width: "100%" }}>
-                  <Tooltip title="Remover Dia">
-                    <Button type="primary" onClick={deleteDay}>
-                      <DeleteOutlined />
-                    </Button>
-                  </Tooltip>
-
-                  <Select
-                    defaultValue="Ferias"
-                    options={[{ value: "Ferias" }]}
-                  />
-
-                  <Tooltip title="Editar Dia">
-                    <Button type="primary" onClick={openModal}>
-                      <EditOutlined />
-                    </Button>
-                  </Tooltip>
-                </Space.Compact>
-              </Form.Item>
-              <Form.Item label="Nome" style={formStyle("50%")}>
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label="Base"
-                style={formStyle("calc(50% - 8px)", "8px")}
-              >
-                <Select />
-              </Form.Item>
-              <Form.Item label="Descrição" style={formStyle("50%")}>
-                <Input />
-              </Form.Item>
-              <Form.Item label="Obs" style={{ marginBottom: 0 }}>
-                <TextArea style={{ resize: "none", height: "99px" }} />
-              </Form.Item>
+              <div style={{ margin: 10, float: "right" }}>
+                <NewButton onClick={openModal} />
+                <SaveButton />
+              </div>
             </Card>
           </Col>
-          <Col style={{ marginTop: 10 }} span={24}>
-            <Card bodyStyle={{ padding: 0 }}>
-              <Calendar fullscreen={false} value={value} />
+          <Col span={6}>
+            <Card style={{ height: 375 }} bodyStyle={{ padding: 0 }}>
+              <Calendar
+                fullscreen={false}
+                value={value}
+                style={{ color: "red" }}
+              />
             </Card>
           </Col>
         </Row>

@@ -39,18 +39,18 @@ const items: TabsProps["items"] = [
   },
   {
     key: "7",
+    label: "Recursos",
+    children: "Recursos",
+  },
+  {
+    key: "8",
     label: "Sub-Recurso",
     children: "Sub-Recurso",
   },
   {
-    key: "8",
+    key: "9",
     label: "Materias Críticos(Material)",
     children: "Materias Críticos(Material)",
-  },
-  {
-    key: "9",
-    label: "Materias Críticos(Impacto)",
-    children: "Materias Críticos(Impacto)",
   },
   {
     key: "10",
@@ -58,8 +58,8 @@ const items: TabsProps["items"] = [
     children: "Materias Críticos(Impacto)",
   },
   {
-    key: "11",
-    label: "Calendário",
+    key: "12",
+    label: "Calendários",
     children: <CalendarSettings />,
   },
 ];

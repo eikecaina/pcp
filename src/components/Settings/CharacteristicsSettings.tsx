@@ -1,17 +1,22 @@
-import { Card, Col, Form, Input, Row, Select } from "antd";
+import { Card, Col, Divider, Form, Input, Row, Select } from "antd";
 import { formStyle } from "./Style";
 import CustomInputNumber from "components/CustomInputNumber";
-import ButtonsComponent from "./ButtonsComponent";
+import {
+  DeleteButton,
+  EditButton,
+  NewButton,
+  SaveButton,
+} from "./ButtonsComponent";
 
 const CharacteristicsSettings: React.FC = () => {
   return (
     <>
       <Form layout="vertical">
-        <Card bodyStyle={{ padding: 10 }}>
-          <ButtonsComponent new={true} edit={true} delete={true} save={true} />
+        <Card bodyStyle={{ padding: 0 }}>
           <Row gutter={5}>
             <Col span={24}>
-              <div>
+              <Divider>Definição</Divider>
+              <div style={{ margin: 10 }}>
                 <Form.Item
                   label="Grupo"
                   style={formStyle("calc(50% - 8px)", "8px")}
@@ -51,6 +56,12 @@ const CharacteristicsSettings: React.FC = () => {
               </div>
             </Col>
           </Row>
+          <div style={{ margin: 10, float: "right" }}>
+            <NewButton />
+            <EditButton />
+            <DeleteButton />
+            <SaveButton />
+          </div>
         </Card>
       </Form>
     </>

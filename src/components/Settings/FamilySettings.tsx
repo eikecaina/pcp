@@ -9,41 +9,51 @@ import {
   Select,
   Tree,
 } from "antd";
-import ButtonsComponent from "./ButtonsComponent";
+
 import { formStyle } from "./Style";
 import { DataFetcher } from "components/DataFetcherJson";
+import {
+  DeleteButton,
+  EditButton,
+  NewButton,
+  SaveButton,
+} from "./ButtonsComponent";
 
 const FamilySttings: React.FC = () => {
   return (
     <>
       <Form layout="vertical">
-        <Card bodyStyle={{ padding: 10 }}>
-          <ButtonsComponent new={true} edit={true} delete={true} save={true} />
+        <Card bodyStyle={{ padding: 0 }}>
+         
           <Row gutter={10}>
-            <Col span={24}>
-              <div>
+            <Col span={12}>
+              <Divider orientation="left">Definição</Divider>
+              <div style={{ margin: 10 }}>
                 <Form.Item
-                  style={formStyle("calc(50% - 8px", "8px")}
+                  style={formStyle("calc(50% - 5px", "5px")}
                   label="Lista"
                 >
                   <Select />
                 </Form.Item>
-                <Form.Item style={formStyle("calc(50% - 8px")} label="Nome">
+                <Form.Item style={formStyle("calc(50% - 5px")} label="Nome">
                   <Input />
                 </Form.Item>
                 <Form.Item
-                  style={formStyle("calc(50% - 8px", "8px")}
+                  style={formStyle("calc(50% - 5px", "5px")}
                   label="Planejador"
                 >
                   <Input />
                 </Form.Item>
-                <Form.Item style={formStyle("calc(50% - 8px")} label="Grupo">
+                <Form.Item style={formStyle("calc(50% - 5px")} label="Grupo">
                   <Input />
                 </Form.Item>
               </div>
             </Col>
-            <Col span={24}>
-              <div style={{ height: "450px", overflowX: "auto" }}>
+            <Col span={12}>
+              <Divider orientation="left">
+                Valores que definem a familia
+              </Divider>
+              <div style={{ height: "420px", overflowX: "auto" }}>
                 <DataFetcher
                   apiUrl="http://localhost:3000/api/getData"
                   tipo="processos"
@@ -51,12 +61,11 @@ const FamilySttings: React.FC = () => {
                   {(treeData) => (
                     <>
                       <Tree
-                      checkable
+                        checkable
                         style={{
-                        
                           height: "100%",
                           maxHeight: 607,
-                          
+
                           textOverflow: "ellipsis",
                           whiteSpace: "nowrap",
                         }}
@@ -80,6 +89,12 @@ const FamilySttings: React.FC = () => {
               </div>
             </Col>
           </Row>
+          <div style={{ margin: 10, float: "right" }}>
+            <NewButton />
+            <EditButton />
+            <DeleteButton />
+            <SaveButton />
+          </div>
         </Card>
       </Form>
     </>

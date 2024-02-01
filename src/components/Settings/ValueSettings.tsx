@@ -10,9 +10,14 @@ import {
   Tree,
 } from "antd";
 import { DataFetcher } from "components/DataFetcherJson";
-import ButtonsComponent from "./ButtonsComponent";
 import { formStyle } from "./Style";
 import CustomInputNumber from "components/CustomInputNumber";
+import {
+  DeleteButton,
+  EditButton,
+  NewButton,
+  SaveButton,
+} from "./ButtonsComponent";
 
 const ValueSettings: React.FC = () => {
   const options = [
@@ -24,14 +29,11 @@ const ValueSettings: React.FC = () => {
 
   return (
     <Form layout="vertical">
-      <Card bodyStyle={{ padding: 10 }}>
-        <ButtonsComponent new={true} edit={true} delete={true} save={true} />
+      <Card bodyStyle={{ padding: 0 }}>
         <Row gutter={10}>
           <Col span={12}>
-            <Card
-              bodyStyle={{ padding: 0 }}
-              style={{ height: "450px", overflowX: "auto" }}
-            >
+            <Divider orientation="left">Familia de definição</Divider>
+            <div style={{ height: "390px", overflowX: "auto" }}>
               <DataFetcher
                 apiUrl="http://localhost:3000/api/getData"
                 tipo="processos"
@@ -39,7 +41,6 @@ const ValueSettings: React.FC = () => {
                 {(treeData) => (
                   <>
                     <Tree
-                      checkable
                       style={{
                         height: "100%",
                         maxHeight: 607,
@@ -50,64 +51,56 @@ const ValueSettings: React.FC = () => {
                       defaultExpandedKeys={["0-0-0"]}
                       treeData={treeData}
                     />
-                    <div style={{ padding: 10 }}>
-                      <div
-                        style={{
-                          width: "100%",
-                          display: "flex",
-                          alignContent: "center",
-                          justifyContent: "space-evenly",
-                        }}
-                      ></div>
-                    </div>
                   </>
                 )}
               </DataFetcher>
-            </Card>
+            </div>
           </Col>
           <Col span={12}>
-            <Card bodyStyle={{ padding: 0 }} title="Definição">
-              <div style={{ margin: 10 }}>
-                <Form.Item
-                  style={formStyle("calc(50% - 8px)", "8px")}
-                  label="ID"
-                >
-                  <CustomInputNumber
-                    defaultValue={50}
-                    disabled
-                    style={{ width: "100%" }}
-                  />
-                </Form.Item>
-                <Form.Item style={formStyle("50%")} label="Nome">
-                  <Input />
-                </Form.Item>
-                <Form.Item
-                  style={formStyle("calc(50% - 8px)", "8px")}
-                  label="Característica"
-                >
-                  <Select />
-                </Form.Item>
-                <Form.Item style={formStyle("50%")} label="Posição">
-                  <CustomInputNumber min={1} style={{ width: "100%" }} />
-                </Form.Item>
-              </div>
-              <Divider orientation="left">Condições</Divider>
-              <div style={{ margin: 10 }}>
-                <Checkbox.Group style={{ display: "grid" }}>
-                  {options.map((option) => (
-                    <Checkbox
-                      key={option.value}
-                      value={option.value}
-                      style={{ margin: "7px" }}
-                    >
-                      {option.label}
-                    </Checkbox>
-                  ))}
-                </Checkbox.Group>
-              </div>
-            </Card>
+            <Divider orientation="left">Definição</Divider>
+            <div style={{ margin: 10 }}>
+              <Form.Item style={formStyle("calc(50% - 8px)", "8px")} label="ID">
+                <CustomInputNumber
+                  defaultValue={50}
+                  disabled
+                  style={{ width: "100%" }}
+                />
+              </Form.Item>
+              <Form.Item style={formStyle("50%")} label="Nome">
+                <Input />
+              </Form.Item>
+              <Form.Item
+                style={formStyle("calc(50% - 8px)", "8px")}
+                label="Característica"
+              >
+                <Select />
+              </Form.Item>
+              <Form.Item style={formStyle("50%")} label="Posição">
+                <CustomInputNumber min={1} style={{ width: "100%" }} />
+              </Form.Item>
+            </div>
+            <Divider orientation="left">Condições</Divider>
+            <div style={{ margin: 10 }}>
+              <Checkbox.Group style={{ display: "grid" }}>
+                {options.map((option) => (
+                  <Checkbox
+                    key={option.value}
+                    value={option.value}
+                    style={{ margin: "7px" }}
+                  >
+                    {option.label}
+                  </Checkbox>
+                ))}
+              </Checkbox.Group>
+            </div>
           </Col>
         </Row>
+        <div style={{ margin: 10, float: "right" }}>
+          <NewButton />
+          <EditButton />
+          <DeleteButton />
+          <SaveButton />
+        </div>
       </Card>
     </Form>
   );
