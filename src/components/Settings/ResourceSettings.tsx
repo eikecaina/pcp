@@ -12,62 +12,61 @@ import {
 
 const ResourceSettings: React.FC = () => {
   return (
-    <Form layout="vertical">
-      <Card bodyStyle={{ padding: 0 }}>
-        <Divider orientation="left">Definição</Divider>
-        <div style={{ margin: 10 }}>
-          <Row gutter={20}>
-            <Col span={24}>
-              <Form.Item
-                style={formStyle("calc(33.33% - 5px)", "5px")}
-                label="Grupo"
-              >
-                <Select />
-              </Form.Item>
-              <Form.Item
-                style={formStyle("calc(33.33% - 5px)", "5px")}
-                label="ID"
-              >
-                <CustomInputNumber style={{ width: "100%" }} min={1} />
-              </Form.Item>
-              <Form.Item
-                style={formStyle("calc(33.33% - 5px)", "5px")}
-                label="Nome"
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                style={formStyle("calc(33.33% - 5px)", "5px")}
-                label="Descrição"
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                style={formStyle("calc(33.33% - 5px)", "5px")}
-                label="Disponibilidade diária"
-              >
-                <Select />
-              </Form.Item>
-              <Form.Item
-                style={formStyle("calc(33.33% - 5px)")}
-                label="Calendário"
-              >
-                <Select />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
+    <Card title="Definição" bodyStyle={{ padding: 10 }}>
+      <Form layout="vertical">
+        <Row gutter={20}>
+          <Col span={24}>
+            <Form.Item
+              style={formStyle("calc(33.33% - 5px)", "5px")}
+              label="Grupo"
+            >
+              <Select />
+            </Form.Item>
+            <Form.Item
+              style={formStyle("calc(33.33% - 5px)", "5px")}
+              label="ID"
+            >
+              <CustomInputNumber style={{ width: "100%" }} min={1} />
+            </Form.Item>
+            <Form.Item
+              style={formStyle("calc(33.33% - 5px)", "5px")}
+              label="Nome"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              style={formStyle("calc(33.33% - 5px)", "5px")}
+              label="Descrição"
+            >
+              <Input />
+            </Form.Item>
+            <Form.Item
+              style={formStyle("calc(33.33% - 5px)", "5px")}
+              label="Disponibilidade diária"
+            >
+              <Select />
+            </Form.Item>
+            <Form.Item
+              style={formStyle("calc(33.33% - 5px)")}
+              label="Calendário"
+            >
+              <Select />
+            </Form.Item>
+          </Col>
+          <Col span={12}>
+            <Card
+              title="Famílias que o recurso está disponivel"
+              bodyStyle={{ padding: 10 }}
+            >
               <DataFetcher
                 apiUrl="http://localhost:3000/api/getData"
                 tipo="processos"
               >
                 {(treeData) => (
                   <>
-                    <Divider orientation="left">
-                      Famílias que o recurso está disponivel
-                    </Divider>
                     <div
                       style={{
-                        height: "360px",
+                        height: "340px",
                         overflowX: "auto",
                       }}
                     >
@@ -86,20 +85,22 @@ const ResourceSettings: React.FC = () => {
                   </>
                 )}
               </DataFetcher>
-            </Col>
-            <Col span={12}>
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card
+              bodyStyle={{ padding: 10 }}
+              title="Processos que consomem o recurso"
+            >
               <DataFetcher
                 apiUrl="http://localhost:3000/api/getData"
                 tipo="processos"
               >
                 {(treeData) => (
                   <>
-                    <Divider orientation="left">
-                      Processos que consomem o recurso
-                    </Divider>
                     <div
                       style={{
-                        height: "360px",
+                        height: "340px",
                         overflowX: "auto",
                       }}
                     >
@@ -118,17 +119,17 @@ const ResourceSettings: React.FC = () => {
                   </>
                 )}
               </DataFetcher>
-            </Col>
-          </Row>
-        </div>
+            </Card>
+          </Col>
+        </Row>
         <div style={{ margin: 10, float: "right" }}>
           <NewButton />
           <EditButton />
           <DeleteButton />
           <SaveButton />
         </div>
-      </Card>
-    </Form>
+      </Form>
+    </Card>
   );
 };
 
