@@ -1,10 +1,9 @@
 import {
-  Button,
   Card,
   Col,
-  Divider,
   Form,
   Input,
+  RadioChangeEvent,
   Row,
   Select,
   Tree,
@@ -14,81 +13,94 @@ import { formStyle } from "./Style";
 import { DataFetcher } from "components/DataFetcherJson";
 import {
   DeleteButton,
-  EditButton,
-  NewButton,
+  RadioButtons,
   SaveButton,
+  SelectRadio,
 } from "./ButtonsComponent";
+import { useState } from "react";
 
 const FamilySttings: React.FC = () => {
+  const [value, setValue] = useState(1);
+
+  const onChange = (e: RadioChangeEvent) => {
+    setValue(e.target.value);
+  };
   return (
     <>
+      <div style={{ display: "flex" }}>
+        <RadioButtons onChange={onChange} value={value} />
+        <div style={{ marginLeft: 15 }}></div>
+        <SelectRadio
+          style={formStyle("calc(25% - 8px)", "8px")}
+          type="Lista"
+          value={value}
+        />
+      </div>
       <Form layout="vertical">
-        <Row gutter={10}>
-          <Form.Item style={formStyle("calc(33% - 5px", "5px")} label="Lista">
-            <Select />
-          </Form.Item>
-          <Col span={24}>
-            <Card title="Definição" bodyStyle={{ padding: 10 }}>
-              <Form.Item
-                style={formStyle("calc(33% - 5px", "5px")}
-                label="Nome"
+        <div>
+          <Row gutter={10}>
+            <Col span={24}>
+              <Card title="Definição" bodyStyle={{ padding: 10 }}>
+                <Form.Item
+                  style={formStyle("calc(33% - 8px", "8px")}
+                  label="Nome"
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item
+                  style={formStyle("calc(33% - 8px", "8px")}
+                  label="Planejador"
+                >
+                  <Input />
+                </Form.Item>
+                <Form.Item style={formStyle("33%")} label="Grupo">
+                  <Select />
+                </Form.Item>
+              </Card>
+            </Col>
+            <Col span={24}>
+              <Card
+                style={{ marginTop: 10 }}
+                title="Valores que definem a familia"
+                bodyStyle={{ height: "300px", overflowX: "auto", padding: 5 }}
               >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                style={formStyle("calc(33% - 5px", "5px")}
-                label="Planejador"
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item style={formStyle("calc(33% - 5px")} label="Grupo">
-                <Input />
-              </Form.Item>
-            </Card>
-          </Col>
-          <Col span={14}>
-            <Card
-              title="Valores que definem a familia"
-              bodyStyle={{ height: "420px", overflowX: "auto" }}
-            >
-              <DataFetcher
-                apiUrl="http://localhost:3000/api/getData"
-                tipo="processos"
-              >
-                {(treeData) => (
-                  <>
-                    <Tree
-                      checkable
-                      style={{
-                        height: "100%",
-                        maxHeight: 607,
-
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                      }}
-                      showLine={true}
-                      defaultExpandedKeys={["0-0-0"]}
-                      treeData={treeData}
-                    />
-                    <div style={{ padding: 10 }}>
-                      <div
+                <DataFetcher
+                  apiUrl="http://localhost:3000/api/getData"
+                  tipo="processos"
+                >
+                  {(treeData) => (
+                    <>
+                      <Tree
+                        checkable
                         style={{
-                          width: "100%",
-                          display: "flex",
-                          alignContent: "center",
-                          justifyContent: "space-evenly",
+                          height: "100%",
+                          maxHeight: 607,
+
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
                         }}
-                      ></div>
-                    </div>
-                  </>
-                )}
-              </DataFetcher>
-            </Card>
-          </Col>
-        </Row>
+                        showLine={true}
+                        defaultExpandedKeys={["0-0-0"]}
+                        treeData={treeData}
+                      />
+                      <div style={{ padding: 10 }}>
+                        <div
+                          style={{
+                            width: "100%",
+                            display: "flex",
+                            alignContent: "center",
+                            justifyContent: "space-evenly",
+                          }}
+                        ></div>
+                      </div>
+                    </>
+                  )}
+                </DataFetcher>
+              </Card>
+            </Col>
+          </Row>
+        </div>
         <div style={{ margin: 10, float: "right" }}>
-          <NewButton />
-          <EditButton />
           <DeleteButton />
           <SaveButton />
         </div>

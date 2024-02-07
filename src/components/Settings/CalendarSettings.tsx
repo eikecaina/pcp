@@ -20,21 +20,21 @@ import {
   Tooltip,
   Space,
 } from "antd";
-import type { TabsProps } from "antd";
+import type { RadioChangeEvent, TabsProps } from "antd";
 import CustomInputNumber from "components/CustomInputNumber";
 import dayjs from "dayjs";
 import { useState } from "react";
 import {
   DeleteButton,
-  EditButton,
-  NewButton,
+  RadioButtons,
   SaveButton,
+  SelectRadio,
 } from "./ButtonsComponent";
 
 const { TextArea } = Input;
 
 export const CalendarSettings = () => {
-  const [value, setValue] = useState();
+  const [value, setValue] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => {
@@ -69,21 +69,28 @@ export const CalendarSettings = () => {
     marginRight: marginRight,
   });
 
+  const onChange = (e: RadioChangeEvent) => {
+    setValue(e.target.value);
+  };
+
   return (
     <>
+      <div style={{ display: "flex" }}>
+        <RadioButtons onChange={onChange} value={value} />
+        <div style={{ marginLeft: 15 }}></div>
+        <SelectRadio
+          style={formStyle("calc(25% - 8px)", "8px")}
+          type="Calendário"
+          value={value}
+        />
+      </div>
       <Form layout="vertical">
         <Row gutter={5}>
           <Col span={18} style={{ display: "flex" }}>
             <Card style={{ width: "100%" }} bodyStyle={{ padding: 0 }}>
               <div style={{ margin: 10 }}>
                 <Form.Item
-                  label="Calendários"
-                  style={formStyle("calc(25% - 8px)", "8px")}
-                >
-                  <Select />
-                </Form.Item>
-                <Form.Item
-                  style={formStyle("calc(25% - 8px)", "8px")}
+                  style={formStyle("calc(40% - 8px)", "8px")}
                   label="Dias"
                 >
                   <Space.Compact style={{ width: "100%" }}>
@@ -105,7 +112,17 @@ export const CalendarSettings = () => {
                     </Tooltip>
                   </Space.Compact>
                 </Form.Item>
-                <Form.Item label="Nome" style={formStyle("50%")}>
+                <Form.Item label=" " style={formStyle("5%")}>
+                  <Tooltip title="Adicionar dia">
+                    <Button
+                      icon={<PlusOutlined />}
+                      onClick={openModal}
+                      type="primary"
+                    ></Button>
+                  </Tooltip>
+                </Form.Item>
+
+                <Form.Item label="Nome" style={formStyle("55%")}>
                   <Input />
                 </Form.Item>
                 <Form.Item
@@ -121,26 +138,21 @@ export const CalendarSettings = () => {
                   <TextArea style={{ resize: "none", height: "99px" }} />
                 </Form.Item>
               </div>
-              <div style={{ margin: 10, float: "right" }}>
-                <NewButton onClick={openModal} />
-                <SaveButton />
-              </div>
             </Card>
           </Col>
           <Col span={6}>
-            <Card style={{ height: 375 }} bodyStyle={{ padding: 0 }}>
-              <Calendar
-                fullscreen={false}
-                value={value}
-                style={{ color: "red" }}
-              />
+            <Card style={{ height: 325 }} bodyStyle={{ padding: 0 }}>
+              <Calendar fullscreen={false} style={{ color: "red" }} />
             </Card>
           </Col>
         </Row>
+        <div style={{ margin: 10, float: "right" }}>
+          <SaveButton />
+        </div>
       </Form>
       <Modal
         width={1200}
-        title="Basic Modal"
+        title="Definição do dia"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}

@@ -5,6 +5,7 @@ import {
   Divider,
   Form,
   Input,
+  RadioChangeEvent,
   Row,
   Select,
   Tree,
@@ -12,14 +13,15 @@ import {
 import { DataFetcher } from "components/DataFetcherJson";
 import { formStyle } from "./Style";
 import CustomInputNumber from "components/CustomInputNumber";
-import {
-  DeleteButton,
-  EditButton,
-  NewButton,
-  SaveButton,
-} from "./ButtonsComponent";
+import { DeleteButton, RadioButtons, SaveButton } from "./ButtonsComponent";
+import { useState } from "react";
 
 const ValueSettings: React.FC = () => {
+  const [value, setValue] = useState(1);
+
+  const onChange = (e: RadioChangeEvent) => {
+    setValue(e.target.value);
+  };
   const options = [
     { label: "Nova aprovação", value: "Nova aprovação" },
     { label: "Novo certificado", value: "Novo certificado" },
@@ -29,9 +31,13 @@ const ValueSettings: React.FC = () => {
 
   return (
     <Form layout="vertical">
+      <RadioButtons onChange={onChange} value={value} />
       <Row gutter={10}>
         <Col span={12}>
-          <Card title="Família de definição" style={{ height: "450px", overflowX: "auto" }}>
+          <Card
+            title="Família de definição"
+            style={{ height: "450px", overflowX: "auto" }}
+          >
             <DataFetcher
               apiUrl="http://localhost:3000/api/getData"
               tipo="processos"
@@ -55,7 +61,6 @@ const ValueSettings: React.FC = () => {
           </Card>
         </Col>
         <Col span={12}>
-          
           <Card title="Definição" bodyStyle={{ padding: 10 }}>
             <Form.Item style={formStyle("calc(50% - 8px)", "8px")} label="ID">
               <CustomInputNumber
@@ -94,8 +99,6 @@ const ValueSettings: React.FC = () => {
         </Col>
       </Row>
       <div style={{ margin: 10, float: "right" }}>
-        <NewButton />
-        <EditButton />
         <DeleteButton />
         <SaveButton />
       </div>
