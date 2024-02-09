@@ -6,6 +6,7 @@ import CharacteristicsSettings from "./CharacteristicsSettings";
 import ValueSettings from "./ValueSettings";
 import ProcessSettings from "./ProcessSettings";
 import ResourceSettings from "./ResourceSettings";
+import { CriticalMaterials } from "./CriticalMaterials";
 
 const items: TabsProps["items"] = [
   {
@@ -50,16 +51,11 @@ const items: TabsProps["items"] = [
   },
   {
     key: "9",
-    label: "Materias Críticos(Material)",
-    children: "Materias Críticos(Material)",
+    label: "Materias Críticos",
+    children: <CriticalMaterials />,
   },
   {
     key: "10",
-    label: "Materias Críticos(Impacto)",
-    children: "Materias Críticos(Impacto)",
-  },
-  {
-    key: "12",
     label: "Calendários",
     children: <CalendarSettings />,
   },

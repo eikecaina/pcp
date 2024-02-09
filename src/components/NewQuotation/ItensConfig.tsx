@@ -238,7 +238,7 @@ export const ProductConfig: React.FC = () => {
           {t("generalButtons.calcButton")}
         </Button>
         <Button style={{ width: "30%" }} type="primary">
-          Salvar
+          {t("generalButtons.saveButton")}
         </Button>
       </div>
 

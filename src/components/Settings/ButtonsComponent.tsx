@@ -37,7 +37,9 @@ export const DeleteButton: React.FC<Buttons> = ({
         style={buttonStyle}
         type="primary"
         icon={<DeleteOutlined />}
-      >Excluir</Button>
+      >
+        Excluir
+      </Button>
     </Tooltip>
   );
 };
@@ -54,7 +56,9 @@ export const SaveButton: React.FC<Buttons> = ({
         style={buttonStyle}
         type="primary"
         icon={<SaveOutlined />}
-      >Salvar</Button>
+      >
+        Salvar
+      </Button>
     </Tooltip>
   );
 };
@@ -87,40 +91,16 @@ export const SelectRadio: React.FC<RadioValue> = ({
     <>
       {value === 1 ? (
         <>
-          {type === "Grupo" && (
-            <Form.Item label="Grupo" style={style}>
-              <Select disabled />
-            </Form.Item>
-          )}
-          {type === "Lista" && (
-            <Form.Item label="Lista" style={style}>
-              <Select disabled />
-            </Form.Item>
-          )}
-          {type === "Calendário" && (
-            <Form.Item label="Calendários" style={style}>
-              <Select disabled />
-            </Form.Item>
-          )}
+          <Form.Item label={type} style={style}>
+            <Select disabled />
+          </Form.Item>
         </>
       ) : null}
       {value === 2 ? (
         <>
-          {type === "Grupo" && (
-            <Form.Item label="Grupo" style={style}>
-              <Select />
-            </Form.Item>
-          )}
-          {type === "Lista" && (
-            <Form.Item label="Lista" style={style}>
-              <Select />
-            </Form.Item>
-          )}
-          {type === "Calendário" && (
-            <Form.Item label="Calendários" style={style}>
-              <Select />
-            </Form.Item>
-          )}
+          <Form.Item label={type} style={style}>
+            <Select />
+          </Form.Item>
         </>
       ) : null}
     </>
