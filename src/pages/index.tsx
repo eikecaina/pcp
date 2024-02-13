@@ -1,9 +1,10 @@
 import { NextPage, GetStaticProps } from "next";
 
 import { getServerSideTranslations } from "configs/language/server";
+import Quotation from "components/NewQuotation/Quotation";
 
 const Home: NextPage = () => {
-  return <div>Home</div>;
+  return <Quotation />;
 };
 
 export const getStaticProps: GetStaticProps = async (req) => {

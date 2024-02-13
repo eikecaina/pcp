@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   Cascader,
   Checkbox,
@@ -22,6 +23,7 @@ import {
 import { formStyle } from "./Style";
 import { DataFetcher } from "components/DataFetcherJson";
 import { searchOptions } from "./SearchFilter";
+import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 
 export const CriticalMaterials: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -97,7 +99,7 @@ export const Material: React.FC = () => {
                 </DataFetcher>
               </div>
               <SelectRadio
-                style={formStyle("100%")}
+                style={formStyle("97%")}
                 type="Nome"
                 value={value}
                 onChange={onChange}
@@ -130,7 +132,7 @@ export const Material: React.FC = () => {
                 <Input />
               </Form.Item>
               <Form.Item
-                label="Prazo"
+                label="Prazo (dias)"
                 style={{
                   width: "calc(30% - 5px)",
                   marginRight: 5,
@@ -178,14 +180,31 @@ export const Impact: React.FC = () => {
     options.push({ value: i, label: "Família " + i });
   }
 
+  const [value, setValue] = useState(1);
+
+  const handleChange = () => {
+    setValue(value === 1 ? 2 : 1);
+  };
+
   return (
     <Form layout="vertical" style={{ marginTop: 10 }}>
       <Card title="Definição" bodyStyle={{ padding: 10 }}>
-        <Form.Item style={formStyle("calc(20% - 5px)", "5px")} label="Material">
-          <Select />
+        <div>
+          <Button
+            onClick={handleChange}
+            type="primary"
+            style={{ margin: "5px 0px 10px 0px" }}
+            icon={<EditOutlined />}
+          >
+            Editar
+          </Button>
+        </div>
+        <Form.Item style={formStyle("calc(50% - 5px)", "5px")} label="Material">
+          <Select disabled={value === 2} />
         </Form.Item>
-        <Form.Item label="Familia" style={formStyle("calc(20% - 5px)", "5px")}>
+        <Form.Item label="Familia" style={formStyle("calc(50% - 5px)", "5px")}>
           <Cascader
+            disabled={value === 1}
             showSearch={{ filter: searchOptions }}
             style={{ width: "100%" }}
             options={options}
@@ -195,23 +214,25 @@ export const Impact: React.FC = () => {
         </Form.Item>
         <Form.Item
           label="Família Selecionada"
-          style={formStyle("calc(20% - 5px)", "5px")}
+          style={formStyle("calc(33.33% - 5px)", "5px")}
         >
           <Select />
         </Form.Item>
         <Form.Item
           label="Processo de liberação"
-          style={formStyle("calc(20% - 5px)", "5px")}
+          style={formStyle("calc(33.33% - 5px)", "5px")}
         >
           <Select />
         </Form.Item>
-        <Form.Item
-          label="Processo impactado"
-          style={formStyle("20%")}
-        >
+        <Form.Item label="Processo impactado" style={formStyle("33.33%")}>
           <Select />
         </Form.Item>
       </Card>
+      <div style={{ float: "right", marginTop: 10 }}>
+        <Button type="primary" icon={<SaveOutlined />}>
+          Salvar
+        </Button>
+      </div>
     </Form>
   );
 };

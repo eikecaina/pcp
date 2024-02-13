@@ -152,25 +152,6 @@ const PcpProcessResources: React.FC = () => {
             <div>
               <Form layout="vertical">
                 <Form.Item
-                  label={t("labels.quotation")}
-                  style={{
-                    margin: "0 16px 0 0",
-                    display: "inline-block",
-                    width: "calc(50% - 8px)",
-                  }}
-                >
-                  <Select></Select>
-                </Form.Item>
-                <Form.Item
-                  label={t("labels.client")}
-                  style={{
-                    display: "inline-block",
-                    width: "calc(50% - 8px)",
-                  }}
-                >
-                  <Input />
-                </Form.Item>
-                <Form.Item
                   label="Controle"
                   style={{
                     display: "inline-block",
@@ -189,6 +170,26 @@ const PcpProcessResources: React.FC = () => {
                 >
                   <Input />
                 </Form.Item>
+                <Form.Item
+                  label={t("labels.quotation")}
+                  style={{
+                    margin: "0 16px 0 0",
+                    display: "inline-block",
+                    width: "calc(50% - 8px)",
+                  }}
+                >
+                  <Select></Select>
+                </Form.Item>
+                <Form.Item
+                  label={t("labels.client")}
+                  style={{
+                    display: "inline-block",
+                    width: "calc(50% - 8px)",
+                  }}
+                >
+                  <Input />
+                </Form.Item>
+
                 <Form.Item label={t("labels.processResource")}>
                   <Select
                     style={{

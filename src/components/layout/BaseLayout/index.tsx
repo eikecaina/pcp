@@ -11,7 +11,7 @@ export const BaseLayout: React.FC = ({ children }) => {
   return (
     <Styled.Wrapper>
       <Styled.PlacedHeader />
-      <Styled.PlacedSider />
+      {/*<Styled.PlacedSider />*/}
       <Styled.ContentWrapper>
         <React.Suspense
           fallback={

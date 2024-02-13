@@ -7,6 +7,9 @@ import ValueSettings from "./ValueSettings";
 import ProcessSettings from "./ProcessSettings";
 import ResourceSettings from "./ResourceSettings";
 import { CriticalMaterials } from "./CriticalMaterials";
+import { Connections } from "./Connections";
+import SubResource from "./Subresource";
+
 
 const items: TabsProps["items"] = [
   {
@@ -37,7 +40,7 @@ const items: TabsProps["items"] = [
   {
     key: "6",
     label: "Ligações",
-    children: "Ligações",
+    children: <Connections />,
   },
   {
     key: "7",
@@ -47,7 +50,7 @@ const items: TabsProps["items"] = [
   {
     key: "8",
     label: "Sub-Recurso",
-    children: "Sub-Recurso",
+    children: <SubResource/>,
   },
   {
     key: "9",
