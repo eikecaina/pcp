@@ -228,16 +228,19 @@ export const ProductConfig: React.FC = () => {
         }}
       >
         <Button
-          style={{ width: "30%" }}
+          style={{ width: "24%" }}
           onClick={openModalConfig}
           type="primary"
         >
           {t("generalButtons.configButton")}
         </Button>
-        <Button style={{ width: "30%" }} type="primary">
+        <Button style={{ width: "24%" }} type="primary">
           {t("generalButtons.calcButton")}
         </Button>
-        <Button style={{ width: "30%" }} type="primary">
+        <Button style={{ width: "24%" }} type="primary">
+          Consumir
+        </Button>
+        <Button style={{ width: "24%" }} type="primary">
           {t("generalButtons.saveButton")}
         </Button>
       </div>

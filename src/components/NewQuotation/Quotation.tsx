@@ -8,7 +8,7 @@ const Quotation: React.FC = () => {
 
   return (
     <Row gutter={10} style={{ height: "100%" }}>
-      <Col span={9}>
+      <Col span={10}>
         <Card style={{ height: "100%" }} bodyStyle={{ padding: 0 }}>
           <Divider orientation="left">{t("titles.itensConfig")}</Divider>
           <GeneralData />
@@ -16,7 +16,7 @@ const Quotation: React.FC = () => {
           <FloatMenu />
         </Card>
       </Col>
-      <Col span={15}>
+      <Col span={14}>
         <div style={{ overflowY: "auto", width: "100%", height: "100%" }}>
           <Resume />
         </div>
