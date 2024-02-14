@@ -52,7 +52,11 @@ const ProcessSettings: React.FC = () => {
       <Form layout="vertical">
         <Row gutter={10}>
           <Col span={9}>
-            <Card style={{ height: "420px" }} title="Definição" bodyStyle={{ padding: 10 }}>
+            <Card
+              style={{ height: "420px" }}
+              title="Definição"
+              bodyStyle={{ padding: 10 }}
+            >
               <Form.Item
                 style={formStyle("calc(100% - 8px)", "8px")}
                 label="Nome"
@@ -106,7 +110,7 @@ const ProcessSettings: React.FC = () => {
                   <Radio value={3}>Tempo por característica</Radio>
                   {valueTime === 2 ? (
                     <Form.Item
-                      style={{ width: "100%", marginTop: 20 }}
+                      style={{ width: "60%", marginTop: 20 }}
                       label="Família"
                     >
                       <Select showSearch />
@@ -125,7 +129,7 @@ const ProcessSettings: React.FC = () => {
                           <>
                             <div
                               style={{
-                                height: "217px",
+                                height: "250px",
                                 overflowX: "auto",
                               }}
                             >
