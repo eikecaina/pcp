@@ -52,7 +52,7 @@ const ProcessSettings: React.FC = () => {
       <Form layout="vertical">
         <Row gutter={10}>
           <Col span={9}>
-            <Card title="Definição" bodyStyle={{ padding: 10 }}>
+            <Card style={{ height: "420px" }} title="Definição" bodyStyle={{ padding: 10 }}>
               <Form.Item
                 style={formStyle("calc(100% - 8px)", "8px")}
                 label="Nome"
@@ -87,7 +87,7 @@ const ProcessSettings: React.FC = () => {
 
           <Col span={15}>
             <Card
-              style={{ height: "373px" }}
+              style={{ height: "420px" }}
               title="Definição por tempo"
               bodyStyle={{ padding: 10, height: "100%" }}
             >
