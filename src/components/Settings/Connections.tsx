@@ -170,7 +170,7 @@ export const Connections: React.FC = () => {
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
-        width={800}
+        width={850}
       >
         <div style={{ display: "flex", margin: "15px 0px 0px 0px" }}>
           <div style={{ marginRight: 15 }}>
@@ -231,7 +231,7 @@ export const Connections: React.FC = () => {
         open={isModalExitOpen}
         onOk={handleOkExit}
         onCancel={handleCancelExit}
-        width={800}
+        width={850}
       >
         <div style={{ display: "flex", margin: "15px 0px 0px 0px" }}>
           <div style={{ marginRight: 15 }}>
@@ -262,7 +262,7 @@ export const Connections: React.FC = () => {
                 </Form.Item>
                 <Form.Item>
                   <Radio value={2}>
-                    Finalização do processo{" "}
+                    Finalização do processo
                     <DatePicker
                       disabled={valueRadioModal === 1}
                       format={"DD/MM/YYYY"}

@@ -16,6 +16,7 @@
     "@emotion/core": "^11.0.0",
     "@emotion/react": "^11.1.5",
     "@emotion/styled": "^11.1.5",
+    "@types/pg": "^8.11.0",
     "@vercel/postgres": "^0.7.2",
     "@vitejs/plugin-react-swc": "^3.4.1",
     "@wmo-dev/language-selector": "^1.2.1",

@@ -11,6 +11,8 @@ import {
   RadioChangeEvent,
   Row,
   Select,
+  Tabs,
+  TabsProps,
   Tree,
 } from "antd";
 import React, { useState } from "react";
@@ -26,24 +28,21 @@ import { searchOptions } from "./SearchFilter";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 
 export const CriticalMaterials: React.FC = () => {
-  const [value, setValue] = useState(1);
-
-  const onChange = (e: RadioChangeEvent) => {
-    setValue(e.target.value);
-  };
+  const items: TabsProps["items"] = [
+    {
+      key: "1",
+      label: "Material",
+      children: <Material />,
+    },
+    {
+      key: "2",
+      label: "Impacto",
+      children: <Impact />,
+    },
+  ];
   return (
     <>
-      <Radio.Group value={value} optionType="button" buttonStyle="solid">
-        <Radio value={1} onChange={onChange}>
-          Material
-        </Radio>
-        <Radio value={2} onChange={onChange}>
-          Impacto
-        </Radio>
-      </Radio.Group>
-
-      {value === 1 ? <Material /> : null}
-      {value === 2 ? <Impact /> : null}
+      <Tabs type="line" defaultActiveKey="1" items={items} />
     </>
   );
 };
