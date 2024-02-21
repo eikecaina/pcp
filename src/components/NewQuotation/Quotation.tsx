@@ -1,5 +1,5 @@
 import { Button, Card, Col, Divider, Row } from "antd";
-import { FloatMenu, GeneralData, ProductConfig } from "./ItensConfig";
+import { FloatMenu, GeneralData } from "./ItensConfig";
 import Resume from "./Resume";
 import { useTranslation } from "next-i18next";
 
@@ -12,7 +12,6 @@ const Quotation: React.FC = () => {
         <Card style={{ height: "100%" }} bodyStyle={{ padding: 0 }}>
           <Divider orientation="left">{t("titles.itensConfig")}</Divider>
           <GeneralData />
-          <ProductConfig />
           <FloatMenu />
         </Card>
       </Col>

@@ -23,8 +23,8 @@ import {
   Tooltip,
   message,
 } from "antd";
-import axios from 'axios';
-import React, { useState } from "react";
+import axios from "axios";
+import React, { ChangeEvent, useState } from "react";
 
 import ConfigModal from "./ConfigModal/ConfigModal";
 import PcpPage from "components/Pcp/PcpPage";
@@ -81,100 +81,6 @@ export const GeneralData: React.FC = () => {
       onOk: removeOptions,
     });
   };
-  const { t } = useTranslation("layout");
-
-  const [formData, setFormData] = useState();
-  const handleFormSubmit = async () => {
-    try {
-      const response = await axios.post('http://localhost:3000/api/route', formData);
-      console.log('Response:', response.data);
-    } catch (error) {
-      console.log('Erro', error)
-    }
-  };
-
-  return (
-    <Row style={{ padding: 10 }}>
-      <Form layout="vertical" onFinish={handleFormSubmit}>
-        <Form.Item
-        name='item'
-          style={{
-            display: "inline-block",
-            width: "calc(50% - 8px)",
-          }}
-          label={t("labels.client")}
-          rules={[{ required: true, message: "Por favor, insira o Cliente!" }]}
-        >
-          <Space.Compact style={{ width: "100%" }}>
-            <Input />
-            <Tooltip title="Abrir Cotação">
-              <Button
-                type="primary"
-                style={{ borderRadius: 3 }}
-                onClick={handleOpenModal}
-              >
-                <SearchOutlined />
-              </Button>
-            </Tooltip>
-            <SearchQuotation
-              isModalOpen={isModalOpen}
-              setModalIsOpen={setIsModalOpen}
-            />
-          </Space.Compact>
-        </Form.Item>
-
-        <Form.Item
-          style={{
-            display: "inline-block",
-            width: "calc(50% - 8px)",
-            margin: "0 8px",
-          }}
-          label={t("labels.item")}
-        >
-          <Space.Compact style={{ width: "100%" }}>
-            <Tooltip title="Remover Item">
-              <Button type="primary" onClick={confirmDelete}>
-                <MinusOutlined />
-              </Button>
-            </Tooltip>
-
-            <Select
-              value={selectedItem}
-              onChange={(value) => setSelectedItem(value)}
-              options={selectOptions}
-            />
-            <Tooltip title="Adicionar Item">
-              <Button type="primary" onClick={addOptions}>
-                <PlusOutlined />
-              </Button>
-            </Tooltip>
-          </Space.Compact>
-        </Form.Item>
-
-        <Form.Item
-          style={{ display: "inline-block", width: "calc(50% - 8px)" }}
-          label={t("labels.quotation")}
-        >
-          <CustomInputNumber style={{ width: "100%" }} />
-        </Form.Item>
-
-        <Form.Item
-          style={{
-            display: "inline-block",
-            width: "calc(50% - 8px)",
-            margin: "0 8px",
-          }}
-          label={t("labels.salesOrder")}
-        >
-          <CustomInputNumber style={{ width: "100%" }} />
-        </Form.Item>
-      </Form>
-    </Row>
-  );
-};
-
-export const ProductConfig: React.FC = () => {
-  const { t } = useTranslation("layout");
 
   const [showPower, setShowPower] = useState(false);
   const [showVoltage, setShowVoltage] = useState(false);
@@ -195,8 +101,116 @@ export const ProductConfig: React.FC = () => {
     }
   };
 
+  const { t } = useTranslation("layout");
+
+  const [formData, setFormData] = useState({
+    client: "",
+    quotation: 0,
+    salesOrder: 0,
+  });
+
+  const handleSaveClick = async (id: any) => {
+    try {
+      await axios.post(`http://localhost:3000/api/route?id=${id}`, formData);
+      console.log(formData);
+      
+      setFormData({
+        client: '',
+        quotation: 0,
+        salesOrder: 0,
+      });
+    } catch (error) {
+      console.log('Erro ao salvar:', error);
+    }
+  }
+  
+  const handleInputChange = (name: string, value: any) => {
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
   return (
     <>
+      <Row style={{ padding: 10 }}>
+        <Form layout="vertical">
+          <Form.Item
+            name="item"
+            style={{
+              display: "inline-block",
+              width: "calc(50% - 8px)",
+            }}
+            label={t("labels.client")}
+            rules={[
+              { required: true, message: "Por favor, insira o Cliente!" },
+            ]}
+          >
+            <Space.Compact style={{ width: "100%" }}>
+              <Input name="client" value={formData.client} onChange={(e) => handleInputChange("client", e.target.value)} />
+              <Tooltip title="Abrir Cotação">
+                <Button
+                  type="primary"
+                  style={{ borderRadius: 3 }}
+                  onClick={handleOpenModal}
+                >
+                  <SearchOutlined />
+                </Button>
+              </Tooltip>
+              <SearchQuotation
+                isModalOpen={isModalOpen}
+                setModalIsOpen={setIsModalOpen}
+              />
+            </Space.Compact>
+          </Form.Item>
+
+          <Form.Item
+            style={{
+              display: "inline-block",
+              width: "calc(50% - 8px)",
+              margin: "0 8px",
+            }}
+            label={t("labels.item")}
+          >
+            <Space.Compact style={{ width: "100%" }}>
+              <Tooltip title="Remover Item">
+                <Button type="primary" onClick={confirmDelete}>
+                  <MinusOutlined />
+                </Button>
+              </Tooltip>
+
+              <Select
+                value={selectedItem}
+                onChange={(value) => setSelectedItem(value)}
+                options={selectOptions}
+              />
+              <Tooltip title="Adicionar Item">
+                <Button type="primary" onClick={addOptions}>
+                  <PlusOutlined />
+                </Button>
+              </Tooltip>
+            </Space.Compact>
+          </Form.Item>
+
+          <Form.Item
+            style={{ display: "inline-block", width: "calc(50% - 8px)" }}
+            label={t("labels.quotation")}
+          >
+            <CustomInputNumber name="quotation" value={formData.quotation} onChange={(value) => handleInputChange("quotation", value)} style={{ width: "100%" }} />
+          </Form.Item>
+
+          <Form.Item
+            style={{
+              display: "inline-block",
+              width: "calc(50% - 8px)",
+              margin: "0 8px",
+            }}
+            label={t("labels.salesOrder")}
+          >
+            <CustomInputNumber name="salesOrder" value={formData.salesOrder} onChange={(value) => handleInputChange("salesOrder", value)} style={{ width: "100%" }} />
+          </Form.Item>
+        </Form>
+      </Row>
       <Divider orientation="left" style={{ marginTop: "10px 0 0px 0" }}>
         {t("titles.productConfig")}
       </Divider>
@@ -253,7 +267,12 @@ export const ProductConfig: React.FC = () => {
         <Button style={{ width: "24%" }} type="primary">
           Consumir
         </Button>
-        <Button htmlType="submit" style={{ width: "24%" }} type="primary">
+        <Button
+          htmlType="submit"
+          onClick={handleSaveClick}
+          style={{ width: "24%" }}
+          type="primary"
+        >
           {t("generalButtons.saveButton")}
         </Button>
       </div>
