@@ -19,7 +19,7 @@ const items: TabsProps["items"] = [
   },
   {
     key: "2",
-    label: "Familias",
+    label: "Famílias",
     children: <FamilySttings />,
   },
   {
@@ -54,7 +54,7 @@ const items: TabsProps["items"] = [
   },
   {
     key: "9",
-    label: "Materias Críticos",
+    label: "Materiais Críticos",
     children: <CriticalMaterials />,
   },
   {
