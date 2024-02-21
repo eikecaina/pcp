@@ -255,7 +255,7 @@ const PcpData: React.FC = () => {
                       width: "100%",
                       display: "flex",
                       alignContent: "center",
-                      justifyContent: "space-evenly",
+                      justifyContent: "space-between",
                     }}
                   >
                     <Button
@@ -265,6 +265,14 @@ const PcpData: React.FC = () => {
                       }}
                     >
                       {t("generalButtons.deleteButton")}
+                    </Button>
+                    <Button
+                      type="primary"
+                      style={{
+                        width: "calc(30% - 8px)",
+                      }}
+                    >
+                      Recalcular
                     </Button>
                     <Button
                       type="primary"

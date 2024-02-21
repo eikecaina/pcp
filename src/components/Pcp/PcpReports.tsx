@@ -114,7 +114,7 @@ const Reports: React.FC = () => {
               type="primary"
               icon={<FileExcelOutlined />}
             >
-              Gerar XML
+              Gerar Excel
             </Button>
           </Form>
         </Card>

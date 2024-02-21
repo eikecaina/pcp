@@ -127,7 +127,7 @@ const PlanningMap: React.FC = () => {
           }}
         >
           <Form.Item label="Modelo" style={{ width: "33.33%" }}>
-            <Select defaultValue={"Mapa 1"} options={[{ value: "Mapa 1" }]} />
+            <Select disabled={!isDisableInput} defaultValue={"Mapa 1"} options={[{ value: "Mapa 1" }]} />
           </Form.Item>
           <Form.Item
             label="Data"

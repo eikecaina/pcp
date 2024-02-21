@@ -23,6 +23,7 @@ import {
   Tooltip,
   message,
 } from "antd";
+import axios from 'axios';
 import React, { useState } from "react";
 
 import ConfigModal from "./ConfigModal/ConfigModal";
@@ -81,10 +82,22 @@ export const GeneralData: React.FC = () => {
     });
   };
   const { t } = useTranslation("layout");
+
+  const [formData, setFormData] = useState();
+  const handleFormSubmit = async () => {
+    try {
+      const response = await axios.post('http://localhost:3000/api/route', formData);
+      console.log('Response:', response.data);
+    } catch (error) {
+      console.log('Erro', error)
+    }
+  };
+
   return (
     <Row style={{ padding: 10 }}>
-      <Form layout="vertical">
+      <Form layout="vertical" onFinish={handleFormSubmit}>
         <Form.Item
+        name='item'
           style={{
             display: "inline-block",
             width: "calc(50% - 8px)",
@@ -240,7 +253,7 @@ export const ProductConfig: React.FC = () => {
         <Button style={{ width: "24%" }} type="primary">
           Consumir
         </Button>
-        <Button style={{ width: "24%" }} type="primary">
+        <Button htmlType="submit" style={{ width: "24%" }} type="primary">
           {t("generalButtons.saveButton")}
         </Button>
       </div>

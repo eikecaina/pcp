@@ -1,21 +1,21 @@
-import { NextApiRequest, NextApiResponse } from "next";
+import { NextApiRequest, NextApiResponse } from 'next';
+import fs from 'fs';
+
+const dataFilePath = './data.json';
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
-  if (req.method === "GET") {
-    // Se o método da solicitação for GET, retornamos a mensagem "Hello"
-    res.status(200).json({ message: "GET" });
-  } else if (req.method === "DELETE") {
-    // Se o método da solicitação for DELETE, retornamos a mensagem "Hello"
-    res.status(200).json({ message: "DELETE" });
-  } else if (req.method === "PUT") {
-    // Se o método da solicitação for PUT, retornamos a mensagem "Hello"
-    res.status(200).json({ message: "PUT" });
-  } else if (req.method === "POST") {
-    res.status(200).json({ message: "POST" });
+  if (req.method === "POST") {
+    const formData = req.body;
+    fs.writeFile(dataFilePath, JSON.stringify(formData), (err) => {
+      if (err) {
+        console.error('Erro ao salvar os dados do formulário:', err);
+        res.status(500).json({ error: "Erro ao salvar os dados do formulário" });
+        return;
+      }
+      console.log('Dados do formulário salvos com sucesso.');
+      res.status(200).json({ message: "Dados do formulário salvos com sucesso!" });
+    });
   } else {
     res.status(405).json({ error: "Method Not Allowed" });
   }
 }
-
-
-

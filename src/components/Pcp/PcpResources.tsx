@@ -68,7 +68,7 @@ const PcpResources: React.FC = () => {
           </Form.Item>
         </Form>
 
-          <Col style={{ height: 670 }}>
+          <Col style={{ height: 580 }}>
             <BarGraph />
           </Col>
         

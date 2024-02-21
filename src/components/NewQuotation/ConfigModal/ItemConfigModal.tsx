@@ -141,12 +141,13 @@ export const DeliveryModal: React.FC = () => {
             {t("generalButtons.cleanButton")}
           </Button>
         </Row>
+        <Checkbox style={{ marginTop: 10 }}>Data de entrega da última peça</Checkbox>
         <div
           style={{
             marginTop: 15,
             overflowY: "auto",
             height: "100%",
-            maxHeight: 257,
+            maxHeight: 147,
             maxWidth: "100%",
           }}
         >

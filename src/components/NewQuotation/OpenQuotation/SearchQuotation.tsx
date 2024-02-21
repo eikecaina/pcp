@@ -107,11 +107,11 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
         <Button key="back" onClick={clearFilters}>
           Limpar Filtros
         </Button>,
-        <Button key="submit" type="primary" onClick={handleOk}>
-          Abrir
-        </Button>,
         <Button key="link" type="primary" onClick={handleOk}>
           Cancelar
+        </Button>,
+        <Button key="submit" type="primary" onClick={handleOk}>
+          Abrir
         </Button>,
       ]}
     >

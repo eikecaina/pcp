@@ -48,7 +48,7 @@ const PcpProcessResources: React.FC = () => {
 
   return (
     <Row gutter={15}>
-      <Col span={12}>
+      <Col span={10}>
         <Card
           bodyStyle={{
             padding: 0,
@@ -239,7 +239,7 @@ const PcpProcessResources: React.FC = () => {
                   type="primary"
                   style={{
                     display: "inline-block",
-                    width: "calc(33.33% - 8px)",
+                    width: "calc(25% - 8px)",
                   }}
                 >
                   {t("generalButtons.newButton")}
@@ -248,7 +248,7 @@ const PcpProcessResources: React.FC = () => {
                   type="primary"
                   style={{
                     display: "inline-block",
-                    width: "calc(33.33% - 8px)",
+                    width: "calc(25% - 8px)",
                   }}
                 >
                   {t("generalButtons.editButton")}
@@ -257,7 +257,7 @@ const PcpProcessResources: React.FC = () => {
                   type="primary"
                   style={{
                     display: "inline-block",
-                    width: "calc(33.33% - 8px)",
+                    width: "calc(25% - 8px)",
                   }}
                 >
                   {t("generalButtons.deleteButton")}
@@ -267,7 +267,7 @@ const PcpProcessResources: React.FC = () => {
           </div>
         </Card>
       </Col>
-      <Col span={12} style={{ height: 245 }}>
+      <Col span={14} style={{ height: 245 }}>
         <BarGraph />
 
         <BarGraph />
