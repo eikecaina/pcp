@@ -20,6 +20,7 @@ import {
   SaveButton,
   SelectRadio,
 } from "./ButtonsComponent";
+import CustomInputNumber from "components/CustomInputNumber";
 
 const ProcessSettings: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -53,7 +54,7 @@ const ProcessSettings: React.FC = () => {
         <Row gutter={10}>
           <Col span={9}>
             <Card
-              style={{ height: "420px" }}
+              style={{ height: "470px" }}
               title="Definição"
               bodyStyle={{ padding: 10 }}
             >
@@ -75,7 +76,7 @@ const ProcessSettings: React.FC = () => {
               >
                 <Select />
               </Form.Item>
-              <Checkbox.Group style={{ width: "100%" }}>
+              <Checkbox.Group style={{ width: "100%", display: 'grid' }}>
                 {options.map((option) => (
                   <Checkbox
                     key={option.value}
@@ -91,7 +92,7 @@ const ProcessSettings: React.FC = () => {
 
           <Col span={15}>
             <Card
-              style={{ height: "420px" }}
+              style={{ height: "470px" }}
               title="Definição por tempo"
               bodyStyle={{ padding: 10, height: "100%" }}
             >
@@ -109,12 +110,43 @@ const ProcessSettings: React.FC = () => {
                   <Radio value={2}>Tempo por família</Radio>
                   <Radio value={3}>Tempo por característica</Radio>
                   {valueTime === 2 ? (
-                    <Form.Item
-                      style={{ width: "60%", marginTop: 20 }}
-                      label="Família"
-                    >
-                      <Select showSearch />
-                    </Form.Item>
+                    <>
+                      <Form.Item
+                        style={{ width: "60%", marginTop: 20 }}
+                        label="Família"
+                      >
+                        <Select showSearch />
+                      </Form.Item>
+                      <div style={{ width: "60%" }}>
+                        <Form.Item label="Periodo" style={{width: '50%'}}>
+                          <Select/>
+                        </Form.Item>
+                        <Form.Item
+                          label="Novo aprovação"
+                          style={formStyle("calc(50% - 5px)", "5px")}
+                        >
+                          <CustomInputNumber style={{ width: "100%" }} />
+                        </Form.Item>
+                        <Form.Item
+                          label="Novo certificado"
+                          style={formStyle("calc(50% - 5px)", "5px")}
+                        >
+                          <CustomInputNumber style={{ width: "100%" }} />
+                        </Form.Item>
+                        <Form.Item
+                          label="Repetição aprovação"
+                          style={formStyle("calc(50% - 5px)", "5px")}
+                        >
+                          <CustomInputNumber style={{ width: "100%" }} />
+                        </Form.Item>
+                        <Form.Item
+                          label="Repetição certificado"
+                          style={formStyle("calc(50% - 5px)", "5px")}
+                        >
+                          <CustomInputNumber style={{ width: "100%" }} />
+                        </Form.Item>
+                      </div>
+                    </>
                   ) : null}
                   {valueTime === 3 ? (
                     <Form.Item

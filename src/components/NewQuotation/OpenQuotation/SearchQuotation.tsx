@@ -1,14 +1,16 @@
-
-
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-alpine.min.css";
-import { ColDef, GridApi, IDateFilterParams, ITextFilterParams } from "ag-grid-community";
-import { useMemo, useRef, useState } from "react";
+import {
+  ColDef,
+  GridApi,
+  IDateFilterParams,
+  ITextFilterParams,
+} from "ag-grid-community";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Modal } from "antd";
-import { DataFetcher } from "components/DataFetcherJson";
 import { useTranslation } from "next-i18next";
-import { buttons } from "polished";
+import axios from "axios";
 
 interface SearchQuotationProps {
   isModalOpen: boolean;
@@ -56,7 +58,7 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
     { headerName: "Ordem de Venda", field: "salesOrder" },
     {
       headerName: "Criada em",
-      field: "create",
+      field: "created",
       filter: "agDateColumnFilter",
       filterParams: filterParams,
     },
@@ -79,7 +81,7 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
       flex: 1,
       floatingFilter: true,
       filterParams: {
-        buttons: ['clear'],
+        buttons: ["clear"],
       } as ITextFilterParams,
       suppressMenu: true,
     }),
@@ -94,6 +96,26 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
     setModalIsOpen(false);
   };
   const { t } = useTranslation("layout");
+  const [rowData, setRowData] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("http://localhost:3000/api/route");
+        setRowData(response.data.data);
+      } catch (error) {
+        console.error("Erro ao obter os dados:", error);
+      }
+    };
+    fetchData();
+  }, [isModalOpen]);
+
+  const [selectedRow, setSelectedRow] = useState(null);
+
+  const handleOpen = () => {
+    setSelectedRow(selectedRow);    
+  };
+
   return (
     <Modal
       width={"100%"}
@@ -110,32 +132,30 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
         <Button key="link" type="primary" onClick={handleOk}>
           Cancelar
         </Button>,
-        <Button key="submit" type="primary" onClick={handleOk}>
+        <Button key="submit" type="primary" onClick={handleOpen}>
           Abrir
         </Button>,
       ]}
     >
-      <DataFetcher
-        apiUrl="http://localhost:3000/api/getData"
-        tipo="open-quotation"
-      >
-        {(rowData) => (
-          <div className="ag-theme-alpine" style={containerStyle}>
-            <div style={gridStyle}>
-              <AgGridReact
-                ref={gridRef}
-                pagination={true}
-                rowSelection="multiple"
-                animateRows={true}
-                sideBar={"columns"}
-                rowData={rowData}
-                columnDefs={columnDefs}
-                defaultColDef={defaultColDef}
-              />
-            </div>
-          </div>
-        )}
-      </DataFetcher>
+      <div className="ag-theme-alpine" style={containerStyle}>
+        <div style={gridStyle}>
+          <AgGridReact
+            onRowSelected={(e) => {
+              if (e.node.isSelected()) {
+                setSelectedRow(e.data);
+              }
+            }}
+            ref={gridRef}
+            pagination={true}
+            rowSelection="single"
+            animateRows={true}
+            sideBar={"columns"}
+            rowData={rowData}
+            columnDefs={columnDefs}
+            defaultColDef={defaultColDef}
+          />
+        </div>
+      </div>
     </Modal>
   );
 };

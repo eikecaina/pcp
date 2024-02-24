@@ -4,9 +4,7 @@ import path from "path";
 
 interface Data {
   id: number;
-  client: string;
-  quotation: number;
-  salesOrder: number;
+  [key: string]: string | number;
 }
 
 let savedData: Data[] = [];
@@ -18,9 +16,8 @@ export default async function handler(
 ) {
   switch (req.method) {
     case "POST":
-      const { client, quotation, salesOrder } = req.body;
-      const id = countId++;
-      savedData.push({ id, client, quotation, salesOrder });
+      const { id, ...formData } = req.body;
+      savedData.push({ id: countId++, ...formData });
       saveDataJson(savedData);
       savedData = [];
       res.status(200).json({ message: "Dados salvos com sucesso" });

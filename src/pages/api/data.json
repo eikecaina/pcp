@@ -1,20 +1,26 @@
 [
   {
     "id": 1,
-    "client": "",
-    "quotation": 0,
-    "salesOrder": 0
-  },
-  {
-    "id": 2,
-    "client": "",
-    "quotation": 0,
-    "salesOrder": 0
+    "user": "e-eike",
+    "client": "Teste",
+    "quotation": 123,
+    "salesOrder": 4321,
+    "created": "23/02/2024"
   },
   {
     "id": 1,
-    "client": "teste",
+    "user": "e-eike",
+    "client": "teste213123",
+    "quotation": 213123,
+    "salesOrder": 123123,
+    "created": "23/02/2024"
+  },
+  {
+    "id": 2,
+    "user": "e-eike",
+    "client": "4343",
     "quotation": 123123,
-    "salesOrder": 12421412312
+    "salesOrder": 123123,
+    "created": "23/02/2024"
   }
 ]

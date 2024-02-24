@@ -23,7 +23,6 @@ import {
   Tooltip,
   message,
 } from "antd";
-import axios from "axios";
 import React, { ChangeEvent, useState } from "react";
 
 import ConfigModal from "./ConfigModal/ConfigModal";
@@ -33,6 +32,17 @@ import { useTranslation } from "next-i18next";
 import CustomInputNumber from "components/CustomInputNumber";
 import PlanningMap from "components/MapQuotation/PlanningMap";
 import GeneralSettings from "components/Settings/GeneralSettings";
+import { saveDataForm } from "pages/api/utils/apiUtils";
+import dayjs from "dayjs";
+import axios from "axios";
+
+interface FormData {
+  client: string;
+  quotation: number | null;
+  salesOrder: number | null;
+  created: string;
+  user: string;
+}
 
 export const GeneralData: React.FC = () => {
   const [selectOptions, setSelectOptions] = useState([{ value: "10" }]);
@@ -87,7 +97,7 @@ export const GeneralData: React.FC = () => {
   const [showMaterial, setShowMaterial] = useState(false);
   const [isModalConfigOpen, setIsModalConfigOpen] = useState(false);
 
-  const openModalConfig = () => {
+  const openModalConfig = async () => {
     setIsModalConfigOpen(true);
   };
 
@@ -103,31 +113,45 @@ export const GeneralData: React.FC = () => {
 
   const { t } = useTranslation("layout");
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
+    user: 'e-eike',
     client: "",
-    quotation: 0,
-    salesOrder: 0,
+    quotation: null,
+    salesOrder: null,
+    created: dayjs().format('DD/MM/YYYY'),
   });
+  const [formValid, setValidForm] = useState(false);
+  const [alertInput, setAlertInput] = useState(true);
 
   const handleSaveClick = async (id: any) => {
-    try {
-      await axios.post(`http://localhost:3000/api/route?id=${id}`, formData);
-      console.log(formData);
-      
-      setFormData({
-        client: '',
-        quotation: 0,
-        salesOrder: 0,
-      });
-    } catch (error) {
-      console.log('Erro ao salvar:', error);
+    setValidForm(true);
+    if (
+      formData.client !== "" &&
+      formData.quotation !== null &&
+      formData.salesOrder !== null
+    ) {
+      const success = await saveDataForm(id, formData);
+      if (success) {
+        setFormData({
+          user: 'e-eike',
+          client: "",
+          quotation: null,
+          salesOrder: null,
+          created: dayjs().format('DD/MM/YYYY'),
+        });
+        setValidForm(false);
+        message.success("Nova cotação criada");
+      }
+    } else {
+      setAlertInput(false);
+      message.info("Preencha os campos");
     }
-  }
-  
-  const handleInputChange = (name: string, value: any) => {
+  };
+
+  const handleInputChange = (name: string, value: string | number | null) => {
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
     });
   };
 
@@ -137,17 +161,23 @@ export const GeneralData: React.FC = () => {
         <Form layout="vertical">
           <Form.Item
             name="item"
+            required={alertInput === false}
             style={{
               display: "inline-block",
               width: "calc(50% - 8px)",
             }}
             label={t("labels.client")}
-            rules={[
-              { required: true, message: "Por favor, insira o Cliente!" },
-            ]}
           >
             <Space.Compact style={{ width: "100%" }}>
-              <Input name="client" value={formData.client} onChange={(e) => handleInputChange("client", e.target.value)} />
+              <Input
+                name="client"
+                value={formData.client}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  typeof e.target.value === "string"
+                    ? handleInputChange("client", e.target.value)
+                    : null
+                }
+              />
               <Tooltip title="Abrir Cotação">
                 <Button
                   type="primary"
@@ -195,8 +225,18 @@ export const GeneralData: React.FC = () => {
           <Form.Item
             style={{ display: "inline-block", width: "calc(50% - 8px)" }}
             label={t("labels.quotation")}
+            required={alertInput === false}
           >
-            <CustomInputNumber name="quotation" value={formData.quotation} onChange={(value) => handleInputChange("quotation", value)} style={{ width: "100%" }} />
+            <CustomInputNumber
+              name="quotation"
+              value={formData.quotation}
+              onChange={(value) =>
+                typeof value === "number"
+                  ? handleInputChange("quotation", value)
+                  : handleInputChange("quotation", null)
+              }
+              style={{ width: "100%" }}
+            />
           </Form.Item>
 
           <Form.Item
@@ -206,8 +246,18 @@ export const GeneralData: React.FC = () => {
               margin: "0 8px",
             }}
             label={t("labels.salesOrder")}
+            required={alertInput === false}
           >
-            <CustomInputNumber name="salesOrder" value={formData.salesOrder} onChange={(value) => handleInputChange("salesOrder", value)} style={{ width: "100%" }} />
+            <CustomInputNumber
+              name="salesOrder"
+              value={formData.salesOrder}
+              onChange={(value) =>
+                typeof value === "number"
+                  ? handleInputChange("salesOrder", value)
+                  : handleInputChange("salesOrder", null)
+              }
+              style={{ width: "100%" }}
+            />
           </Form.Item>
         </Form>
       </Row>
