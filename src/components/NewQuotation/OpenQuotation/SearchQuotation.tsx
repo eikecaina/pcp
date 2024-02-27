@@ -8,13 +8,15 @@ import {
   ITextFilterParams,
 } from "ag-grid-community";
 import { useEffect, useMemo, useRef, useState } from "react";
-import { Button, Modal } from "antd";
+import { Button, Modal, Spin } from "antd";
 import { useTranslation } from "next-i18next";
 import axios from "axios";
+import Loading from "components/Loading";
 
 interface SearchQuotationProps {
   isModalOpen: boolean;
   setModalIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onRowSelect: (rowData: any) => void;
 }
 
 const filterParams: IDateFilterParams = {
@@ -49,6 +51,7 @@ const filterParams: IDateFilterParams = {
 const SearchQuotation: React.FC<SearchQuotationProps> = ({
   isModalOpen,
   setModalIsOpen,
+  onRowSelect,
 }) => {
   const gridRef = useRef<AgGridReact>(null);
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
@@ -110,10 +113,22 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
     fetchData();
   }, [isModalOpen]);
 
-  const [selectedRow, setSelectedRow] = useState(null);
+  const [selectedRow, setSelectedRow] = useState<any[] | null>(null);
+  const [loading, setLoading] = useState(false);
 
   const handleOpen = () => {
-    setSelectedRow(selectedRow);    
+    setLoading(true);
+    onRowSelect(selectedRow);
+    setTimeout(() => {
+      setLoading(false);
+      setModalIsOpen(false);
+    }, 1000);
+  };
+
+  const handleRowSelected = () => {
+    const selectedNodes = gridRef.current?.api.getSelectedNodes();
+    const selectedData = selectedNodes?.map((node) => node.data) ?? [];
+    setSelectedRow(selectedData);
   };
 
   return (
@@ -140,11 +155,7 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
       <div className="ag-theme-alpine" style={containerStyle}>
         <div style={gridStyle}>
           <AgGridReact
-            onRowSelected={(e) => {
-              if (e.node.isSelected()) {
-                setSelectedRow(e.data);
-              }
-            }}
+            onRowSelected={handleRowSelected}
             ref={gridRef}
             pagination={true}
             rowSelection="single"
@@ -156,6 +167,7 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
           />
         </div>
       </div>
+      {loading && <Loading />}
     </Modal>
   );
 };

@@ -34,7 +34,6 @@ import PlanningMap from "components/MapQuotation/PlanningMap";
 import GeneralSettings from "components/Settings/GeneralSettings";
 import { saveDataForm } from "pages/api/utils/apiUtils";
 import dayjs from "dayjs";
-import axios from "axios";
 
 interface FormData {
   client: string;
@@ -114,11 +113,11 @@ export const GeneralData: React.FC = () => {
   const { t } = useTranslation("layout");
 
   const [formData, setFormData] = useState<FormData>({
-    user: 'e-eike',
+    user: "e-eike",
     client: "",
     quotation: null,
     salesOrder: null,
-    created: dayjs().format('DD/MM/YYYY'),
+    created: dayjs().format("DD/MM/YYYY"),
   });
   const [formValid, setValidForm] = useState(false);
   const [alertInput, setAlertInput] = useState(true);
@@ -133,11 +132,11 @@ export const GeneralData: React.FC = () => {
       const success = await saveDataForm(id, formData);
       if (success) {
         setFormData({
-          user: 'e-eike',
+          user: "e-eike",
           client: "",
           quotation: null,
           salesOrder: null,
-          created: dayjs().format('DD/MM/YYYY'),
+          created: dayjs().format("DD/MM/YYYY"),
         });
         setValidForm(false);
         message.success("Nova cotação criada");
@@ -145,6 +144,19 @@ export const GeneralData: React.FC = () => {
     } else {
       setAlertInput(false);
       message.info("Preencha os campos");
+    }
+  };
+
+  const handleRowSelect = (selectedData: any[]) => {
+    if (selectedData && selectedData.length > 0) {
+      const selectedRowData = selectedData[0];
+      setFormData({
+        user: selectedRowData.user || "",
+        client: selectedRowData.client || "",
+        quotation: selectedRowData.quotation || null,
+        salesOrder: selectedRowData.salesOrder || null,
+        created: selectedRowData.created || "",
+      });
     }
   };
 
@@ -172,11 +184,7 @@ export const GeneralData: React.FC = () => {
               <Input
                 name="client"
                 value={formData.client}
-                onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                  typeof e.target.value === "string"
-                    ? handleInputChange("client", e.target.value)
-                    : null
-                }
+                onChange={(e) => handleInputChange("client", e.target.value)}
               />
               <Tooltip title="Abrir Cotação">
                 <Button
@@ -188,6 +196,7 @@ export const GeneralData: React.FC = () => {
                 </Button>
               </Tooltip>
               <SearchQuotation
+                onRowSelect={handleRowSelect}
                 isModalOpen={isModalOpen}
                 setModalIsOpen={setIsModalOpen}
               />
