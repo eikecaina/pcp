@@ -6,9 +6,11 @@ import {
   Col,
   DatePicker,
   Divider,
+  Dropdown,
   Form,
   Input,
   List,
+  MenuProps,
   Radio,
   Row,
   Select,
@@ -37,6 +39,18 @@ const PcpData: React.FC = () => {
   };
 
   const { t } = useTranslation("layout");
+
+  const onMenuClick: MenuProps["onClick"] = (e) => {
+    console.log("click", e);
+  };
+
+  const items = [
+    {
+      key: "1",
+      label: "Recalcular todas as entregas",
+    },
+  ];
+
   return (
     <Row gutter={6}>
       <Col span={8}>
@@ -266,14 +280,7 @@ const PcpData: React.FC = () => {
                     >
                       {t("generalButtons.deleteButton")}
                     </Button>
-                    <Button
-                      type="primary"
-                      style={{
-                        width: "calc(30% - 8px)",
-                      }}
-                    >
-                      Recalcular
-                    </Button>
+
                     <Button
                       type="primary"
                       style={{
@@ -282,6 +289,16 @@ const PcpData: React.FC = () => {
                     >
                       {t("generalButtons.confirmButton")}
                     </Button>
+
+                    <Dropdown.Button
+                      type="primary"
+                      style={{
+                        width: "calc(22% - 8px)",
+                      }}
+                      menu={{ items, onClick: onMenuClick }}
+                    >
+                      Recalcular
+                    </Dropdown.Button>
                   </div>
                 </div>
               </>

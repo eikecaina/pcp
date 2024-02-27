@@ -159,13 +159,13 @@ const Reports: React.FC = () => {
       </div>
 
       <Modal
-        title="Digite o nome do arquivo"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
+        okText="Gerar"
       >
         <Form layout="vertical">
-          <Form.Item label="Digite o nome">
+          <Form.Item label="Digite o nome do arquivo">
             <Input value={inputValue} onChange={handleInputChange} />
           </Form.Item>
         </Form>
