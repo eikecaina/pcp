@@ -324,7 +324,7 @@ export const GeneralData: React.FC = () => {
           {t("generalButtons.calcButton")}
         </Button>
         <Button style={{ width: "24%" }} type="primary">
-          Consumir
+          {t("generalButtons.consumeButton")}
         </Button>
         <Button
           htmlType="submit"

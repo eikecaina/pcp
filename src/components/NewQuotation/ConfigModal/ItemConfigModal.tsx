@@ -28,9 +28,9 @@ export const ItemConfigModal: React.FC = () => {
           value={disabelInput}
         >
           <Space direction="vertical" style={{ marginBottom: 20 }}>
-            <Radio value={1}>Certificado</Radio>
+            <Radio value={1}>{t("labels.cerificate")}</Radio>
             <Radio value={2}>
-              Aprovação em dias corridos{" "}
+              {t("labels.aproved")}
               <CustomInputNumber
                 disabled={disabelInput === 1}
                 min={0}
@@ -41,10 +41,10 @@ export const ItemConfigModal: React.FC = () => {
           </Space>
         </Radio.Group>
         <Form layout="vertical">
-          <Form.Item label="Número do Claim">
+          <Form.Item label={t("labels.claim")}>
             <CustomInputNumber style={{ width: "100%" }} />
           </Form.Item>
-          <Form.Item label="Número do novo material">
+          <Form.Item label={t("labels.newMaterial")}>
             <CustomInputNumber style={{ width: "100%" }} />
           </Form.Item>
           <Form.Item
@@ -53,7 +53,7 @@ export const ItemConfigModal: React.FC = () => {
                 checked={repMaterial}
                 onChange={(e) => setRepMaterial(e.target.checked)}
               >
-                Repetição do material
+              {t("labels.repetition")}
               </Checkbox>
             }
           >
@@ -110,7 +110,7 @@ export const DeliveryModal: React.FC = () => {
     <Card style={{ height: "100%", minHeight: 420 }} bodyStyle={{ padding: 0 }}>
       <Divider orientation="left">{t("titles.deliveries")}</Divider>
       <div style={{ padding: 10 }}>
-        <Form.Item label="Entrega em">
+        <Form.Item label={t("labels.delivery")}>
           <DatePicker
             style={{ width: "100%" }}
             defaultValue={dayjs("00/00/0000", dateFormatList[0])}
@@ -118,8 +118,7 @@ export const DeliveryModal: React.FC = () => {
           />
         </Form.Item>
         <Form.Item
-          label="Quantidade"
-          rules={[{ required: true, message: "Por favor, selecione o Item!" }]}
+          label={t("labels.quantity")}
         >
           <CustomInputNumber style={{ width: "100%" }} />
         </Form.Item>
@@ -141,7 +140,7 @@ export const DeliveryModal: React.FC = () => {
             {t("generalButtons.cleanButton")}
           </Button>
         </Row>
-        <Checkbox style={{ marginTop: 10 }}>Data de entrega da última peça</Checkbox>
+        <Checkbox style={{ marginTop: 10 }}>{t("labels.lastPart")}</Checkbox>
         <div
           style={{
             marginTop: 15,

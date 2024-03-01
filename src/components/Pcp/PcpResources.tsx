@@ -15,7 +15,7 @@ const PcpResources: React.FC = () => {
       <Col span={24}>
         <Form style={{ display: "flex", marginTop: "8px" }}>
           <Form.Item
-            label="Grupos"
+            label={t("labels.group")}
             style={{ display: "inline-block", width: "30%" }}
           >
             <Select
@@ -30,7 +30,7 @@ const PcpResources: React.FC = () => {
           </Form.Item>
 
           <Form.Item
-            label="Recursos"
+            label={t("labels.resource")}
             style={{
               display: "inline-block",
               width: "30%",
@@ -63,7 +63,7 @@ const PcpResources: React.FC = () => {
             style={{ display: "inline-block", width: "6%", marginLeft: 8 }}
           >
             <Button type="primary" icon={<FilterFilled />}>
-              Filtrar
+              {t("generalButtons.filterButton")}
             </Button>
           </Form.Item>
         </Form>

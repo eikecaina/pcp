@@ -54,7 +54,7 @@ const ProcessSettings: React.FC = () => {
         <Row gutter={10}>
           <Col span={9}>
             <Card
-              style={{ height: "470px" }}
+              style={{ height: "440px" }}
               title="Definição"
               bodyStyle={{ padding: 10 }}
             >
@@ -76,7 +76,7 @@ const ProcessSettings: React.FC = () => {
               >
                 <Select />
               </Form.Item>
-              <Checkbox.Group style={{ width: "100%", display: 'grid' }}>
+              <Checkbox.Group style={{ width: "100%", display: "grid" }}>
                 {options.map((option) => (
                   <Checkbox
                     key={option.value}
@@ -92,7 +92,7 @@ const ProcessSettings: React.FC = () => {
 
           <Col span={15}>
             <Card
-              style={{ height: "470px" }}
+              style={{ height: "440px" }}
               title="Definição por tempo"
               bodyStyle={{ padding: 10, height: "100%" }}
             >
@@ -100,26 +100,30 @@ const ProcessSettings: React.FC = () => {
                 <Radio.Group onChange={onChangeTime} value={valueTime}>
                   <Radio value={1}>
                     Tempo Fixo
-                    <DatePicker
+                    <CustomInputNumber
                       disabled={valueTime === 2 || valueTime === 3}
-                      style={{ marginLeft: 5 }}
-                      showTime
-                      format={"DD/MM/YYYY HH:mm:ss"}
+                      style={{ marginLeft: 5, width: "30%" }}
+                      placeholder="0"
+                    />
+                    <Select
+                      disabled={valueTime === 2 || valueTime === 3}
+                      style={{ marginLeft: 5, width: "45%" }}
+                      placeholder="Dia"
                     />
                   </Radio>
                   <Radio value={2}>Tempo por família</Radio>
                   <Radio value={3}>Tempo por característica</Radio>
                   {valueTime === 2 ? (
                     <>
-                      <Form.Item
-                        style={{ width: "60%", marginTop: 20 }}
-                        label="Família"
-                      >
-                        <Select showSearch />
-                      </Form.Item>
-                      <div style={{ width: "60%" }}>
-                        <Form.Item label="Periodo" style={{width: '50%'}}>
-                          <Select/>
+                      <div style={{ width: "40%", marginTop: 40 }}>
+                        <Form.Item
+                          style={formStyle("calc(50% - 5px)", "5px")}
+                          label="Família"
+                        >
+                          <Select showSearch />
+                        </Form.Item>
+                        <Form.Item label="Periodo" style={formStyle("calc(50% - 5px)", "5px")}>
+                          <Select />
                         </Form.Item>
                         <Form.Item
                           label="Novo aprovação"

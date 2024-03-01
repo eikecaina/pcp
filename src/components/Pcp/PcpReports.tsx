@@ -16,10 +16,12 @@ import { ChangeEvent, useState } from "react";
 import { FileExcelOutlined } from "@ant-design/icons";
 import { BarGraph, PieGraph } from "./PcpGraphs";
 import { exportToExcel } from "components/ExportExcel";
+import { useTranslation } from "next-i18next";
 
 const { RangePicker } = DatePicker;
 
 const Reports: React.FC = () => {
+  const { t } = useTranslation("layout");
   const [selectedRadio, setSelectedRadio] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -70,7 +72,7 @@ const Reports: React.FC = () => {
         >
           <Form layout="vertical">
             <Form.Item
-              label="Período"
+              label= {t("labels.period")}
               style={{
                 width: "calc(50% - 8px)",
                 display: "inline-block",
@@ -80,7 +82,7 @@ const Reports: React.FC = () => {
               <RangePicker style={{ width: "100%" }} />
             </Form.Item>
             <Form.Item
-              label="Grupo"
+              label={t("labels.group")}
               style={{ width: "calc(50% - 8px)", display: "inline-block" }}
             >
               <Select
@@ -101,7 +103,7 @@ const Reports: React.FC = () => {
                 label={
                   <>
                     <Radio value={1} />
-                    <span>Processo</span>
+                    <span>{t("labels.process")}</span>
                   </>
                 }
                 style={{
@@ -119,7 +121,7 @@ const Reports: React.FC = () => {
                 label={
                   <>
                     <Radio value={2} />
-                    <span>Recurso</span>
+                    <span>{t("labels.resource")}</span>
                   </>
                 }
                 style={{ width: "calc(50% - 8px)", display: "inline-block" }}
@@ -142,7 +144,7 @@ const Reports: React.FC = () => {
               type="primary"
               icon={<FileExcelOutlined />}
             >
-              Gerar Excel
+              {t("generalButtons.generateButton")}
             </Button>
           </Form>
         </Card>
@@ -165,7 +167,7 @@ const Reports: React.FC = () => {
         okText="Gerar"
       >
         <Form layout="vertical">
-          <Form.Item label="Digite o nome do arquivo">
+          <Form.Item label={t("labels.nameArchive")}>
             <Input value={inputValue} onChange={handleInputChange} />
           </Form.Item>
         </Form>

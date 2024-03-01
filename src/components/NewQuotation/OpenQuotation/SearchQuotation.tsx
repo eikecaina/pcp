@@ -53,14 +53,15 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
   setModalIsOpen,
   onRowSelect,
 }) => {
+  const { t } = useTranslation("layout");
   const gridRef = useRef<AgGridReact>(null);
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
-    { headerName: "Usuário", field: "user" },
-    { headerName: "Cliente", field: "client" },
-    { headerName: "Cotação", field: "quotation" },
-    { headerName: "Ordem de Venda", field: "salesOrder" },
+    { headerName: t("labels.user"), field: "user" },
+    { headerName: t("labels.client"), field: "client" },
+    { headerName: t("labels.quotation"), field: "quotation" },
+    { headerName: t("labels.salesOrder"), field: "salesOrder" },
     {
-      headerName: "Criada em",
+      headerName: t("labels.created"),
       field: "created",
       filter: "agDateColumnFilter",
       filterParams: filterParams,
@@ -98,7 +99,6 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
   const handleCancel = () => {
     setModalIsOpen(false);
   };
-  const { t } = useTranslation("layout");
   const [rowData, setRowData] = useState([]);
 
   useEffect(() => {
@@ -142,13 +142,13 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
       cancelText={t("generalButtons.cancelButton")}
       footer={[
         <Button key="back" onClick={clearFilters}>
-          Limpar Filtros
+          {t("generalButtons.cleanFilters")}
         </Button>,
         <Button key="link" type="primary" onClick={handleOk}>
-          Cancelar
+          {t("generalButtons.cancelButton")}
         </Button>,
         <Button key="submit" type="primary" onClick={handleOpen}>
-          Abrir
+          {t("generalButtons.openButton")}
         </Button>,
       ]}
     >

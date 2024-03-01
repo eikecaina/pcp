@@ -47,7 +47,11 @@
     "dataButton": "Data",
     "processResourcesButton": "Processos e Recursos",
     "reportsButton": "Relatórios",
-    "consolidatedresourcesButton": "Recursos consolidados"
+    "consolidatedresourcesButton": "Recursos consolidados",
+    "consumeButton": "Consumir",
+    "cleanFilters": "Limpar Filtros",
+    "generateButton": "Gerar excel",
+    "filterButton": "Filtrar"
   },
   "titles": {
     "itensConfig": "Configurações de Item",
@@ -87,6 +91,21 @@
     "selectDate": "Selecione a data",
     "control": "Controle",
     "processResource": "Processos e Recursos Consumidos",
-    "secondsConsum": "Consumo em Segundos"
+    "secondsConsum": "Consumo em segundos",
+    "cerificate": "Certificado",
+    "aproved": "Aprovação em dias de calendário",
+    "claim": "Número do pedido",
+    "newMaterial": "Novo número de material",
+    "repetition": "Repetição de material",
+    "delivery": "Entrega em",
+    "quantity": "Quantidade",
+    "lastPart": "Data de entrega da última parte",
+    "user": "Usuário",
+    "created": "Criado em",
+    "recalculateAll": "Recalcular tudo",
+    "period": "Período",
+    "group": "Grupo",
+    "nameArchive": "Nome do arquivo"
+
   }
 }

@@ -47,7 +47,12 @@
     "dataButton": "Data",
     "processResourcesButton": "Processes and Resources",
     "reportsButton": "Reports",
-    "consolidatedresourcesButton": "Consolidated Resources"
+    "consolidatedresourcesButton": "Consolidated Resources",
+    "consumeButton": "Consume",
+    "cleanFilters": "Clean Filters",
+    "recalcButton": "Recalculate",
+    "generateButton": "Generate excel",
+    "filterButton": "Filter"
   },
   "titles": {
     "itensConfig": "Item Setting",
@@ -87,6 +92,20 @@
     "selectDate": "Select the date",
     "control": "Control",
     "processResource": "Processes and Resources Consumed",
-    "secondsConsum": "Consum Seconds"
+    "secondsConsum": "Consum Seconds",
+    "cerificate": "Certificate",
+    "aproved": "Approval on calendar days",
+    "claim": "Claim number",
+    "newMaterial": "New material number",
+    "repetition": "Repetition of material",
+    "delivery": "Delivery in",
+    "quantity": "Quantity",
+    "lastPart": "Last part delivery date",
+    "user": "User",
+    "created": "Created",
+    "recalculateAll": "Recalculate all",
+    "period": "Period",
+    "group": "Group",
+    "nameArchive": "Name archive"
   }
 }

@@ -47,7 +47,7 @@ const PcpData: React.FC = () => {
   const items = [
     {
       key: "1",
-      label: "Recalcular todas as entregas",
+      label: t("labels.recalculateAll"),
     },
   ];
 
@@ -297,7 +297,7 @@ const PcpData: React.FC = () => {
                       }}
                       menu={{ items, onClick: onMenuClick }}
                     >
-                      Recalcular
+                      {t("generalButtons.recalcButton")}
                     </Dropdown.Button>
                   </div>
                 </div>

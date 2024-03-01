@@ -21,6 +21,7 @@ import {
   SelectRadio,
 } from "./ButtonsComponent";
 import { formStyle } from "./Style";
+import CustomInputNumber from "components/CustomInputNumber";
 
 export const Connections: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -71,6 +72,8 @@ export const Connections: React.FC = () => {
   const handleCancelExit = () => {
     setIsModalExitOpen(false);
   };
+
+  const [newRule, setNewRule] = useState(false);
   return (
     <>
       <Form.Item style={{ width: "25%" }} label="Processo">
@@ -82,7 +85,7 @@ export const Connections: React.FC = () => {
             <div style={{ marginTop: 5, width: "100%" }}>
               <RadioButtons value={value} onChange={onChange} />
             </div>
-            <Form disabled={value === 1} layout="vertical">
+            <Form layout="vertical">
               <Form.Item
                 label="Processo Entrada"
                 style={formStyle("calc(50% - 5px)", "5px")}
@@ -94,15 +97,14 @@ export const Connections: React.FC = () => {
               </Form.Item>
               <Form.Item
                 label="Tempo"
-                style={formStyle("calc(50% - 5px)", "5px")}
+                style={formStyle("calc(20% - 5px)", "5px")}
               >
-                <DatePicker
-                  style={{ width: "100%" }}
-                  showTime
-                  format={"DD/MM/YYYY HH:mm:ss"}
-                />
+                <CustomInputNumber style={{ width: "100%" }} placeholder="0" />
               </Form.Item>
-              <Form.Item label="Tipo" style={formStyle("50%")}>
+              <Form.Item label=" " style={formStyle("calc(20% - 5px)", "5px")}>
+                <Select />
+              </Form.Item>
+              <Form.Item label="Tipo" style={formStyle("60%")}>
                 <Select />
               </Form.Item>
               <Form.Item>
@@ -126,7 +128,7 @@ export const Connections: React.FC = () => {
             <div style={{ marginTop: 5, width: "100%" }}>
               <RadioButtons value={exitValue} onChange={onChangeExit} />
             </div>
-            <Form disabled={exitValue === 1} layout="vertical">
+            <Form layout="vertical">
               <Form.Item
                 label="Processo Entrada"
                 style={formStyle("calc(50% - 5px)", "5px")}
@@ -138,15 +140,14 @@ export const Connections: React.FC = () => {
               </Form.Item>
               <Form.Item
                 label="Tempo"
-                style={formStyle("calc(50% - 5px)", "5px")}
+                style={formStyle("calc(20% - 5px)", "5px")}
               >
-                <DatePicker
-                  style={{ width: "100%" }}
-                  showTime
-                  format={"DD/MM/YYYY HH:mm:ss"}
-                />
+                <CustomInputNumber style={{ width: "100%" }} placeholder="0" />
               </Form.Item>
-              <Form.Item label="Tipo" style={formStyle("50%")}>
+              <Form.Item label=" " style={formStyle("calc(20% - 5px)", "5px")}>
+                <Select />
+              </Form.Item>
+              <Form.Item label="Tipo" style={formStyle("60%")}>
                 <Select />
               </Form.Item>
               <Form.Item>
@@ -174,41 +175,29 @@ export const Connections: React.FC = () => {
       >
         <div style={{ display: "flex", margin: "15px 0px 0px 0px" }}>
           <div style={{ marginRight: 15 }}>
-            <RadioButtons
-              value={valueModal}
-              onChange={onChangeModal}
-              type="Regras"
-            />
+            <Button type="primary">Novo</Button>
           </div>
-          <SelectRadio
-            style={formStyle("calc(40% - 2px)", "6px")}
-            value={valueModal}
-            type="Regras"
-          />
-          <Form.Item label="Regra" style={formStyle("40%")}>
-            <Input disabled={valueModal === 2} />
+          <Form.Item label="Regras" style={formStyle("calc(40% - 2px)", "6px")}>
+            <Select />
           </Form.Item>
         </div>
         <Row gutter={10}>
           <Col span={12}>
             <Card title="Condições de entrada" bodyStyle={{ padding: 10 }}>
-              <Radio.Group
-                onChange={onChangeRadioModal}
-                value={valueRadioModal}
-              >
+              <div>
                 <Form.Item>
                   <Radio value={1}>Nenhuma</Radio>
                 </Form.Item>
                 <Form.Item>
                   <Radio value={2}>
-                    Finalização do processo{" "}
+                    Finalização do processo
                     <DatePicker
-                      disabled={valueRadioModal === 1}
+                      style={{ marginLeft: 10 }}
                       format={"DD/MM/YYYY"}
                     />
                   </Radio>
                 </Form.Item>
-              </Radio.Group>
+              </div>
             </Card>
           </Col>
           <Col span={12}>
@@ -216,7 +205,11 @@ export const Connections: React.FC = () => {
               <Form.Item>
                 <Checkbox>
                   Inico
-                  <DatePicker style={{ marginLeft: 10 }} showTime />
+                  <DatePicker
+                    style={{ marginLeft: 10 }}
+                    format={"DD/MM/YYYY"}
+                    showTime
+                  />
                 </Checkbox>
               </Form.Item>
               <Form.Item>
@@ -235,28 +228,16 @@ export const Connections: React.FC = () => {
       >
         <div style={{ display: "flex", margin: "15px 0px 0px 0px" }}>
           <div style={{ marginRight: 15 }}>
-            <RadioButtons
-              value={valueModal}
-              onChange={onChangeModal}
-              type="Regras"
-            />
+            <Button type="primary">Novo</Button>
           </div>
-          <SelectRadio
-            style={formStyle("calc(40% - 2px)", "6px")}
-            value={valueModal}
-            type="Regras"
-          />
-          <Form.Item label="Regra" style={formStyle("40%")}>
-            <Input disabled={valueModal === 2} />
+          <Form.Item label="Regras" style={formStyle("calc(40% - 2px)", "6px")}>
+            <Select />
           </Form.Item>
         </div>
         <Row gutter={10}>
           <Col span={12}>
             <Card title="Condições de entrada" bodyStyle={{ padding: 10 }}>
-              <Radio.Group
-                onChange={onChangeRadioModal}
-                value={valueRadioModal}
-              >
+              <div>
                 <Form.Item>
                   <Radio value={1}>Nenhuma</Radio>
                 </Form.Item>
@@ -264,12 +245,12 @@ export const Connections: React.FC = () => {
                   <Radio value={2}>
                     Finalização do processo
                     <DatePicker
-                      disabled={valueRadioModal === 1}
+                      style={{ marginLeft: 10 }}
                       format={"DD/MM/YYYY"}
                     />
                   </Radio>
                 </Form.Item>
-              </Radio.Group>
+              </div>
             </Card>
           </Col>
           <Col span={12}>
