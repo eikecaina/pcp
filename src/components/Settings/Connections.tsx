@@ -22,6 +22,7 @@ import {
 } from "./ButtonsComponent";
 import { formStyle } from "./Style";
 import CustomInputNumber from "components/CustomInputNumber";
+import { useTranslation } from "next-i18next";
 
 export const Connections: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -73,30 +74,30 @@ export const Connections: React.FC = () => {
     setIsModalExitOpen(false);
   };
 
-  const [newRule, setNewRule] = useState(false);
+  const { t } = useTranslation("layout");
   return (
     <>
-      <Form.Item style={{ width: "25%" }} label="Processo">
+      <Form.Item style={{ width: "25%" }} label={t("labels.process")}>
         <Select />
       </Form.Item>
       <Row gutter={10}>
         <Col span={12}>
-          <Card bodyStyle={{ padding: 10 }} title="Entrada">
+          <Card bodyStyle={{ padding: 10 }} title={t("titles.entry")}>
             <div style={{ marginTop: 5, width: "100%" }}>
               <RadioButtons value={value} onChange={onChange} />
             </div>
             <Form layout="vertical">
               <Form.Item
-                label="Processo Entrada"
+                label={t("labels.entryProcess")}
                 style={formStyle("calc(50% - 5px)", "5px")}
               >
                 <Select />
               </Form.Item>
-              <Form.Item label="Processo Saída" style={formStyle("50%")}>
+              <Form.Item label={t("labels.outputProcess")} style={formStyle("50%")}>
                 <Select />
               </Form.Item>
               <Form.Item
-                label="Tempo"
+                label={t("labels.time")}
                 style={formStyle("calc(20% - 5px)", "5px")}
               >
                 <CustomInputNumber style={{ width: "100%" }} placeholder="0" />
@@ -104,15 +105,15 @@ export const Connections: React.FC = () => {
               <Form.Item label=" " style={formStyle("calc(20% - 5px)", "5px")}>
                 <Select />
               </Form.Item>
-              <Form.Item label="Tipo" style={formStyle("60%")}>
+              <Form.Item label={t("labels.type")} style={formStyle("60%")}>
                 <Select />
               </Form.Item>
               <Form.Item>
-                <Checkbox>Dias Corridos</Checkbox>
+                <Checkbox>{t("labels.elapsedDays")}</Checkbox>
               </Form.Item>
               <Form.Item>
                 <Button onClick={showModal} type="primary">
-                  Regras
+                  {t("labels.rules")}
                 </Button>
               </Form.Item>
               <div style={{ float: "right" }}>
@@ -124,22 +125,22 @@ export const Connections: React.FC = () => {
         </Col>
 
         <Col span={12}>
-          <Card bodyStyle={{ padding: 10 }} title="Saída">
+          <Card bodyStyle={{ padding: 10 }} title={t("titles.output")}>
             <div style={{ marginTop: 5, width: "100%" }}>
               <RadioButtons value={exitValue} onChange={onChangeExit} />
             </div>
             <Form layout="vertical">
               <Form.Item
-                label="Processo Entrada"
+                label={t("labels.entryProcess")}
                 style={formStyle("calc(50% - 5px)", "5px")}
               >
                 <Select />
               </Form.Item>
-              <Form.Item label="Processo Saída" style={formStyle("50%")}>
+              <Form.Item label={t("labels.outputProcess")} style={formStyle("50%")}>
                 <Select />
               </Form.Item>
               <Form.Item
-                label="Tempo"
+                label={t("labels.time")}
                 style={formStyle("calc(20% - 5px)", "5px")}
               >
                 <CustomInputNumber style={{ width: "100%" }} placeholder="0" />
@@ -147,15 +148,15 @@ export const Connections: React.FC = () => {
               <Form.Item label=" " style={formStyle("calc(20% - 5px)", "5px")}>
                 <Select />
               </Form.Item>
-              <Form.Item label="Tipo" style={formStyle("60%")}>
+              <Form.Item label={t("labels.type")} style={formStyle("60%")}>
                 <Select />
               </Form.Item>
               <Form.Item>
-                <Checkbox>Dias Corridos</Checkbox>
+                <Checkbox>{t("labels.elapsedDays")}</Checkbox>
               </Form.Item>
               <Form.Item>
                 <Button onClick={showModalExit} type="primary">
-                  Regras
+                  {t("labels.rules")}
                 </Button>
               </Form.Item>
               <div style={{ float: "right" }}>
@@ -167,7 +168,7 @@ export const Connections: React.FC = () => {
         </Col>
       </Row>
       <Modal
-        title="Ligação de Entrada"
+        title={t("titles.entryCondition")}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
@@ -175,22 +176,22 @@ export const Connections: React.FC = () => {
       >
         <div style={{ display: "flex", margin: "15px 0px 0px 0px" }}>
           <div style={{ marginRight: 15 }}>
-            <Button type="primary">Novo</Button>
+            <Button type="primary">{t("generalButtons.newButton")}</Button>
           </div>
-          <Form.Item label="Regras" style={formStyle("calc(40% - 2px)", "6px")}>
+          <Form.Item label={t("labels.rules")} style={formStyle("calc(40% - 2px)", "6px")}>
             <Select />
           </Form.Item>
         </div>
         <Row gutter={10}>
           <Col span={12}>
-            <Card title="Condições de entrada" bodyStyle={{ padding: 10 }}>
+            <Card title={t("titles.entryAction")} bodyStyle={{ padding: 10 }}>
               <div>
                 <Form.Item>
-                  <Radio value={1}>Nenhuma</Radio>
+                  <Radio value={1}>{t("labels.none")}</Radio>
                 </Form.Item>
                 <Form.Item>
                   <Radio value={2}>
-                    Finalização do processo
+                   {t("labels.completionProcess")}
                     <DatePicker
                       style={{ marginLeft: 10 }}
                       format={"DD/MM/YYYY"}
@@ -201,10 +202,10 @@ export const Connections: React.FC = () => {
             </Card>
           </Col>
           <Col span={12}>
-            <Card title="Ações de saída" bodyStyle={{ padding: 10 }}>
+            <Card title={t("titles.exitAction")} bodyStyle={{ padding: 10 }}>
               <Form.Item>
                 <Checkbox>
-                  Inico
+                  {t("labels.start")}
                   <DatePicker
                     style={{ marginLeft: 10 }}
                     format={"DD/MM/YYYY"}
@@ -213,14 +214,14 @@ export const Connections: React.FC = () => {
                 </Checkbox>
               </Form.Item>
               <Form.Item>
-                <Checkbox>Dias corridos</Checkbox>
+                <Checkbox>{t("labels.elapsedDays")}</Checkbox>
               </Form.Item>
             </Card>
           </Col>
         </Row>
       </Modal>
       <Modal
-        title="Ligação de Saída"
+        title={t("labels.outputCondition")}
         open={isModalExitOpen}
         onOk={handleOkExit}
         onCancel={handleCancelExit}
@@ -228,22 +229,22 @@ export const Connections: React.FC = () => {
       >
         <div style={{ display: "flex", margin: "15px 0px 0px 0px" }}>
           <div style={{ marginRight: 15 }}>
-            <Button type="primary">Novo</Button>
+            <Button type="primary">{t("generalButtons.newButton")}</Button>
           </div>
-          <Form.Item label="Regras" style={formStyle("calc(40% - 2px)", "6px")}>
+          <Form.Item label={t("labels.rules")} style={formStyle("calc(40% - 2px)", "6px")}>
             <Select />
           </Form.Item>
         </div>
         <Row gutter={10}>
           <Col span={12}>
-            <Card title="Condições de entrada" bodyStyle={{ padding: 10 }}>
+            <Card title={t("titles.entryAction")} bodyStyle={{ padding: 10 }}>
               <div>
                 <Form.Item>
-                  <Radio value={1}>Nenhuma</Radio>
+                  <Radio value={1}>{t("labels.none")}</Radio>
                 </Form.Item>
                 <Form.Item>
                   <Radio value={2}>
-                    Finalização do processo
+                    {t("labels.completionProcess")}
                     <DatePicker
                       style={{ marginLeft: 10 }}
                       format={"DD/MM/YYYY"}
@@ -254,15 +255,15 @@ export const Connections: React.FC = () => {
             </Card>
           </Col>
           <Col span={12}>
-            <Card title="Ações de saída" bodyStyle={{ padding: 10 }}>
+            <Card title={t("titles.exitAction")} bodyStyle={{ padding: 10 }}>
               <Form.Item>
                 <Checkbox>
-                  Inico
+                {t("labels.start")}
                   <DatePicker style={{ marginLeft: 10 }} showTime />
                 </Checkbox>
               </Form.Item>
               <Form.Item>
-                <Checkbox>Dias corridos</Checkbox>
+                <Checkbox>{t("labels.elapsedDays")}</Checkbox>
               </Form.Item>
             </Card>
           </Col>

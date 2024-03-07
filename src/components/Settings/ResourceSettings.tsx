@@ -19,6 +19,7 @@ import {
   SaveButton,
   SelectRadio,
 } from "./ButtonsComponent";
+import { useTranslation } from "next-i18next";
 
 const { TextArea } = Input;
 
@@ -28,6 +29,8 @@ const ResourceSettings: React.FC = () => {
   const onChange = (e: RadioChangeEvent) => {
     setValue(e.target.value);
   };
+
+  const {t} = useTranslation("layout");
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -35,11 +38,11 @@ const ResourceSettings: React.FC = () => {
         <div style={{ marginLeft: 15 }}></div>
         <SelectRadio
           style={formStyle("calc(25% - 8px)", "8px")}
-          type="Lista"
+          type={t("labels.list")}
           value={value}
         />
       </div>
-      <Card title="Definição" bodyStyle={{ padding: 10 }}>
+      <Card title={t("titles.definition")} bodyStyle={{ padding: 10 }}>
         <Form layout="vertical">
           <Row gutter={20}>
             <Col span={24}>
@@ -48,25 +51,25 @@ const ResourceSettings: React.FC = () => {
               </Form.Item>
               <Form.Item
                 style={formStyle("calc(25% - 5px)", "5px")}
-                label="Nome"
+                label={t("labels.name")}
               >
                 <Input />
               </Form.Item>
               <Form.Item
                 style={formStyle("calc(25% - 5px)", "5px")}
-                label="Disponibilidade diária"
+                label={t("labels.dailyAvailability")}
               >
                 <Select />
               </Form.Item>
               <Form.Item
                 style={formStyle("calc(25% - 5px)")}
-                label="Calendário"
+                label={t("labels.calendar")}
               >
                 <Select />
               </Form.Item>
               <Form.Item
                 style={formStyle("calc(100% - 5px)", "5px")}
-                label="Descrição"
+                label={t("labels.description")}
               >
                 <TextArea style={{ height: 100, resize: 'none' }}/>
               </Form.Item>

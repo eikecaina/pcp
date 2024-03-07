@@ -26,6 +26,7 @@ import { formStyle } from "./Style";
 import { DataFetcher } from "components/DataFetcherJson";
 import { searchOptions } from "./SearchFilter";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
+import { useTranslation } from "next-i18next";
 
 export const CriticalMaterials: React.FC = () => {
   const items: TabsProps["items"] = [
@@ -59,12 +60,14 @@ export const Material: React.FC = () => {
     setValueMaterial(e.target.value);
   };
 
+  const { t } = useTranslation("layout");
+
   return (
     <>
       <Form style={{ marginTop: 10 }} layout="vertical">
         <Row gutter={10}>
           <Col span={12}>
-            <Card bodyStyle={{ padding: 10 }} title="Características">
+            <Card bodyStyle={{ padding: 10 }} title={t("titles.characteristic")}>
               <div style={{ marginTop: 5, width: "100%" }}>
                 <RadioButtons value={value} onChange={onChange} />
               </div>
@@ -99,7 +102,7 @@ export const Material: React.FC = () => {
               </div>
               <SelectRadio
                 style={formStyle("97%")}
-                type="Nome"
+                type={t("labels.name")}
                 value={value}
                 onChange={onChange}
               />
@@ -112,7 +115,7 @@ export const Material: React.FC = () => {
           <Col span={12}>
             <Card
               style={{ height: 527 }}
-              title="Material Crítico"
+              title={t("titles.criticalMaterial")}
               bodyStyle={{ padding: 10 }}
             >
               <div style={{ marginTop: 5, width: "100%" }}>
@@ -123,15 +126,15 @@ export const Material: React.FC = () => {
               </div>
               <SelectRadio
                 style={formStyle("calc(50% - 5px)", "5px")}
-                type="Material Crítico"
+                type={t("labels.criticalMaterial")}
                 value={valueMaterial}
                 onChange={onChangeMaterial}
               />
-              <Form.Item label="Nome" style={formStyle("50%")}>
+              <Form.Item label={t("labels.name")} style={formStyle("50%")}>
                 <Input />
               </Form.Item>
               <Form.Item
-                label="Prazo (dias)"
+                label={t("labels.days")}
                 style={{
                   width: "calc(30% - 5px)",
                   marginRight: 5,
@@ -142,7 +145,7 @@ export const Material: React.FC = () => {
                 <InputNumber style={{ width: "100%" }} min={1} />
               </Form.Item>
               <Form.Item
-                label="Classe"
+                label={t("labels.class")}
                 style={{
                   width: "70%",
                   display: "inline-block",
@@ -152,7 +155,7 @@ export const Material: React.FC = () => {
                 <Input />
               </Form.Item>
               <Checkbox style={{ marginTop: 5, width: "100%" }}>
-                Prazo sob consulta
+                {t("labels.deadline")}
               </Checkbox>
               <div
                 style={{
@@ -184,10 +187,10 @@ export const Impact: React.FC = () => {
   const handleChange = () => {
     setValue(value === 1 ? 2 : 1);
   };
-
+  const { t } = useTranslation("layout");
   return (
     <Form layout="vertical" style={{ marginTop: 10 }}>
-      <Card title="Definição" bodyStyle={{ padding: 10 }}>
+      <Card title={t("titles.definition")} bodyStyle={{ padding: 10 }}>
         <div>
           <Button
             onClick={handleChange}
@@ -195,13 +198,13 @@ export const Impact: React.FC = () => {
             style={{ margin: "5px 0px 10px 0px" }}
             icon={<EditOutlined />}
           >
-            Editar
+            {t("generalButtons.editButton")}
           </Button>
         </div>
-        <Form.Item style={formStyle("calc(50% - 5px)", "5px")} label="Material">
+        <Form.Item style={formStyle("calc(50% - 5px)", "5px")} label={t("labels.material")}>
           <Select disabled={value === 2} />
         </Form.Item>
-        <Form.Item label="Familia" style={formStyle("calc(50% - 5px)", "5px")}>
+        <Form.Item label={t("labels.family")} style={formStyle("calc(50% - 5px)", "5px")}>
           <Cascader
             disabled={value === 1}
             showSearch={{ filter: searchOptions }}
@@ -212,24 +215,24 @@ export const Impact: React.FC = () => {
           />
         </Form.Item>
         <Form.Item
-          label="Família Selecionada"
+          label={t("labels.selectedFamily")}
           style={formStyle("calc(33.33% - 5px)", "5px")}
         >
           <Select />
         </Form.Item>
         <Form.Item
-          label="Processo de liberação"
+          label={t("labels.realeseProcess")}
           style={formStyle("calc(33.33% - 5px)", "5px")}
         >
           <Select />
         </Form.Item>
-        <Form.Item label="Processo impactado" style={formStyle("33.33%")}>
+        <Form.Item label={t("labels.impactedProcess")} style={formStyle("33.33%")}>
           <Select />
         </Form.Item>
       </Card>
       <div style={{ float: "right", marginTop: 10 }}>
         <Button type="primary" icon={<SaveOutlined />}>
-          Salvar
+         {t("generalButtons.saveButton")}
         </Button>
       </div>
     </Form>

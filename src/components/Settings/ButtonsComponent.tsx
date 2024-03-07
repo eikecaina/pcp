@@ -8,6 +8,7 @@ import {
   Select,
   Tooltip,
 } from "antd";
+import { useTranslation } from "next-i18next";
 import React, { FormEventHandler, MouseEventHandler, useState } from "react";
 
 interface RadioValue {
@@ -29,8 +30,9 @@ export const DeleteButton: React.FC<Buttons> = ({
   onChange: onChange,
   onClick: onClick,
 }) => {
+ const { t } = useTranslation("layout");
   return (
-    <Tooltip title="Excluir">
+    <Tooltip title={t("generalButtons.deleteButton")}>
       <Button
         onChange={onChange}
         onClick={onClick}
@@ -38,7 +40,7 @@ export const DeleteButton: React.FC<Buttons> = ({
         type="primary"
         icon={<DeleteOutlined />}
       >
-        Excluir
+        {t("generalButtons.deleteButton")}
       </Button>
     </Tooltip>
   );
@@ -48,8 +50,9 @@ export const SaveButton: React.FC<Buttons> = ({
   onChange: onChange,
   onClick: onClick,
 }) => {
+  const { t } = useTranslation("layout");
   return (
-    <Tooltip title="Salvar">
+    <Tooltip title={t("generalButtons.saveButton")}>
       <Button
         onChange={onChange}
         onClick={onClick}
@@ -57,7 +60,7 @@ export const SaveButton: React.FC<Buttons> = ({
         type="primary"
         icon={<SaveOutlined />}
       >
-        Salvar
+       {t("generalButtons.saveButton")}
       </Button>
     </Tooltip>
   );
@@ -67,6 +70,7 @@ export const RadioButtons: React.FC<RadioValue> = ({
   value: value,
   onChange: onChange,
 }) => {
+    const { t } = useTranslation("layout");
   return (
     <Radio.Group
       value={value}
@@ -76,8 +80,8 @@ export const RadioButtons: React.FC<RadioValue> = ({
       buttonStyle="solid"
       style={{ marginBottom: 10 }}
     >
-      <Radio value={1}>Novo</Radio>
-      <Radio value={2}>Editar</Radio>
+      <Radio value={1}>{t("generalButtons.newButton")}</Radio>
+      <Radio value={2}>{t("generalButtons.editButton")}</Radio>
     </Radio.Group>
   );
 };

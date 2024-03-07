@@ -18,6 +18,7 @@ import {
   SelectRadio,
 } from "./ButtonsComponent";
 import { useState } from "react";
+import { useTranslation } from "next-i18next";
 
 const FamilySttings: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -25,6 +26,8 @@ const FamilySttings: React.FC = () => {
   const onChange = (e: RadioChangeEvent) => {
     setValue(e.target.value);
   };
+
+  const { t } = useTranslation("layout");
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -32,7 +35,7 @@ const FamilySttings: React.FC = () => {
         <div style={{ marginLeft: 15 }}></div>
         <SelectRadio
           style={formStyle("calc(25% - 8px)", "8px")}
-          type="Lista"
+          type={t("labels.list")}
           value={value}
         />
       </div>
@@ -40,20 +43,20 @@ const FamilySttings: React.FC = () => {
         <div>
           <Row gutter={10}>
             <Col span={24}>
-              <Card title="Definição" bodyStyle={{ padding: 10 }}>
+              <Card title={t("titles.definition")} bodyStyle={{ padding: 10 }}>
                 <Form.Item
                   style={formStyle("calc(33% - 8px", "8px")}
-                  label="Nome"
+                  label={t("labels.name")}
                 >
                   <Input />
                 </Form.Item>
                 <Form.Item
                   style={formStyle("calc(33% - 8px", "8px")}
-                  label="Planejador"
+                  label={t("labels.planner")}
                 >
                   <Input />
                 </Form.Item>
-                <Form.Item style={formStyle("33%")} label="Grupo">
+                <Form.Item style={formStyle("33%")} label={t("labels.group")}>
                   <Select />
                 </Form.Item>
               </Card>
@@ -61,7 +64,7 @@ const FamilySttings: React.FC = () => {
             <Col span={24}>
               <Card
                 style={{ marginTop: 10 }}
-                title="Valores que definem a familia"
+                title={t("titles.valuesFamily")}
                 bodyStyle={{ height: "300px", overflowX: "auto", padding: 5 }}
               >
                 <DataFetcher

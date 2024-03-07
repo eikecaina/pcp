@@ -21,6 +21,7 @@ import {
   SelectRadio,
 } from "./ButtonsComponent";
 import CustomInputNumber from "components/CustomInputNumber";
+import { useTranslation } from "next-i18next";
 
 const ProcessSettings: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -33,10 +34,12 @@ const ProcessSettings: React.FC = () => {
     setValueTime(e.target.value);
   };
 
+  const {t} = useTranslation("layout");
+
   const options = [
-    { label: "Visivel para cotação", value: "Visivel para cotação" },
-    { label: "Atrasar", value: "Atrasar" },
-    { label: "Processo fabril", value: "Processo fabril" },
+    { label: t("labels.visibleQuotations"), value: "Visivel para cotação" },
+    { label: t("labels.dalayer"), value: "Atrasar" },
+    { label: t("labels.manufacturingProcess"), value: "Processo fabril" },
   ];
 
   return (
@@ -46,7 +49,7 @@ const ProcessSettings: React.FC = () => {
         <div style={{ marginLeft: 15 }}></div>
         <SelectRadio
           style={formStyle("calc(25% - 8px)", "8px")}
-          type="Lista"
+          type={t("labels.list")}
           value={value}
         />
       </div>
@@ -55,24 +58,24 @@ const ProcessSettings: React.FC = () => {
           <Col span={9}>
             <Card
               style={{ height: "440px" }}
-              title="Definição"
+              title={t("titles.definition")}
               bodyStyle={{ padding: 10 }}
             >
               <Form.Item
                 style={formStyle("calc(100% - 8px)", "8px")}
-                label="Nome"
+                label={t("labels.name")}
               >
                 <Input />
               </Form.Item>
               <Form.Item
                 style={formStyle("calc(100% - 8px)", "8px")}
-                label="Descrição"
+                label={t("labels.description")}
               >
                 <Input />
               </Form.Item>
               <Form.Item
                 style={formStyle("calc(100% - 8px)", "8px")}
-                label="Calendário"
+                label={t("labels.calendar")}
               >
                 <Select />
               </Form.Item>
@@ -93,13 +96,13 @@ const ProcessSettings: React.FC = () => {
           <Col span={15}>
             <Card
               style={{ height: "440px" }}
-              title="Definição por tempo"
+              title={t("titles.definition")}
               bodyStyle={{ padding: 10, height: "100%" }}
             >
               <Col span={24}>
                 <Radio.Group onChange={onChangeTime} value={valueTime}>
                   <Radio value={1}>
-                    Tempo Fixo
+                  {t("labels.fixedTime")}
                     <CustomInputNumber
                       disabled={valueTime === 2 || valueTime === 3}
                       style={{ marginLeft: 5, width: "30%" }}
@@ -111,40 +114,40 @@ const ProcessSettings: React.FC = () => {
                       placeholder="Dia"
                     />
                   </Radio>
-                  <Radio value={2}>Tempo por família</Radio>
-                  <Radio value={3}>Tempo por característica</Radio>
+                  <Radio value={2}>{t("labels.familyTime")}</Radio>
+                  <Radio value={3}>{t("labels.timeCharacteristic")}</Radio>
                   {valueTime === 2 ? (
                     <>
                       <div style={{ width: "40%", marginTop: 40 }}>
                         <Form.Item
                           style={formStyle("calc(50% - 5px)", "5px")}
-                          label="Família"
+                          label={t("labels.family")}
                         >
                           <Select showSearch />
                         </Form.Item>
-                        <Form.Item label="Periodo" style={formStyle("calc(50% - 5px)", "5px")}>
+                        <Form.Item label={t("labels.period")} style={formStyle("calc(50% - 5px)", "5px")}>
                           <Select />
                         </Form.Item>
                         <Form.Item
-                          label="Novo aprovação"
+                          label={t("labels.newApproval")}
                           style={formStyle("calc(50% - 5px)", "5px")}
                         >
                           <CustomInputNumber style={{ width: "100%" }} />
                         </Form.Item>
                         <Form.Item
-                          label="Novo certificado"
+                          label={t("labels.newCertificate")}
                           style={formStyle("calc(50% - 5px)", "5px")}
                         >
                           <CustomInputNumber style={{ width: "100%" }} />
                         </Form.Item>
                         <Form.Item
-                          label="Repetição aprovação"
+                          label={t("labels.repeatApproval")}
                           style={formStyle("calc(50% - 5px)", "5px")}
                         >
                           <CustomInputNumber style={{ width: "100%" }} />
                         </Form.Item>
                         <Form.Item
-                          label="Repetição certificado"
+                          label={t("labels.certificateRepetition")}
                           style={formStyle("calc(50% - 5px)", "5px")}
                         >
                           <CustomInputNumber style={{ width: "100%" }} />

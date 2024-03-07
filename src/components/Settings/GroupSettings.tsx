@@ -19,6 +19,7 @@ import {
   SaveButton,
   SelectRadio,
 } from "./ButtonsComponent";
+import { useTranslation } from "next-i18next";
 
 const { TextArea } = Input;
 
@@ -29,6 +30,8 @@ const GroupSettings: React.FC = () => {
     setValue(e.target.value);
   };
 
+  const { t } = useTranslation("layout");
+
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -36,7 +39,7 @@ const GroupSettings: React.FC = () => {
         <div style={{ marginLeft: 15}}></div>
         <SelectRadio
           style={formStyle("calc(25% - 8px)", "8px")}
-          type="Grupo"
+          type={t("labels.group")}
           value={value}
         />
       </div>
@@ -44,35 +47,35 @@ const GroupSettings: React.FC = () => {
         <div>
           <Row gutter={10}>
             <Col span={12}>
-              <Card title="Definição" bodyStyle={{ padding: 10 }}>
-                <Form.Item label="Nome" style={formStyle("100%")}>
+              <Card title={t("titles.definition")} bodyStyle={{ padding: 10 }}>
+                <Form.Item label={t("labels.name")} style={formStyle("100%")}>
                   <Input />
                 </Form.Item>
-                <Form.Item label="Email" style={formStyle("100%")}>
+                <Form.Item label={t("labels.email")} style={formStyle("100%")}>
                   <Input />
                 </Form.Item>
-                <Form.Item label="Descrição" style={{ marginBottom: 20 }}>
+                <Form.Item label={t("labels.description")} style={{ marginBottom: 20 }}>
                   <TextArea style={{ resize: "none", height: "150px" }} />
                 </Form.Item>
               </Card>
             </Col>
             <Col span={12}>
-              <Card title="Bloqueio Temporario" bodyStyle={{ padding: 10 }}>
-                <Form.Item label="Estado">
+              <Card title={t("titles.temporaryBlock")} bodyStyle={{ padding: 10 }}>
+                <Form.Item label={t("labels.state")}>
                   <Select
                     options={[{ value: "Ativo" }, { value: "Bloqueado" }]}
                   />
                 </Form.Item>
                 <Form.Item
                   style={formStyle("calc(50% - 8px)", "8px")}
-                  label="Desbloqueio"
+                  label={t("labels.unlock")}
                 >
                   <DatePicker format={"DD/MM/YYYY"} style={{ width: "100%" }} />
                 </Form.Item>
                 <Form.Item label=" " style={formStyle("50%")}>
                   <TimePicker style={{ width: "100%" }} />
                 </Form.Item>
-                <Form.Item label="Avisos" style={{ marginBottom: 20 }}>
+                <Form.Item label={t("labels.warnings")}style={{ marginBottom: 20 }}>
                   <TextArea style={{ resize: "none", height: "150px" }} />
                 </Form.Item>
               </Card>
