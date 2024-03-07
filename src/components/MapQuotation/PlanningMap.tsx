@@ -20,6 +20,7 @@ import {
   SaveOutlined,
 } from "@ant-design/icons";
 import { useState } from "react";
+import { useTranslation } from "next-i18next";
 
 type Presets = Required<ColorPickerProps>["presets"][number];
 
@@ -42,6 +43,8 @@ const genPresets = (presets = presetPalettes) =>
   }));
 
 const PlanningMap: React.FC = () => {
+
+  const { t } = useTranslation("layout");
   const { token } = theme.useToken();
   const presets = genPresets({
     primary: generate(token.colorPrimary),
@@ -52,37 +55,37 @@ const PlanningMap: React.FC = () => {
   const columns: TableColumnsType<DataType> = [
     {
       width: 30,
-      title: "Exibir",
+      title: t("labels.display"),
       dataIndex: "exibir",
       key: "exibir",
     },
     {
       width: 30,
-      title: "Tempo",
+      title: t("labels.time"),
       dataIndex: "tempo",
       key: "tempo",
     },
     {
       width: 250,
-      title: "Nome",
+      title: t("labels.name"),
       dataIndex: "name",
       key: "name",
     },
     {
       width: 30,
-      title: "Abrev",
+      title: t("labels.abbrev"),
       dataIndex: "abrev",
       key: "abrev",
     },
     {
       width: 30,
-      title: "Quebra",
+      title: t("labels.display"),
       dataIndex: "quebra",
       key: "quebra",
     },
     {
       width: 30,
-      title: "Cor",
+      title: t("labels.color"),
       dataIndex: "cor",
       key: "cor",
     },
@@ -126,16 +129,20 @@ const PlanningMap: React.FC = () => {
             width: "82%",
           }}
         >
-          <Form.Item label="Modelo" style={{ width: "33.33%" }}>
-            <Select disabled={!isDisableInput} defaultValue={"Mapa 1"} options={[{ value: "Mapa 1" }]} />
+          <Form.Item label={t("labels.model")} style={{ width: "33.33%" }}>
+            <Select
+              disabled={!isDisableInput}
+              defaultValue={"Mapa 1"}
+              options={[{ value: "Mapa 1" }]}
+            />
           </Form.Item>
           <Form.Item
-            label="Data"
+            label={t("labels.date")}
             style={{ width: "36.33%", margin: "0 7px 0 7px" }}
           >
             <RangePicker format={weekFormat} />
           </Form.Item>
-          <Form.Item label="Nome" style={{ width: "33.33%" }}>
+          <Form.Item label={t("labels.name")} style={{ width: "33.33%" }}>
             <Input defaultValue={"Mapa 1"} disabled={isDisableInput} />
           </Form.Item>
         </Form>
@@ -147,20 +154,20 @@ const PlanningMap: React.FC = () => {
             justifyContent: "space-between",
           }}
         >
-          <Tooltip title="Novo Modelo">
+          <Tooltip title={t("labels.newModel")}>
             <Button icon={<FileAddOutlined />} type="primary"></Button>
           </Tooltip>
-          <Tooltip title="Editar">
+          <Tooltip title={t("labels.edit")}>
             <Button
               onClick={handleDisableInput}
               icon={<EditOutlined />}
               type="primary"
             ></Button>
           </Tooltip>
-          <Tooltip title="Salvar">
+          <Tooltip title={t("labels.save")}>
             <Button icon={<SaveOutlined />} type="primary"></Button>
           </Tooltip>
-          <Tooltip title="Excluir">
+          <Tooltip title={t("labels.delete")}>
             <Button icon={<CloseOutlined />} type="primary"></Button>
           </Tooltip>
         </div>

@@ -52,7 +52,17 @@
     "cleanFilters": "Clean Filters",
     "recalcButton": "Recalculate",
     "generateButton": "Generate excel",
-    "filterButton": "Filter"
+    "filterButton": "Filter",
+    "groupButton": "Group",
+    "familiesButton": "Families",
+    "characteristicsButton": "Characteristics",
+    "valuesButton": "Values",
+    "processesButton": "Processes",
+    "connectionsButton": "Connections",
+    "resourcesButton": "Resources",
+    "subResourcesButton": "Sub-Resource",
+    "criticalMaterialsButton": "Critical Materials",
+    "calendarsButton": "Calendars"
   },
   "titles": {
     "itensConfig": "Item Setting",
@@ -73,9 +83,13 @@
     "outputCondition": "Output Condition",
     "entryAction": "Entry Action",
     "exitAction": "Exit Action",
-
     "characteristic": "Characteristic",
-    "criticalMaterial": "Critical Material"
+    "criticalMaterial": "Critical Material",
+    "settingsDay": "Settings Day",
+    "occurrence": "Occurrence",
+
+    "planningMap": "Planning Map",
+    "generalSettings": "General Settings"
   },
   "labels": {
     "client": "Client",
@@ -160,6 +174,27 @@
     "selectedFamily": "Selected family",
     "realeseProcess": "Realese Process",
     "impactedProcess": "Impact Process",
-    "criticalMaterial": "Critical Material"
+    "criticalMaterial": "Critical Material",
+    "removeDays": "Remove Days",
+    "comments": "Comments",
+    "editDays": "Edit Days",
+    "addDays": "Add Days",
+    "date": "Date",
+    "repeat": "Repeat",
+    "termination": "Termination",
+    "in": "In",
+    "after": "After",
+    "occurrences": "Occurrences",
+    "deleteDays": "Do you want to delete the day?",
+    "delete": "Delete",
+
+    "model": "Model",
+    "newModel": "New Model",
+    "color": "Color",
+    "abbrev" : "Abbrev",
+    "smash" : "Smash",
+    "display": "Display",
+    "edit" : "Edit",
+    "save" : "Save"
   }
 }

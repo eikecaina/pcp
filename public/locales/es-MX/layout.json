@@ -50,7 +50,17 @@
     "consumeButton": "Consumir",
     "cleanFilters": "Filtros Limpios",
     "generateButton": "Generar excel",
-    "filterButton": "Filtrar"
+    "filterButton": "Filtrar",
+    "groupButton": "Grupo",
+    "familiesButton": "Familias",
+    "characteristicsButton": "Características",
+    "valuesButton": "Valores",
+    "processesButton": "Procesos",
+    "connectionsButton": "Conexiones",
+    "resourcesButton": "Recursos",
+    "subResourcesButton": "Sub-Recurso",
+    "criticalMaterialsButton": "Materiales Críticos",
+    "calendarsButton": "Calendarios"
   },
   "titles": {
     "itensConfig": "Configuración de Ítems",
@@ -72,7 +82,11 @@
     "entryAction": "Acción de Entrada",
     "exitAction": "Acción de Salida",
     "characteristic": "Característica",
-    "criticalMaterial": "Material Crítico"
+    "criticalMaterial": "Material Crítico",
+    "settingsDay": "Día de Configuración",
+    "occurrence": "Ocurrencia",
+    "planningMap": "Mapa de Planificación",
+    "generalSettings": "Configuración General"
   },
   "labels": {
     "client": "Cliente",
@@ -156,6 +170,26 @@
     "selectedFamily": "Familia seleccionada",
     "realeseProcess": "Proceso de liberación",
     "impactedProcess": "Proceso impactado",
-    "criticalMaterial": "Material crítico"
+    "criticalMaterial": "Material crítico",
+    "removeDays": "Eliminar Días",
+    "comments": "Comentarios",
+    "editDays": "Editar Días",
+    "addDays": "Agregar Días",
+    "date": "Fecha",
+    "repeat": "Repetir",
+    "termination": "Terminación",
+    "in": "En",
+    "after": "Después de",
+    "occurrences": "Ocurrencias",
+    "deleteDays": "¿Desea eliminar el día?",
+    "delete": "Eliminar",
+    "model": "Modelo",
+    "newModel": "Nuevo Modelo",
+    "color": "Color",
+    "abbrev": "Abreviatura",
+    "smash": "Romper",
+    "display": "Mostrar",
+    "edit": "Editar",
+    "save": "Guardar"
   }
 }

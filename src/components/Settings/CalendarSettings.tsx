@@ -30,6 +30,7 @@ import {
   SaveButton,
   SelectRadio,
 } from "./ButtonsComponent";
+import { useTranslation } from "next-i18next";
 
 const { TextArea } = Input;
 
@@ -44,11 +45,11 @@ export const CalendarSettings = () => {
 
   const deleteDay = () => {
     Modal.confirm({
-      title: "Excluir",
+      title: t("generalButtons.deleteButton"),
       icon: <ExclamationCircleOutlined />,
-      content: "Deseja excluir o dia?",
-      okText: "Confirmar",
-      cancelText: "Cancelar",
+      content: t("labels.deleteDays"),
+      okText: t("generalButtons.confirmButton"),
+      cancelText: t("generalButtons.cancelButton"),
     });
   };
 
@@ -73,6 +74,8 @@ export const CalendarSettings = () => {
     setValue(e.target.value);
   };
 
+  const {t} = useTranslation("layout");
+
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -80,7 +83,7 @@ export const CalendarSettings = () => {
         <div style={{ marginLeft: 15 }}></div>
         <SelectRadio
           style={formStyle("calc(25% - 8px)", "8px")}
-          type="Calendário"
+          type={t("labels.calendar")}
           value={value}
         />
       </div>
@@ -91,10 +94,10 @@ export const CalendarSettings = () => {
               <div style={{ margin: 10 }}>
                 <Form.Item
                   style={formStyle("calc(40% - 8px)", "8px")}
-                  label="Dias"
+                  label={t("labels.days")}
                 >
                   <Space.Compact style={{ width: "100%" }}>
-                    <Tooltip title="Remover Dia">
+                    <Tooltip title={t("labels.removeDays")}>
                       <Button type="primary" onClick={deleteDay}>
                         <DeleteOutlined />
                       </Button>
@@ -105,7 +108,7 @@ export const CalendarSettings = () => {
                       options={[{ value: "Ferias" }]}
                     />
 
-                    <Tooltip title="Editar Dia">
+                    <Tooltip title={t("labels.editDays")}>
                       <Button type="primary" onClick={openModal}>
                         <EditOutlined />
                       </Button>
@@ -113,7 +116,7 @@ export const CalendarSettings = () => {
                   </Space.Compact>
                 </Form.Item>
                 <Form.Item label=" " style={formStyle("5%")}>
-                  <Tooltip title="Adicionar dia">
+                  <Tooltip title={t("labels.addDays")}>
                     <Button
                       icon={<PlusOutlined />}
                       onClick={openModal}
@@ -122,7 +125,7 @@ export const CalendarSettings = () => {
                   </Tooltip>
                 </Form.Item>
 
-                <Form.Item label="Nome" style={formStyle("55%")}>
+                <Form.Item label={t("labels.name")} style={formStyle("55%")}>
                   <Input />
                 </Form.Item>
                 <Form.Item
@@ -131,10 +134,10 @@ export const CalendarSettings = () => {
                 >
                   <Select />
                 </Form.Item>
-                <Form.Item label="Descrição" style={formStyle("50%")}>
+                <Form.Item label={t("labels.description")} style={formStyle("50%")}>
                   <Input />
                 </Form.Item>
-                <Form.Item label="Obs" style={{ marginBottom: 0 }}>
+                <Form.Item label={t("labels.comments")} style={{ marginBottom: 0 }}>
                   <TextArea style={{ resize: "none", height: "99px" }} />
                 </Form.Item>
               </div>
@@ -151,23 +154,23 @@ export const CalendarSettings = () => {
         </div>
       </Form>
       <Modal
-        width={1200}
-        title="Definição do dia"
+        width={1400}
+        title={t("titles.settingsDay")}
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
       >
         <Form style={{ marginTop: "10px" }} colon={false}>
           <div style={{ display: "flex" }}>
-            <Col span={8}>
-              <Card title="Ocorrência" bodyStyle={{ padding: 10 }}>
+            <Col span={9}>
+              <Card title={t("titles.occurrence")} bodyStyle={{ padding: 10 }}>
                 <div style={{ width: "100%" }}>
-                  <Form.Item label="Nome">
+                  <Form.Item label={t("labels.name")}>
                     <Input size="small" />
                   </Form.Item>
                   <Form.Item
-                    label="Data"
-                    style={formStyle("calc(78% - 5px)", "5px")}
+                    label={t("lables.date")}
+                    style={formStyle("calc(70% - 5px)", "5px")}
                   >
                     <DatePicker
                       size="small"
@@ -177,16 +180,16 @@ export const CalendarSettings = () => {
                     />
                   </Form.Item>
                   <Form.Item
-                    label="Dia util"
-                    style={formStyle("calc(20% - 8px)", "8px")}
+                    label={t("labels.elapsedDays")}
+                    style={formStyle("calc(23% - 8px)", "8px")}
                   >
                     <Checkbox />
                   </Form.Item>
                 </div>
               </Card>
             </Col>
-            <Col span={8}>
-              <Card title="Repetição" bodyStyle={{ padding: 10 }}>
+            <Col span={6}>
+              <Card title={t("labels.repeat")} bodyStyle={{ padding: 10 }}>
                 <Form.Item style={formStyle("100%")} label="Nunca">
                   <Checkbox />
                 </Form.Item>
@@ -211,24 +214,24 @@ export const CalendarSettings = () => {
                 </Form.Item>
               </Card>
             </Col>
-            <Col span={8}>
-              <Card title="Término" bodyStyle={{ padding: 10 }}>
+            <Col span={9}>
+              <Card title={t("labels.termination")} bodyStyle={{ padding: 10 }}>
                 <Form.Item style={formStyle("100%")} label="Nunca">
                   <Checkbox />
                 </Form.Item>
                 <Form.Item
                   style={formStyle("calc(50% - 6px)", "6px")}
-                  label="Em"
+                  label={t("labels.in")}
                 >
                   <DatePicker format={"DD/MM/YYYY"} size="small" />
                 </Form.Item>
-                <Form.Item label="Após" style={formStyle("50%")}>
+                <Form.Item label={t("labels.after")} style={formStyle("50%")}>
                   <CustomInputNumber
                     size="small"
                     min={1}
                     style={formStyle("40%", "8px")}
                   />
-                  ocorrências
+                  {t("labels.occurrences")}
                 </Form.Item>
               </Card>
             </Col>

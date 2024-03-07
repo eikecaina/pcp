@@ -381,7 +381,7 @@ export const FloatMenu: React.FC = () => {
         style={{ right: 50, bottom: 90 }}
       >
         <FloatButton
-          tooltip={<div>Mapa de Planejamento</div>}
+          tooltip={<div>{t("titles.planningMap")}</div>}
           type="default"
           icon={<FileOutlined />}
           onClick={openModalMap}
@@ -393,7 +393,7 @@ export const FloatMenu: React.FC = () => {
           onClick={openDrawerPcp}
         />
         <FloatButton
-          tooltip={<div> Configuração Geral</div>}
+          tooltip={<div>{t("titles.generalSettings")}</div>}
           type="default"
           icon={<SettingOutlined />}
           onClick={openDrawerConfig}
@@ -411,7 +411,7 @@ export const FloatMenu: React.FC = () => {
       </Drawer>
       <Drawer
         width={"100%"}
-        title="Configuração Geral"
+        title={t("titles.generalSettings")}
         placement="right"
         onClose={closeDrawerConfig}
         open={isDrawerVisibleGeneralConfig}
@@ -419,7 +419,7 @@ export const FloatMenu: React.FC = () => {
         <GeneralSettings />
       </Drawer>
       <Modal
-        title="Mapa de Planejamento"
+        title={t("titles.planningMap")}
         width={"1000px"}
         open={isModalMapOpen}
         onCancel={closeModalMap}
