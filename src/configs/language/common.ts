@@ -1,6 +1,6 @@
 import config from "../../../next.config";
 
-import { UserConfig } from "next-i18next";
+import { UserConfig } from "react-i18next";
 
 export type I18nFormatFunction = (value: any, language: string) => string;
 

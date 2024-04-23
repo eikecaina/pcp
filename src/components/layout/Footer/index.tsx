@@ -1,4 +1,4 @@
-import { useTranslation } from "next-i18next";
+import { useTranslation } from "react-i18next";
 
 import * as Styled from "./styled";
 
@@ -7,13 +7,14 @@ export interface FooterProps {
 }
 
 export const Footer: React.FC<FooterProps> = ({ className }) => {
-  const { t } = useTranslation("layout");
+  // const { t } = useTranslation("layout");
 
   const siteName = process.env.SITE_NAME;
+  // const siteName = "WTPC"
 
   return (
     <Styled.Wrapper className={className}>
-      {t("footer.copyright", { siteName })}
+      {/* {t("footer.copyright", { siteName })} */}
     </Styled.Wrapper>
   );
 };
