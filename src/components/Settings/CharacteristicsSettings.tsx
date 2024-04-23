@@ -24,11 +24,7 @@ const CharacteristicsSettings: React.FC = () => {
       <div style={{ display: "flex" }}>
         <RadioButtons onChange={onChange} value={value} />
         <div style={{ marginLeft: 15 }}></div>
-        <SelectRadio
-          style={formStyle("calc(25% - 8px)", "8px")}
-          type={t("labels.group")}
-          value={value}
-        />
+
       </div>
       <Form layout="vertical">
         <div>
