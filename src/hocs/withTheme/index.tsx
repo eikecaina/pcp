@@ -1,7 +1,7 @@
 import { Global, ThemeProvider, css } from "@emotion/react";
 import { normalize } from "polished";
 
-import { theme } from "styles/theme";
+import { theme } from "lib/styles/theme";
 
 export const withTheme: React.HOC = (Component) => {
   return (props) => {

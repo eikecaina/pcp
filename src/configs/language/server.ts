@@ -1,7 +1,7 @@
-import { readFile } from "fs/promises";
-import { UserConfig } from "next-i18next";
+// import { readFile } from "fs/promises";
+// import { UserConfig } from "next-i18next";
 
-import { isDev } from "utils/environment";
+import { isDev } from "lib/utils/environment";
 
 import { i18nCommonConfig } from "./common";
 
@@ -33,10 +33,11 @@ export async function getServerSideTranslations(
         continue;
       }
 
-      const fileBuffer = await readFile(`./public/locales/${lang}/${ns}.json`);
-      const translations = JSON.parse(fileBuffer.toString());
 
-      langTranslationsMap.set(ns, translations);
+      // const fileBuffer = await readFile(`./public/locales/${lang}/${ns}.json`);
+      // const translations = JSON.parse(fileBuffer.toString());
+
+      // langTranslationsMap.set(ns, translations);
     }
 
     translationsMap.set(lang, Object.fromEntries(langTranslationsMap));

@@ -19,7 +19,7 @@ export const Content = styled.div`
   align-items: center;
 
   height: 100%;
-  padding: 0 ${({ theme }) => theme.spacing.lg};
+  padding: 0 ${({ theme }) => theme.spacing.md};
 
   color: ${({ theme }) => theme.color.dark.text};
 `;
@@ -41,8 +41,6 @@ export const UserCardWrapper = styled.div`
   padding: 0 ${({ theme }) => theme.spacing.md};
 
   align-items: center;
-
-  background-color: ${({ theme }) => theme.color.primary.bg};
   color: ${({ theme }) => theme.color.primary.text};
 
   cursor: pointer;

@@ -27,5 +27,6 @@
   "unauthorized": {
     "button": "Entrar",
     "message": "Desculpe, você não está autorizado a visualizar esta página, por favor faça o login:"
-  }
+  },
+  "Logout": "Logout2"
 }

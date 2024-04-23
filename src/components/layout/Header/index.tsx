@@ -1,13 +1,11 @@
+"use client";
+
 import * as React from "react";
-
-import { useAuth } from "@wmo-dev/login-utils";
-import { Button } from "antd";
-
-import { LoginModal } from "../LoginModal";
-
-import { LanguageChanger } from "./LanguageChanger";
-import { UserCard } from "./UserCard";
 import * as Styled from "./styled";
+import AuthStatus from "./authStatus";
+import LanguageChanger from "./LanguageChanger";
+import { useSession } from "next-auth/react";
+import { Spin } from "antd";
 
 export interface HeaderProps {
   className?: string;
@@ -15,32 +13,18 @@ export interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ className }) => {
   const siteName = process.env.SITE_NAME;
-
-  const { user, verifiedToken } = useAuth();
-  const [visible, setVisible] = React.useState(true);
-
-  const loggedIn = user ? true : verifiedToken ? false : undefined;
-  const hideModal = !visible || loggedIn || loggedIn === undefined;
+  const {data: session, status} = useSession();
 
   return (
     <Styled.Wrapper className={className}>
+      {status != "loading" && <>
       <Styled.Content>
         <img src="/assets/images/WEGLogo.png" alt="WEGLogo" />
         <Styled.Title>{siteName}</Styled.Title>
-        {user ? (
-          <UserCard />
-        ) : (
-          <Button type="primary" onClick={() => setVisible(true)}>
-            Login
-          </Button>
-        )}
-        <LoginModal
-          visible={!hideModal}
-          onCancel={() => setVisible(false)}
-          onOk={() => setVisible(false)}
-        />
+        <AuthStatus />
       </Styled.Content>
       <LanguageChanger />
+      </>}
     </Styled.Wrapper>
   );
 };

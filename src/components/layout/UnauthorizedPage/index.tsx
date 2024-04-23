@@ -1,14 +1,16 @@
+"use client";
 import * as React from "react";
 
 import { Button, Result } from "antd";
-import { useTranslation } from "next-i18next";
+// import { useTranslation } from "next-i18next";
+import { useTranslation } from "react-i18next";
 
 import { LoginModal } from "../LoginModal";
 
 import * as Styled from "./styled";
 
 export const UnauthorizedPage: React.FC = () => {
-  const { t } = useTranslation("layout");
+  const { t } = useTranslation();
   const [visible, setVisible] = React.useState(false);
 
   return (

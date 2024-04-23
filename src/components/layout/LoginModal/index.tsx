@@ -1,10 +1,11 @@
 import * as React from "react";
 
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { useAuth } from "@wmo-dev/login-utils";
+// import { useAuth } from "@wmo-dev/login-utils";
 import { Form, Input, Modal, ModalProps } from "antd";
-import { useTranslation } from "next-i18next";
+// import { useTranslation } from "next-i18next";
 import { useForm, Controller } from "react-hook-form";
+import {useSession, signIn, signOut} from "next-auth/react"
 
 import * as Styled from "./styled";
 
@@ -22,8 +23,9 @@ export const LoginModal: React.FC<LoginModalProps> = ({
   visible,
   ...props
 }) => {
-  const { t } = useTranslation("layout");
-  const { user, verifiedToken, login } = useAuth();
+  // const { t } = useTranslation("layout");
+  // const {data: session, status} = useSession();
+  // const { user, verifiedToken, login } = useAuth();
 
   const {
     control,
@@ -31,14 +33,15 @@ export const LoginModal: React.FC<LoginModalProps> = ({
     formState: { errors },
   } = useForm<LoginFormInput>();
 
-  const [loading, setLoading] = React.useState(false);
+  const [loading, setLoading] = React.useState(status == "loading");
   const [error, setError] = React.useState<string>();
-  const onSubmit = handleSubmit(async (data) => {
+
+  const onSubmit = handleSubmit(async () => {
     setLoading(true);
     setError(undefined);
 
     try {
-      await login(data.username, data.password);
+      //signIn("keycloak") //login(data.username, data.password);
     } catch {
       setError(t("login.errors.unauthorized"));
     }
@@ -49,7 +52,7 @@ export const LoginModal: React.FC<LoginModalProps> = ({
     }
   });
 
-  const internalVisible = visible ?? (!user && verifiedToken);
+  const internalVisible = true //visible ?? (!!session && !!session?.user);
   const hideCancel = visible === undefined;
 
   return (

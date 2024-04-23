@@ -50,7 +50,7 @@ export const SpinnerWrapper = styled.div`
 
   width: 100%;
   height: 100%;
-
+ background-color:red;
   justify-items: center;
   align-items: center;
 `;

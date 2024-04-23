@@ -1,22 +1,19 @@
 const APP_ENV = process.env.APP_ENV ?? "dev";
 
 module.exports = {
-  i18n: {
-    defaultLocale: "en-US",
-    locales: ["en-US", "pt-BR"],
-  },
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/', // automatically becomes /docs/with-basePath
+  //       destination: '/:locale', // automatically becomes /docs/another
+  //       permanent: false,
+  //     },
+  //   ]
+  // },
   env: {
-    SITE_NAME: "Nextjs Boileplate",
+    SITE_NAME: "WTPC",
   },
   serverRuntimeConfig: {
     APP_ENV,
-  },
-  async rewrites() {
-    return [
-      {
-        source: "/locales/:language/:namespace",
-        destination: "/api/locales/:language/:namespace",
-      },
-    ];
   },
 };
