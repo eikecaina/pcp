@@ -154,6 +154,7 @@ export const GeneralData: React.FC = () => {
 
   return (
     <>
+    <div style={{height: '100%'}}>
       <Row style={{ padding: 10 }}>
         <Form layout="vertical">
           <Form.Item
@@ -324,6 +325,7 @@ export const GeneralData: React.FC = () => {
       {isModalConfigOpen && (
         <ConfigModal setIsModalConfigOpen={setIsModalConfigOpen} />
       )}
+    </div>
     </>
   );
 };

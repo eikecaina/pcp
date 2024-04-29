@@ -1,6 +1,12 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next'
 import axios from "axios";
+const api = axios.create({
+  headers: { 'Content-Type': 'text/plain', 'Accept': 'Application/json; charset=UTF-8' },
+  baseURL: '//jsonplaceholder.typicode.com',
+  // baseURL: '//localhost:3000/',
+  // baseURL: '//dcqas012168.weg.net:3255/',
+});
 
 export default function handler(
   req: NextApiRequest,
@@ -12,31 +18,21 @@ export default function handler(
   res.status(204).send(null);
 }
 
-export async function GeAllData() {
+export async function GetAllData() {
   try {
-    let res = { success: true}
-    fetch('https://jsonplaceholder.typicode.com/todos')
-    .then(response => response.json())
-    .then(json => {console.log(json); res = json;})
-
-    // await axios.get(`https://jsonplaceholder.typicode.com/todos/1`);
-    return true;
+    return await api.get(`/todos`).then(r => {
+      return r.data
+    });
   } catch (error) {
     console.log("Erro ao salvar:", error);
   }
 }
 
-export async function GetDataFromId(id: number, formData: any) {
+export async function GetDataFromId(id: number) {
   try {
-    console.log(id)
-    console.log(formData)
-    let res = { success: true}
-    fetch('https://jsonplaceholder.typicode.com/todos/1')
-    .then(response => response.json())
-    .then(json => {console.log(json); res = json;})
-
-    // await axios.get(`https://jsonplaceholder.typicode.com/todos/1`);
-    return true;
+    return await api.get(`/todos/${id}`).then(res => {
+      return res.data
+    });
   } catch (error) {
     console.log("Erro ao salvar:", error);
   }
@@ -44,15 +40,9 @@ export async function GetDataFromId(id: number, formData: any) {
 
 export async function GetDataCommmentsForId(id: number, formData: any) {
   try {
-    console.log(id)
-    console.log(formData)
-    let res = { success: true}
-    fetch('https://jsonplaceholder.typicode.com/todos/1/comments')
-    .then(response => response.json())
-    .then(json => {console.log(json); res = json;})
-
-    // await axios.get(`https://jsonplaceholder.typicode.com/todos/1`);
-    return true;
+    return await api.get(`/todos/${id}/comments`).then(res => {
+      return res.data
+    });
   } catch (error) {
     console.log("Erro ao salvar:", error);
   }
@@ -76,27 +66,23 @@ export async function GetDataCommentsWithFilterParam(id: number, formData: any) 
   }
 }
 
-export async function Save(id: number, formData: any) {
+export async function Save() {
   try {
-    console.log(id)
-    console.log(formData)
-    let res = { success: true}
-    fetch(`https://jsonplaceholder.typicode.com/posts`, {
-      method: 'POST',
-      body: JSON.stringify({
-        title: 'foo',
-        body: 'bar',
-        userId: 1,
-      }),
+    let data = {
+      title: 'foo',
+      body: 'bar',
+      userId: 1,
+    }
+
+    let config = {
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
-      },
-    })
-      .then((response) => response.json())
-      .then(json => {console.log(json); res = json;})
+      }
+    }
 
-    // await axios.get(`https://jsonplaceholder.typicode.com/todos/1`);
-    return res;
+    return await api.post(`/posts`, data, config).then(res => {
+      return res.data
+    });
   } catch (error) {
     console.log("Erro ao salvar:", error);
   }
