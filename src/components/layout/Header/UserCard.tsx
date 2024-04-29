@@ -1,6 +1,3 @@
-// import { useTranslation } from "next-i18next";
-
-// import { useAuth } from "@wmo-dev/login-utils";
 import { Avatar, Dropdown, MenuProps, Space } from "antd";
 
 import * as Styled from "./styled";
@@ -14,37 +11,44 @@ import { useState } from "react";
 
 export interface Props {
   className?: string;
-  user?: Session
+  user?: any
 }
 
 export const UserCard: React.FC<Props> = ({ className = "", user = {}}) => {
   const { t } = useTranslation();
   let [cookie, setCookie, removeCookie] = useCookies(["PLANT"]);
-  const names = user?.user?.name?.split(" ")
-  const initial1 = names[0]?.substring(0, 1)
-  const initial2 = names[names.length-1].substring(0, 1)
-  let selectedKeys:string[] = [];
-
   let itemsChildren:any = []
-  let qtyRoles = user?.roles.length;
+  let selectedKeys:string[] = [];
+  let initial1=''
+  let initial2=''
+  let qtyRoles = 0;
 
-  if(qtyRoles>1){
-    //loop pra cada grupo de acesso que o usuário possui (cadastrado no Developers Portal)
-    user?.roles.forEach( (k: string) => {
-      //se o nome do grupo de acesso possui "-" no texto
-      if(k.includes("-")){
-        //extrai os 4 últimos dígitos que deveriam ser os números da planta
-        let plant = k.substring( k.length-4, k.length )
+  if(!!user){
+    const names = user.user?.name?.split(" ")
+    initial1 = names[0]?.substring(0, 1)
+    initial2 = names[names.length-1].substring(0, 1)
+    let roles = user.roles;
 
-        if(!itemsChildren.find((e:any) => e.key === "plant"+plant)){
-          itemsChildren.push({
-            label: (<div>{plant}</div>),
-            key: "plant"+plant.trim(),
-            onClick: ()=>changeCurrentPlant(plant.trim())
-          })
+    qtyRoles = roles.length;
+
+    if(qtyRoles>1){
+      //loop pra cada grupo de acesso que o usuário possui (cadastrado no Developers Portal)
+      roles.forEach( (k: string) => {
+        //se o nome do grupo de acesso possui "-" no texto
+        if(k.includes("-")){
+          //extrai os 4 últimos dígitos que deveriam ser os números da planta
+          let plantOption = k.substring( k.length-4, k.length )
+
+          if(!itemsChildren.find((e:any) => e.key === "plant"+plantOption)){
+            itemsChildren.push({
+              label: (<div>{plantOption}</div>),
+              key: "plant"+plantOption.trim(),
+              onClick: ()=>changeCurrentPlant(plantOption.trim())
+            })
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   if(itemsChildren.length > 0 && cookie!=null && cookie!=undefined){
@@ -58,9 +62,12 @@ export const UserCard: React.FC<Props> = ({ className = "", user = {}}) => {
     }
     
   }
-  const [plant, setPlant] = useState((t("userCard.plant")+": "+ selectedKeys[0].substring( selectedKeys[0].length-4, selectedKeys[0].length )).toString())
+
+  let currentPlant = selectedKeys.length == 0 ? "":(t("userCard.plant")+": "+ selectedKeys[0].substring( selectedKeys[0].length-4, selectedKeys[0].length )).toString()
+
+  const [plant, setPlant] = useState(currentPlant)
   
-  const PlantGroup = (qtyRoles==1)? {
+  const PlantGroup = (qtyRoles<=1)? {
     label: (plant),
     key: "currentPlant"
   } : {

@@ -1,6 +1,6 @@
 import Quotation from '@/components/NewQuotation/Quotation';
 
-async function Home({ params: { locale } }: { params: { locale: string } }) {
+async function Home() {
   return <Quotation />;
 };
 
