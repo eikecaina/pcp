@@ -4,7 +4,7 @@ include:
     file: 'react.yml'
 
 variables:
-  NODE_VERSION: "20"
+  NODE_VERSION: "18"
   DOCKER_IMAGE_NAME: "wtpc-frontend"
   K8S_APP_NAME: "wtpc-frontend"
 
