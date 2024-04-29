@@ -17,7 +17,7 @@
 include:
   - project: 'devops/templates/javascript-ci-templates'
     ref: k8s
-    file: 'express-node20.yml'
+    file: 'react-app-node20.yml'
 
 variables:
   NEEDS_DEV: "false"
