@@ -27,14 +27,14 @@ variables:
   DOCKER_CONTAINER_PORT: "3000"
   AUTOMATIC_DEPLOYMENT_ON_DEV: "false"
   AUTOMATIC_DEPLOYMENT_ON_QA: "true"
-  DOCKER_IMAGE_NAME: ens3-frontend
-  DOCKER_CONTAINER_NAME: ens3-frontend  
+  DOCKER_IMAGE_NAME: wtpc-frontend
+  DOCKER_CONTAINER_NAME: wtpc-frontend  
   PRE_PROD_TEST: "false"
   
 deploy:qa:
   variables:
    APP_ENV: "qa"
-   NAMESPACE: "dev-ensaios-sim"
+   NAMESPACE: "dev-wtpc-sim"
    K8S_CPU_REQ: 100m
    K8S_CPU_LIM: 120m
    K8S_MEM_REQ: 200Mi
