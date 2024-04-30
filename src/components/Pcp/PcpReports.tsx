@@ -76,7 +76,7 @@ const Reports: React.FC = () => {
               style={{
                 width: "calc(50% - 8px)",
                 display: "inline-block",
-                margin: "0 8px",
+                margin: "0 7px",
               }}
             >
               <RangePicker style={{ width: "100%" }} />
@@ -109,7 +109,7 @@ const Reports: React.FC = () => {
                 style={{
                   width: "calc(50% - 8px)",
                   display: "inline-block",
-                  margin: "0 8px",
+                  margin: "0 7px",
                 }}
               >
                 <Select

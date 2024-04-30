@@ -55,7 +55,7 @@ const PcpProcessResources: React.FC = () => {
                 style={{
                   width: "calc(50% - 8px)",
                   display: "inline-block",
-                  margin: "0px 16px 0 0px",
+                  margin: "0px 15px 0 0px",
                 }}
               >
                 <Select
@@ -107,7 +107,7 @@ const PcpProcessResources: React.FC = () => {
                 style={{
                   display: "inline-block",
                   width: "calc(50% - 8px)",
-                  margin: "0 16px 0 0",
+                  margin: "0 15px 0 0",
                 }}
               >
                 <DataFetcherUniversity apiUrl="http://universities.hipolabs.com/search?country=United+States&limit=10">
@@ -148,7 +148,7 @@ const PcpProcessResources: React.FC = () => {
                   style={{
                     display: "inline-block",
                     width: "calc(50% - 8px)",
-                    margin: "0 16px 0 0",
+                    margin: "0 15px 0 0",
                   }}
                 >
                   <Select />
@@ -165,7 +165,7 @@ const PcpProcessResources: React.FC = () => {
                 <Form.Item
                   label={t("labels.quotation")}
                   style={{
-                    margin: "0 16px 0 0",
+                    margin: "0 15px 0 0",
                     display: "inline-block",
                     width: "calc(50% - 8px)",
                   }}
@@ -193,7 +193,7 @@ const PcpProcessResources: React.FC = () => {
                     style={{
                       display: "inline-block",
                       width: "calc(50% - 8px)",
-                      margin: "0 0px 0 16px",
+                      margin: "0 0px 0 15px",
                     }}
                   />
                 </Form.Item>
@@ -202,7 +202,7 @@ const PcpProcessResources: React.FC = () => {
                   style={{
                     width: "calc(50% - 8px)",
                     display: "inline-block",
-                    margin: "0px 16px 0 0px",
+                    margin: "0px 15px 0 0px",
                   }}
                 >
                   <CustomInputNumber style={{ width: "100%" }} />
