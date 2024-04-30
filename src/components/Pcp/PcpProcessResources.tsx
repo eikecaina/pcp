@@ -10,7 +10,6 @@ import {
   Row,
   Select,
 } from "antd";
-import { DataFetcherUniversity } from "components/DataFetcherJson";
 import { DatePicker } from "antd";
 import { RadioChangeEvent } from "antd/lib";
 
@@ -110,22 +109,14 @@ const PcpProcessResources: React.FC = () => {
                   margin: "0 15px 0 0",
                 }}
               >
-                <DataFetcherUniversity apiUrl="http://universities.hipolabs.com/search?country=United+States&limit=10">
-                  {(universityData) => (
-                    <Select
-                      placeholder="Selecione o processo"
-                      showSearch
-                      onChange={(value) => handleSelectChange(value)}
-                      disabled={selectedRadio === 2}
-                    >
-                      {universityData.map((item) => (
-                        <Select.Option key={item.id} value={item.name}>
-                          {`${item.name} (${item.alpha_two_code})`}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  )}
-                </DataFetcherUniversity>
+                <Select
+                  placeholder="Selecione o processo"
+                  showSearch
+                  onChange={(value) => handleSelectChange(value)}
+                  disabled={selectedRadio === 2}
+                >
+                  
+                </Select>
               </Form.Item>
               <Form.Item
                 style={{
