@@ -2,7 +2,6 @@ import styled from "@emotion/styled";
 import { Layout } from "antd";
 
 import { Header } from "../Header";
-import { Sider } from "../Sider";
 
 export const Wrapper = styled(Layout)`
   display: grid;
@@ -40,9 +39,6 @@ export const ContentWrapper = styled.main`
 
 export const PlacedHeader = styled(Header)`
   grid-area: header;
-`;
-export const PlacedSider = styled(Sider)`
-  grid-area: sider;
 `;
 
 export const SpinnerWrapper = styled.div`

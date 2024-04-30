@@ -5,8 +5,6 @@ import { Button, Result } from "antd";
 // import { useTranslation } from "next-i18next";
 import { useTranslation } from "react-i18next";
 
-import { LoginModal } from "../LoginModal";
-
 import * as Styled from "./styled";
 
 export const UnauthorizedPage: React.FC = () => {
@@ -24,11 +22,6 @@ export const UnauthorizedPage: React.FC = () => {
             {t("unauthorized.button")}
           </Button>
         }
-      />
-      <LoginModal
-        visible={visible}
-        onOk={() => setVisible(false)}
-        onCancel={() => setVisible(false)}
       />
     </Styled.Wrapper>
   );

@@ -1,7 +1,6 @@
 "use server";
 
-import { authOptions } from "app/api/auth/[...nextauth]/route";
-// import { authOptions } from "lib/utils/authOptions";
+import {authOptions} from "app/api/auth/[...nextauth]/[...nextauth]";
 import { getServerSession } from "next-auth";
 import { decrypt } from "./encryption";
 

@@ -4,7 +4,6 @@ import { Button, Spin } from "antd";
 import {useSession, signIn, signOut} from "next-auth/react"
 import { UserCard } from "./UserCard";
 import { GetStaticProps } from "next";
-// import { getServerSideTranslations } from "configs/language/server";
 import Loader from "../loader/Loader";
 
 export async function keycloakSessionLogOut(){

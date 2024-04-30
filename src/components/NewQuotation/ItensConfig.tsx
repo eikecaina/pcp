@@ -32,7 +32,8 @@ import { useTranslation } from "react-i18next";
 import CustomInputNumber from "components/CustomInputNumber";
 import PlanningMap from "components/MapQuotation/PlanningMap";
 import GeneralSettings from "components/Settings/GeneralSettings";
-import { saveDataForm } from "@/app/api/apiUtils";
+import { saveDataForm } from "@/app/api/services/Example/apiUtils";
+
 import dayjs from "dayjs";
 
 interface FormData {
@@ -153,6 +154,7 @@ export const GeneralData: React.FC = () => {
 
   return (
     <>
+    <div style={{height: '100%'}}>
       <Row style={{ padding: 10 }}>
         <Form layout="vertical">
           <Form.Item
@@ -323,6 +325,7 @@ export const GeneralData: React.FC = () => {
       {isModalConfigOpen && (
         <ConfigModal setIsModalConfigOpen={setIsModalConfigOpen} />
       )}
+    </div>
     </>
   );
 };
