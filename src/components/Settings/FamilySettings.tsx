@@ -19,6 +19,7 @@ import {
 } from "./ButtonsComponent";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
+import { GetAllGroup } from "@/app/api/services/Group/data";
 
 const FamilySttings: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -57,6 +58,7 @@ const FamilySttings: React.FC = () => {
                   <Input />
                 </Form.Item>
                 <Form.Item style={formStyle("33%")} label={t("labels.group")}>
+                  
                   <Select />
                 </Form.Item>
               </Card>
