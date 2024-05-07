@@ -11,7 +11,7 @@ import {
   TimePicker,
 } from "antd";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { formStyle } from "./Style";
 import {
   DeleteButton,
@@ -21,9 +21,14 @@ import {
 } from "./ButtonsComponent";
 import { useTranslation } from "react-i18next";
 import { DatePickerProps } from "antd/lib/date-picker";
-import { Save } from "@/app/api/services/Group/data";
-
+import { Delete, GetAllGroup, Save } from "@/app/api/services/Group/data";
+import { UUID } from "crypto";
 const { TextArea } = Input;
+
+interface Group {
+  id: UUID;
+  group: string;
+}
 
 const GroupSettings: React.FC = () => {
   const [value, setValue] = useState(1);
@@ -35,26 +40,59 @@ const GroupSettings: React.FC = () => {
   const { t } = useTranslation("layout");
 
   const [formData, setFormData] = useState<any>({});
+  const [groups, setGroups] = useState<Group[]>([]);
+
+  const { Option } = Select;
+
+  useEffect(() => {
+    async function fetchGroups() {
+      try {
+        const response = await GetAllGroup();
+        const groupData = response.result.map(
+          (group: { id: any; ds_Group: string }) => ({
+            id: group.id,
+            group: group.ds_Group,
+          })
+        );
+        setGroups(groupData);
+      } catch (error) {
+        console.error("Erro ao buscar grupos:", error);
+      }
+    }
+
+    fetchGroups();
+  }, []);
 
   const handleInputChange = (fieldName: string, value: string) => {
     setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleSelectGroupChange = (id: Group) => {
+    setFormData({ ...formData, id: id });
   };
 
   const handleSelectChange = (value: string) => {
     setFormData({ ...formData, status: value });
   };
 
-  const handleDateChange: DatePickerProps['onChange'] = (date) => { 
-      const formattedData = date.format("DD/MM/YYYY HH:mm:ss");
-      setFormData({ ...formData, unlockDateTime: formattedData });
+  const handleDateChange: DatePickerProps["onChange"] = (date) => {
+    const formattedData = date.toDate().toISOString();
+    setFormData({ ...formData, unlockDateTime: formattedData });
   };
-  
-  const handleButtonClick = async () => {
+
+  const saveGroup = async () => {
     try {
       await Save(formData);
-  
     } catch (error) {
-      console.log(formData);
+      console.log("Não foi possivel salvar");
+    }
+  };
+
+  const deleteGroup = async () => {
+    try {
+      await Delete(formData);
+    } catch (error) {
+      console.log("Não foi possivel deletar");
     }
   };
 
@@ -63,11 +101,19 @@ const GroupSettings: React.FC = () => {
       <div style={{ display: "flex" }}>
         <RadioButtons onChange={onChange} value={value} />
         <div style={{ marginLeft: 15 }}></div>
-        <SelectRadio
-          style={formStyle("calc(25% - 8px)", "8px")}
-          type={t("labels.group")}
-          value={value}
-        />
+        <Form.Item style={{ width: "50%" }} label={t("labels.group")}>
+          <Select
+            style={formStyle("calc(25% - 8px)", "8px")}
+            disabled={value === 1}
+            onChange={handleSelectGroupChange}
+          >
+            {groups.map((group) => (
+              <Option key={group.id} value={group.id}>
+                {group.group}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
       </div>
       <Form layout="vertical">
         <div>
@@ -139,8 +185,8 @@ const GroupSettings: React.FC = () => {
         </div>
       </Form>
       <div style={{ margin: 10, float: "right" }}>
-        <DeleteButton />
-        <SaveButton onClick={handleButtonClick} />
+        <DeleteButton onClick={deleteGroup} />
+        <SaveButton onClick={saveGroup} />
       </div>
     </>
   );

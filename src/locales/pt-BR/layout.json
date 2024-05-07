@@ -91,6 +91,7 @@
     "generalSettings": "Configurações Gerais"
   },
   "labels": {
+    "familly": "Familia",
     "client": "Cliente",
     "item": "Item",
     "quotation": "Cotação",

@@ -11,11 +11,14 @@ import {
 import { useTranslation } from "react-i18next";
 import React, { FormEventHandler, MouseEventHandler, useState } from "react";
 
+const { Option } = Select;
+
 interface RadioValue {
   value: number;
   onChange?: (e: RadioChangeEvent) => void;
   type?: string;
   style?: React.CSSProperties;
+  typeOfDatas?: any;
 }
 
 interface Buttons {
@@ -30,7 +33,7 @@ export const DeleteButton: React.FC<Buttons> = ({
   onChange: onChange,
   onClick: onClick,
 }) => {
- const { t } = useTranslation("layout");
+  const { t } = useTranslation("layout");
   return (
     <Tooltip title={t("generalButtons.deleteButton")}>
       <Button
@@ -60,7 +63,7 @@ export const SaveButton: React.FC<Buttons> = ({
         type="primary"
         icon={<SaveOutlined />}
       >
-       {t("generalButtons.saveButton")}
+        {t("generalButtons.saveButton")}
       </Button>
     </Tooltip>
   );
@@ -70,7 +73,7 @@ export const RadioButtons: React.FC<RadioValue> = ({
   value: value,
   onChange: onChange,
 }) => {
-    const { t } = useTranslation("layout");
+  const { t } = useTranslation("layout");
   return (
     <Radio.Group
       value={value}
@@ -90,6 +93,7 @@ export const SelectRadio: React.FC<RadioValue> = ({
   value: value,
   type: type,
   style: style,
+  typeOfDatas: typeOfDatas,
 }) => {
   return (
     <>
@@ -103,7 +107,13 @@ export const SelectRadio: React.FC<RadioValue> = ({
       {value === 2 ? (
         <>
           <Form.Item label={type} style={style}>
-            <Select />
+            <Select>
+              {typeOfDatas.map((type: any) => (
+                <Option key={type.id} value={type.id}>
+                  {type.group}
+                </Option>
+              ))}
+            </Select>
           </Form.Item>
         </>
       ) : null}

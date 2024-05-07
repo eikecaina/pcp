@@ -17,12 +17,96 @@ import {
   SaveButton,
   SelectRadio,
 } from "./ButtonsComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { UUID } from "crypto";
+import { Delete, Save, GetAllFamilly } from "@/app/api/services/Familly/data";
 import { GetAllGroup } from "@/app/api/services/Group/data";
+
+const { Option } = Select;
+
+interface Group {
+  id: UUID;
+  group: string;
+}
+
+interface Familly {
+  id: UUID;
+  familly: string;
+}
 
 const FamilySttings: React.FC = () => {
   const [value, setValue] = useState(1);
+
+  const [formData, setFormData] = useState<any>({});
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [famillys, setFamillys] = useState<Familly[]>([]);
+
+  const handleSelectFamillyChange = (id: Familly) => {
+    setFormData({ ...formData, id: id });
+  };
+
+  const handleSelectGroupChange = (idGroup: Group) => {
+    setFormData({ ...formData, idGroup: idGroup });
+  };
+
+  const handleInputChange = (fieldName: string, value: string) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const saveFamilly = async () => {
+    try {
+      await Save(formData);
+    } catch (error) {
+      console.log("Não foi possivel salvar");
+    }
+  };
+
+  const deleteFamilly = async () => {
+    try {
+      await Delete(formData);
+    } catch (error) {
+      console.log("Não foi possivel deletar");
+    }
+  };
+
+  useEffect(() => {
+    async function fetchGroups() {
+      try {
+        const response = await GetAllGroup();
+        const groupData = response.result.map(
+          (group: { id: UUID; ds_Group: string }) => ({
+            id: group.id,
+            group: group.ds_Group,
+          })
+        );
+        setGroups(groupData);
+      } catch (error) {
+        console.error("Erro ao buscar grupos:", error);
+      }
+    }
+
+    fetchGroups();
+  }, []);
+
+  useEffect(() => {
+    async function fetchFamillys() {
+      try {
+        const response = await GetAllFamilly();
+        const famillyData = response.result.map(
+          (familly: { id: UUID; ds_Familly: string }) => ({
+            id: familly.id,
+            familly: familly.ds_Familly,
+          })
+        );
+        setFamillys(famillyData);
+      } catch (error) {
+        console.error("Erro ao buscar grupos:", error);
+      }
+    }
+
+    fetchFamillys();
+  }, []);
 
   const onChange = (e: RadioChangeEvent) => {
     setValue(e.target.value);
@@ -34,11 +118,19 @@ const FamilySttings: React.FC = () => {
       <div style={{ display: "flex" }}>
         <RadioButtons onChange={onChange} value={value} />
         <div style={{ marginLeft: 15 }}></div>
-        <SelectRadio
-          style={formStyle("calc(25% - 8px)", "8px")}
-          type={t("labels.list")}
-          value={value}
-        />
+        <Form.Item style={{ width: "50%" }} label={t("labels.familly")}>
+          <Select
+            style={formStyle("calc(25% - 8px)", "8px")}
+            disabled={value === 1}
+            onChange={handleSelectFamillyChange}
+          >
+            {famillys.map((familly) => (
+              <Option key={familly.id} value={familly.id}>
+                {familly.familly}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
       </div>
       <Form layout="vertical">
         <div>
@@ -49,17 +141,28 @@ const FamilySttings: React.FC = () => {
                   style={formStyle("calc(33% - 8px", "8px")}
                   label={t("labels.name")}
                 >
-                  <Input />
+                  <Input
+                    onChange={(e) =>
+                      handleInputChange("familly", e.target.value)
+                    }
+                  />
                 </Form.Item>
                 <Form.Item
                   style={formStyle("calc(33% - 8px", "8px")}
                   label={t("labels.planner")}
                 >
-                  <Input />
+                  <Input
+                    onChange={(e) => handleInputChange("plan", e.target.value)}
+                  />
                 </Form.Item>
                 <Form.Item style={formStyle("33%")} label={t("labels.group")}>
-                  
-                  <Select />
+                  <Select onChange={handleSelectGroupChange}>
+                    {groups.map((group) => (
+                      <Option key={group.id} value={group.id}>
+                        {group.group}
+                      </Option>
+                    ))}
+                  </Select>
                 </Form.Item>
               </Card>
             </Col>
@@ -106,8 +209,8 @@ const FamilySttings: React.FC = () => {
           </Row>
         </div>
         <div style={{ margin: 10, float: "right" }}>
-          <DeleteButton />
-          <SaveButton />
+          <DeleteButton onClick={deleteFamilly} />
+          <SaveButton onClick={saveFamilly} />
         </div>
       </Form>
     </>

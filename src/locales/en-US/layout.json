@@ -93,6 +93,7 @@
     "generalSettings": "General Settings"
   },
   "labels": {
+    "familly": "Familly",
     "client": "Client",
     "item": "Item",
     "quotation": "Quotation",

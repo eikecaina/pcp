@@ -4,20 +4,16 @@ import { UUID } from 'crypto';
 
 interface FormData {
   id: UUID;
-  group: string;
-  desc: string;
-  status: string;
-  email: string;
-  auditCreated: Date;
-  idBlocked: boolean;
-  unlockDateTime: Date;
-  idAutoUnlocked: boolean;
-  auditModifiedUser: boolean;
+  familly: string;
+  plan: string;
+  idGroup: UUID;
+  modifiedUser: string;
+  createdUser: string;
 }
 
-export async function GetAllGroup() {
+export async function GetAllFamilly() {
   try {
-    return await api.get(`/Group/GetAll`).then((r) => {
+    return await api.get(`/Familly/GetAll`).then((r) => {
       return r.data;
     });
   } catch (error) {
@@ -27,7 +23,7 @@ export async function GetAllGroup() {
 
 export async function GetDataFromId(id: number) {
   try {
-    return await api.get(`/Group/Get/${id}`).then((res) => {
+    return await api.get(`/Familly/Get/${id}`).then((res) => {
       return res.data;
     });
   } catch (error) {
@@ -38,19 +34,15 @@ export async function GetDataFromId(id: number) {
 export async function Save(formData: FormData) {
   const rec = {
     id: uuidv4(),
-    ds_Group: formData.group,
-    ds_Email: formData.email,
-    ds_Desc: formData.desc,
-    ds_Blocked: formData.status,
-    dt_Auto_Unlocked: formData.unlockDateTime,
-    cd_Audit_Created_User: new Date().toISOString(),
-    id_Blocked: true,
-    id_Auto_Unlocked: true,
+    ds_Familly: formData.familly,
+    ds_Familly_Planej: formData.plan,
+    id_Group: formData.idGroup,
     cd_Audit_Modified_User: "Eike",
+    cd_Audit_Created_User: "Eike"
   };
 
   try {
-    const response = await api.post(`/Group`, rec);
+    const response = await api.post(`/Familly`, rec);
     console.log(rec);
 
     return response.data;
@@ -68,7 +60,7 @@ export async function Update(id: number, formData: any) {
       headers: { "Content-Type": "application/json; charset=UTF-8" },
     };
 
-    return await api.put(`/Group/Update`, data, config).then((res) => {
+    return await api.put(`/Familly/Update`, data, config).then((res) => {
       return res.data;
     });
   } catch (error) {
@@ -82,7 +74,7 @@ export async function Delete(formData: FormData) {
   }
 
   try {
-    return await api.delete(`/Group/Delete/${rec.id}`).then((res) => {
+    return await api.delete(`/Familly/Delete/${rec.id}`).then((res) => {
       console.log("Deletado com sucesso");
       return res.data;
     });
