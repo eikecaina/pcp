@@ -90,6 +90,7 @@
     "generalSettings": "Configuración General"
   },
   "labels": {
+    "charact": "Caracteristica",
     "familly": "Familia",
     "client": "Cliente",
     "item": "Ítem",

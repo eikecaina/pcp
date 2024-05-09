@@ -1,30 +1,148 @@
-import { Card, Col, Form, Input, RadioChangeEvent, Row, Select } from "antd";
-import { formStyle } from "./Style";
-import CustomInputNumber from "components/CustomInputNumber";
 import {
-  DeleteButton,
-  RadioButtons,
-  SaveButton,
-  SelectRadio,
-} from "./ButtonsComponent";
-import { useState } from "react";
+  Card,
+  Col,
+  Form,
+  Input,
+  InputNumber,
+  RadioChangeEvent,
+  Row,
+  Select,
+} from "antd";
+import { formStyle } from "./Style";
+import { DeleteButton, RadioButtons, SaveButton } from "./ButtonsComponent";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import {
+  Delete,
+  GetAllCharact,
+  GetAllCharactType,
+  Save,
+} from "@/app/api/services/Characteristc/data";
+import { UUID } from "crypto";
 
 const { TextArea } = Input;
 
+interface Charact {
+  id: UUID;
+  charact: string;
+  
+}
+
+interface CharactType {
+  id: UUID;
+  charactType: string;
+}
+
 const CharacteristicsSettings: React.FC = () => {
   const [value, setValue] = useState(1);
+  const [formData, setFormData] = useState<any>({});
+  const [characts, setCharact] = useState<Charact[]>([]);
+  const [charactType, setCharactType] = useState<CharactType[]>([]);
+  
+  const { Option } = Select;
 
   const onChange = (e: RadioChangeEvent) => {
     setValue(e.target.value);
   };
+
+  useEffect(() => {
+    async function fetchCaract() {
+      try {
+        const response = await GetAllCharact();
+        const charactData = response.result.map(
+          (charact: { id: UUID; ds_Caract: string }) => ({
+            id: charact.id,
+            charact: charact.ds_Caract,
+          })
+        );
+        setCharact(charactData);
+      } catch (error) {
+        console.error("Erro ao buscar caracteristicas:", error);
+      }
+    }
+
+    fetchCaract();
+  }, []);
+
+  useEffect(() => {
+    async function fetchCaractType() {
+      try {
+        const response = await GetAllCharactType();
+        const charactTypeData = response.result.map(
+          (charactType: {id: UUID, ds_Caract_Type: string }) => ({
+            id: charactType.id,
+            charactType: charactType.ds_Caract_Type,
+          })
+        );
+        setCharactType(charactTypeData);
+      } catch (error) {
+        console.error("Erro ao buscar caracteristicas:", error);
+      }
+    }
+
+    fetchCaractType();
+  }, []);
+
+  const handleInputChange = (fieldName: string, value: string) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleSelectChange = (value: string) => {
+    setFormData({ ...formData, id: value });
+  };
+
+  const handleSelectTypeChange = (type: string) => {
+    setFormData({...formData, type: type});
+  }
+
+  const handleSelectNumberChange = (value: number | null) => {
+    setFormData({ ...formData, position: value });
+  };
+
   const { t } = useTranslation("layout");
+
+  const saveCharact = async () => {
+    try {
+      await Save(formData);
+       console.log(formData);
+    } catch (error) {
+      console.log("Não foi possivel salvar");
+    }
+  };
+
+  const deleteCharact = async () => {
+    try {
+      await Delete(formData);
+    } catch (error) {
+      console.log("Não foi possivel deletar");
+    }
+  };
+
   return (
     <>
       <div style={{ display: "flex" }}>
-        <RadioButtons onChange={onChange} value={value} />
+        <RadioButtons
+          onChange={onChange}
+          value={value}
+          style={{ marginRight: 5 }}
+        />
+        <Form.Item
+          style={{ width: "50%", marginLeft: 10 }}
+          label={t("labels.charact")}
+        >
+          <Select
+            onChange={handleSelectChange}
+            style={formStyle("calc(25% - 8px)", "8px")}
+            disabled={value === 1}
+          >
+            {characts.map((charact) => (
+              <Option key={charact.id} value={charact.id}>
+                {charact.charact}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
         <div style={{ marginLeft: 15 }}></div>
-
       </div>
       <Form layout="vertical">
         <div>
@@ -35,38 +153,57 @@ const CharacteristicsSettings: React.FC = () => {
                   label={t("labels.name")}
                   style={formStyle("calc(28.33% - 8px)", "8px")}
                 >
-                  <Input />
+                  <Input
+                    onChange={(e) => {
+                      handleInputChange("charact", e.target.value);
+                    }}
+                  />
                 </Form.Item>
                 <Form.Item
                   label={t("labels.exhibition")}
                   style={formStyle("calc(28.33% - 8px)", "8px")}
                 >
-                  <Input />
+                  <Input
+                    onChange={(e) => {
+                      handleInputChange("exib", e.target.value);
+                    }}
+                  />
                 </Form.Item>
                 <Form.Item
                   label={t("labels.position")}
                   style={formStyle("calc(15% - 8px)", "8px")}
                 >
-                  <CustomInputNumber min={1} style={{ width: "100%" }} />
+                  <InputNumber
+                    min={1}
+                    style={{ width: "100%" }}
+                    onChange={handleSelectNumberChange}
+                  />
                 </Form.Item>
                 <Form.Item label={t("labels.type")} style={formStyle("28.33%")}>
-                  <Select
-                    options={[{ value: "Linha" }, { value: "Produto" }]}
-                  />
+                  <Select style={{ width: "100%" }} onChange={handleSelectTypeChange}>
+                    {charactType.map((charactType) => (
+                      <Option key={charactType.id} value={charactType.id}>
+                        {charactType.charactType}
+                      </Option>
+                    ))}
+                  </Select>
                 </Form.Item>
                 <Form.Item
                   label={t("labels.description")}
                   style={formStyle("100%")}
                 >
-                  <TextArea style={{ height: 150, resize: "none" }} />
+                  <TextArea
+                    style={{ height: 150, resize: "none" }}
+                    onChange={(e) => handleInputChange("desc", e.target.value)}
+                  />
                 </Form.Item>
               </Card>
             </Col>
           </Row>
         </div>
         <div style={{ margin: 10, float: "right" }}>
-          <DeleteButton />
-          <SaveButton />
+          <DeleteButton onClick={deleteCharact}/>
+          <SaveButton onClick={saveCharact} />
         </div>
       </Form>
     </>
