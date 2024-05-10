@@ -20,7 +20,12 @@ import {
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { UUID } from "crypto";
-import { Delete, Save, GetAllFamilly } from "@/app/api/services/Familly/data";
+import {
+  Delete,
+  Save,
+  GetAllFamily,
+  Update,
+} from "@/app/api/services/Family/data";
 import { GetAllGroup } from "@/app/api/services/Group/data";
 
 const { Option } = Select;
@@ -30,9 +35,11 @@ interface Group {
   group: string;
 }
 
-interface Familly {
+interface Family {
   id: UUID;
-  familly: string;
+  family: string;
+  plan: string;
+  group: UUID;
 }
 
 const FamilySttings: React.FC = () => {
@@ -40,29 +47,52 @@ const FamilySttings: React.FC = () => {
 
   const [formData, setFormData] = useState<any>({});
   const [groups, setGroups] = useState<Group[]>([]);
-  const [famillys, setFamillys] = useState<Familly[]>([]);
+  const [familys, setFamilys] = useState<Family[]>([]);
 
-  const handleSelectFamillyChange = (id: Familly) => {
-    setFormData({ ...formData, id: id });
+  const handleSelectFamilyChange = (selectedFamilyId: any) => {
+    const selectedFamily = familys.find(
+      (family) => family.id === selectedFamilyId
+    );
+    if (selectedFamily) {
+      setFormData({
+        ...formData,
+        id: selectedFamily.id,
+        group: selectedFamily.group,
+        plan: selectedFamily.plan,
+        family: selectedFamily.family,
+      });
+    }
+    console.log(formData);
   };
 
-  const handleSelectGroupChange = (idGroup: Group) => {
-    setFormData({ ...formData, idGroup: idGroup });
+  const handleSelectGroupChange = (selectedGroupId: UUID | string) => {
+    const selectedGroup = groups.find((group) => group.id === selectedGroupId);
+    if (selectedGroup) {
+      setFormData({
+        ...formData,
+        idGroup: selectedGroupId,
+        group: selectedGroup.group,
+      });
+    }
   };
 
   const handleInputChange = (fieldName: string, value: string) => {
     setFormData({ ...formData, [fieldName]: value });
   };
 
-  const saveFamilly = async () => {
+  const saveFamily = async () => {
     try {
-      await Save(formData);
+      if (formData.id) {
+        Update(formData);
+      } else {
+        await Save(formData);
+      }
     } catch (error) {
       console.log("Não foi possivel salvar");
     }
   };
 
-  const deleteFamilly = async () => {
+  const deleteFamily = async () => {
     try {
       await Delete(formData);
     } catch (error) {
@@ -90,22 +120,29 @@ const FamilySttings: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    async function fetchFamillys() {
+    async function fetchFamilys() {
       try {
-        const response = await GetAllFamilly();
-        const famillyData = response.result.map(
-          (familly: { id: UUID; ds_Familly: string }) => ({
-            id: familly.id,
-            familly: familly.ds_Familly,
+        const response = await GetAllFamily();
+        const familyData = response.result.map(
+          (family: {
+            id: UUID;
+            ds_Family: string;
+            ds_Family_Planej: string;
+            id_Group: Group;
+          }) => ({
+            id: family.id,
+            family: family.ds_Family,
+            group: family.id_Group,
+            plan: family.ds_Family_Planej,
           })
         );
-        setFamillys(famillyData);
+        setFamilys(familyData);
       } catch (error) {
         console.error("Erro ao buscar grupos:", error);
       }
     }
 
-    fetchFamillys();
+    fetchFamilys();
   }, []);
 
   const onChange = (e: RadioChangeEvent) => {
@@ -118,15 +155,16 @@ const FamilySttings: React.FC = () => {
       <div style={{ display: "flex" }}>
         <RadioButtons onChange={onChange} value={value} />
         <div style={{ marginLeft: 15 }}></div>
-        <Form.Item style={{ width: "50%" }} label={t("labels.familly")}>
+        <Form.Item style={{ width: "50%" }} label={t("labels.family")}>
+          <Input className="id-verification" hidden value={formData.id}></Input>
           <Select
             style={formStyle("calc(25% - 8px)", "8px")}
             disabled={value === 1}
-            onChange={handleSelectFamillyChange}
+            onChange={handleSelectFamilyChange}
           >
-            {famillys.map((familly) => (
-              <Option key={familly.id} value={familly.id}>
-                {familly.familly}
+            {familys.map((family) => (
+              <Option key={family.id} value={family.id}>
+                {family.family}
               </Option>
             ))}
           </Select>
@@ -142,8 +180,9 @@ const FamilySttings: React.FC = () => {
                   label={t("labels.name")}
                 >
                   <Input
+                    value={formData.family}
                     onChange={(e) =>
-                      handleInputChange("familly", e.target.value)
+                      handleInputChange("family", e.target.value)
                     }
                   />
                 </Form.Item>
@@ -152,11 +191,15 @@ const FamilySttings: React.FC = () => {
                   label={t("labels.planner")}
                 >
                   <Input
+                    value={formData.plan}
                     onChange={(e) => handleInputChange("plan", e.target.value)}
                   />
                 </Form.Item>
                 <Form.Item style={formStyle("33%")} label={t("labels.group")}>
-                  <Select onChange={handleSelectGroupChange}>
+                  <Select
+                    onChange={handleSelectGroupChange}
+                    value={formData.group}
+                  >
                     {groups.map((group) => (
                       <Option key={group.id} value={group.id}>
                         {group.group}
@@ -209,8 +252,8 @@ const FamilySttings: React.FC = () => {
           </Row>
         </div>
         <div style={{ margin: 10, float: "right" }}>
-          <DeleteButton onClick={deleteFamilly} />
-          <SaveButton onClick={saveFamilly} />
+          <DeleteButton onClick={deleteFamily} />
+          <SaveButton onClick={saveFamily} />
         </div>
       </Form>
     </>

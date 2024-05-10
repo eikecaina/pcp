@@ -14,19 +14,23 @@ import { DataFetcher } from "components/DataFetcherJson";
 import { formStyle } from "./Style";
 import CustomInputNumber from "components/CustomInputNumber";
 import { DeleteButton, RadioButtons, SaveButton } from "./ButtonsComponent";
-import { useState } from "react";
+import { useState, useTransition } from "react";
+import { useTranslation } from "react-i18next";
 
 const ValueSettings: React.FC = () => {
+
+  const { t } = useTranslation("layout");
+
   const [value, setValue] = useState(1);
 
   const onChange = (e: RadioChangeEvent) => {
     setValue(e.target.value);
   };
   const options = [
-    { label: "Nova aprovação", value: "Nova aprovação" },
-    { label: "Novo certificado", value: "Novo certificado" },
-    { label: "Repetição aprovação", value: "Repetição aprovação" },
-    { label: "Repetição certificado", value: "Repetição certificado" },
+    { label: t("labels.newAprovattion"), value: "Nova aprovação" },
+    { label: t("labels.newCertificate"), value: "Novo certificado" },
+    { label: t("labels.repetitionAprovattion"), value: "Repetição aprovação" },
+    { label: t("labels.repetitionCertificate"), value: "Repetição certificado" },
   ];
 
   return (
@@ -35,7 +39,7 @@ const ValueSettings: React.FC = () => {
       <Row gutter={10}>
         <Col span={12}>
           <Card
-            title="Família de definição"
+            title={t("titles.definitionFamily")}
             style={{ height: "450px", overflowX: "auto" }}
           >
             {value === 2 ? (
@@ -85,28 +89,22 @@ const ValueSettings: React.FC = () => {
           </Card>
         </Col>
         <Col span={12}>
-          <Card title="Definição" bodyStyle={{ padding: 10 }}>
+          <Card title={t("titles.definition")} bodyStyle={{ padding: 10 }}>
             <Form layout="vertical" disabled={value === 1}>
-              <Form.Item style={formStyle("calc(50% - 8px)", "8px")} label="ID">
-                <CustomInputNumber
-                  defaultValue={50}
-                  disabled
-                  style={{ width: "100%" }}
-                />
-              </Form.Item>
-              <Form.Item style={formStyle("50%")} label="Nome">
+             
+              <Form.Item style={formStyle("100%")} label={t("labels.name")}>
                 <Input />
               </Form.Item>
               <Form.Item
                 style={formStyle("calc(50% - 8px)", "8px")}
-                label="Característica"
+                label={t("labels.charact")}
               >
                 <Select />
               </Form.Item>
-              <Form.Item style={formStyle("50%")} label="Posição">
+              <Form.Item style={formStyle("50%")} label={t("labels.position")}>
                 <CustomInputNumber min={1} style={{ width: "100%" }} />
               </Form.Item>
-              <Divider orientation="left">Condições</Divider>
+              <Divider orientation="left">{t("titles.condition")}</Divider>
               <div>
                 <Checkbox.Group style={{ display: "grid" }}>
                   {options.map((option) => (

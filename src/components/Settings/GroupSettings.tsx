@@ -21,13 +21,22 @@ import {
 } from "./ButtonsComponent";
 import { useTranslation } from "react-i18next";
 import { DatePickerProps } from "antd/lib/date-picker";
-import { Delete, GetAllGroup, Save } from "@/app/api/services/Group/data";
+import {
+  Delete,
+  GetAllGroup,
+  Save,
+  Update,
+} from "@/app/api/services/Group/data";
 import { UUID } from "crypto";
+import { group } from "console";
 const { TextArea } = Input;
 
 interface Group {
   id: UUID;
   group: string;
+  desc: string;
+  status: string;
+  email: string;
 }
 
 const GroupSettings: React.FC = () => {
@@ -49,9 +58,18 @@ const GroupSettings: React.FC = () => {
       try {
         const response = await GetAllGroup();
         const groupData = response.result.map(
-          (group: { id: any; ds_Group: string }) => ({
+          (group: {
+            id: any;
+            ds_Group: string;
+            ds_Email: string;
+            ds_Desc: string;
+            ds_Blocked: string;
+          }) => ({
             id: group.id,
             group: group.ds_Group,
+            desc: group.ds_Desc,
+            email: group.ds_Email,
+            status: group.ds_Blocked,
           })
         );
         setGroups(groupData);
@@ -67,22 +85,31 @@ const GroupSettings: React.FC = () => {
     setFormData({ ...formData, [fieldName]: value });
   };
 
-  const handleSelectGroupChange = (id: Group) => {
-    setFormData({ ...formData, id: id });
+  const handleSelectGroupChange = (selectedGroupId: any) => {
+    const selectedGroup = groups.find((group) => group.id === selectedGroupId);
+    if (selectedGroup) {
+      setFormData({
+        ...formData,
+        id: selectedGroup.id,
+        group: selectedGroup.group,
+        desc: selectedGroup.desc,
+        email: selectedGroup.email,
+        status: selectedGroup.status,
+      });
+    }
   };
 
   const handleSelectChange = (value: string) => {
     setFormData({ ...formData, status: value });
   };
 
-  const handleDateChange: DatePickerProps["onChange"] = (date) => {
-    const formattedData = date.toDate().toISOString();
-    setFormData({ ...formData, unlockDateTime: formattedData });
-  };
-
   const saveGroup = async () => {
     try {
-      await Save(formData);
+      if (formData.id) {
+        Update(formData);
+      } else {
+        await Save(formData);
+      }
     } catch (error) {
       console.log("Não foi possivel salvar");
     }
@@ -117,6 +144,7 @@ const GroupSettings: React.FC = () => {
       </div>
       <Form layout="vertical">
         <div>
+          <Input className="id-verification" hidden value={formData.id}></Input>
           <Row gutter={10}>
             <Col span={12}>
               <Card title={t("titles.definition")} bodyStyle={{ padding: 10 }}>
@@ -125,6 +153,7 @@ const GroupSettings: React.FC = () => {
                   style={formStyle("calc(50% - 8px)", "8px")}
                 >
                   <Input
+                    value={formData.group}
                     onChange={(e) => handleInputChange("group", e.target.value)}
                   />
                 </Form.Item>
@@ -133,6 +162,7 @@ const GroupSettings: React.FC = () => {
                   style={formStyle("calc(50%)")}
                 >
                   <Input
+                    value={formData.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
                   />
                 </Form.Item>
@@ -141,6 +171,7 @@ const GroupSettings: React.FC = () => {
                   style={{ marginBottom: 20 }}
                 >
                   <TextArea
+                    value={formData.desc}
                     style={{ resize: "none", height: "150px" }}
                     onChange={(e) => handleInputChange("desc", e.target.value)}
                   />
@@ -154,25 +185,14 @@ const GroupSettings: React.FC = () => {
               >
                 <Form.Item
                   label={t("labels.state")}
-                  style={formStyle("calc(50% - 8px)", "8px")}
+                  style={formStyle("calc(100%)")}
                 >
                   <Select
+                    value={formData.status}
                     options={[{ value: "Ativo" }, { value: "Bloqueado" }]}
                     onChange={handleSelectChange}
                   />
                 </Form.Item>
-                <Form.Item
-                  style={formStyle("calc(50%)")}
-                  label={t("labels.unlock")}
-                >
-                  <DatePicker
-                    showTime
-                    format={"DD/MM/YYYY HH:mm:ss"}
-                    style={{ width: "100%" }}
-                    onChange={handleDateChange}
-                  />
-                </Form.Item>
-
                 <Form.Item
                   label={t("labels.warnings")}
                   style={{ marginBottom: 20 }}

@@ -1,6 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import api from "../api";
-import { UUID } from 'crypto';
+import { UUID } from "crypto";
 
 interface FormData {
   id: UUID;
@@ -61,25 +61,34 @@ export async function Save(formData: FormData) {
   }
 }
 
-export async function Update(id: number, formData: any) {
+export async function Update( formData: any) {
   try {
-    let data = {};
-    let config = {
-      headers: { "Content-Type": "application/json; charset=UTF-8" },
+    let data = {
+      id: formData.id,
+      ds_Group: formData.group,
+      ds_Email: formData.email,
+      ds_Desc: formData.desc,
+      ds_Blocked: formData.status,
+      dt_Auto_Unlocked: formData.unlockDateTime,
+      cd_Audit_Created_User: new Date().toISOString(),
+      id_Blocked: true,
+      id_Auto_Unlocked: true,
+      cd_Audit_Modified_User: "Eike",
     };
+  
 
-    return await api.put(`/Group/Update`, data, config).then((res) => {
+    return await api.put(`/Group/Update`, data ).then((res) => {
       return res.data;
     });
   } catch (error) {
-    console.log("Erro ao salvar:", error);
+    console.log("Erro ao Editar:", error);
   }
 }
 
 export async function Delete(formData: FormData) {
   const rec = {
     id: formData.id,
-  }
+  };
 
   try {
     return await api.delete(`/Group/Delete/${rec.id}`).then((res) => {
@@ -88,7 +97,5 @@ export async function Delete(formData: FormData) {
     });
   } catch (error) {
     console.log("Erro ao deletar:", error);
-   
-    
   }
 }

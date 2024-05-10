@@ -17,6 +17,7 @@ import {
   GetAllCharact,
   GetAllCharactType,
   Save,
+  Update,
 } from "@/app/api/services/Characteristc/data";
 import { UUID } from "crypto";
 
@@ -25,7 +26,10 @@ const { TextArea } = Input;
 interface Charact {
   id: UUID;
   charact: string;
-  
+  exib: string;
+  desc: string;
+  type: UUID;
+  position: number;
 }
 
 interface CharactType {
@@ -38,7 +42,7 @@ const CharacteristicsSettings: React.FC = () => {
   const [formData, setFormData] = useState<any>({});
   const [characts, setCharact] = useState<Charact[]>([]);
   const [charactType, setCharactType] = useState<CharactType[]>([]);
-  
+
   const { Option } = Select;
 
   const onChange = (e: RadioChangeEvent) => {
@@ -50,12 +54,24 @@ const CharacteristicsSettings: React.FC = () => {
       try {
         const response = await GetAllCharact();
         const charactData = response.result.map(
-          (charact: { id: UUID; ds_Caract: string }) => ({
+          (charact: {
+            id: UUID;
+            ds_Caract: string;
+            ds_Exib: string;
+            ds_Desc: string;
+            cd_Caract_Type: UUID;
+            vl_Position: number;
+          }) => ({
             id: charact.id,
             charact: charact.ds_Caract,
+            exib: charact.ds_Exib,
+            desc: charact.ds_Desc,
+            type: charact.cd_Caract_Type,
+            position: charact.vl_Position,
           })
         );
         setCharact(charactData);
+        console.log(charactData);
       } catch (error) {
         console.error("Erro ao buscar caracteristicas:", error);
       }
@@ -69,7 +85,7 @@ const CharacteristicsSettings: React.FC = () => {
       try {
         const response = await GetAllCharactType();
         const charactTypeData = response.result.map(
-          (charactType: {id: UUID, ds_Caract_Type: string }) => ({
+          (charactType: { id: UUID; ds_Caract_Type: string }) => ({
             id: charactType.id,
             charactType: charactType.ds_Caract_Type,
           })
@@ -87,13 +103,26 @@ const CharacteristicsSettings: React.FC = () => {
     setFormData({ ...formData, [fieldName]: value });
   };
 
-  const handleSelectChange = (value: string) => {
-    setFormData({ ...formData, id: value });
+  const handleSelectChange = (selectedCharactId: any) => {
+    const selectedCharact = characts.find(
+      (charact) => charact.id === selectedCharactId
+    );
+    if (selectedCharact) {
+      setFormData({
+        ...formData,
+        id: selectedCharact.id,
+        charact: selectedCharact.charact,
+        exib: selectedCharact.exib,
+        desc: selectedCharact.desc,
+        type: selectedCharact.type,
+        position: selectedCharact.position,
+      });
+    }
   };
 
   const handleSelectTypeChange = (type: string) => {
-    setFormData({...formData, type: type});
-  }
+    setFormData({ ...formData, type: type });
+  };
 
   const handleSelectNumberChange = (value: number | null) => {
     setFormData({ ...formData, position: value });
@@ -103,8 +132,11 @@ const CharacteristicsSettings: React.FC = () => {
 
   const saveCharact = async () => {
     try {
-      await Save(formData);
-       console.log(formData);
+      if (formData.id) {
+        Update(formData);
+      } else {
+        await Save(formData);
+      }
     } catch (error) {
       console.log("Não foi possivel salvar");
     }
@@ -154,6 +186,7 @@ const CharacteristicsSettings: React.FC = () => {
                   style={formStyle("calc(28.33% - 8px)", "8px")}
                 >
                   <Input
+                    value={formData.charact}
                     onChange={(e) => {
                       handleInputChange("charact", e.target.value);
                     }}
@@ -164,6 +197,7 @@ const CharacteristicsSettings: React.FC = () => {
                   style={formStyle("calc(28.33% - 8px)", "8px")}
                 >
                   <Input
+                    value={formData.exib}
                     onChange={(e) => {
                       handleInputChange("exib", e.target.value);
                     }}
@@ -174,13 +208,18 @@ const CharacteristicsSettings: React.FC = () => {
                   style={formStyle("calc(15% - 8px)", "8px")}
                 >
                   <InputNumber
+                    value={formData.position}
                     min={1}
                     style={{ width: "100%" }}
                     onChange={handleSelectNumberChange}
                   />
                 </Form.Item>
                 <Form.Item label={t("labels.type")} style={formStyle("28.33%")}>
-                  <Select style={{ width: "100%" }} onChange={handleSelectTypeChange}>
+                  <Select
+                    value={formData.type}
+                    style={{ width: "100%" }}
+                    onChange={handleSelectTypeChange}
+                  >
                     {charactType.map((charactType) => (
                       <Option key={charactType.id} value={charactType.id}>
                         {charactType.charactType}
@@ -193,6 +232,7 @@ const CharacteristicsSettings: React.FC = () => {
                   style={formStyle("100%")}
                 >
                   <TextArea
+                    value={formData.desc}
                     style={{ height: 150, resize: "none" }}
                     onChange={(e) => handleInputChange("desc", e.target.value)}
                   />
@@ -202,7 +242,7 @@ const CharacteristicsSettings: React.FC = () => {
           </Row>
         </div>
         <div style={{ margin: 10, float: "right" }}>
-          <DeleteButton onClick={deleteCharact}/>
+          <DeleteButton onClick={deleteCharact} />
           <SaveButton onClick={saveCharact} />
         </div>
       </Form>

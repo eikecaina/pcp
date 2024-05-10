@@ -9,7 +9,7 @@
     "plant": "Planta",
     "menus": {
       "logout": "Cerrar sesión"
-    }    
+    }
   },
   "footer": {
     "copyright": "© {{siteName}} - Desarrollado por el Departamento de Investigación y Desarrollo - WMO"
@@ -87,9 +87,14 @@
     "settingsDay": "Día de Configuración",
     "occurrence": "Ocurrencia",
     "planningMap": "Mapa de Planificación",
-    "generalSettings": "Configuración General"
+    "generalSettings": "Configuración General",
+    "definitionFamily": "Definicion Familia",
+    "condition": "Condición"
   },
   "labels": {
+    "newAprovattion": "Nueva aprobación",
+    "repetitionAprovattion": "Repetición aprobación",
+    "repetitionCertificate": "Repetición certificado",
     "charact": "Caracteristica",
     "familly": "Familia",
     "client": "Cliente",

@@ -1,6 +1,6 @@
 import api from "../api";
 import { UUID } from "crypto";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 interface FormData {
   id: UUID;
@@ -70,18 +70,26 @@ export async function Save(formData: FormData) {
   }
 }
 
-export async function Update(id: number, formData: any) {
+export async function Update(formData: any) {
   try {
-    let data = {};
-    let config = {
-      headers: { "Content-Type": "application/json; charset=UTF-8" },
+    let data = {
+      id: formData.id,
+      ds_Caract: formData.charact,
+      ds_Exib: formData.exib,
+      ds_Desc: formData.desc,
+      cd_Caract_Type: formData.type,
+      vl_Position: formData.position,
+      dt_Audit_Created: new Date(),
+      cd_Audit_Created_User: "Eike",
+      dt_Audit_Modified: new Date(),
+      cd_Audit_Modified_User: "Eike",
     };
 
-    return await api.put(`/Charact/Update`, data, config).then((res) => {
+    return await api.put(`/Characteristic/Update`, data).then((res) => {
       return res.data;
     });
   } catch (error) {
-    console.log("Erro ao salvar:", error);
+    console.log("Erro ao Editar:", error);
   }
 }
 
@@ -99,4 +107,3 @@ export async function Delete(formData: FormData) {
     console.log("Erro ao deletar:", error);
   }
 }
-

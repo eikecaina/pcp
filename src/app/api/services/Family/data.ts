@@ -4,16 +4,16 @@ import { UUID } from 'crypto';
 
 interface FormData {
   id: UUID;
-  familly: string;
+  family: string;
   plan: string;
   idGroup: UUID;
   modifiedUser: string;
   createdUser: string;
 }
 
-export async function GetAllFamilly() {
+export async function GetAllFamily() {
   try {
-    return await api.get(`/Familly/GetAll`).then((r) => {
+    return await api.get(`/Family/GetAll`).then((r) => {
       return r.data;
     });
   } catch (error) {
@@ -23,7 +23,7 @@ export async function GetAllFamilly() {
 
 export async function GetDataFromId(id: number) {
   try {
-    return await api.get(`/Familly/Get/${id}`).then((res) => {
+    return await api.get(`/Family/Get/${id}`).then((res) => {
       return res.data;
     });
   } catch (error) {
@@ -34,15 +34,15 @@ export async function GetDataFromId(id: number) {
 export async function Save(formData: FormData) {
   const rec = {
     id: uuidv4(),
-    ds_Familly: formData.familly,
-    ds_Familly_Planej: formData.plan,
+    ds_Family: formData.family,
+    ds_Family_Planej: formData.plan,
     id_Group: formData.idGroup,
     cd_Audit_Modified_User: "Eike",
     cd_Audit_Created_User: "Eike"
   };
 
   try {
-    const response = await api.post(`/Familly`, rec);
+    const response = await api.post(`/Family`, rec);
     console.log(rec);
 
     return response.data;
@@ -53,18 +53,23 @@ export async function Save(formData: FormData) {
   }
 }
 
-export async function Update(id: number, formData: any) {
+export async function Update( formData: any) {
   try {
-    let data = {};
-    let config = {
-      headers: { "Content-Type": "application/json; charset=UTF-8" },
+    let data = {
+      id: formData.id,
+      ds_Family: formData.family,
+      ds_Family_Planej: formData.plan,
+      id_Group: formData.idGroup,
+      cd_Audit_Modified_User: "Eike",
+      cd_Audit_Created_User: "Eike"
     };
+  
 
-    return await api.put(`/Familly/Update`, data, config).then((res) => {
+    return await api.put(`/Family/Update`, data ).then((res) => {
       return res.data;
     });
   } catch (error) {
-    console.log("Erro ao salvar:", error);
+    console.log("Erro ao Editar:", error);
   }
 }
 
@@ -74,7 +79,7 @@ export async function Delete(formData: FormData) {
   }
 
   try {
-    return await api.delete(`/Familly/Delete/${rec.id}`).then((res) => {
+    return await api.delete(`/Family/Delete/${rec.id}`).then((res) => {
       console.log("Deletado com sucesso");
       return res.data;
     });
