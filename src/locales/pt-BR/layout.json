@@ -93,6 +93,7 @@
     "condition": "Condição"
   },
   "labels": {
+    "values": "Valores",
     "newAprovattion": "Nova aprovação",
     "repetitionAprovattion": "Repetição aprovação",
     "repetitionCertificate": "Repetição certificado",

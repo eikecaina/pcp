@@ -156,7 +156,6 @@ const FamilySttings: React.FC = () => {
         <RadioButtons onChange={onChange} value={value} />
         <div style={{ marginLeft: 15 }}></div>
         <Form.Item style={{ width: "50%" }} label={t("labels.family")}>
-          <Input className="id-verification" hidden value={formData.id}></Input>
           <Select
             style={formStyle("calc(25% - 8px)", "8px")}
             disabled={value === 1}

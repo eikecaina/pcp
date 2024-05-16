@@ -95,6 +95,7 @@
     "condition": "Condition"
   },
   "labels": {
+    "values": "Values",
     "newAprovattion": "New Aprovation",
     "repetitionAprovattion": "Repetition approval",
     "repetitionCertificate": "Repetition certificate",

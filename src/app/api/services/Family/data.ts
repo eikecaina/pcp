@@ -66,6 +66,7 @@ export async function Update( formData: any) {
   
 
     return await api.put(`/Family/Update`, data ).then((res) => {
+      console.log(data);
       return res.data;
     });
   } catch (error) {
