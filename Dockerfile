@@ -57,8 +57,9 @@ RUN adduser --system --uid 1001 nextjs
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
+COPY --from=builder --chown=nextjs:nodejs /app/.next/server/app ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/server/app/api ./api
+COPY --from=builder --chown=nextjs:nodejs /app/.next/server/app/[locale] ./[locale]
 
 EXPOSE 3000
 
