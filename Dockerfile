@@ -1,20 +1,3 @@
-# FROM node:16-buster
-
-# EXPOSE 3000
-
-# WORKDIR /opt/nextjs
-
-# COPY . .
-
-# RUN  npm install
-
-# ENV NODE_ENV "production"
-
-# RUN npm run build
-
-# CMD npm start
-
-
 FROM registry-docker.weg.net/node:20 AS base
 
 FROM base AS deps
@@ -52,14 +35,13 @@ ENV NODE_ENV production
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# COPY --from=builder /app/public ./public
+COPY --from=builder /app/public ./public
 
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
-COPY --from=builder --chown=nextjs:nodejs /app/.next/server/app ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/server/app/api ./api
-COPY --from=builder --chown=nextjs:nodejs /app/.next/server/app/[locale] ./[locale]
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
 EXPOSE 3000
 
