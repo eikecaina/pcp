@@ -6,10 +6,12 @@ import {
   Form,
   Input,
   InputNumber,
+  Modal,
   RadioChangeEvent,
   Row,
   Select,
   Tree,
+  message,
 } from "antd";
 import { DataFetcher } from "components/DataFetcherJson";
 import { formStyle } from "./Style";
@@ -25,6 +27,7 @@ import {
 } from "@/app/api/services/Value/data";
 import { UUID } from "crypto";
 import { GetAllCharact } from "@/app/api/services/Characteristc/data";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -48,74 +51,82 @@ const ValueSettings: React.FC = () => {
   const { t } = useTranslation("layout");
 
   const [value, setValue] = useState(1);
-
-  const onChange = (e: RadioChangeEvent) => {
-    setValue(e.target.value);
-  };
-
   const [formData, setFormData] = useState<any>({});
   const [values, setValues] = useState<Value[]>([]);
   const [characts, setCharacts] = useState<Charact[]>([]);
+  const [fetchData, setFetchData] = useState(true);
 
-  useEffect(() => {
-    async function fetchValues() {
-      try {
-        const response = await GetAllValue();
-        const valueData = response.result.map(
-          (value: {
-            id: any;
-            ds_Value: string;
-            cd_Caract: any;
-            vl_Position: number;
-            id_Allow_New_Approved: boolean;
-            id_Allow_Repeat_Approved: boolean;
-            id_Allow_New_Certificate: boolean;
-            id_Allow_Repeat_Certificate: boolean;
-          }) => ({
-            id: value.id,
-            value: value.ds_Value,
-            charact: value.cd_Caract,
-            position: value.vl_Position,
-            newApproved: value.id_Allow_New_Approved,
-            repeatApproved: value.id_Allow_Repeat_Approved,
-            newCertificate: value.id_Allow_New_Certificate,
-            repeatCertificate: value.id_Allow_Repeat_Certificate,
-          })
-        );
-        setValues(valueData);
-        console.log(valueData);
-      } catch (error) {
-        console.error("Erro ao buscar grupos:", error);
-      }
+  const clearInputs = () => {
+    setFormData({
+      id: undefined,
+      value: undefined,
+      charact: undefined,
+      position: undefined,
+      newApproved: undefined,
+      repeatApproved: undefined,
+      newCertificate: undefined,
+      repeatCertificate: undefined,
+    });
+  };
+
+  const success = () => {
+    message
+      .open({
+        type: "loading",
+        content: "Salvando..",
+        duration: 2.5,
+      })
+      .then(async () => {
+        try {
+          if (formData.id) {
+            Update(formData);
+            clearInputs();
+            setFetchData(true);
+          } else {
+            await Save(formData);
+            clearInputs();
+            setFetchData(true);
+          }
+          message.success("Salvo com sucesso!", 2.5);
+        } catch (error) {
+          message.error("Não foi possível salvar");
+        }
+      });
+  };
+
+  const confirmDelete = () => {
+    Modal.confirm({
+      title: t("generalButtons.deleteButton"),
+      icon: <ExclamationCircleOutlined />,
+      content: "Deseja excluir a Família??",
+      okText: t("generalButtons.confirmButton"),
+      cancelText: t("generalButtons.cancelButton"),
+      async onOk() {
+        try {
+          await Delete(formData);
+          clearInputs();
+          setFetchData(true);
+          message.success("Excluido com sucesso!");
+        } catch (error) {
+          message.error("Não foi possivel excluir!");
+        }
+      },
+    });
+  };
+
+  const onChange = (e: RadioChangeEvent) => {
+    const selectedValue = e.target.value;
+    if (selectedValue === 1) {
+      setFormData({});
     }
-
-    fetchValues();
-  }, []);
-
-  useEffect(() => {
-    async function fetchCharacts() {
-      try {
-        const response = await GetAllCharact();
-        const charactData = response.result.map(
-          (charact: { id: UUID; ds_Caract: string }) => ({
-            id: charact.id,
-            charact: charact.ds_Caract,
-          })
-        );
-        setCharacts(charactData);
-      } catch (error) {
-        console.error("Erro ao buscar grupos:", error);
-      }
-    }
-
-    fetchCharacts();
-  }, []);
+    setValue(selectedValue);
+  };
 
   const handleInputChange = (fieldName: string, value: any) => {
     setFormData({ ...formData, [fieldName]: value });
   };
 
-  const handleSelectedChange = (selectedValueId: any) => {
+  const handleSelectValueChange = (selectedValueId: any) => {
     const selectedValue = values.find((value) => value.id === selectedValueId);
     if (selectedValue) {
       setFormData({
@@ -146,32 +157,73 @@ const ValueSettings: React.FC = () => {
     }
   };
 
-  const saveValue = async () => {
-    try {
-      if (formData.id) {
-        Update(formData);
-      } else {
-        await Save(formData);
+  useEffect(() => {
+    if (fetchData) {
+      async function fetchValues() {
+        try {
+          const response = await GetAllValue();
+          const valueData = response.result.map(
+            (value: {
+              id: any;
+              ds_Value: string;
+              cd_Caract: any;
+              vl_Position: number;
+              id_Allow_New_Approved: boolean;
+              id_Allow_Repeat_Approved: boolean;
+              id_Allow_New_Certificate: boolean;
+              id_Allow_Repeat_Certificate: boolean;
+            }) => ({
+              id: value.id,
+              value: value.ds_Value,
+              charact: value.cd_Caract,
+              position: value.vl_Position,
+              newApproved: value.id_Allow_New_Approved,
+              repeatApproved: value.id_Allow_Repeat_Approved,
+              newCertificate: value.id_Allow_New_Certificate,
+              repeatCertificate: value.id_Allow_Repeat_Certificate,
+            })
+          );
+          setValues(valueData);
+          console.log(valueData);
+        } catch (error) {
+          console.error("Erro ao buscar grupos:", error);
+        }
       }
-    } catch (error) {
-      console.log("Não foi possivel salvar");
+      fetchValues();
+      setFetchData(false);
     }
-  };
+  }, [fetchData]);
 
-  const deleteValue = async () => {
-    Delete(formData);
-  };
+  useEffect(() => {
+    async function fetchCharacts() {
+      try {
+        const response = await GetAllCharact();
+        const charactData = response.result.map(
+          (charact: { id: UUID; ds_Caract: string }) => ({
+            id: charact.id,
+            charact: charact.ds_Caract,
+          })
+        );
+        setCharacts(charactData);
+      } catch (error) {
+        console.error("Erro ao buscar grupos:", error);
+      }
+    }
+
+    fetchCharacts();
+  }, [handleSelectCaractChange]);
 
   return (
     <>
       <div style={{ display: "flex" }}>
         <RadioButtons onChange={onChange} value={value} />
         <div style={{ marginLeft: 15 }}></div>
-        <Form.Item style={{ width: "50%" }} label={t("labels.group")}>
+        <Form.Item style={{ width: "50%" }} label={t("labels.values")}>
           <Select
-            onChange={handleSelectedChange}
+            onChange={handleSelectValueChange}
             style={formStyle("calc(25% - 8px)", "8px")}
             disabled={value === 1}
+            value={value === 2 ? formData.value : null}
           >
             {values.map((value) => (
               <Option key={value.id} value={value.id}>
@@ -277,8 +329,8 @@ const ValueSettings: React.FC = () => {
         </Col>
       </Row>
       <div style={{ margin: 10, float: "right" }}>
-        <DeleteButton onClick={deleteValue} />
-        <SaveButton onClick={saveValue} />
+        <DeleteButton onClick={confirmDelete} />
+        <SaveButton onClick={success} />
       </div>
     </>
   );

@@ -4,9 +4,11 @@ import {
   Form,
   Input,
   InputNumber,
+  Modal,
   RadioChangeEvent,
   Row,
   Select,
+  message,
 } from "antd";
 import { formStyle } from "./Style";
 import { DeleteButton, RadioButtons, SaveButton } from "./ButtonsComponent";
@@ -20,6 +22,7 @@ import {
   Update,
 } from "@/app/api/services/Characteristc/data";
 import { UUID } from "crypto";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const { TextArea } = Input;
 
@@ -42,62 +45,73 @@ const CharacteristicsSettings: React.FC = () => {
   const [formData, setFormData] = useState<any>({});
   const [characts, setCharact] = useState<Charact[]>([]);
   const [charactType, setCharactType] = useState<CharactType[]>([]);
+  const [fetchData, setFetchData] = useState(true);
 
   const { Option } = Select;
 
-  const onChange = (e: RadioChangeEvent) => {
-    setValue(e.target.value);
+  const clearInputs = () => {
+    setFormData({
+      id: undefined,
+      charact: undefined,
+      exib: undefined,
+      desc: undefined,
+      type: undefined,
+      position: undefined,
+    });
   };
 
-  useEffect(() => {
-    async function fetchCaract() {
-      try {
-        const response = await GetAllCharact();
-        const charactData = response.result.map(
-          (charact: {
-            id: UUID;
-            ds_Caract: string;
-            ds_Exib: string;
-            ds_Desc: string;
-            cd_Caract_Type: UUID;
-            vl_Position: number;
-          }) => ({
-            id: charact.id,
-            charact: charact.ds_Caract,
-            exib: charact.ds_Exib,
-            desc: charact.ds_Desc,
-            type: charact.cd_Caract_Type,
-            position: charact.vl_Position,
-          })
-        );
-        setCharact(charactData);
-        console.log(charactData);
-      } catch (error) {
-        console.error("Erro ao buscar caracteristicas:", error);
-      }
+  const success = () => {
+    message
+      .open({
+        type: "loading",
+        content: "Salvando..",
+        duration: 2.5,
+      })
+      .then(async () => {
+        try {
+          if (formData.id) {
+            Update(formData);
+            clearInputs();
+            setFetchData(true);
+          } else {
+            await Save(formData);
+            clearInputs();
+            setFetchData(true);
+          }
+          message.success("Salvo com sucesso!", 2.5);
+        } catch (error) {
+          message.error("Não foi possível salvar");
+        }
+      });
+  };
+
+  const confirmDelete = () => {
+    Modal.confirm({
+      title: t("generalButtons.deleteButton"),
+      icon: <ExclamationCircleOutlined />,
+      content: "Deseja excluir a Família??",
+      okText: t("generalButtons.confirmButton"),
+      cancelText: t("generalButtons.cancelButton"),
+      async onOk() {
+        try {
+          await Delete(formData);
+          clearInputs();
+          setFetchData(true);
+          message.success("Excluido com sucesso!");
+        } catch (error) {
+          message.error("Não foi possivel excluir!");
+        }
+      },
+    });
+  };
+
+  const onChange = (e: RadioChangeEvent) => {
+    const selectedValue = e.target.value;
+    if (selectedValue === 1) {
+      setFormData({});
     }
-
-    fetchCaract();
-  }, []);
-
-  useEffect(() => {
-    async function fetchCaractType() {
-      try {
-        const response = await GetAllCharactType();
-        const charactTypeData = response.result.map(
-          (charactType: { id: UUID; ds_Caract_Type: string }) => ({
-            id: charactType.id,
-            charactType: charactType.ds_Caract_Type,
-          })
-        );
-        setCharactType(charactTypeData);
-      } catch (error) {
-        console.error("Erro ao buscar caracteristicas:", error);
-      }
-    }
-
-    fetchCaractType();
-  }, []);
+    setValue(selectedValue);
+  };
 
   const handleInputChange = (fieldName: string, value: string) => {
     setFormData({ ...formData, [fieldName]: value });
@@ -130,25 +144,59 @@ const CharacteristicsSettings: React.FC = () => {
 
   const { t } = useTranslation("layout");
 
-  const saveCharact = async () => {
-    try {
-      if (formData.id) {
-        Update(formData);
-      } else {
-        await Save(formData);
+  useEffect(() => {
+    if (fetchData) {
+      async function fetchCaract() {
+        try {
+          const response = await GetAllCharact();
+          const charactData = response.result.map(
+            (charact: {
+              id: UUID;
+              ds_Caract: string;
+              ds_Exib: string;
+              ds_Desc: string;
+              cd_Caract_Type: UUID;
+              vl_Position: number;
+            }) => ({
+              id: charact.id,
+              charact: charact.ds_Caract,
+              exib: charact.ds_Exib,
+              desc: charact.ds_Desc,
+              type: charact.cd_Caract_Type,
+              position: charact.vl_Position,
+            })
+          );
+          setCharact(charactData);
+          console.log(charactData);
+          
+        } catch (error) {
+          console.error("Erro ao buscar caracteristicas:", error);
+        }
       }
-    } catch (error) {
-      console.log("Não foi possivel salvar");
+  
+      fetchCaract();
+      setFetchData(false);
     }
-  };
+  }, [fetchData]);
 
-  const deleteCharact = async () => {
-    try {
-      await Delete(formData);
-    } catch (error) {
-      console.log("Não foi possivel deletar");
+  useEffect(() => {
+    async function fetchCaractType() {
+      try {
+        const response = await GetAllCharactType();
+        const charactTypeData = response.result.map(
+          (charactType: { id: UUID; ds_Caract_Type: string }) => ({
+            id: charactType.id,
+            charactType: charactType.ds_Caract_Type,
+          })
+        );
+        setCharactType(charactTypeData);
+      } catch (error) {
+        console.error("Erro ao buscar caracteristicas:", error);
+      }
     }
-  };
+
+    fetchCaractType();
+  }, []);
 
   return (
     <>
@@ -166,6 +214,7 @@ const CharacteristicsSettings: React.FC = () => {
             onChange={handleSelectChange}
             style={formStyle("calc(25% - 8px)", "8px")}
             disabled={value === 1}
+            value={value === 2 ? formData.charact : null}
           >
             {characts.map((charact) => (
               <Option key={charact.id} value={charact.id}>
@@ -242,8 +291,8 @@ const CharacteristicsSettings: React.FC = () => {
           </Row>
         </div>
         <div style={{ margin: 10, float: "right" }}>
-          <DeleteButton onClick={deleteCharact} />
-          <SaveButton onClick={saveCharact} />
+          <DeleteButton onClick={confirmDelete} />
+          <SaveButton onClick={success} />
         </div>
       </Form>
     </>

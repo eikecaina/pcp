@@ -3,10 +3,12 @@ import {
   Col,
   Form,
   Input,
+  Modal,
   RadioChangeEvent,
   Row,
   Select,
   Tree,
+  message,
 } from "antd";
 
 import { formStyle } from "./Style";
@@ -27,6 +29,7 @@ import {
   Update,
 } from "@/app/api/services/Family/data";
 import { GetAllGroup } from "@/app/api/services/Group/data";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
 
@@ -44,10 +47,65 @@ interface Family {
 
 const FamilySttings: React.FC = () => {
   const [value, setValue] = useState(1);
-
   const [formData, setFormData] = useState<any>({});
   const [groups, setGroups] = useState<Group[]>([]);
   const [familys, setFamilys] = useState<Family[]>([]);
+  const [fetchData, setFetchData] = useState(true);
+
+  const clearInputs = () => {
+    setFormData({
+      id: undefined,
+      family: undefined,
+      plan: undefined,
+      group: undefined,
+    });
+  };
+
+  const success = () => {
+    message
+      .open({
+        type: "loading",
+        content: "Salvando..",
+        duration: 2.5,
+      })
+      .then(async () => {
+        try {
+          if (formData.id) {
+            Update(formData);
+            clearInputs();
+            setFetchData(true);
+            message.success("Editado com sucesso!", 2.5);
+          } else {
+            await Save(formData);
+            clearInputs();
+            setFetchData(true);
+            message.success("Salvo com sucesso!", 2.5);
+          }
+        } catch (error) {
+          message.error("Não foi possível salvar");
+        }
+      });
+  };
+
+  const confirmDelete = () => {
+    Modal.confirm({
+      title: t("generalButtons.deleteButton"),
+      icon: <ExclamationCircleOutlined />,
+      content: "Deseja excluir a Família??",
+      okText: t("generalButtons.confirmButton"),
+      cancelText: t("generalButtons.cancelButton"),
+      async onOk() {
+        try {
+          await Delete(formData);
+          clearInputs();
+          setFetchData(true);
+          message.success("Excluido com sucesso!");
+        } catch (error) {
+          message.error("Não foi possivel excluir!");
+        }
+      },
+    });
+  };
 
   const handleSelectFamilyChange = (selectedFamilyId: any) => {
     const selectedFamily = familys.find(
@@ -62,7 +120,11 @@ const FamilySttings: React.FC = () => {
         family: selectedFamily.family,
       });
     }
-    console.log(formData);
+    console.log(selectedFamily);
+  };
+
+  const handleInputChange = (fieldName: string, value: string) => {
+    setFormData({ ...formData, [fieldName]: value });
   };
 
   const handleSelectGroupChange = (selectedGroupId: UUID | string) => {
@@ -73,30 +135,6 @@ const FamilySttings: React.FC = () => {
         idGroup: selectedGroupId,
         group: selectedGroup.group,
       });
-    }
-  };
-
-  const handleInputChange = (fieldName: string, value: string) => {
-    setFormData({ ...formData, [fieldName]: value });
-  };
-
-  const saveFamily = async () => {
-    try {
-      if (formData.id) {
-        Update(formData);
-      } else {
-        await Save(formData);
-      }
-    } catch (error) {
-      console.log("Não foi possivel salvar");
-    }
-  };
-
-  const deleteFamily = async () => {
-    try {
-      await Delete(formData);
-    } catch (error) {
-      console.log("Não foi possivel deletar");
     }
   };
 
@@ -117,36 +155,43 @@ const FamilySttings: React.FC = () => {
     }
 
     fetchGroups();
-  }, []);
+  }, [handleSelectGroupChange]);
 
   useEffect(() => {
-    async function fetchFamilys() {
-      try {
-        const response = await GetAllFamily();
-        const familyData = response.result.map(
-          (family: {
-            id: UUID;
-            ds_Family: string;
-            ds_Family_Planej: string;
-            id_Group: Group;
-          }) => ({
-            id: family.id,
-            family: family.ds_Family,
-            group: family.id_Group,
-            plan: family.ds_Family_Planej,
-          })
-        );
-        setFamilys(familyData);
-      } catch (error) {
-        console.error("Erro ao buscar grupos:", error);
+    if (fetchData) {
+      async function fetchFamilys() {
+        try {
+          const response = await GetAllFamily();
+          const familyData = response.result.map(
+            (family: {
+              id: UUID;
+              ds_Family: string;
+              ds_Family_Planej: string;
+              id_Group: Group;
+            }) => ({
+              id: family.id,
+              family: family.ds_Family,
+              group: family.id_Group,
+              plan: family.ds_Family_Planej,
+            })
+          );
+          setFamilys(familyData);
+        } catch (error) {
+          console.error("Erro ao buscar grupos:", error);
+        }
       }
-    }
 
-    fetchFamilys();
-  }, []);
+      fetchFamilys();
+      setFetchData(false);
+    }
+  }, [fetchData]);
 
   const onChange = (e: RadioChangeEvent) => {
-    setValue(e.target.value);
+    const selectedValue = e.target.value;
+    if (selectedValue === 1) {
+      setFormData({});
+    }
+    setValue(selectedValue);
   };
 
   const { t } = useTranslation("layout");
@@ -159,6 +204,7 @@ const FamilySttings: React.FC = () => {
           <Select
             style={formStyle("calc(25% - 8px)", "8px")}
             disabled={value === 1}
+            value={value === 2 ? formData.family : null}
             onChange={handleSelectFamilyChange}
           >
             {familys.map((family) => (
@@ -214,45 +260,34 @@ const FamilySttings: React.FC = () => {
                 title={t("titles.valuesFamily")}
                 bodyStyle={{ height: "300px", overflowX: "auto", padding: 5 }}
               >
-                <DataFetcher
-                  apiUrl="http://localhost:3000/api/getData"
-                  tipo="processos"
-                >
-                  {(treeData) => (
-                    <>
-                      <Tree
-                        checkable
-                        style={{
-                          height: "100%",
-                          maxHeight: 607,
-
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                        showLine={true}
-                        defaultExpandedKeys={["0-0-0"]}
-                        treeData={treeData}
-                      />
-                      <div style={{ padding: 10 }}>
-                        <div
-                          style={{
-                            width: "100%",
-                            display: "flex",
-                            alignContent: "center",
-                            justifyContent: "space-evenly",
-                          }}
-                        ></div>
-                      </div>
-                    </>
-                  )}
-                </DataFetcher>
+                <Tree
+                  checkable
+                  style={{
+                    height: "100%",
+                    maxHeight: 607,
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                  showLine={true}
+                  defaultExpandedKeys={["0-0-0"]}
+                />
+                <div style={{ padding: 10 }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      alignContent: "center",
+                      justifyContent: "space-evenly",
+                    }}
+                  ></div>
+                </div>
               </Card>
             </Col>
           </Row>
         </div>
         <div style={{ margin: 10, float: "right" }}>
-          <DeleteButton onClick={deleteFamily} />
-          <SaveButton onClick={saveFamily} />
+          <DeleteButton onClick={confirmDelete} />
+          <SaveButton onClick={success} />
         </div>
       </Form>
     </>
