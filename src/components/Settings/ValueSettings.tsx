@@ -98,7 +98,7 @@ const ValueSettings: React.FC = () => {
     Modal.confirm({
       title: t("generalButtons.deleteButton"),
       icon: <ExclamationCircleOutlined />,
-      content: "Deseja excluir a Família??",
+      content: "Deseja excluir o Valor?",
       okText: t("generalButtons.confirmButton"),
       cancelText: t("generalButtons.cancelButton"),
       async onOk() {
@@ -157,59 +157,59 @@ const ValueSettings: React.FC = () => {
     }
   };
 
+  const fetchValues = async () => {
+    try {
+      const response = await GetAllValue();
+      const valueData = response.result.map(
+        (value: {
+          id: UUID;
+          ds_Value: string;
+          cd_Caract: UUID;
+          vl_Position: number;
+          id_Allow_New_Approved: boolean;
+          id_Allow_Repeat_Approved: boolean;
+          id_Allow_New_Certificate: boolean;
+          id_Allow_Repeat_Certificate: boolean;
+        }) => ({
+          id: value.id,
+          value: value.ds_Value,
+          charact: value.cd_Caract,
+          position: value.vl_Position,
+          newApproved: value.id_Allow_New_Approved,
+          repeatApproved: value.id_Allow_Repeat_Approved,
+          newCertificate: value.id_Allow_New_Certificate,
+          repeatCertificate: value.id_Allow_Repeat_Certificate,
+        })
+      );
+      setValues(valueData);
+      console.log(valueData);
+    } catch (error) {
+      console.error("Erro ao buscar valores:", error);
+    }
+  };
+
+  const fetchCharacts = async () => {
+    try {
+      const response = await GetAllCharact();
+      const charactData = response.result.map(
+        (charact: { id: UUID; ds_Caract: string }) => ({
+          id: charact.id,
+          charact: charact.ds_Caract,
+        })
+      );
+      setCharacts(charactData);
+    } catch (error) {
+      console.error("Erro ao buscar características:", error);
+    }
+  };
+
   useEffect(() => {
     if (fetchData) {
-      async function fetchValues() {
-        try {
-          const response = await GetAllValue();
-          const valueData = response.result.map(
-            (value: {
-              id: any;
-              ds_Value: string;
-              cd_Caract: any;
-              vl_Position: number;
-              id_Allow_New_Approved: boolean;
-              id_Allow_Repeat_Approved: boolean;
-              id_Allow_New_Certificate: boolean;
-              id_Allow_Repeat_Certificate: boolean;
-            }) => ({
-              id: value.id,
-              value: value.ds_Value,
-              charact: value.cd_Caract,
-              position: value.vl_Position,
-              newApproved: value.id_Allow_New_Approved,
-              repeatApproved: value.id_Allow_Repeat_Approved,
-              newCertificate: value.id_Allow_New_Certificate,
-              repeatCertificate: value.id_Allow_Repeat_Certificate,
-            })
-          );
-          setValues(valueData);
-          console.log(valueData);
-        } catch (error) {
-          console.error("Erro ao buscar grupos:", error);
-        }
-      }
-      fetchValues();
-      setFetchData(false);
+      fetchValues().then(() => setFetchData(false));
     }
   }, [fetchData]);
 
   useEffect(() => {
-    async function fetchCharacts() {
-      try {
-        const response = await GetAllCharact();
-        const charactData = response.result.map(
-          (charact: { id: UUID; ds_Caract: string }) => ({
-            id: charact.id,
-            charact: charact.ds_Caract,
-          })
-        );
-        setCharacts(charactData);
-      } catch (error) {
-        console.error("Erro ao buscar grupos:", error);
-      }
-    }
-
     fetchCharacts();
   }, [handleSelectCaractChange]);
 

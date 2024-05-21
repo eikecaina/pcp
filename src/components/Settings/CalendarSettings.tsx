@@ -89,7 +89,7 @@ export const CalendarSettings = () => {
       </div>
       <Form layout="vertical">
         <Row gutter={5}>
-          <Col span={18} style={{ display: "flex" }}>
+          <Col span={20} style={{ display: "flex" }}>
             <Card style={{ width: "100%" }} bodyStyle={{ padding: 0 }}>
               <div style={{ margin: 10 }}>
                 <Form.Item
@@ -143,13 +143,14 @@ export const CalendarSettings = () => {
               </div>
             </Card>
           </Col>
-          <Col span={6}>
+          <Col span={4}>
             <Card style={{ height: 325 }} bodyStyle={{ padding: 0 }}>
               <Calendar fullscreen={false} style={{ color: "red" }} />
             </Card>
           </Col>
         </Row>
         <div style={{ margin: 10, float: "right" }}>
+          <DeleteButton />
           <SaveButton />
         </div>
       </Form>

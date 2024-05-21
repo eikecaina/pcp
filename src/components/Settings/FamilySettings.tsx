@@ -27,6 +27,7 @@ import {
   Save,
   GetAllFamily,
   Update,
+  GetDataFromId,
 } from "@/app/api/services/Family/data";
 import { GetAllGroup } from "@/app/api/services/Group/data";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
@@ -54,10 +55,10 @@ const FamilySttings: React.FC = () => {
 
   const clearInputs = () => {
     setFormData({
-      id: undefined,
-      family: undefined,
-      plan: undefined,
-      group: undefined,
+      id: "",
+      family: "",
+      plan: "",
+      group: "",
     });
   };
 
@@ -72,7 +73,6 @@ const FamilySttings: React.FC = () => {
         try {
           if (formData.id) {
             Update(formData);
-            clearInputs();
             setFetchData(true);
             message.success("Editado com sucesso!", 2.5);
           } else {
@@ -81,6 +81,7 @@ const FamilySttings: React.FC = () => {
             setFetchData(true);
             message.success("Salvo com sucesso!", 2.5);
           }
+          setFetchData(true);
         } catch (error) {
           message.error("Não foi possível salvar");
         }
@@ -91,7 +92,7 @@ const FamilySttings: React.FC = () => {
     Modal.confirm({
       title: t("generalButtons.deleteButton"),
       icon: <ExclamationCircleOutlined />,
-      content: "Deseja excluir a Família??",
+      content: "Deseja excluir a Família?",
       okText: t("generalButtons.confirmButton"),
       cancelText: t("generalButtons.cancelButton"),
       async onOk() {
@@ -107,27 +108,29 @@ const FamilySttings: React.FC = () => {
     });
   };
 
-  const handleSelectFamilyChange = (selectedFamilyId: any) => {
-    const selectedFamily = familys.find(
-      (family) => family.id === selectedFamilyId
-    );
-    if (selectedFamily) {
-      setFormData({
-        ...formData,
-        id: selectedFamily.id,
-        group: selectedFamily.group,
-        plan: selectedFamily.plan,
-        family: selectedFamily.family,
-      });
+  const handleSelectFamilyChange = async (selectedFamilyId: UUID) => {
+    try {
+      const selectedFamily = await GetDataFromId(selectedFamilyId);
+      if (selectedFamily) {
+        setFormData({
+          ...formData,
+          id: selectedFamily.id,
+          group: selectedFamily.id_Group,
+          plan: selectedFamily.ds_Family_Planej,
+          family: selectedFamily.ds_Family,
+        });
+      }
+      console.log(formData);
+    } catch (error) {
+      console.error("Erro ao buscar dados da família:", error);
     }
-    console.log(selectedFamily);
   };
 
   const handleInputChange = (fieldName: string, value: string) => {
     setFormData({ ...formData, [fieldName]: value });
   };
 
-  const handleSelectGroupChange = (selectedGroupId: UUID | string) => {
+  const handleSelectGroupChange = (selectedGroupId: UUID) => {
     const selectedGroup = groups.find((group) => group.id === selectedGroupId);
     if (selectedGroup) {
       setFormData({
@@ -138,53 +141,52 @@ const FamilySttings: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    async function fetchGroups() {
-      try {
-        const response = await GetAllGroup();
-        const groupData = response.result.map(
-          (group: { id: UUID; ds_Group: string }) => ({
-            id: group.id,
-            group: group.ds_Group,
-          })
-        );
-        setGroups(groupData);
-      } catch (error) {
-        console.error("Erro ao buscar grupos:", error);
-      }
+  const fetchGroups = async (setGroups: any) => {
+    try {
+      const response = await GetAllGroup();
+      const groupData = response.result.map(
+        (group: { id: UUID; ds_Group: string }) => ({
+          id: group.id,
+          group: group.ds_Group,
+        })
+      );
+      setGroups(groupData);
+    } catch (error) {
+      console.error("Erro ao buscar grupos:", error);
     }
+  };
 
-    fetchGroups();
+  const fetchFamilys = async (setFamilys: any) => {
+    try {
+      const response = await GetAllFamily();
+      const familyData = response.result.map(
+        (family: {
+          id: UUID;
+          ds_Family: string;
+          id_Group: UUID;
+          ds_Family_Planej: string;
+        }) => ({
+          id: family.id,
+          family: family.ds_Family,
+          group: family.id_Group,
+          plan: family.ds_Family_Planej,
+        })
+      );
+      setFamilys(familyData);
+    } catch (error) {
+      console.error("Erro ao buscar famílias:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchGroups(setGroups);
   }, [handleSelectGroupChange]);
 
   useEffect(() => {
     if (fetchData) {
-      async function fetchFamilys() {
-        try {
-          const response = await GetAllFamily();
-          const familyData = response.result.map(
-            (family: {
-              id: UUID;
-              ds_Family: string;
-              ds_Family_Planej: string;
-              id_Group: Group;
-            }) => ({
-              id: family.id,
-              family: family.ds_Family,
-              group: family.id_Group,
-              plan: family.ds_Family_Planej,
-            })
-          );
-          setFamilys(familyData);
-        } catch (error) {
-          console.error("Erro ao buscar grupos:", error);
-        }
-      }
-
-      fetchFamilys();
-      setFetchData(false);
+      fetchFamilys(setFamilys).then(() => setFetchData(false));
     }
-  }, [fetchData]);
+  }, [fetchData, fetchFamilys, setFetchData]);
 
   const onChange = (e: RadioChangeEvent) => {
     const selectedValue = e.target.value;

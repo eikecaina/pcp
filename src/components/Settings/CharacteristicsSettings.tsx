@@ -144,57 +144,44 @@ const CharacteristicsSettings: React.FC = () => {
 
   const { t } = useTranslation("layout");
 
+  const fetchCaract = async () => {
+    try {
+      const response = await GetAllCharact();
+      const charactData = response.result.map((charact: { id: UUID; ds_Caract: string; ds_Exib: string; ds_Desc: string; cd_Caract_Type: UUID; vl_Position: number; }) => ({
+        id: charact.id,
+        charact: charact.ds_Caract,
+        exib: charact.ds_Exib,
+        desc: charact.ds_Desc,
+        type: charact.cd_Caract_Type,
+        position: charact.vl_Position,
+      }));
+      setCharact(charactData);
+      console.log(charactData);
+    } catch (error) {
+      console.error("Erro ao buscar características:", error);
+    }
+  };
+  
+  const fetchCaractType = async () => {
+    try {
+      const response = await GetAllCharactType();
+      const charactTypeData = response.result.map((charactType: { id: UUID; ds_Caract_Type: string; }) => ({
+        id: charactType.id,
+        charactType: charactType.ds_Caract_Type,
+      }));
+      setCharactType(charactTypeData);
+    } catch (error) {
+      console.error("Erro ao buscar tipos de características:", error);
+    }
+  };
+  
   useEffect(() => {
     if (fetchData) {
-      async function fetchCaract() {
-        try {
-          const response = await GetAllCharact();
-          const charactData = response.result.map(
-            (charact: {
-              id: UUID;
-              ds_Caract: string;
-              ds_Exib: string;
-              ds_Desc: string;
-              cd_Caract_Type: UUID;
-              vl_Position: number;
-            }) => ({
-              id: charact.id,
-              charact: charact.ds_Caract,
-              exib: charact.ds_Exib,
-              desc: charact.ds_Desc,
-              type: charact.cd_Caract_Type,
-              position: charact.vl_Position,
-            })
-          );
-          setCharact(charactData);
-          console.log(charactData);
-          
-        } catch (error) {
-          console.error("Erro ao buscar caracteristicas:", error);
-        }
-      }
-  
-      fetchCaract();
-      setFetchData(false);
+      fetchCaract().then(() => setFetchData(false));
     }
   }, [fetchData]);
-
+  
   useEffect(() => {
-    async function fetchCaractType() {
-      try {
-        const response = await GetAllCharactType();
-        const charactTypeData = response.result.map(
-          (charactType: { id: UUID; ds_Caract_Type: string }) => ({
-            id: charactType.id,
-            charactType: charactType.ds_Caract_Type,
-          })
-        );
-        setCharactType(charactTypeData);
-      } catch (error) {
-        console.error("Erro ao buscar caracteristicas:", error);
-      }
-    }
-
     fetchCaractType();
   }, []);
 

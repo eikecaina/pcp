@@ -21,7 +21,7 @@ export async function GetAllFamily() {
   }
 }
 
-export async function GetDataFromId(id: number) {
+export async function GetDataFromId(id: UUID) {
   try {
     return await api.get(`/Family/Get/${id}`).then((res) => {
       return res.data;

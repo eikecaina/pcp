@@ -89,7 +89,7 @@ const GroupSettings: React.FC = () => {
     Modal.confirm({
       title: t("generalButtons.deleteButton"),
       icon: <ExclamationCircleOutlined />,
-      content: "Deseja excluir a Família??",
+      content: "Deseja excluir o Grupo?",
       okText: t("generalButtons.confirmButton"),
       cancelText: t("generalButtons.cancelButton"),
       async onOk() {
@@ -114,33 +114,27 @@ const GroupSettings: React.FC = () => {
   };
 
   useEffect(() => {
-    if (fetchData) {
-      async function fetchGroups() {
+    const fetchGroups = async () => {
+      if (fetchData) {
         try {
           const response = await GetAllGroup();
-          const groupData = response.result.map(
-            (group: {
-              id: any;
-              ds_Group: string;
-              ds_Email: string;
-              ds_Desc: string;
-              ds_Blocked: string;
-            }) => ({
-              id: group.id,
-              group: group.ds_Group,
-              desc: group.ds_Desc,
-              email: group.ds_Email,
-              status: group.ds_Blocked,
-            })
-          );
+          const groupData = response.result.map((group: { id: any; ds_Group: string; ds_Desc: string; ds_Email: string; ds_Blocked: string; }) => ({
+            id: group.id,
+            group: group.ds_Group,
+            desc: group.ds_Desc,
+            email: group.ds_Email,
+            status: group.ds_Blocked,
+          }));
           setGroups(groupData);
         } catch (error) {
           console.error("Erro ao buscar grupos:", error);
+        } finally {
+          setFetchData(false);
         }
       }
-      fetchGroups();
-      setFetchData(false);
-    }
+    };
+  
+    fetchGroups();
   }, [fetchData]);
 
   const handleInputChange = (fieldName: string, value: string) => {
