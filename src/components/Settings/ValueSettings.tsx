@@ -58,14 +58,13 @@ const ValueSettings: React.FC = () => {
 
   const clearInputs = () => {
     setFormData({
-      id: undefined,
-      value: undefined,
-      charact: undefined,
-      position: undefined,
-      newApproved: undefined,
-      repeatApproved: undefined,
-      newCertificate: undefined,
-      repeatCertificate: undefined,
+      value: '',
+      charact: '',
+      position: '',
+      newApproved: '',
+      repeatApproved: '',
+      newCertificate: '',
+      repeatCertificate: '',
     });
   };
 
@@ -79,14 +78,12 @@ const ValueSettings: React.FC = () => {
       .then(async () => {
         try {
           if (formData.id) {
-            Update(formData);
-            clearInputs();
-            setFetchData(true);
+            await Update(formData);
           } else {
-            await Save(formData);
+            await Save(formData); 
             clearInputs();
-            setFetchData(true);
           }
+          setFetchData(true);
           message.success("Salvo com sucesso!", 2.5);
         } catch (error) {
           message.error("Não foi possível salvar");

@@ -19,11 +19,12 @@ import {
   Modal,
   Tooltip,
   Space,
+  message,
 } from "antd";
 import type { RadioChangeEvent, TabsProps } from "antd";
 import CustomInputNumber from "components/CustomInputNumber";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   DeleteButton,
   RadioButtons,
@@ -31,16 +32,91 @@ import {
   SelectRadio,
 } from "./ButtonsComponent";
 import { useTranslation } from "react-i18next";
+import { UUID } from "crypto";
+import {
+  Delete,
+  GetAllCalendar,
+  GetDataFromId,
+  Save,
+  Update,
+} from "@/app/api/services/Calendar/data";
 
 const { TextArea } = Input;
 
+interface Calendar {
+  id: UUID;
+  calendar: string;
+  shortDesc: string;
+  longDesc: string;
+  createdUser: string;
+  modifiedUser: string;
+}
+
 export const CalendarSettings = () => {
-  const [value, setValue] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [value, setValue] = useState(1);
+  const [formData, setFormData] = useState<any>({});
+  const [calendars, setCalendars] = useState<Calendar[]>([]);
+  const [fetchData, setFetchData] = useState(true);
+
+  const { t } = useTranslation("layout");
+  const { Option } = Select;
 
   const openModal = () => {
     setValue(value);
     setIsModalOpen(true);
+  };
+
+  const clearInputs = () => {
+    setFormData({
+      id: "",
+      family: "",
+      plan: "",
+      group: "",
+    });
+  };
+
+  const success = () => {
+    message
+      .open({
+        type: "loading",
+        content: "Salvando..",
+        duration: 2.5,
+      })
+      .then(async () => {
+        try {
+          if (formData.id) {
+            await Update(formData);
+          } else {
+            await Save(formData); 
+            clearInputs();
+          }
+          setFetchData(true);
+          message.success("Salvo com sucesso!", 2.5);
+        } catch (error) {
+          message.error("Não foi possível salvar");
+        }
+      });
+  };
+
+  const confirmDelete = () => {
+    Modal.confirm({
+      title: t("generalButtons.deleteButton"),
+      icon: <ExclamationCircleOutlined />,
+      content: "Deseja excluir o Calendário?",
+      okText: t("generalButtons.confirmButton"),
+      cancelText: t("generalButtons.cancelButton"),
+      async onOk() {
+        try {
+          await Delete(formData);
+          clearInputs();
+          setFetchData(true);
+          message.success("Excluido com sucesso!");
+        } catch (error) {
+          message.error("Não foi possivel excluir!");
+        }
+      },
+    });
   };
 
   const deleteDay = () => {
@@ -71,21 +147,90 @@ export const CalendarSettings = () => {
   });
 
   const onChange = (e: RadioChangeEvent) => {
-    setValue(e.target.value);
+    const selectedValue = e.target.value;
+    if (selectedValue === 1) {
+      setFormData({});
+    }
+    setValue(selectedValue);
   };
 
-  const {t} = useTranslation("layout");
+  
+  const handleInputChange = (fieldName: string, value: string) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleSelectCalendarChange = async (selectedCalendarId: UUID) => {
+    try {
+      const selectedCalendar = await GetDataFromId(selectedCalendarId);
+      if (selectedCalendar) {
+        setFormData({
+          ...formData,
+          id: selectedCalendar.id,
+          calendar: selectedCalendar.ds_Calendar,
+          shortDesc: selectedCalendar.ds_Short_Desc,
+          longDesc: selectedCalendar.ds_Long_Desc,
+          createdUser: selectedCalendar.cd_Audit_Created_User,
+          modifiedUser: selectedCalendar.cd_Audit_Modified_User,
+        });
+      }
+      console.log(formData);
+    } catch (error) {
+      console.error("Erro ao buscar dados do calendário:", error);
+    }
+  };
+
+  const fetchCalendars = async (setCalendars: any) => {
+    try {
+      const response = await GetAllCalendar();
+      const calendarData = response.result.map(
+        (calendar: {
+          id: UUID;
+          ds_Calendar: string;
+          ds_Short_Desc: string;
+          ds_Long_Desc: string;
+          cd_Audit_Created_User: string;
+          cd_Audit_Modified_User: string;
+        }) => ({
+          id: calendar.id,
+          calendar: calendar.ds_Calendar,
+          shortDesc: calendar.ds_Short_Desc,
+          longDesc: calendar.ds_Long_Desc,
+          createdUser: calendar.cd_Audit_Created_User,
+          modifiedUser: calendar.cd_Audit_Modified_User,
+        })
+      );
+      setCalendars(calendarData);
+    } catch (error) {
+      console.error("Erro ao buscar calendários:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (fetchData) {
+      fetchCalendars(setCalendars).then(() => setFetchData(false));
+    }
+  }, [fetchData, setCalendars, setFetchData]);
+
 
   return (
     <>
       <div style={{ display: "flex" }}>
         <RadioButtons onChange={onChange} value={value} />
         <div style={{ marginLeft: 15 }}></div>
-        <SelectRadio
-          style={formStyle("calc(25% - 8px)", "8px")}
-          type={t("labels.calendar")}
-          value={value}
-        />
+        <Form.Item style={{ width: "50%" }} label={t("labels.calendar")}>
+          <Select
+            style={formStyle("calc(25% - 8px)", "8px")}
+            disabled={value === 1}
+            onChange={handleSelectCalendarChange}
+            value={value === 2 ? formData.calendar : null}
+          >
+            {calendars.map((calendar) => (
+              <Option key={calendar.id} value={calendar.id}>
+                {calendar.calendar}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
       </div>
       <Form layout="vertical">
         <Row gutter={5}>
@@ -103,10 +248,7 @@ export const CalendarSettings = () => {
                       </Button>
                     </Tooltip>
 
-                    <Select
-                      defaultValue="Ferias"
-                      options={[{ value: "Ferias" }]}
-                    />
+                    <Select />
 
                     <Tooltip title={t("labels.editDays")}>
                       <Button type="primary" onClick={openModal}>
@@ -126,7 +268,12 @@ export const CalendarSettings = () => {
                 </Form.Item>
 
                 <Form.Item label={t("labels.name")} style={formStyle("55%")}>
-                  <Input />
+                  <Input
+                    value={formData.calendar}
+                    onChange={(e) =>
+                      handleInputChange("calendar", e.target.value)
+                    }
+                  />
                 </Form.Item>
                 <Form.Item
                   label="Base"
@@ -134,11 +281,28 @@ export const CalendarSettings = () => {
                 >
                   <Select />
                 </Form.Item>
-                <Form.Item label={t("labels.description")} style={formStyle("50%")}>
-                  <Input />
+                <Form.Item
+                  label={t("labels.description")}
+                  style={formStyle("50%")}
+                >
+                  <Input
+                    value={formData.shortDesc}
+                    onChange={(e) =>
+                      handleInputChange("shortDesc", e.target.value)
+                    }
+                  />
                 </Form.Item>
-                <Form.Item label={t("labels.comments")} style={{ marginBottom: 0 }}>
-                  <TextArea style={{ resize: "none", height: "99px" }} />
+                <Form.Item
+                  label={t("labels.comments")}
+                  style={{ marginBottom: 0 }}
+                >
+                  <TextArea
+                    style={{ resize: "none", height: "99px" }}
+                    value={formData.longDesc}
+                    onChange={(e) =>
+                      handleInputChange("longDesc", e.target.value)
+                    }
+                  />
                 </Form.Item>
               </div>
             </Card>
@@ -150,8 +314,8 @@ export const CalendarSettings = () => {
           </Col>
         </Row>
         <div style={{ margin: 10, float: "right" }}>
-          <DeleteButton />
-          <SaveButton />
+          <DeleteButton onClick={confirmDelete} />
+          <SaveButton onClick={success} />
         </div>
       </Form>
       <Modal

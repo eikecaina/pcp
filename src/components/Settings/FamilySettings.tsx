@@ -55,7 +55,6 @@ const FamilySttings: React.FC = () => {
 
   const clearInputs = () => {
     setFormData({
-      id: "",
       family: "",
       plan: "",
       group: "",
@@ -72,16 +71,13 @@ const FamilySttings: React.FC = () => {
       .then(async () => {
         try {
           if (formData.id) {
-            Update(formData);
-            setFetchData(true);
-            message.success("Editado com sucesso!", 2.5);
+            await Update(formData);
           } else {
             await Save(formData);
             clearInputs();
-            setFetchData(true);
-            message.success("Salvo com sucesso!", 2.5);
           }
           setFetchData(true);
+          message.success("Salvo com sucesso!", 2.5);
         } catch (error) {
           message.error("Não foi possível salvar");
         }
@@ -132,6 +128,8 @@ const FamilySttings: React.FC = () => {
 
   const handleSelectGroupChange = (selectedGroupId: UUID) => {
     const selectedGroup = groups.find((group) => group.id === selectedGroupId);
+    console.log(selectedGroup);
+
     if (selectedGroup) {
       setFormData({
         ...formData,
@@ -141,7 +139,7 @@ const FamilySttings: React.FC = () => {
     }
   };
 
-  const fetchGroups = async (setGroups: any) => {
+  const fetchGroups = async () => {
     try {
       const response = await GetAllGroup();
       const groupData = response.result.map(
@@ -156,7 +154,7 @@ const FamilySttings: React.FC = () => {
     }
   };
 
-  const fetchFamilys = async (setFamilys: any) => {
+  const fetchFamilys = async () => {
     try {
       const response = await GetAllFamily();
       const familyData = response.result.map(
@@ -179,14 +177,14 @@ const FamilySttings: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchGroups(setGroups);
-  }, [handleSelectGroupChange]);
+    fetchGroups();
+  }, []);
 
   useEffect(() => {
     if (fetchData) {
-      fetchFamilys(setFamilys).then(() => setFetchData(false));
+      fetchFamilys().then(() => setFetchData(false));
     }
-  }, [fetchData, fetchFamilys, setFetchData]);
+  }, [fetchData]);
 
   const onChange = (e: RadioChangeEvent) => {
     const selectedValue = e.target.value;

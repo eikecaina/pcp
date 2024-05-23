@@ -52,13 +52,14 @@ const GroupSettings: React.FC = () => {
 
   const clearInputs = () => {
     setFormData({
-      id: undefined,
-      group: undefined,
-      desc: undefined,
-      status: undefined,
-      email: undefined,
+      id: '',
+      group: '',
+      desc: '',
+      status: '',
+      email: '',
     });
   };
+
 
   const success = () => {
     message
@@ -70,14 +71,12 @@ const GroupSettings: React.FC = () => {
       .then(async () => {
         try {
           if (formData.id) {
-            Update(formData);
-            setFetchData(true);
-            clearInputs();
+            await Update(formData);
           } else {
-            await Save(formData);
-            setFetchData(true);
+            await Save(formData); 
             clearInputs();
           }
+          setFetchData(true);
           message.success("Salvo com sucesso!", 2.5);
         } catch (error) {
           message.error("Não foi possível salvar");

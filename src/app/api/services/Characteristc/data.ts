@@ -86,6 +86,7 @@ export async function Update(formData: any) {
     };
 
     return await api.put(`/Characteristic/Update`, data).then((res) => {
+      console.log(formData);
       return res.data;
     });
   } catch (error) {

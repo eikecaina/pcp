@@ -51,12 +51,11 @@ const CharacteristicsSettings: React.FC = () => {
 
   const clearInputs = () => {
     setFormData({
-      id: undefined,
-      charact: undefined,
-      exib: undefined,
-      desc: undefined,
-      type: undefined,
-      position: undefined,
+      charact: '',
+      exib: '',
+      desc: '',
+      type: '',
+      position: '',
     });
   };
 
@@ -70,14 +69,12 @@ const CharacteristicsSettings: React.FC = () => {
       .then(async () => {
         try {
           if (formData.id) {
-            Update(formData);
-            clearInputs();
-            setFetchData(true);
+            await Update(formData);
           } else {
-            await Save(formData);
+            await Save(formData); 
             clearInputs();
-            setFetchData(true);
           }
+          setFetchData(true);
           message.success("Salvo com sucesso!", 2.5);
         } catch (error) {
           message.error("Não foi possível salvar");
@@ -89,7 +86,7 @@ const CharacteristicsSettings: React.FC = () => {
     Modal.confirm({
       title: t("generalButtons.deleteButton"),
       icon: <ExclamationCircleOutlined />,
-      content: "Deseja excluir a Família??",
+      content: "Deseja excluir a Característica?",
       okText: t("generalButtons.confirmButton"),
       cancelText: t("generalButtons.cancelButton"),
       async onOk() {
