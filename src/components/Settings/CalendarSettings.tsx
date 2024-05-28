@@ -40,6 +40,7 @@ import {
   Save,
   Update,
 } from "@/app/api/services/Calendar/data";
+import { GetAllDay } from "@/app/api/services/Day/data";
 
 const { TextArea } = Input;
 
@@ -52,11 +53,17 @@ interface Calendar {
   modifiedUser: string;
 }
 
+interface Days {
+  id: UUID;
+  day: string;
+}
+
 export const CalendarSettings = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [value, setValue] = useState(1);
   const [formData, setFormData] = useState<any>({});
   const [calendars, setCalendars] = useState<Calendar[]>([]);
+  const [days, setDays] = useState<Days[]>([]);
   const [fetchData, setFetchData] = useState(true);
 
   const { t } = useTranslation("layout");
@@ -68,12 +75,7 @@ export const CalendarSettings = () => {
   };
 
   const clearInputs = () => {
-    setFormData({
-      id: "",
-      family: "",
-      plan: "",
-      group: "",
-    });
+    setFormData({});
   };
 
   const success = () => {
@@ -88,7 +90,7 @@ export const CalendarSettings = () => {
           if (formData.id) {
             await Update(formData);
           } else {
-            await Save(formData); 
+            await Save(formData);
             clearInputs();
           }
           setFetchData(true);
@@ -154,7 +156,6 @@ export const CalendarSettings = () => {
     setValue(selectedValue);
   };
 
-  
   const handleInputChange = (fieldName: string, value: string) => {
     setFormData({ ...formData, [fieldName]: value });
   };
@@ -211,6 +212,53 @@ export const CalendarSettings = () => {
     }
   }, [fetchData, setCalendars, setFetchData]);
 
+  const fetchDays = async () => {
+    try {
+      const response = await GetAllDay();
+      const dayData = response.result.map(
+        (day: { id: UUID; ds_Calendar_Day: string }) => ({
+          id: day.id,
+          day: day.ds_Calendar_Day,
+        })
+      );
+      setDays(dayData);
+    } catch (error) {
+      console.log("Erro ao buscar dia:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (fetchData) {
+      fetchDays();
+    }
+  }, []);
+
+  const listDays = () => {
+    const days = [
+      { data: "24/02/2024", nome: "Feriado" },
+      { data: "22/04/2024", nome: "Ferias" },
+      { data: "21/07/2024", nome: "Carnaval" },
+      { data: "26/09/2024", nome: "Sexta-feira" },
+      { data: "28/01/2024", nome: "Happy Hour" },
+    ];
+
+    return (
+      <ul style={{ listStyle: "none", padding: 0, margin: 0, height: 180 }}>
+        {days.map((item, index) => (
+          <li
+            style={{
+              marginBottom: 3,
+              background: index % 2 === 0 ? "white" : "#f0f0f0",
+              padding: 2,
+            }}
+            key={index}
+          >
+            {item.data + " - " + item.nome}
+          </li>
+        ))}
+      </ul>
+    );
+  };
 
   return (
     <>
@@ -234,11 +282,22 @@ export const CalendarSettings = () => {
       </div>
       <Form layout="vertical">
         <Row gutter={5}>
-          <Col span={20} style={{ display: "flex" }}>
+          <Col span={16} style={{ display: "flex" }}>
             <Card style={{ width: "100%" }} bodyStyle={{ padding: 0 }}>
               <div style={{ margin: 10 }}>
                 <Form.Item
-                  style={formStyle("calc(40% - 8px)", "8px")}
+                  label={t("labels.name")}
+                  style={formStyle("calc(50% - 8px)", "8px")}
+                >
+                  <Input
+                    value={formData.calendar}
+                    onChange={(e) =>
+                      handleInputChange("calendar", e.target.value)
+                    }
+                  />
+                </Form.Item>
+                <Form.Item
+                  style={formStyle("calc(50%)")}
                   label={t("labels.days")}
                 >
                   <Space.Compact style={{ width: "100%" }}>
@@ -248,33 +307,23 @@ export const CalendarSettings = () => {
                       </Button>
                     </Tooltip>
 
-                    <Select />
+                    <Select defaultValue={"Sem Dia"}>
+                      <Option value={null}>Sem Dia</Option>
+                      {days.map((day) => (
+                        <Option key={day.id} value={day.id}>
+                          {day.day}
+                        </Option>
+                      ))}
+                    </Select>
 
-                    <Tooltip title={t("labels.editDays")}>
-                      <Button type="primary" onClick={openModal}>
-                        <EditOutlined />
+                    <Tooltip title={t("labels.addDays")}>
+                      <Button onClick={openModal} type="primary">
+                        <PlusOutlined />
                       </Button>
                     </Tooltip>
                   </Space.Compact>
                 </Form.Item>
-                <Form.Item label=" " style={formStyle("5%")}>
-                  <Tooltip title={t("labels.addDays")}>
-                    <Button
-                      icon={<PlusOutlined />}
-                      onClick={openModal}
-                      type="primary"
-                    ></Button>
-                  </Tooltip>
-                </Form.Item>
 
-                <Form.Item label={t("labels.name")} style={formStyle("55%")}>
-                  <Input
-                    value={formData.calendar}
-                    onChange={(e) =>
-                      handleInputChange("calendar", e.target.value)
-                    }
-                  />
-                </Form.Item>
                 <Form.Item
                   label="Base"
                   style={formStyle("calc(50% - 8px)", "8px")}
@@ -309,6 +358,11 @@ export const CalendarSettings = () => {
           </Col>
           <Col span={4}>
             <Card style={{ height: 325 }} bodyStyle={{ padding: 0 }}>
+              {listDays()}
+            </Card>
+          </Col>
+          <Col span={4}>
+            <Card style={{ height: 325 }} bodyStyle={{ padding: 0 }}>
               <Calendar fullscreen={false} style={{ color: "red" }} />
             </Card>
           </Col>
@@ -334,7 +388,7 @@ export const CalendarSettings = () => {
                     <Input size="small" />
                   </Form.Item>
                   <Form.Item
-                    label={t("lables.date")}
+                    label={t("labels.date")}
                     style={formStyle("calc(70% - 5px)", "5px")}
                   >
                     <DatePicker

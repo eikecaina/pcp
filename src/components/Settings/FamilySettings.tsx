@@ -104,39 +104,30 @@ const FamilySttings: React.FC = () => {
     });
   };
 
-  const handleSelectFamilyChange = async (selectedFamilyId: UUID) => {
-    try {
-      const selectedFamily = await GetDataFromId(selectedFamilyId);
-      if (selectedFamily) {
-        setFormData({
-          ...formData,
-          id: selectedFamily.id,
-          group: selectedFamily.id_Group,
-          plan: selectedFamily.ds_Family_Planej,
-          family: selectedFamily.ds_Family,
-        });
-      }
-      console.log(formData);
-    } catch (error) {
-      console.error("Erro ao buscar dados da família:", error);
+  const handleSelectFamilyChange = (selectedFamilyId: any) => {
+    const selectedFamily = familys.find(
+      (family) => family.id === selectedFamilyId
+    );
+    if (selectedFamily) {
+      setFormData({
+        ...formData,
+        id: selectedFamily.id,
+        group: selectedFamily.group,
+        plan: selectedFamily.plan,
+        family: selectedFamily.family,
+      });
     }
+    console.log(formData);
   };
 
   const handleInputChange = (fieldName: string, value: string) => {
     setFormData({ ...formData, [fieldName]: value });
   };
 
-  const handleSelectGroupChange = (selectedGroupId: UUID) => {
-    const selectedGroup = groups.find((group) => group.id === selectedGroupId);
-    console.log(selectedGroup);
-
-    if (selectedGroup) {
-      setFormData({
-        ...formData,
-        idGroup: selectedGroupId,
-        group: selectedGroup.group,
-      });
-    }
+  const handleSelectGroupChange = (group: any) => {
+    setFormData({ ...formData, group: group });
+    console.log(group);
+    
   };
 
   const fetchGroups = async () => {

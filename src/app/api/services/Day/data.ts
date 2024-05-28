@@ -1,19 +1,15 @@
-import { v4 as uuidv4 } from 'uuid';
 import api from "../api";
-import { UUID } from 'crypto';
+import { UUID } from "crypto";
+import { v4 as uuidv4 } from "uuid";
 
 interface FormData {
   id: UUID;
-  family: string;
-  plan: string;
-  group: UUID;
-  modifiedUser: string;
-  createdUser: string;
+
 }
 
-export async function GetAllFamily() {
+export async function GetAllDay() {
   try {
-    return await api.get(`/Family/GetAll`).then((r) => {
+    return await api.get(`/CalendarDay/GetAll`).then((r) => {
       return r.data;
     });
   } catch (error) {
@@ -23,7 +19,7 @@ export async function GetAllFamily() {
 
 export async function GetDataFromId(id: UUID) {
   try {
-    return await api.get(`/Family/Get/${id}`).then((res) => {
+    return await api.get(`/CalendarDay/Get/${id}`).then((res) => {
       return res.data;
     });
   } catch (error) {
@@ -34,15 +30,12 @@ export async function GetDataFromId(id: UUID) {
 export async function Save(formData: FormData) {
   const rec = {
     id: uuidv4(),
-    ds_Family: formData.family,
-    ds_Family_Planej: formData.plan,
-    id_Group: formData.group,
+    cd_Audit_Created_User: "Eike",
     cd_Audit_Modified_User: "Eike",
-    cd_Audit_Created_User: "Eike"
   };
 
   try {
-    const response = await api.post(`/Family`, rec);
+    const response = await api.post(`/CalendarDay`, rec);
     console.log(rec);
 
     return response.data;
@@ -53,20 +46,15 @@ export async function Save(formData: FormData) {
   }
 }
 
-export async function Update( formData: any) {
+export async function Update(formData: FormData) {
   try {
     let data = {
       id: formData.id,
-      ds_Family: formData.family,
-      ds_Family_Planej: formData.plan,
-      id_Group: formData.group,
+      cd_Audit_Created_User: "Eike",
       cd_Audit_Modified_User: "Eike",
-      cd_Audit_Created_User: "Eike"
     };
-  
 
-    return await api.put(`/Family/Update`, data ).then((res) => {
-      console.log(data);
+    return await api.put(`/CalendarDay/Update`, data).then((res) => {
       return res.data;
     });
   } catch (error) {
@@ -77,16 +65,14 @@ export async function Update( formData: any) {
 export async function Delete(formData: FormData) {
   const rec = {
     id: formData.id,
-  }
+  };
 
   try {
-    return await api.delete(`/Family/Delete/${rec.id}`).then((res) => {
+    return await api.delete(`/CalendarDay/Delete/${rec.id}`).then((res) => {
       console.log("Deletado com sucesso");
       return res.data;
     });
   } catch (error) {
     console.log("Erro ao deletar:", error);
-   
-    
   }
 }

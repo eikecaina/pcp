@@ -137,21 +137,12 @@ const ValueSettings: React.FC = () => {
         newCertificate: selectedValue.newCertificate,
         repeatCertificate: selectedValue.repeatCertificate,
       });
-      console.log(formData);
     }
+    console.log(formData);
   };
 
-  const handleSelectCaractChange = (selectedCharactId: UUID | string) => {
-    const selectedCaract = characts.find(
-      (charact) => charact.id === selectedCharactId
-    );
-    if (selectedCaract) {
-      setFormData({
-        ...formData,
-        idCaract: selectedCharactId,
-        charact: selectedCaract.charact,
-      });
-    }
+  const handleSelectCaractChange = (charact: any) => {
+    setFormData({...formData, charact: charact});
   };
 
   const fetchValues = async () => {
@@ -179,7 +170,6 @@ const ValueSettings: React.FC = () => {
         })
       );
       setValues(valueData);
-      console.log(valueData);
     } catch (error) {
       console.error("Erro ao buscar valores:", error);
     }

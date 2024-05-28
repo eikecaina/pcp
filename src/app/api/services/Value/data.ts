@@ -5,7 +5,7 @@ import { UUID } from "crypto";
 interface FormData {
   id: UUID;
   value: string;
-  idCaract: UUID;
+  charact: UUID;
   position: number;
   newApproved: boolean;
   repeatApproved: boolean;
@@ -37,7 +37,7 @@ export async function Save(formData: FormData) {
   const rec = {
     id: uuidv4(),
     ds_Value: formData.value,
-    cd_Caract: formData.idCaract,
+    cd_Caract: formData.charact,
     vl_Position: formData.position,
     id_Allow_New_Approved: formData.newApproved,
     id_Allow_Repeat_Approved: formData.repeatApproved,
@@ -64,7 +64,7 @@ export async function Update(formData: any) {
     const rec = {
       id: formData.id,
       ds_Value: formData.value,
-      cd_Caract: formData.idCaract,
+      cd_Caract: formData.charact,
       vl_Position: formData.position,
       id_Allow_New_Approved: formData.newApproved,
       id_Allow_Repeat_Approved: formData.repeatApproved,
