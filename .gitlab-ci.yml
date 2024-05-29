@@ -7,6 +7,8 @@ variables:
   NODE_VERSION: "18"
   DOCKER_IMAGE_NAME: "wtpc-frontend"
   K8S_APP_NAME: "wtpc-frontend"
+  K8S_DISABLE_HEALTHCHECK: "true"
+  K8S_DISABLE_METRICS: "true"
 
 deploy:qa:
   variables:

@@ -10,6 +10,7 @@ module.exports = {
   //     },
   //   ]
   // },
+  output: "standalone",
   env: {
     SITE_NAME: "WTPC",
   },
