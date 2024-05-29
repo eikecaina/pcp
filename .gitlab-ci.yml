@@ -13,7 +13,7 @@ variables:
 deploy:qa:
   variables:
     K8S_NAMESPACE: "dev-wtpc-sim"
-    REACT_APP_API_URL: "https://wtpc-qa.weg.net"
+    APP_ENV: "qa"
 
 
 # include:

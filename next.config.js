@@ -12,7 +12,8 @@ module.exports = {
   // },
   output: "standalone",
   env: {
-    SITE_NAME: "WTPC",
+    SITE_NAME: process.env.NEXT_PUBLIC_SITE_NAME,
+    API_URL: process.env.NEXT_PUBLIC_API_URL
   },
   serverRuntimeConfig: {
     APP_ENV,
