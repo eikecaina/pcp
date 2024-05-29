@@ -37,34 +37,35 @@ const GeneralSettings: React.FC = () => {
     },
     {
       key: "5",
+      label: t("generalButtons.calendarsButton"),
+      children: <CalendarSettings />,
+    },
+    {
+      key: "6",
       label: t("generalButtons.processesButton"),
       children: <ProcessSettings />,
     },
     {
-      key: "6",
+      key: "7",
       label: t("generalButtons.connectionsButton"),
       children: <Connections />,
     },
     {
-      key: "7",
+      key: "8",
       label: t("generalButtons.resourcesButton"),
       children: <ResourceSettings />,
     },
     {
-      key: "8",
+      key: "9",
       label: t("generalButtons.subResourcesButton"),
       children: <SubResource />,
     },
     {
-      key: "9",
+      key: "10",
       label: t("generalButtons.criticalMaterialsButton"),
       children: <CriticalMaterials />,
     },
-    {
-      key: "10",
-      label: t("generalButtons.calendarsButton"),
-      children: <CalendarSettings />,
-    },
+  
   ];
 
   return <Tabs defaultActiveKey="1" items={items} />;

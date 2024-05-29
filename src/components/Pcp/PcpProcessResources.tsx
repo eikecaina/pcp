@@ -10,7 +10,6 @@ import {
   Row,
   Select,
 } from "antd";
-import { DataFetcherUniversity } from "components/DataFetcherJson";
 import { DatePicker } from "antd";
 import { RadioChangeEvent } from "antd/lib";
 
@@ -55,7 +54,7 @@ const PcpProcessResources: React.FC = () => {
                 style={{
                   width: "calc(50% - 8px)",
                   display: "inline-block",
-                  margin: "0px 16px 0 0px",
+                  margin: "0px 15px 0 0px",
                 }}
               >
                 <Select
@@ -107,25 +106,17 @@ const PcpProcessResources: React.FC = () => {
                 style={{
                   display: "inline-block",
                   width: "calc(50% - 8px)",
-                  margin: "0 16px 0 0",
+                  margin: "0 15px 0 0",
                 }}
               >
-                <DataFetcherUniversity apiUrl="http://universities.hipolabs.com/search?country=United+States&limit=10">
-                  {(universityData) => (
-                    <Select
-                      placeholder="Selecione o processo"
-                      showSearch
-                      onChange={(value) => handleSelectChange(value)}
-                      disabled={selectedRadio === 2}
-                    >
-                      {universityData.map((item) => (
-                        <Select.Option key={item.id} value={item.name}>
-                          {`${item.name} (${item.alpha_two_code})`}
-                        </Select.Option>
-                      ))}
-                    </Select>
-                  )}
-                </DataFetcherUniversity>
+                <Select
+                  placeholder="Selecione o processo"
+                  showSearch
+                  onChange={(value) => handleSelectChange(value)}
+                  disabled={selectedRadio === 2}
+                >
+                  
+                </Select>
               </Form.Item>
               <Form.Item
                 style={{
@@ -148,7 +139,7 @@ const PcpProcessResources: React.FC = () => {
                   style={{
                     display: "inline-block",
                     width: "calc(50% - 8px)",
-                    margin: "0 16px 0 0",
+                    margin: "0 15px 0 0",
                   }}
                 >
                   <Select />
@@ -165,7 +156,7 @@ const PcpProcessResources: React.FC = () => {
                 <Form.Item
                   label={t("labels.quotation")}
                   style={{
-                    margin: "0 16px 0 0",
+                    margin: "0 15px 0 0",
                     display: "inline-block",
                     width: "calc(50% - 8px)",
                   }}
@@ -193,7 +184,7 @@ const PcpProcessResources: React.FC = () => {
                     style={{
                       display: "inline-block",
                       width: "calc(50% - 8px)",
-                      margin: "0 0px 0 16px",
+                      margin: "0 0px 0 15px",
                     }}
                   />
                 </Form.Item>
@@ -202,7 +193,7 @@ const PcpProcessResources: React.FC = () => {
                   style={{
                     width: "calc(50% - 8px)",
                     display: "inline-block",
-                    margin: "0px 16px 0 0px",
+                    margin: "0px 15px 0 0px",
                   }}
                 >
                   <CustomInputNumber style={{ width: "100%" }} />

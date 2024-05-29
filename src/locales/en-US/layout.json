@@ -88,11 +88,19 @@
     "criticalMaterial": "Critical Material",
     "settingsDay": "Settings Day",
     "occurrence": "Occurrence",
+    "definitionFamily": "Definition Family",
 
     "planningMap": "Planning Map",
-    "generalSettings": "General Settings"
+    "generalSettings": "General Settings",
+    "condition": "Condition"
   },
   "labels": {
+    "values": "Values",
+    "newAprovattion": "New Aprovation",
+    "repetitionAprovattion": "Repetition approval",
+    "repetitionCertificate": "Repetition certificate",
+    "charact": "Characteristic",
+    "familly": "Familly",
     "client": "Client",
     "item": "Item",
     "quotation": "Quotation",

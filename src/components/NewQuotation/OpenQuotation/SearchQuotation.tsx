@@ -1,6 +1,6 @@
 import { AgGridReact } from "ag-grid-react";
-// import "ag-grid-community/styles/ag-grid.css";
-// import "ag-grid-community/styles/ag-theme-alpine.min.css";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
 
 import {
   ColDef,
@@ -11,7 +11,6 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Modal, Spin } from "antd";
 import { useTranslation } from "react-i18next";
-import axios from "axios";
 import Loading from "components/Loading";
 
 interface SearchQuotationProps {
@@ -153,7 +152,7 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
         </Button>,
       ]}
     >
-      <div className="ag-theme-alpine" style={containerStyle}>
+      <div className="ag-theme-quartz" style={containerStyle}>
         <div style={gridStyle}>
           <AgGridReact
             onRowSelected={handleRowSelected}

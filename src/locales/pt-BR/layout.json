@@ -88,9 +88,17 @@
     "settingsDay": "Configuração do dia",
     "occurrence": "Ocorrência",
     "planningMap": "Mapa de Planejamento",
-    "generalSettings": "Configurações Gerais"
+    "generalSettings": "Configurações Gerais",
+    "definitionFamily": "Familia de Definição",
+    "condition": "Condição"
   },
   "labels": {
+    "values": "Valores",
+    "newAprovattion": "Nova aprovação",
+    "repetitionAprovattion": "Repetição aprovação",
+    "repetitionCertificate": "Repetição certificado",
+    "charact": "Característica",
+    "familly": "Familia",
     "client": "Cliente",
     "item": "Item",
     "quotation": "Cotação",

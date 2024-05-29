@@ -3,10 +3,12 @@ import {
   Col,
   Form,
   Input,
+  Modal,
   RadioChangeEvent,
   Row,
   Select,
   Tree,
+  message,
 } from "antd";
 
 import { formStyle } from "./Style";
@@ -17,14 +19,170 @@ import {
   SaveButton,
   SelectRadio,
 } from "./ButtonsComponent";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { UUID } from "crypto";
+import {
+  Delete,
+  Save,
+  GetAllFamily,
+  Update,
+  GetDataFromId,
+} from "@/app/api/services/Family/data";
+import { GetAllGroup } from "@/app/api/services/Group/data";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+
+const { Option } = Select;
+
+interface Group {
+  id: UUID;
+  group: string;
+}
+
+interface Family {
+  id: UUID;
+  family: string;
+  plan: string;
+  group: UUID;
+}
 
 const FamilySttings: React.FC = () => {
   const [value, setValue] = useState(1);
+  const [formData, setFormData] = useState<any>({});
+  const [groups, setGroups] = useState<Group[]>([]);
+  const [familys, setFamilys] = useState<Family[]>([]);
+  const [fetchData, setFetchData] = useState(true);
+
+  const clearInputs = () => {
+    setFormData({
+      family: "",
+      plan: "",
+      group: "",
+    });
+  };
+
+  const success = () => {
+    message
+      .open({
+        type: "loading",
+        content: "Salvando..",
+        duration: 2.5,
+      })
+      .then(async () => {
+        try {
+          if (formData.id) {
+            await Update(formData);
+          } else {
+            await Save(formData);
+            clearInputs();
+          }
+          setFetchData(true);
+          message.success("Salvo com sucesso!", 2.5);
+        } catch (error) {
+          message.error("Não foi possível salvar");
+        }
+      });
+  };
+
+  const confirmDelete = () => {
+    Modal.confirm({
+      title: t("generalButtons.deleteButton"),
+      icon: <ExclamationCircleOutlined />,
+      content: "Deseja excluir a Família?",
+      okText: t("generalButtons.confirmButton"),
+      cancelText: t("generalButtons.cancelButton"),
+      async onOk() {
+        try {
+          await Delete(formData);
+          clearInputs();
+          setFetchData(true);
+          message.success("Excluido com sucesso!");
+        } catch (error) {
+          message.error("Não foi possivel excluir!");
+        }
+      },
+    });
+  };
+
+  const handleSelectFamilyChange = (selectedFamilyId: any) => {
+    const selectedFamily = familys.find(
+      (family) => family.id === selectedFamilyId
+    );
+    if (selectedFamily) {
+      setFormData({
+        ...formData,
+        id: selectedFamily.id,
+        group: selectedFamily.group,
+        plan: selectedFamily.plan,
+        family: selectedFamily.family,
+      });
+    }
+    console.log(formData);
+  };
+
+  const handleInputChange = (fieldName: string, value: string) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleSelectGroupChange = (group: any) => {
+    setFormData({ ...formData, group: group });
+    console.log(group);
+    
+  };
+
+  const fetchGroups = async () => {
+    try {
+      const response = await GetAllGroup();
+      const groupData = response.result.map(
+        (group: { id: UUID; ds_Group: string }) => ({
+          id: group.id,
+          group: group.ds_Group,
+        })
+      );
+      setGroups(groupData);
+    } catch (error) {
+      console.error("Erro ao buscar grupos:", error);
+    }
+  };
+
+  const fetchFamilys = async () => {
+    try {
+      const response = await GetAllFamily();
+      const familyData = response.result.map(
+        (family: {
+          id: UUID;
+          ds_Family: string;
+          id_Group: UUID;
+          ds_Family_Planej: string;
+        }) => ({
+          id: family.id,
+          family: family.ds_Family,
+          group: family.id_Group,
+          plan: family.ds_Family_Planej,
+        })
+      );
+      setFamilys(familyData);
+    } catch (error) {
+      console.error("Erro ao buscar famílias:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchGroups();
+  }, []);
+
+  useEffect(() => {
+    if (fetchData) {
+      fetchFamilys().then(() => setFetchData(false));
+    }
+  }, [fetchData]);
 
   const onChange = (e: RadioChangeEvent) => {
-    setValue(e.target.value);
+    const selectedValue = e.target.value;
+    if (selectedValue === 1) {
+      setFormData({});
+    }
+    setValue(selectedValue);
   };
 
   const { t } = useTranslation("layout");
@@ -33,11 +191,20 @@ const FamilySttings: React.FC = () => {
       <div style={{ display: "flex" }}>
         <RadioButtons onChange={onChange} value={value} />
         <div style={{ marginLeft: 15 }}></div>
-        <SelectRadio
-          style={formStyle("calc(25% - 8px)", "8px")}
-          type={t("labels.list")}
-          value={value}
-        />
+        <Form.Item style={{ width: "50%" }} label={t("labels.family")}>
+          <Select
+            style={formStyle("calc(25% - 8px)", "8px")}
+            disabled={value === 1}
+            value={value === 2 ? formData.family : null}
+            onChange={handleSelectFamilyChange}
+          >
+            {familys.map((family) => (
+              <Option key={family.id} value={family.id}>
+                {family.family}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
       </div>
       <Form layout="vertical">
         <div>
@@ -48,16 +215,33 @@ const FamilySttings: React.FC = () => {
                   style={formStyle("calc(33% - 8px", "8px")}
                   label={t("labels.name")}
                 >
-                  <Input />
+                  <Input
+                    value={formData.family}
+                    onChange={(e) =>
+                      handleInputChange("family", e.target.value)
+                    }
+                  />
                 </Form.Item>
                 <Form.Item
                   style={formStyle("calc(33% - 8px", "8px")}
                   label={t("labels.planner")}
                 >
-                  <Input />
+                  <Input
+                    value={formData.plan}
+                    onChange={(e) => handleInputChange("plan", e.target.value)}
+                  />
                 </Form.Item>
                 <Form.Item style={formStyle("33%")} label={t("labels.group")}>
-                  <Select />
+                  <Select
+                    onChange={handleSelectGroupChange}
+                    value={formData.group}
+                  >
+                    {groups.map((group) => (
+                      <Option key={group.id} value={group.id}>
+                        {group.group}
+                      </Option>
+                    ))}
+                  </Select>
                 </Form.Item>
               </Card>
             </Col>
@@ -67,45 +251,34 @@ const FamilySttings: React.FC = () => {
                 title={t("titles.valuesFamily")}
                 bodyStyle={{ height: "300px", overflowX: "auto", padding: 5 }}
               >
-                <DataFetcher
-                  apiUrl="http://localhost:3000/api/getData"
-                  tipo="processos"
-                >
-                  {(treeData) => (
-                    <>
-                      <Tree
-                        checkable
-                        style={{
-                          height: "100%",
-                          maxHeight: 607,
-
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                        showLine={true}
-                        defaultExpandedKeys={["0-0-0"]}
-                        treeData={treeData}
-                      />
-                      <div style={{ padding: 10 }}>
-                        <div
-                          style={{
-                            width: "100%",
-                            display: "flex",
-                            alignContent: "center",
-                            justifyContent: "space-evenly",
-                          }}
-                        ></div>
-                      </div>
-                    </>
-                  )}
-                </DataFetcher>
+                <Tree
+                  checkable
+                  style={{
+                    height: "100%",
+                    maxHeight: 607,
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                  showLine={true}
+                  defaultExpandedKeys={["0-0-0"]}
+                />
+                <div style={{ padding: 10 }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      alignContent: "center",
+                      justifyContent: "space-evenly",
+                    }}
+                  ></div>
+                </div>
               </Card>
             </Col>
           </Row>
         </div>
         <div style={{ margin: 10, float: "right" }}>
-          <DeleteButton />
-          <SaveButton />
+          <DeleteButton onClick={confirmDelete} />
+          <SaveButton onClick={success} />
         </div>
       </Form>
     </>
