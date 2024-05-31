@@ -30,9 +30,9 @@ deploy:qa:
 #   AUTOMATIC_DEPLOYMENT_ON_DEV: "false"
 #   AUTOMATIC_DEPLOYMENT_ON_QA: "true"
 #   DOCKER_IMAGE_NAME: wtpc-frontend
-#   DOCKER_CONTAINER_NAME: wtpc-frontend  
+#   DOCKER_CONTAINER_NAME: wtpc-frontend
 #   PRE_PROD_TEST: "false"
-  
+
 # deploy:qa:
 #   variables:
 #    APP_ENV: "qa"
