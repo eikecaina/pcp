@@ -1,4 +1,4 @@
-import { DeleteOutlined, SaveOutlined } from "@ant-design/icons";
+import { DeleteOutlined, EditOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
 import {
   Button,
   Form,
@@ -64,6 +64,46 @@ export const SaveButton: React.FC<Buttons> = ({
         icon={<SaveOutlined />}
       >
         {t("generalButtons.saveButton")}
+      </Button>
+    </Tooltip>
+  );
+};
+
+export const EditButton: React.FC<Buttons> = ({
+  onChange: onChange,
+  onClick: onClick,
+}) => {
+  const { t } = useTranslation("layout");
+  return (
+    <Tooltip title={t("generalButtons.editButton")}>
+      <Button
+        onChange={onChange}
+        onClick={onClick}
+        style={buttonStyle}
+        type="primary"
+        icon={<EditOutlined />}
+      >
+        {t("generalButtons.editButton")}
+      </Button>
+    </Tooltip>
+  );
+};
+
+export const NewButton: React.FC<Buttons> = ({
+  onChange: onChange,
+  onClick: onClick,
+}) => {
+  const { t } = useTranslation("layout");
+  return (
+    <Tooltip title={t("generalButtons.newButton")}>
+      <Button
+        onChange={onChange}
+        onClick={onClick}
+        style={buttonStyle}
+        type="primary"
+        icon={<PlusOutlined />}
+      >
+        {t("generalButtons.newButton")}
       </Button>
     </Tooltip>
   );

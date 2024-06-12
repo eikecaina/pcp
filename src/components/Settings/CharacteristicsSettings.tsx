@@ -11,7 +11,13 @@ import {
   message,
 } from "antd";
 import { formStyle } from "./Style";
-import { DeleteButton, RadioButtons, SaveButton } from "./ButtonsComponent";
+import {
+  DeleteButton,
+  EditButton,
+  NewButton,
+  RadioButtons,
+  SaveButton,
+} from "./ButtonsComponent";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -41,7 +47,7 @@ interface CharactType {
 }
 
 const CharacteristicsSettings: React.FC = () => {
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(2);
   const [formData, setFormData] = useState<any>({});
   const [characts, setCharact] = useState<Charact[]>([]);
   const [charactType, setCharactType] = useState<CharactType[]>([]);
@@ -51,11 +57,11 @@ const CharacteristicsSettings: React.FC = () => {
 
   const clearInputs = () => {
     setFormData({
-      charact: '',
-      exib: '',
-      desc: '',
-      type: '',
-      position: '',
+      charact: "",
+      exib: "",
+      desc: "",
+      type: "",
+      position: "",
     });
   };
 
@@ -71,7 +77,7 @@ const CharacteristicsSettings: React.FC = () => {
           if (formData.id) {
             await Update(formData);
           } else {
-            await Save(formData); 
+            await Save(formData);
             clearInputs();
           }
           setFetchData(true);
@@ -144,52 +150,67 @@ const CharacteristicsSettings: React.FC = () => {
   const fetchCaract = async () => {
     try {
       const response = await GetAllCharact();
-      const charactData = response.result.map((charact: { id: UUID; ds_Caract: string; ds_Exib: string; ds_Desc: string; cd_Caract_Type: UUID; vl_Position: number; }) => ({
-        id: charact.id,
-        charact: charact.ds_Caract,
-        exib: charact.ds_Exib,
-        desc: charact.ds_Desc,
-        type: charact.cd_Caract_Type,
-        position: charact.vl_Position,
-      }));
+      const charactData = response.result.map(
+        (charact: {
+          id: UUID;
+          ds_Caract: string;
+          ds_Exib: string;
+          ds_Desc: string;
+          cd_Caract_Type: UUID;
+          vl_Position: number;
+        }) => ({
+          id: charact.id,
+          charact: charact.ds_Caract,
+          exib: charact.ds_Exib,
+          desc: charact.ds_Desc,
+          type: charact.cd_Caract_Type,
+          position: charact.vl_Position,
+        })
+      );
       setCharact(charactData);
       console.log(charactData);
     } catch (error) {
       console.error("Erro ao buscar características:", error);
     }
   };
-  
+
   const fetchCaractType = async () => {
     try {
       const response = await GetAllCharactType();
-      const charactTypeData = response.result.map((charactType: { id: UUID; ds_Caract_Type: string; }) => ({
-        id: charactType.id,
-        charactType: charactType.ds_Caract_Type,
-      }));
+      const charactTypeData = response.result.map(
+        (charactType: { id: UUID; ds_Caract_Type: string }) => ({
+          id: charactType.id,
+          charactType: charactType.ds_Caract_Type,
+        })
+      );
       setCharactType(charactTypeData);
     } catch (error) {
       console.error("Erro ao buscar tipos de características:", error);
     }
   };
-  
+
   useEffect(() => {
     if (fetchData) {
       fetchCaract().then(() => setFetchData(false));
     }
   }, [fetchData]);
-  
+
   useEffect(() => {
     fetchCaractType();
   }, []);
 
+  const newFunction = () => {
+    setValue(1);
+    clearInputs();
+  };
+
+  const editFunction = () => {
+    setValue(3);
+  };
+
   return (
     <>
       <div style={{ display: "flex" }}>
-        <RadioButtons
-          onChange={onChange}
-          value={value}
-          style={{ marginRight: 5 }}
-        />
         <Form.Item
           style={{ width: "50%", marginLeft: 10 }}
           label={t("labels.charact")}
@@ -197,8 +218,8 @@ const CharacteristicsSettings: React.FC = () => {
           <Select
             onChange={handleSelectChange}
             style={formStyle("calc(25% - 8px)", "8px")}
+            value={value === 1 ? null : formData.group}
             disabled={value === 1}
-            value={value === 2 ? formData.charact : null}
           >
             {characts.map((charact) => (
               <Option key={charact.id} value={charact.id}>
@@ -219,6 +240,7 @@ const CharacteristicsSettings: React.FC = () => {
                   style={formStyle("calc(28.33% - 8px)", "8px")}
                 >
                   <Input
+                    disabled={value === 2}
                     value={formData.charact}
                     onChange={(e) => {
                       handleInputChange("charact", e.target.value);
@@ -230,6 +252,7 @@ const CharacteristicsSettings: React.FC = () => {
                   style={formStyle("calc(28.33% - 8px)", "8px")}
                 >
                   <Input
+                    disabled={value === 2}
                     value={formData.exib}
                     onChange={(e) => {
                       handleInputChange("exib", e.target.value);
@@ -241,6 +264,7 @@ const CharacteristicsSettings: React.FC = () => {
                   style={formStyle("calc(15% - 8px)", "8px")}
                 >
                   <InputNumber
+                    disabled={value === 2}
                     value={formData.position}
                     min={1}
                     style={{ width: "100%" }}
@@ -249,6 +273,7 @@ const CharacteristicsSettings: React.FC = () => {
                 </Form.Item>
                 <Form.Item label={t("labels.type")} style={formStyle("28.33%")}>
                   <Select
+                    disabled={value === 2}
                     value={formData.type}
                     style={{ width: "100%" }}
                     onChange={handleSelectTypeChange}
@@ -265,6 +290,7 @@ const CharacteristicsSettings: React.FC = () => {
                   style={formStyle("100%")}
                 >
                   <TextArea
+                    disabled={value === 2}
                     value={formData.desc}
                     style={{ height: 150, resize: "none" }}
                     onChange={(e) => handleInputChange("desc", e.target.value)}
@@ -275,6 +301,8 @@ const CharacteristicsSettings: React.FC = () => {
           </Row>
         </div>
         <div style={{ margin: 10, float: "right" }}>
+          <NewButton onClick={newFunction} />
+          <EditButton onClick={editFunction} />
           <DeleteButton onClick={confirmDelete} />
           <SaveButton onClick={success} />
         </div>
