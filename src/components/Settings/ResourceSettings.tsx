@@ -1,40 +1,103 @@
 import {
   Card,
   Col,
-  Divider,
   Form,
   Input,
-  RadioChangeEvent,
+  Modal,
   Row,
   Select,
   Tree,
+  message,
 } from "antd";
 import React, { useState } from "react";
 import { formStyle } from "./Style";
 import CustomInputNumber from "components/CustomInputNumber";
-import { DataFetcher } from "components/DataFetcherJson";
 import {
   DeleteButton,
-  RadioButtons,
+  EditButton,
+  NewButton,
   SaveButton,
   SelectRadio,
 } from "./ButtonsComponent";
 import { useTranslation } from "react-i18next";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { Delete, Save, Update } from "@/app/api/services/Resource/data";
 
 const { TextArea } = Input;
 
 const ResourceSettings: React.FC = () => {
   const [value, setValue] = useState(1);
+  const [formData, setFormData] = useState<any>([]);
+  const [fetchData, setFetchData] = useState(true);
 
-  const onChange = (e: RadioChangeEvent) => {
-    setValue(e.target.value);
+  const clearInputs = () => {
+    setFormData({});
   };
 
-  const {t} = useTranslation("layout");
+  const success = () => {
+    message
+      .open({
+        type: "loading",
+        content: "Salvando..",
+        duration: 2.5,
+      })
+      .then(async () => {
+        try {
+          if (formData.id) {
+            await Update(formData);
+          } else {
+            await Save(formData);
+            clearInputs();
+          }
+          setFetchData(true);
+          message.success("Salvo com sucesso!", 2.5);
+        } catch (error) {
+          message.error("Não foi possível salvar");
+        }
+      });
+  };
+
+  const confirmDelete = () => {
+    Modal.confirm({
+      title: t("generalButtons.deleteButton"),
+      icon: <ExclamationCircleOutlined />,
+      content: "Deseja excluir o Valor?",
+      okText: t("generalButtons.confirmButton"),
+      cancelText: t("generalButtons.cancelButton"),
+      async onOk() {
+        try {
+          await Delete(formData);
+          clearInputs();
+          setFetchData(true);
+          message.success("Excluido com sucesso!");
+        } catch (error) {
+          message.error("Não foi possivel excluir!");
+        }
+      },
+    });
+  };
+
+  const handleInputChange = (fieldName: string, value: any) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleSelectValueChange = () => {
+    console.log(formData);
+  };
+
+  const newFunction = () => {
+    setValue(1);
+    clearInputs();
+  };
+
+  const editFunction = () => {
+    setValue(3);
+  };
+
+  const { t } = useTranslation("layout");
   return (
     <>
       <div style={{ display: "flex" }}>
-        <RadioButtons onChange={onChange} value={value} />
         <div style={{ marginLeft: 15 }}></div>
         <SelectRadio
           style={formStyle("calc(25% - 8px)", "8px")}
@@ -71,7 +134,7 @@ const ResourceSettings: React.FC = () => {
                 style={formStyle("calc(100% - 5px)", "5px")}
                 label={t("labels.description")}
               >
-                <TextArea style={{ height: 100, resize: 'none' }}/>
+                <TextArea style={{ height: 100, resize: "none" }} />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -79,33 +142,23 @@ const ResourceSettings: React.FC = () => {
                 title="Famílias que o recurso está disponivel"
                 bodyStyle={{ padding: 10 }}
               >
-                <DataFetcher
-                  apiUrl="http://localhost:3000/api/getData"
-                  tipo="processos"
+                <div
+                  style={{
+                    height: "220px",
+                    overflowX: "auto",
+                  }}
                 >
-                  {(treeData) => (
-                    <>
-                      <div
-                        style={{
-                          height: "220px",
-                          overflowX: "auto",
-                        }}
-                      >
-                        <Tree
-                          checkable
-                          style={{
-                            height: "100%",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }}
-                          showLine={true}
-                          defaultExpandedKeys={["0-0-0"]}
-                          treeData={treeData}
-                        />
-                      </div>
-                    </>
-                  )}
-                </DataFetcher>
+                  <Tree
+                    checkable
+                    style={{
+                      height: "100%",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                    showLine={true}
+                    defaultExpandedKeys={["0-0-0"]}
+                  />
+                </div>
               </Card>
             </Col>
             <Col span={12}>
@@ -113,39 +166,31 @@ const ResourceSettings: React.FC = () => {
                 bodyStyle={{ padding: 10 }}
                 title="Processos que consomem o recurso"
               >
-                <DataFetcher
-                  apiUrl="http://localhost:3000/api/getData"
-                  tipo="processos"
+                <div
+                  style={{
+                    height: "220px",
+                    overflowX: "auto",
+                  }}
                 >
-                  {(treeData) => (
-                    <>
-                      <div
-                        style={{
-                          height: "220px",
-                          overflowX: "auto",
-                        }}
-                      >
-                        <Tree
-                          checkable
-                          style={{
-                            height: "100%",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                          }}
-                          showLine={true}
-                          defaultExpandedKeys={["0-0-0"]}
-                          treeData={treeData}
-                        />
-                      </div>
-                    </>
-                  )}
-                </DataFetcher>
+                  <Tree
+                    checkable
+                    style={{
+                      height: "100%",
+                      textOverflow: "ellipsis",
+                      whiteSpace: "nowrap",
+                    }}
+                    showLine={true}
+                    defaultExpandedKeys={["0-0-0"]}
+                  />
+                </div>
               </Card>
             </Col>
           </Row>
           <div style={{ margin: 10, float: "right" }}>
-            <DeleteButton />
-            <SaveButton />
+            <NewButton onClick={newFunction} />
+            <EditButton onClick={editFunction} />
+            <DeleteButton onClick={confirmDelete} />
+            <SaveButton onClick={success} />
           </div>
         </Form>
       </Card>

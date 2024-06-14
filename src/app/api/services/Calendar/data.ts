@@ -31,6 +31,16 @@ export async function GetDataFromId(id: UUID) {
   }
 }
 
+export async function GetCalendarWithDays(id: UUID) {
+  try {
+    return await api.get(`/Calendar/GetWithDays/${id}`).then((res) => {
+      return res.data;
+    });
+  } catch (error) {
+    console.log("Erro ao salvar:", error);
+  }
+}
+
 export async function Save(formData: FormData) {
   const rec = {
     id: uuidv4(),

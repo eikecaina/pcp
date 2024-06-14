@@ -63,15 +63,7 @@ const ValueSettings: React.FC = () => {
   const [fetchData, setFetchData] = useState(true);
 
   const clearInputs = () => {
-    setFormData({
-      value: "",
-      charact: "",
-      position: "",
-      newApproved: "",
-      repeatApproved: "",
-      newCertificate: "",
-      repeatCertificate: "",
-    });
+    setFormData({});
   };
 
   const success = () => {

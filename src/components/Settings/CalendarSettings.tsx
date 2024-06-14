@@ -1,4 +1,4 @@
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+import lib, { ExclamationCircleOutlined } from "@ant-design/icons";
 import {
   Calendar,
   Form,
@@ -26,6 +26,7 @@ import { UUID } from "crypto";
 import {
   Delete,
   GetAllCalendar,
+  GetCalendarWithDays,
   GetDataFromId,
   Save,
   Update,
@@ -272,43 +273,26 @@ export const CalendarSettings = () => {
     }
   };
 
-  const fetchDays = async () => {
+  const fetchCalendarDays = async () => {
     try {
-      const response = await GetAllDay();
-      const dayData = response.result.map(
-        (day: {
-          id: UUID;
-          ds_Calendar_Day: string;
-          cd_Calendar: UUID;
-          id_Business_Day: boolean;
-          dt_Ocurrence: Date;
-          vl_Repeat_End_After: number;
-          id_Repeat: boolean;
-          vl_Repeat_Each: number;
-          vl_Repeat_Period: UUID;
-          dt_Repeat_End: Date;
-        }) => ({
+      const response = await GetCalendarWithDays(formData.id);
+      const dayData = response.calendarDays.map(
+        (day: { id: UUID; ds_Calendar_Day: string }) => ({
           id: day.id,
           dsCalendarDay: day.ds_Calendar_Day,
-          cdCalendar: day.cd_Calendar,
-          idBusinessDay: day.id_Business_Day,
-          dtOcurrence: day.dt_Ocurrence,
-          vlRepeatEndAfter: day.vl_Repeat_End_After,
-          idRepeat: day.id_Repeat,
-          vlRepeatEach: day.vl_Repeat_Each,
-          vlRepeatPeriod: day.vl_Repeat_Period,
-          dtRepeatEnd: day.dt_Repeat_End,
         })
       );
       setDays(dayData);
     } catch (error) {
-      console.error("Não foi possível buscar dias");
+      console.error("Não foi possível buscar dias", error);
     }
   };
 
   useEffect(() => {
-    fetchDays();
-  }, []);
+    if (formData.id) {
+      fetchCalendarDays();
+    }
+  }, [formData.id]);
 
   useEffect(() => {
     if (fetchData) {
@@ -328,10 +312,6 @@ export const CalendarSettings = () => {
   const editFunction = () => {
     setValue(3);
   };
-
-  function verifiedCalendar(calendar: Calendar, days: Days) {
-    return calendar.id === days.cdCalendar;
-  }
 
   return (
     <>
@@ -398,7 +378,13 @@ export const CalendarSettings = () => {
             </Card>
           </Col>
           <Col span={4}>
-            <Card style={{ height: 325 }} bodyStyle={{ padding: 0 }}></Card>
+            <Card style={{ height: 325 }} bodyStyle={{ padding: 0 }}>
+             {days.map((day) =>(
+              <li>
+                {day.dsCalendarDay}
+              </li>
+             ))}
+            </Card>
           </Col>
           <Col span={5}>
             <Card style={{ height: 325 }} bodyStyle={{ padding: 0 }}>
@@ -423,22 +409,6 @@ export const CalendarSettings = () => {
           <Col span={8}>
             <Card title={t("titles.occurrence")} bodyStyle={{ padding: 10 }}>
               <div style={{ width: "100%" }}>
-                <Form.Item
-                  style={formStyle("calc(50% - 8px)", "8px")}
-                  label="Calendário"
-                >
-                  <Select
-                    size="small"
-                    style={{ width: "100%" }}
-                    onChange={handleSelectCalendarDayChange}
-                  >
-                    {calendars.map((calendar) => (
-                      <Option key={calendar.id} value={calendar.id}>
-                        {calendar.calendar}
-                      </Option>
-                    ))}
-                  </Select>
-                </Form.Item>
                 <Form.Item label={t("labels.name")} style={formStyle("50%")}>
                   <Input
                     size="small"
