@@ -3,13 +3,14 @@ import {
   Col,
   Form,
   Input,
+  InputNumber,
   Modal,
   Row,
   Select,
   Tree,
   message,
 } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { formStyle } from "./Style";
 import CustomInputNumber from "components/CustomInputNumber";
 import {
@@ -21,14 +22,40 @@ import {
 } from "./ButtonsComponent";
 import { useTranslation } from "react-i18next";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { Delete, Save, Update } from "@/app/api/services/Resource/data";
+import {
+  Delete,
+  GetAllResource,
+  Save,
+  Update,
+} from "@/app/api/services/Resource/data";
+import { UUID } from "crypto";
+import { GetAllCalendar } from "@/app/api/services/Calendar/data";
 
+const { Option } = Select;
 const { TextArea } = Input;
+
+interface Resource {
+  id: UUID;
+  dsResource: string;
+  dsNotes: string;
+  cdCalendar: UUID;
+  dtAuditCreated: Date;
+  cdAuditCreatedUser: string;
+  dtAuditModified: Date;
+  cdAuditModifiedUser: string;
+}
+
+interface Calendar {
+  id: UUID;
+  calendar: string;
+}
 
 const ResourceSettings: React.FC = () => {
   const [value, setValue] = useState(1);
   const [formData, setFormData] = useState<any>([]);
   const [fetchData, setFetchData] = useState(true);
+  const [resource, setResource] = useState<Resource[]>([]);
+  const [calendars, setCalendars] = useState<Calendar[]>([]);
 
   const clearInputs = () => {
     setFormData({});
@@ -81,7 +108,23 @@ const ResourceSettings: React.FC = () => {
     setFormData({ ...formData, [fieldName]: value });
   };
 
-  const handleSelectValueChange = () => {
+  const handleSelectCalendarChange = (cdCalendar: any) => {
+    setFormData({ ...formData, cdCalendar: cdCalendar });
+  };
+
+  const handleSelectResourceChange = (selectedResourceId: any) => {
+    const selectedResource = resource.find(
+      (resource) => resource.id === selectedResourceId
+    );
+    if (selectedResource) {
+      setFormData({
+        ...formData,
+        id: selectedResource.id,
+        dsResource: selectedResource.dsResource,
+        dsNotes: selectedResource.dsNotes,
+        cdCalendar: selectedResource.cdCalendar,
+      });
+    }
     console.log(formData);
   };
 
@@ -94,47 +137,113 @@ const ResourceSettings: React.FC = () => {
     setValue(3);
   };
 
+  const fetchResource = async () => {
+    try {
+      const response = await GetAllResource();
+      const resourceData = response.result.map(
+        (resource: {
+          id: UUID;
+          ds_Resource: string;
+          ds_Notes: string;
+          cd_Calendar: UUID;
+        }) => ({
+          id: resource.id,
+          dsResource: resource.ds_Resource,
+          dsNotes: resource.ds_Notes,
+          cdCalendar: resource.cd_Calendar,
+        })
+      );
+      setResource(resourceData);
+      console.log(resourceData);
+    } catch (error) {
+      console.error("Erro ao buscar Recursos: ", error);
+    }
+  };
+
+  const fetchCalendar = async () => {
+    try {
+      const response = await GetAllCalendar();
+      const calendarData = response.result.map(
+        (calendar: { id: UUID; ds_Calendar: string }) => ({
+          id: calendar.id,
+          calendar: calendar.ds_Calendar,
+        })
+      );
+      setCalendars(calendarData);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    if (fetchData) {
+      fetchResource().then(() => setFetchData(false));
+    }
+  }, [fetchData]);
+
+  useEffect(() => {
+    if (fetchData) {
+      fetchCalendar().then(() => setFormData(false));
+    }
+  }, [fetchData]);
+
   const { t } = useTranslation("layout");
   return (
     <>
       <div style={{ display: "flex" }}>
-        <div style={{ marginLeft: 15 }}></div>
-        <SelectRadio
-          style={formStyle("calc(25% - 8px)", "8px")}
-          type={t("labels.list")}
-          value={value}
-        />
+        <Form.Item style={{ width: "50%" }} label={t("labels.resource")}>
+          <Select
+            onChange={handleSelectResourceChange}
+            style={formStyle("calc(50%)")}
+            value={value === 1 ? null : formData.group}
+            disabled={value === 1}
+          >
+            {resource.map((resource) => (
+              <Option value={resource.id} key={resource.id}>
+                {resource.dsResource}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
       </div>
       <Card title={t("titles.definition")} bodyStyle={{ padding: 10 }}>
         <Form layout="vertical">
           <Row gutter={20}>
             <Col span={24}>
-              <Form.Item style={formStyle("calc(25% - 5px)", "5px")} label="ID">
-                <CustomInputNumber style={{ width: "100%" }} min={1} />
-              </Form.Item>
               <Form.Item
-                style={formStyle("calc(25% - 5px)", "5px")}
+                style={formStyle("calc(50% - 5px)", "5px")}
                 label={t("labels.name")}
               >
-                <Input />
+                <Input
+                  value={formData.dsResource}
+                  onChange={(e) =>
+                    handleInputChange("dsResource", e.target.value)
+                  }
+                />
               </Form.Item>
+
               <Form.Item
-                style={formStyle("calc(25% - 5px)", "5px")}
-                label={t("labels.dailyAvailability")}
-              >
-                <Select />
-              </Form.Item>
-              <Form.Item
-                style={formStyle("calc(25% - 5px)")}
+                style={formStyle("calc(50%)")}
                 label={t("labels.calendar")}
               >
-                <Select />
+                <Select
+                  value={formData.cdCalendar}
+                  onChange={handleSelectCalendarChange}
+                >
+                  {calendars.map((calendar) => (
+                    <Option key={calendar.id} value={calendar.id}>
+                      {calendar.calendar}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
               <Form.Item
                 style={formStyle("calc(100% - 5px)", "5px")}
                 label={t("labels.description")}
               >
-                <TextArea style={{ height: 100, resize: "none" }} />
+                <TextArea
+                  style={{ height: 100, resize: "none" }}
+                  value={formData.dsNotes}
+                  onChange={(e) => handleInputChange("dsNotes", e.target.value)}
+                />
               </Form.Item>
             </Col>
             <Col span={12}>

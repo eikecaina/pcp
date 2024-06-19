@@ -193,7 +193,7 @@ const FamilySttings: React.FC = () => {
       <div style={{ display: "flex" }}>
         <Form.Item style={{ width: "50%" }} label={t("labels.family")}>
           <Select
-            style={formStyle("calc(25% - 8px)", "8px")}
+            style={formStyle("calc(50% - 8px)", "8px")}
             value={value === 1 ? null : formData.group}
             disabled={value === 1}
             onChange={handleSelectFamilyChange}

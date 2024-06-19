@@ -127,12 +127,11 @@ export const CalendarSettings = () => {
       })
       .then(async () => {
         try {
-          if (formData.id) {
-            await UpdateDay(formData);
-          } else {
+          
+         
             await SaveDay(formData);
             clearInputs();
-          }
+         
           setFetchData(true);
           message.success("Salvo com sucesso!", 2.5);
         } catch (error) {
@@ -208,10 +207,6 @@ export const CalendarSettings = () => {
     setFormData({ ...formData, vlRepeatPeriod: vlRepeatPeriod });
   };
 
-  const handleSelectCalendarDayChange = (dsCalendarDay: UUID) => {
-    setFormData({ ...formData, dsCalendarDay: dsCalendarDay });
-  };
-
   const handleSelectCalendarChange = async (selectedCalendarId: UUID) => {
     try {
       const selectedCalendar = await GetDataFromId(selectedCalendarId);
@@ -283,6 +278,7 @@ export const CalendarSettings = () => {
         })
       );
       setDays(dayData);
+      console.log(response);
     } catch (error) {
       console.error("Não foi possível buscar dias", error);
     }
@@ -318,7 +314,7 @@ export const CalendarSettings = () => {
       <div style={{ display: "flex" }}>
         <Form.Item style={{ width: "50%" }} label={t("labels.calendar")}>
           <Select
-            style={formStyle("calc(25% - 8px)", "8px")}
+            style={formStyle("calc(50% - 8px)", "8px")}
             onChange={handleSelectCalendarChange}
             value={value === 1 ? null : formData.group}
             disabled={value === 1}

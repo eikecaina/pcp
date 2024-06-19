@@ -49,7 +49,7 @@ export async function SaveDay(formData: FormData) {
   const rec = {
     id: uuidv4(),
     ds_Calendar_Day: formData.dsCalendarDay,
-    cd_Calendar: formData.cdCalendar,
+    cd_Calendar: formData.id,
     id_Business_Day: formData.idBusinessDay,
     vl_Base_Days: undefined,
     vl_Base_Period: undefined,

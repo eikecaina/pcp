@@ -9,6 +9,7 @@ interface FormData {
   longDesc: string;
   createdUser: string;
   modifiedUser: string;
+  calendarDays: [],
 }
 
 export async function GetAllCalendar() {
@@ -49,6 +50,7 @@ export async function Save(formData: FormData) {
     ds_Long_Desc: formData.longDesc,
     cd_Audit_Created_User: "Eike",
     cd_Audit_Modified_User: "Eike",
+    calendarDays: [],
   };
 
   try {
@@ -58,27 +60,27 @@ export async function Save(formData: FormData) {
     return response.data;
   } catch (error) {
     console.error("Erro ao salvar:", error);
-    console.log(formData);
+    console.log(rec);
     throw error;
   }
 }
 
 export async function Update(formData: FormData) {
+  let data = {
+    id: formData.id,
+    ds_Calendar: formData.calendar,
+    ds_Short_Desc: formData.shortDesc,
+    ds_Long_Desc: formData.longDesc,
+    cd_Audit_Created_User: "Eike",
+    cd_Audit_Modified_User: "Eike",
+  };
   try {
-    let data = {
-      id: formData.id,
-      ds_Calendar: formData.calendar,
-      ds_Short_Desc: formData.shortDesc,
-      ds_Long_Desc: formData.longDesc,
-      cd_Audit_Created_User: "Eike",
-      cd_Audit_Modified_User: "Eike",
-    };
-
     return await api.put(`/Calendar/Update`, data).then((res) => {
       return res.data;
     });
   } catch (error) {
     console.log("Erro ao Editar:", error);
+    console.log(data);
   }
 }
 

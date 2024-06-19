@@ -217,7 +217,7 @@ const CharacteristicsSettings: React.FC = () => {
         >
           <Select
             onChange={handleSelectChange}
-            style={formStyle("calc(25% - 8px)", "8px")}
+            style={formStyle("calc(50% - 8px)", "8px")}
             value={value === 1 ? null : formData.group}
             disabled={value === 1}
           >

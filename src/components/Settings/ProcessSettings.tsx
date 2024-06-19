@@ -19,6 +19,8 @@ import { formStyle } from "./Style";
 import { DataFetcher } from "components/DataFetcherJson";
 import {
   DeleteButton,
+  EditButton,
+  NewButton,
   RadioButtons,
   SaveButton,
   SelectRadio,
@@ -213,16 +215,23 @@ const ProcessSettings: React.FC = () => {
     setValueTime(e.target.value);
   };
 
+  const newFunction = () => {
+    setValue(1);
+    clearInputs();
+  };
+
+  const editFunction = () => {
+    setValue(3);
+  };
+
   const { t } = useTranslation("layout");
 
   return (
     <>
       <div style={{ display: "flex" }}>
-        <RadioButtons onChange={onChange} value={value} />
-        <div style={{ marginLeft: 15 }}></div>
         <Form.Item style={{ width: "50%" }} label={t("labels.process")}>
           <Select
-            style={formStyle("calc(25% - 8px)", "8px")}
+            style={formStyle("calc(50% - 8px)", "8px")}
             disabled={value === 1}
             value={value === 2 ? formData.process : null}
             onChange={handleSelectProcessChange}
@@ -323,9 +332,7 @@ const ProcessSettings: React.FC = () => {
                       style={{ marginLeft: 5, width: "30%" }}
                       placeholder="0"
                       value={formData.time}
-                      onChange={(e) =>
-                        handleInputChange("time", value)
-                      }
+                      onChange={(e) => handleInputChange("time", value)}
                     />
                     <Select
                       disabled={valueTime === 2 || valueTime === 3}
@@ -408,8 +415,10 @@ const ProcessSettings: React.FC = () => {
           </Col>
         </Row>
         <div style={{ margin: 10, float: "right" }}>
-          <DeleteButton onClick={confirmDelete}/>
-          <SaveButton onClick={success}/>
+          <NewButton onClick={newFunction} />
+          <EditButton onClick={editFunction} />
+          <DeleteButton onClick={confirmDelete} />
+          <SaveButton onClick={success} />
         </div>
       </Form>
     </>

@@ -4,6 +4,13 @@ import { UUID } from "crypto";
 
 interface FormData {
   id: UUID;
+  dsResource: string;
+  dsNotes: string;
+  cdCalendar: UUID;
+  dtAuditCreated: Date;
+  cdAuditCreatedUser: string;
+  dtAuditModified: Date;
+  cdAuditModifiedUser: string;
 }
 
 export async function GetAllResource() {
@@ -27,9 +34,18 @@ export async function GetDataFromId(id: UUID) {
 }
 
 export async function Save(formData: FormData) {
-  const rec = {};
-
   try {
+    const rec = {
+      id: uuidv4(),
+      ds_Resource: formData.dsResource,
+      ds_Notes: formData.dsNotes,
+      cd_Calendar: formData.cdCalendar,
+      dt_Audit_Created: new Date(),
+      cd_Audit_Created_User: 'Eike',
+      dt_Audit_Modified: new Date(),
+      cd_Audit_Modified_User: 'Eike',
+    };
+
     const response = await api.post(`/Resource`, rec);
     console.log(rec);
 
@@ -43,7 +59,16 @@ export async function Save(formData: FormData) {
 
 export async function Update(formData: any) {
   try {
-    let data = {};
+    let data = {
+      id: formData.id,
+      ds_Resource: formData.dsResource,
+      ds_Notes: formData.dsNotes,
+      cd_Calendar: formData.cdCalendar,
+      dt_Audit_Created: formData.dtAuditCreated,
+      cd_Audit_Created_User: 'Eike',
+      dt_Audit_Modified: new Date(),
+      cd_Audit_Modified_User: 'Eike',
+    };
 
     return await api.put(`/Resource/Update`, data).then((res) => {
       console.log(data);
