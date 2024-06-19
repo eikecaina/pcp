@@ -44,7 +44,7 @@ export async function GetCalendarWithDays(id: UUID) {
 
 export async function Save(formData: FormData) {
   const rec = {
-    id: uuidv4(),
+    id: formData.id,
     ds_Calendar: formData.calendar,
     ds_Short_Desc: formData.shortDesc,
     ds_Long_Desc: formData.longDesc,

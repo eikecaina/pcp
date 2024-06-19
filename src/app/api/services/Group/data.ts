@@ -37,7 +37,7 @@ export async function GetDataFromId(id: number) {
 
 export async function Save(formData: FormData) {
   const rec = {
-    id: uuidv4(),
+    id: formData.id,
     ds_Group: formData.group,
     ds_Email: formData.email,
     ds_Desc: formData.desc,
@@ -61,7 +61,7 @@ export async function Save(formData: FormData) {
   }
 }
 
-export async function Update( formData: any) {
+export async function Update(formData: any) {
   try {
     let data = {
       id: formData.id,
@@ -75,9 +75,8 @@ export async function Update( formData: any) {
       id_Auto_Unlocked: true,
       cd_Audit_Modified_User: "Eike",
     };
-  
 
-    return await api.put(`/Group/Update`, data ).then((res) => {
+    return await api.put(`/Group/Update`, data).then((res) => {
       return res.data;
     });
   } catch (error) {

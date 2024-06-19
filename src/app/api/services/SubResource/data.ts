@@ -39,7 +39,7 @@ export async function GetDataFromId(id: UUID) {
 
 export async function Save(formData: FormData) {
   const rec = {
-    id: uuidv4(),
+    id: formData.id,
     cd_Family: formData.cdFamily,
     cd_Resource_Parent: formData.cdResourceParent,
     cd_Resource_SubResource: formData.cdResourceSubResource,

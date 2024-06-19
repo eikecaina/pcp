@@ -53,13 +53,7 @@ const GroupSettings: React.FC = () => {
   const { Option } = Select;
 
   const clearInputs = () => {
-    setFormData({
-      id: null,
-      group: null,
-      desc: null,
-      status: null,
-      email: null,
-    });
+    setFormData({});
   };
 
   const success = () => {

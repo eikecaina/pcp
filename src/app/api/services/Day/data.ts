@@ -47,7 +47,7 @@ export async function GetDataFromId(id: UUID) {
 
 export async function SaveDay(formData: FormData) {
   const rec = {
-    id: uuidv4(),
+    id: formData.id,
     ds_Calendar_Day: formData.dsCalendarDay,
     cd_Calendar: formData.id,
     id_Business_Day: formData.idBusinessDay,

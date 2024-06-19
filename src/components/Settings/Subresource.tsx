@@ -13,11 +13,9 @@ import {
   DeleteButton,
   EditButton,
   NewButton,
-  RadioButtons,
   SaveButton,
 } from "./ButtonsComponent";
 import { formStyle } from "./Style";
-import CustomInputNumber from "components/CustomInputNumber";
 import { useTranslation } from "react-i18next";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { Delete, Save, Update } from "@/app/api/services/SubResource/data";

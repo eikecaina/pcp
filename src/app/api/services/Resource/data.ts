@@ -36,7 +36,7 @@ export async function GetDataFromId(id: UUID) {
 export async function Save(formData: FormData) {
   try {
     const rec = {
-      id: uuidv4(),
+      id: formData.id,
       ds_Resource: formData.dsResource,
       ds_Notes: formData.dsNotes,
       cd_Calendar: formData.cdCalendar,
