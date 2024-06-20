@@ -192,7 +192,7 @@ const FamilySttings: React.FC = () => {
             disabled={value === 1}
             onChange={handleSelectFamilyChange}
           >
-            {familys.map((familys) => (
+            {familys.map((family) => (
               <Option key={family.id} value={family.id}>
                 {family.family}
               </Option>
