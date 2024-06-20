@@ -51,7 +51,7 @@ interface Calendar {
 }
 
 const ResourceSettings: React.FC = () => {
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(2);
   const [formData, setFormData] = useState<any>([]);
   const [fetchData, setFetchData] = useState(true);
   const [resource, setResource] = useState<Resource[]>([]);
@@ -213,6 +213,7 @@ const ResourceSettings: React.FC = () => {
                 label={t("labels.name")}
               >
                 <Input
+                  disabled={value === 2}
                   value={formData.dsResource}
                   onChange={(e) =>
                     handleInputChange("dsResource", e.target.value)
@@ -225,6 +226,7 @@ const ResourceSettings: React.FC = () => {
                 label={t("labels.calendar")}
               >
                 <Select
+                  disabled={value === 2}
                   value={formData.cdCalendar}
                   onChange={handleSelectCalendarChange}
                 >
@@ -240,6 +242,7 @@ const ResourceSettings: React.FC = () => {
                 label={t("labels.description")}
               >
                 <TextArea
+                  disabled={value === 2}
                   style={{ height: 100, resize: "none" }}
                   value={formData.dsNotes}
                   onChange={(e) => handleInputChange("dsNotes", e.target.value)}

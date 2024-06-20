@@ -147,6 +147,8 @@ const GroupSettings: React.FC = () => {
         status: selectedGroup.status,
       });
     }
+    console.log(formData);
+    
   };
 
   const handleSelectChange = (value: string) => {

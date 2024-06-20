@@ -61,7 +61,7 @@ export async function Save(formData: FormData) {
   }
 }
 
-export async function Update(formData: any) {
+export async function Update(formData: FormData) {
   try {
     let data = {
       id: formData.id,

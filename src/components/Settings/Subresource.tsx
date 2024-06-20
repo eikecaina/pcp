@@ -53,7 +53,7 @@ interface Period {
 }
 
 const SubResource: React.FC = () => {
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(2);
   const [formData, setFormData] = useState<any>([]);
   const [fetchData, setFetchData] = useState(true);
   const [resource, setResource] = useState<Resource[]>([]);
@@ -212,6 +212,7 @@ const SubResource: React.FC = () => {
             label={t("labels.resource")}
           >
             <Select
+              disabled={value === 2}
               onChange={(value) =>
                 handleSelectChange(value, "cdResourceParent")
               }
@@ -224,7 +225,10 @@ const SubResource: React.FC = () => {
             </Select>
           </Form.Item>
           <Form.Item style={formStyle("calc(50%)")} label={t("labels.family")}>
-            <Select onChange={(value) => handleSelectChange(value, "cdFamily")}>
+            <Select
+              disabled={value === 2}
+              onChange={(value) => handleSelectChange(value, "cdFamily")}
+            >
               {family.map((family) => (
                 <Option key={family.id} value={family.id}>
                   {family.dsFamily}
@@ -237,6 +241,7 @@ const SubResource: React.FC = () => {
             label={t("labels.subResource")}
           >
             <Select
+              disabled={value === 2}
               onChange={(value) =>
                 handleSelectChange(value, "cdResourceSubResource")
               }
@@ -250,6 +255,7 @@ const SubResource: React.FC = () => {
           </Form.Item>
           <Form.Item label="Preparo" style={formStyle("calc(20% - 5px", "5px")}>
             <InputNumber
+              disabled={value === 2}
               style={{ width: "100%" }}
               placeholder="0"
               onChange={(value) =>
@@ -259,6 +265,7 @@ const SubResource: React.FC = () => {
           </Form.Item>
           <Form.Item label=" " style={formStyle("calc(20% - 5px", "5px")}>
             <Select
+              disabled={value === 2}
               onChange={(value) =>
                 handleSelectChange(value, "cdPeriodSetupStart")
               }
@@ -276,6 +283,7 @@ const SubResource: React.FC = () => {
             style={formStyle("calc(20% - 5px", "5px")}
           >
             <InputNumber
+              disabled={value === 2}
               style={{ width: "100%" }}
               placeholder="0"
               onChange={(value) =>
@@ -285,6 +293,7 @@ const SubResource: React.FC = () => {
           </Form.Item>
           <Form.Item label=" " style={formStyle("calc(20%)")}>
             <Select
+              disabled={value === 2}
               onChange={(value) =>
                 handleSelectChange(value, "cdPeriodSetupEnd")
               }

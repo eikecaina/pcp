@@ -56,11 +56,7 @@ const FamilySttings: React.FC = () => {
   const [fetchData, setFetchData] = useState(true);
 
   const clearInputs = () => {
-    setFormData({
-      family: "",
-      plan: "",
-      group: "",
-    });
+    setFormData({});
   };
 
   const success = () => {
@@ -106,6 +102,51 @@ const FamilySttings: React.FC = () => {
     });
   };
 
+  const fetchGroups = async () => {
+    try {
+      const response = await GetAllGroup();
+      const groupData = response.result.map(
+        (group: { id: UUID; ds_Group: string }) => ({
+          id: group.id,
+          group: group.ds_Group,
+        })
+      );
+      setGroups(groupData);
+    } catch (error) {
+      console.error("Erro ao buscar grupos:", error);
+    }
+  };
+  useEffect(() => {
+    fetchGroups();
+  }, []);
+
+  const fetchFamilys = async () => {
+    try {
+      const response = await GetAllFamily();
+      const familyData = response.result.map(
+        (family: {
+          id: UUID;
+          ds_Family: string;
+          id_Group: UUID;
+          ds_Family_Planej: string;
+        }) => ({
+          id: family.id,
+          family: family.ds_Family,
+          group: family.id_Group,
+          plan: family.ds_Family_Planej,
+        })
+      );
+      setFamilys(familyData);
+    } catch (error) {
+      console.error("Erro ao buscar famílias:", error);
+    }
+  };
+  useEffect(() => {
+    if (fetchData) {
+      fetchFamilys().then(() => setFetchData(false));
+    }
+  }, [fetchData]);
+
   const handleSelectFamilyChange = (selectedFamilyId: any) => {
     const selectedFamily = familys.find(
       (family) => family.id === selectedFamilyId
@@ -131,53 +172,6 @@ const FamilySttings: React.FC = () => {
     console.log(group);
   };
 
-  const fetchGroups = async () => {
-    try {
-      const response = await GetAllGroup();
-      const groupData = response.result.map(
-        (group: { id: UUID; ds_Group: string }) => ({
-          id: group.id,
-          group: group.ds_Group,
-        })
-      );
-      setGroups(groupData);
-    } catch (error) {
-      console.error("Erro ao buscar grupos:", error);
-    }
-  };
-
-  const fetchFamilys = async () => {
-    try {
-      const response = await GetAllFamily();
-      const familyData = response.result.map(
-        (family: {
-          id: UUID;
-          ds_Family: string;
-          id_Group: UUID;
-          ds_Family_Planej: string;
-        }) => ({
-          id: family.id,
-          family: family.ds_Family,
-          group: family.id_Group,
-          plan: family.ds_Family_Planej,
-        })
-      );
-      setFamilys(familyData);
-    } catch (error) {
-      console.error("Erro ao buscar famílias:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchGroups();
-  }, []);
-
-  useEffect(() => {
-    if (fetchData) {
-      fetchFamilys().then(() => setFetchData(false));
-    }
-  }, [fetchData]);
-
   const newFunction = () => {
     setValue(1);
     clearInputs();
@@ -194,11 +188,11 @@ const FamilySttings: React.FC = () => {
         <Form.Item style={{ width: "50%" }} label={t("labels.family")}>
           <Select
             style={formStyle("calc(50% - 8px)", "8px")}
-            value={value === 1 ? null : formData.group}
+            value={value === 1 ? null : formData.family}
             disabled={value === 1}
             onChange={handleSelectFamilyChange}
           >
-            {familys.map((family) => (
+            {familys.map((familys) => (
               <Option key={family.id} value={family.id}>
                 {family.family}
               </Option>
@@ -239,8 +233,8 @@ const FamilySttings: React.FC = () => {
                     onChange={handleSelectGroupChange}
                     value={formData.group}
                   >
-                    {groups.map((group) => (
-                      <Option key={group.id} value={group.id}>
+                    {groups.map((group, index) => (
+                      <Option key={group.id || index} value={group.id}>
                         {group.group}
                       </Option>
                     ))}

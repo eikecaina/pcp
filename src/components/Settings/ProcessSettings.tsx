@@ -56,7 +56,7 @@ interface Calendar {
 }
 
 const ProcessSettings: React.FC = () => {
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(2);
   const [formData, setFormData] = useState<any>({});
   const [fetchData, setFetchData] = useState(true);
   const [processes, setProcesses] = useState<Process[]>([]);
@@ -233,7 +233,7 @@ const ProcessSettings: React.FC = () => {
           <Select
             style={formStyle("calc(50% - 8px)", "8px")}
             disabled={value === 1}
-            value={value === 2 ? formData.process : null}
+            value={value === 3 ? formData.process : null}
             onChange={handleSelectProcessChange}
           >
             {processes.map((process) => (
@@ -257,6 +257,7 @@ const ProcessSettings: React.FC = () => {
                 label={t("labels.name")}
               >
                 <Input
+                  disabled={value === 2}
                   value={formData.process}
                   onChange={(e) => handleInputChange("process", e.target.value)}
                 />
@@ -266,6 +267,7 @@ const ProcessSettings: React.FC = () => {
                 label={t("labels.description")}
               >
                 <Input
+                  disabled={value === 2}
                   value={formData.description}
                   onChange={(e) =>
                     handleInputChange("description", e.target.value)
@@ -277,6 +279,7 @@ const ProcessSettings: React.FC = () => {
                 label={t("labels.calendar")}
               >
                 <Select
+                  disabled={value === 2}
                   value={formData.calendar}
                   onChange={handleSelectCalendarChange}
                 >
@@ -289,6 +292,7 @@ const ProcessSettings: React.FC = () => {
               </Form.Item>
               <div style={{ width: "100%", display: "grid" }}>
                 <Checkbox
+                  disabled={value === 2}
                   checked={formData.quotation}
                   onChange={(e) =>
                     handleInputChange("quotation", e.target.checked)
@@ -298,6 +302,7 @@ const ProcessSettings: React.FC = () => {
                   {t("labels.visibleQuotations")}
                 </Checkbox>
                 <Checkbox
+                  disabled={value === 2}
                   onChange={(e) => handleInputChange("delay", e.target.checked)}
                   checked={formData.delay}
                   style={{ margin: "7px" }}
@@ -305,6 +310,7 @@ const ProcessSettings: React.FC = () => {
                   {t("labels.dalayer")}
                 </Checkbox>
                 <Checkbox
+                  disabled={value === 2}
                   onChange={(e) =>
                     handleInputChange("factory", e.target.checked)
                   }
@@ -328,14 +334,14 @@ const ProcessSettings: React.FC = () => {
                   <Radio value={1}>
                     {t("labels.fixedTime")}
                     <InputNumber
-                      disabled={valueTime === 2 || valueTime === 3}
+                      disabled={value === 2}
                       style={{ marginLeft: 5, width: "30%" }}
                       placeholder="0"
                       value={formData.time}
                       onChange={(e) => handleInputChange("time", value)}
                     />
                     <Select
-                      disabled={valueTime === 2 || valueTime === 3}
+                      disabled={value === 2}
                       style={{ marginLeft: 5, width: "45%" }}
                       placeholder="Dia"
                     />
