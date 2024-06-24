@@ -16,7 +16,13 @@ import {
 import { DataFetcher } from "components/DataFetcherJson";
 import { formStyle } from "./Style";
 import CustomInputNumber from "components/CustomInputNumber";
-import { DeleteButton, RadioButtons, SaveButton } from "./ButtonsComponent";
+import {
+  DeleteButton,
+  EditButton,
+  NewButton,
+  RadioButtons,
+  SaveButton,
+} from "./ButtonsComponent";
 import { useEffect, useState, useTransition } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -50,22 +56,14 @@ interface Charact {
 const ValueSettings: React.FC = () => {
   const { t } = useTranslation("layout");
 
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(2);
   const [formData, setFormData] = useState<any>({});
   const [values, setValues] = useState<Value[]>([]);
   const [characts, setCharacts] = useState<Charact[]>([]);
   const [fetchData, setFetchData] = useState(true);
 
   const clearInputs = () => {
-    setFormData({
-      value: '',
-      charact: '',
-      position: '',
-      newApproved: '',
-      repeatApproved: '',
-      newCertificate: '',
-      repeatCertificate: '',
-    });
+    setFormData({});
   };
 
   const success = () => {
@@ -80,7 +78,7 @@ const ValueSettings: React.FC = () => {
           if (formData.id) {
             await Update(formData);
           } else {
-            await Save(formData); 
+            await Save(formData);
             clearInputs();
           }
           setFetchData(true);
@@ -111,14 +109,6 @@ const ValueSettings: React.FC = () => {
     });
   };
 
-  const onChange = (e: RadioChangeEvent) => {
-    const selectedValue = e.target.value;
-    if (selectedValue === 1) {
-      setFormData({});
-    }
-    setValue(selectedValue);
-  };
-
   const handleInputChange = (fieldName: string, value: any) => {
     setFormData({ ...formData, [fieldName]: value });
   };
@@ -142,7 +132,7 @@ const ValueSettings: React.FC = () => {
   };
 
   const handleSelectCaractChange = (charact: any) => {
-    setFormData({...formData, charact: charact});
+    setFormData({ ...formData, charact: charact });
   };
 
   const fetchValues = async () => {
@@ -200,17 +190,24 @@ const ValueSettings: React.FC = () => {
     fetchCharacts();
   }, [handleSelectCaractChange]);
 
+  const newFunction = () => {
+    setValue(1);
+    clearInputs();
+  };
+
+  const editFunction = () => {
+    setValue(3);
+  };
+
   return (
     <>
       <div style={{ display: "flex" }}>
-        <RadioButtons onChange={onChange} value={value} />
-        <div style={{ marginLeft: 15 }}></div>
         <Form.Item style={{ width: "50%" }} label={t("labels.values")}>
           <Select
             onChange={handleSelectValueChange}
-            style={formStyle("calc(25% - 8px)", "8px")}
+            style={formStyle("calc(50% - 8px)", "8px")}
+            value={value === 1 ? null : formData.group}
             disabled={value === 1}
-            value={value === 2 ? formData.value : null}
           >
             {values.map((value) => (
               <Option key={value.id} value={value.id}>
@@ -245,6 +242,7 @@ const ValueSettings: React.FC = () => {
             <Form layout="vertical">
               <Form.Item style={formStyle("100%")} label={t("labels.name")}>
                 <Input
+                  disabled={value === 2}
                   value={formData.value}
                   onChange={(e) => handleInputChange("value", e.target.value)}
                 />
@@ -254,6 +252,7 @@ const ValueSettings: React.FC = () => {
                 label={t("labels.charact")}
               >
                 <Select
+                  disabled={value === 2}
                   onChange={handleSelectCaractChange}
                   value={formData.charact}
                 >
@@ -266,6 +265,7 @@ const ValueSettings: React.FC = () => {
               </Form.Item>
               <Form.Item style={formStyle("50%")} label={t("labels.position")}>
                 <InputNumber
+                  disabled={value === 2}
                   min={1}
                   style={{ width: "100%" }}
                   value={formData.position}
@@ -275,6 +275,7 @@ const ValueSettings: React.FC = () => {
               <Divider orientation="left">{t("titles.condition")}</Divider>
               <div style={{ display: "grid" }}>
                 <Checkbox
+                  disabled={value === 2}
                   checked={formData.newApproved}
                   style={{ margin: "7px" }}
                   onChange={(e) =>
@@ -284,6 +285,7 @@ const ValueSettings: React.FC = () => {
                   {t("labels.newAprovattion")}
                 </Checkbox>
                 <Checkbox
+                  disabled={value === 2}
                   checked={formData.repeatApproved}
                   style={{ margin: "7px" }}
                   onChange={(e) =>
@@ -293,6 +295,7 @@ const ValueSettings: React.FC = () => {
                   {t("labels.repetitionAprovattion")}
                 </Checkbox>
                 <Checkbox
+                  disabled={value === 2}
                   checked={formData.newCertificate}
                   style={{ margin: "7px" }}
                   onChange={(e) =>
@@ -302,6 +305,7 @@ const ValueSettings: React.FC = () => {
                   {t("labels.newCertificate")}
                 </Checkbox>
                 <Checkbox
+                  disabled={value === 2}
                   checked={formData.repeatCertificate}
                   style={{ margin: "7px" }}
                   onChange={(e) =>
@@ -316,6 +320,8 @@ const ValueSettings: React.FC = () => {
         </Col>
       </Row>
       <div style={{ margin: 10, float: "right" }}>
+        <NewButton onClick={newFunction} />
+        <EditButton onClick={editFunction} />
         <DeleteButton onClick={confirmDelete} />
         <SaveButton onClick={success} />
       </div>

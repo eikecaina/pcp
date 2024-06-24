@@ -46,7 +46,7 @@ export async function GetDataFromId(id: number) {
 
 export async function Save(formData: FormData) {
   const rec = {
-    id: uuidv4(),
+    id: formData.id,
     ds_Caract: formData.charact,
     ds_Exib: formData.exib,
     ds_Desc: formData.desc,

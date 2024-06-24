@@ -33,7 +33,7 @@ export async function GetDataFromId(id: UUID) {
 
 export async function Save(formData: FormData) {
   const rec = {
-    id: uuidv4(),
+    id: formData.id,
     ds_Family: formData.family,
     ds_Family_Planej: formData.plan,
     id_Group: formData.group,

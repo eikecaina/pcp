@@ -1,46 +1,43 @@
+import lib, { ExclamationCircleOutlined } from "@ant-design/icons";
 import {
-  DeleteOutlined,
-  EditOutlined,
-  ExclamationCircleOutlined,
-  PlusOutlined,
-} from "@ant-design/icons";
-import {
-  Button,
   Calendar,
   Form,
   Input,
   Select,
-  Tabs,
   Card,
   Row,
   Col,
   Checkbox,
   DatePicker,
   Modal,
-  Tooltip,
-  Space,
   message,
+  Divider,
+  InputNumber,
 } from "antd";
-import type { RadioChangeEvent, TabsProps } from "antd";
-import CustomInputNumber from "components/CustomInputNumber";
-import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 import {
   DeleteButton,
-  RadioButtons,
+  EditButton,
+  NewButton,
   SaveButton,
-  SelectRadio,
 } from "./ButtonsComponent";
 import { useTranslation } from "react-i18next";
 import { UUID } from "crypto";
 import {
   Delete,
   GetAllCalendar,
+  GetCalendarWithDays,
   GetDataFromId,
   Save,
   Update,
 } from "@/app/api/services/Calendar/data";
-import { GetAllDay } from "@/app/api/services/Day/data";
+import {
+  DeleteDay,
+  GetAllDay,
+  SaveDay,
+  UpdateDay,
+} from "@/app/api/services/Day/data";
+import { GetAllPeriod } from "@/app/api/services/Period/data";
 
 const { TextArea } = Input;
 
@@ -51,28 +48,50 @@ interface Calendar {
   longDesc: string;
   createdUser: string;
   modifiedUser: string;
+  calendarDay: UUID;
 }
 
 interface Days {
   id: UUID;
-  day: string;
+  dsCalendarDay: string;
+  cdCalendar: UUID;
+  idBusinessDay: boolean;
+  vlBaseDays: number;
+  vlBasePeriod: number;
+  vlBasePosition: number;
+  vlOcurrenceType: number;
+  dtOcurrence: Date;
+  vlRepeatEnd: number;
+  vlRepeatEndAfter: number;
+  idRepeat: boolean;
+  vlRepeatEach: number;
+  vlRepeatPeriod: number;
+  vlRepeatBusinessDays: number;
+  dtRepeatEnd: Date;
+  dtAuditCreated: Date;
+  cdAuditCreatedUser: string;
+  dtAuditModified: Date;
+  cdAuditModifiedUser: string;
+}
+
+interface Period {
+  id: UUID;
+  period: string;
 }
 
 export const CalendarSettings = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [value, setValue] = useState(1);
-  const [formData, setFormData] = useState<any>({});
+  const [value, setValue] = useState(2);
+  const [formData, setFormData] = useState<any>({
+    idRepeat: false,
+    idBussinesDay: false,
+  });
   const [calendars, setCalendars] = useState<Calendar[]>([]);
+  const [periods, setPeriods] = useState<Period[]>([]);
   const [days, setDays] = useState<Days[]>([]);
   const [fetchData, setFetchData] = useState(true);
 
   const { t } = useTranslation("layout");
   const { Option } = Select;
-
-  const openModal = () => {
-    setValue(value);
-    setIsModalOpen(true);
-  };
 
   const clearInputs = () => {
     setFormData({});
@@ -89,6 +108,7 @@ export const CalendarSettings = () => {
         try {
           if (formData.id) {
             await Update(formData);
+            clearInputs();
           } else {
             await Save(formData);
             clearInputs();
@@ -97,6 +117,27 @@ export const CalendarSettings = () => {
           message.success("Salvo com sucesso!", 2.5);
         } catch (error) {
           message.error("Não foi possível salvar");
+        }
+      });
+  };
+
+  const successDay = () => {
+    message
+      .open({
+        type: "loading",
+        content: "Salvando..",
+        duration: 2.5,
+      })
+      .then(async () => {
+        try {
+          await SaveDay(formData);
+          clearInputs();
+
+          setFetchData(true);
+          message.success("Salvo com sucesso!", 2.5);
+        } catch (error) {
+          message.error("Não foi possível salvar");
+          console.log(formData);
         }
       });
   };
@@ -125,18 +166,20 @@ export const CalendarSettings = () => {
     Modal.confirm({
       title: t("generalButtons.deleteButton"),
       icon: <ExclamationCircleOutlined />,
-      content: t("labels.deleteDays"),
+      content: "Deseja excluir o Dia?",
       okText: t("generalButtons.confirmButton"),
       cancelText: t("generalButtons.cancelButton"),
+      async onOk() {
+        try {
+          await DeleteDay(formData);
+          clearInputs();
+          setFetchData(true);
+          message.success("Excluido com sucesso!");
+        } catch (error) {
+          message.error("Não foi possivel excluir!");
+        }
+      },
     });
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
   };
 
   const formStyle = (
@@ -148,16 +191,21 @@ export const CalendarSettings = () => {
     marginRight: marginRight,
   });
 
-  const onChange = (e: RadioChangeEvent) => {
-    const selectedValue = e.target.value;
-    if (selectedValue === 1) {
-      setFormData({});
-    }
-    setValue(selectedValue);
+  const handleInputChange = (fieldName: string, value: any) => {
+    setFormData({ ...formData, [fieldName]: value });
   };
 
-  const handleInputChange = (fieldName: string, value: string) => {
+  const handleInputDayChange = (fieldName: string, value: any) => {
     setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleDateChange = (fieldName: string) => (date: any) => {
+    const formattedDate = date ? date.toDate().toISOString() : "";
+    setFormData({ ...formData, [fieldName]: formattedDate });
+  };
+
+  const handleSelectPeriodChange = (vlRepeatPeriod: string) => {
+    setFormData({ ...formData, vlRepeatPeriod: vlRepeatPeriod });
   };
 
   const handleSelectCalendarChange = async (selectedCalendarId: UUID) => {
@@ -177,6 +225,21 @@ export const CalendarSettings = () => {
       console.log(formData);
     } catch (error) {
       console.error("Erro ao buscar dados do calendário:", error);
+    }
+  };
+
+  const fetchPeriods = async () => {
+    try {
+      const response = await GetAllPeriod();
+      const periodData = response.result.map(
+        (period: { id: UUID; ds_Period: string }) => ({
+          id: period.id,
+          period: period.ds_Period,
+        })
+      );
+      setPeriods(periodData);
+    } catch (error) {
+      console.error("Erro ao buscar periodos", error);
     }
   };
 
@@ -206,71 +269,55 @@ export const CalendarSettings = () => {
     }
   };
 
+  const fetchCalendarDays = async () => {
+    try {
+      const response = await GetCalendarWithDays(formData.id);
+      const dayData = response.calendarDays.map(
+        (day: { id: UUID; ds_Calendar_Day: string }) => ({
+          id: day.id,
+          dsCalendarDay: day.ds_Calendar_Day,
+        })
+      );
+      setDays(dayData);
+      console.log(response);
+    } catch (error) {
+      console.error("Não foi possível buscar dias", error);
+    }
+  };
+
+  useEffect(() => {
+    if (formData.id) {
+      fetchCalendarDays();
+    }
+  }, [formData.id]);
+
   useEffect(() => {
     if (fetchData) {
       fetchCalendars(setCalendars).then(() => setFetchData(false));
     }
   }, [fetchData, setCalendars, setFetchData]);
 
-  const fetchDays = async () => {
-    try {
-      const response = await GetAllDay();
-      const dayData = response.result.map(
-        (day: { id: UUID; ds_Calendar_Day: string }) => ({
-          id: day.id,
-          day: day.ds_Calendar_Day,
-        })
-      );
-      setDays(dayData);
-    } catch (error) {
-      console.log("Erro ao buscar dia:", error);
-    }
-  };
-
   useEffect(() => {
-    if (fetchData) {
-      fetchDays();
-    }
+    fetchPeriods();
   }, []);
 
-  const listDays = () => {
-    const days = [
-      { data: "24/02/2024", nome: "Feriado" },
-      { data: "22/04/2024", nome: "Ferias" },
-      { data: "21/07/2024", nome: "Carnaval" },
-      { data: "26/09/2024", nome: "Sexta-feira" },
-      { data: "28/01/2024", nome: "Happy Hour" },
-    ];
-
-    return (
-      <ul style={{ listStyle: "none", padding: 0, margin: 0, height: 180 }}>
-        {days.map((item, index) => (
-          <li
-            style={{
-              marginBottom: 3,
-              background: index % 2 === 0 ? "white" : "#f0f0f0",
-              padding: 2,
-            }}
-            key={index}
-          >
-            {item.data + " - " + item.nome}
-          </li>
-        ))}
-      </ul>
-    );
+  const newFunction = () => {
+    setValue(1);
+    clearInputs();
   };
 
+  const editFunction = () => {
+    setValue(3);
+  };
   return (
     <>
       <div style={{ display: "flex" }}>
-        <RadioButtons onChange={onChange} value={value} />
-        <div style={{ marginLeft: 15 }}></div>
         <Form.Item style={{ width: "50%" }} label={t("labels.calendar")}>
           <Select
-            style={formStyle("calc(25% - 8px)", "8px")}
-            disabled={value === 1}
+            style={formStyle("calc(50% - 8px)", "8px")}
             onChange={handleSelectCalendarChange}
-            value={value === 2 ? formData.calendar : null}
+            value={value === 1 ? null : formData.group}
+            disabled={value === 1}
           >
             {calendars.map((calendar) => (
               <Option key={calendar.id} value={calendar.id}>
@@ -282,7 +329,7 @@ export const CalendarSettings = () => {
       </div>
       <Form layout="vertical">
         <Row gutter={5}>
-          <Col span={16} style={{ display: "flex" }}>
+          <Col span={15} style={{ display: "flex" }}>
             <Card style={{ width: "100%" }} bodyStyle={{ padding: 0 }}>
               <div style={{ margin: 10 }}>
                 <Form.Item
@@ -290,51 +337,20 @@ export const CalendarSettings = () => {
                   style={formStyle("calc(50% - 8px)", "8px")}
                 >
                   <Input
+                    disabled={value === 2}
                     value={formData.calendar}
                     onChange={(e) =>
                       handleInputChange("calendar", e.target.value)
                     }
                   />
                 </Form.Item>
-                <Form.Item
-                  style={formStyle("calc(50%)")}
-                  label={t("labels.days")}
-                >
-                  <Space.Compact style={{ width: "100%" }}>
-                    <Tooltip title={t("labels.removeDays")}>
-                      <Button type="primary" onClick={deleteDay}>
-                        <DeleteOutlined />
-                      </Button>
-                    </Tooltip>
 
-                    <Select defaultValue={"Sem Dia"}>
-                      <Option value={null}>Sem Dia</Option>
-                      {days.map((day) => (
-                        <Option key={day.id} value={day.id}>
-                          {day.day}
-                        </Option>
-                      ))}
-                    </Select>
-
-                    <Tooltip title={t("labels.addDays")}>
-                      <Button onClick={openModal} type="primary">
-                        <PlusOutlined />
-                      </Button>
-                    </Tooltip>
-                  </Space.Compact>
-                </Form.Item>
-
-                <Form.Item
-                  label="Base"
-                  style={formStyle("calc(50% - 8px)", "8px")}
-                >
+                <Form.Item label="Base" style={formStyle("calc(50%)")}>
                   <Select />
                 </Form.Item>
-                <Form.Item
-                  label={t("labels.description")}
-                  style={formStyle("50%")}
-                >
+                <Form.Item label={t("labels.description")}>
                   <Input
+                    disabled={value === 2}
                     value={formData.shortDesc}
                     onChange={(e) =>
                       handleInputChange("shortDesc", e.target.value)
@@ -346,6 +362,7 @@ export const CalendarSettings = () => {
                   style={{ marginBottom: 0 }}
                 >
                   <TextArea
+                    disabled={value === 2}
                     style={{ resize: "none", height: "99px" }}
                     value={formData.longDesc}
                     onChange={(e) =>
@@ -358,126 +375,135 @@ export const CalendarSettings = () => {
           </Col>
           <Col span={4}>
             <Card style={{ height: 325 }} bodyStyle={{ padding: 0 }}>
-              {listDays()}
+              {days.map((day) => (
+                <li>{day.dsCalendarDay}</li>
+              ))}
             </Card>
           </Col>
-          <Col span={4}>
+          <Col span={5}>
             <Card style={{ height: 325 }} bodyStyle={{ padding: 0 }}>
               <Calendar fullscreen={false} style={{ color: "red" }} />
             </Card>
           </Col>
         </Row>
-        <div style={{ margin: 10, float: "right" }}>
-          <DeleteButton onClick={confirmDelete} />
-          <SaveButton onClick={success} />
+        <div style={{ width: "100%", margin: 10, float: "right" }}>
+          <div style={{ float: "right" }}>
+            <NewButton onClick={newFunction} />
+            <EditButton onClick={editFunction} />
+            <DeleteButton onClick={confirmDelete} />
+            <SaveButton onClick={success} />
+          </div>
         </div>
       </Form>
-      <Modal
-        width={1400}
-        title={t("titles.settingsDay")}
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <Form style={{ marginTop: "10px" }} colon={false}>
-          <div style={{ display: "flex" }}>
-            <Col span={9}>
-              <Card title={t("titles.occurrence")} bodyStyle={{ padding: 10 }}>
-                <div style={{ width: "100%" }}>
-                  <Form.Item label={t("labels.name")}>
-                    <Input size="small" />
-                  </Form.Item>
-                  <Form.Item
-                    label={t("labels.date")}
-                    style={formStyle("calc(70% - 5px)", "5px")}
-                  >
-                    <DatePicker
-                      size="small"
-                      defaultValue={dayjs()}
-                      format={"DD/MM/YYYY"}
-                      style={formStyle("80%")}
-                    />
-                  </Form.Item>
-                  <Form.Item
-                    label={t("labels.elapsedDays")}
-                    style={formStyle("calc(23% - 8px)", "8px")}
-                  >
-                    <Checkbox />
-                  </Form.Item>
-                </div>
-              </Card>
-            </Col>
-            <Col span={6}>
-              <Card title={t("labels.repeat")} bodyStyle={{ padding: 10 }}>
-                <Form.Item style={formStyle("100%")} label="Nunca">
-                  <Checkbox />
-                </Form.Item>
-                <Form.Item style={formStyle("65%")} label="A cada">
-                  <CustomInputNumber
-                    defaultValue={1}
-                    min={1}
+      <Divider style={{ padding: 0, margin: 0 }} orientation="left">
+        Cadastro de dia
+      </Divider>
+      <Form style={{ marginTop: "30px" }} colon={false}>
+        <div style={{ display: "flex" }}>
+          <Col span={8}>
+            <Card title={t("titles.occurrence")} bodyStyle={{ padding: 10 }}>
+              <div style={{ width: "100%" }}>
+                <Form.Item label={t("labels.name")} style={formStyle("50%")}>
+                  <Input
                     size="small"
-                    style={formStyle("calc(45% - 8px)", "8px")}
-                  />
-                  <Select
-                    defaultValue={"Dia"}
-                    options={[
-                      { value: "Dia" },
-                      { value: "Semana" },
-                      { value: "Mês" },
-                      { value: "Ano" },
-                    ]}
-                    style={formStyle("55%")}
-                    size="small"
+                    onChange={(e) =>
+                      handleInputDayChange("dsCalendarDay", e.target.value)
+                    }
                   />
                 </Form.Item>
-              </Card>
-            </Col>
-            <Col span={9}>
-              <Card title={t("labels.termination")} bodyStyle={{ padding: 10 }}>
-                <Form.Item style={formStyle("100%")} label="Nunca">
-                  <Checkbox />
+
+                <Form.Item
+                  label={t("labels.date")}
+                  style={formStyle("calc(70% - 5px)", "5px")}
+                >
+                  <DatePicker
+                    size="small"
+                    format={"DD/MM/YYYY"}
+                    style={formStyle("80%")}
+                    onChange={handleDateChange("dtOcurrence")}
+                  />
                 </Form.Item>
                 <Form.Item
-                  style={formStyle("calc(50% - 6px)", "6px")}
-                  label={t("labels.in")}
+                  label={t("labels.elapsedDays")}
+                  style={formStyle("calc(23% - 8px)", "8px")}
                 >
-                  <DatePicker format={"DD/MM/YYYY"} size="small" />
-                </Form.Item>
-                <Form.Item label={t("labels.after")} style={formStyle("50%")}>
-                  <CustomInputNumber
-                    size="small"
-                    min={1}
-                    style={formStyle("40%", "8px")}
+                  <Checkbox
+                    checked={formData.idBusinessDay}
+                    onChange={(e) =>
+                      handleInputDayChange("idBusinessDay", e.target.checked)
+                    }
                   />
-                  {t("labels.occurrences")}
                 </Form.Item>
-              </Card>
-            </Col>
+              </div>
+            </Card>
+          </Col>
+          <Col span={8}>
+            <Card title={t("labels.repeat")} bodyStyle={{ padding: 10 }}>
+              <Form.Item style={formStyle("100%")} label="Nunca">
+                <Checkbox
+                  checked={formData.idRepeat}
+                  onChange={(e) =>
+                    handleInputDayChange("idRepeat", e.target.checked)
+                  }
+                />
+              </Form.Item>
+              <Form.Item style={formStyle("65%")} label="A cada">
+                <InputNumber
+                  min={0}
+                  size="small"
+                  style={formStyle("calc(45% - 8px)", "8px")}
+                  onChange={() => handleInputDayChange("vlRepeatEach", value)}
+                />
+                <Select
+                  onChange={handleSelectPeriodChange}
+                  style={formStyle("55%")}
+                  size="small"
+                >
+                  {periods.slice(3).map((period) => (
+                    <Option key={period.id} value={period.id}>
+                      {period.period}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Card>
+          </Col>
+          <Col span={8}>
+            <Card title={t("labels.termination")} bodyStyle={{ padding: 10 }}>
+              <Form.Item
+                style={formStyle("calc(50% - 6px)", "6px")}
+                label={t("labels.in")}
+              >
+                <DatePicker
+                  onChange={handleDateChange("dtRepeatEnd")}
+                  format={"DD/MM/YYYY"}
+                  size="small"
+                />
+              </Form.Item>
+              <Form.Item label={t("labels.after")} style={formStyle("50%")}>
+                <InputNumber
+                  size="small"
+                  min={0}
+                  style={formStyle("40%", "8px")}
+                  onChange={() =>
+                    handleInputDayChange("vlRepeatEndAfter", value)
+                  }
+                />
+                {t("labels.occurrences")}
+              </Form.Item>
+              <Form.Item style={formStyle("100%")} hidden></Form.Item>
+            </Card>
+          </Col>
+        </div>
+        <div style={{ width: "100%", margin: 10, float: "right" }}>
+          <div style={{ float: "right" }}>
+            <NewButton onClick={newFunction} />
+            <EditButton onClick={editFunction} />
+            <DeleteButton onClick={deleteDay} />
+            <SaveButton onClick={successDay} />
           </div>
-        </Form>
-      </Modal>
+        </div>
+      </Form>
     </>
   );
 };
-
-export const Maintenance = () => {
-  return <div> Manutenção </div>;
-};
-
-export const PageTabs = () => {
-  return <Tabs defaultActiveKey="1" items={items} />;
-};
-
-const items: TabsProps["items"] = [
-  {
-    key: "1",
-    label: "Calendário",
-    children: <CalendarSettings />,
-  },
-  {
-    key: "2",
-    label: "Manutenção",
-    children: <Maintenance />,
-  },
-];

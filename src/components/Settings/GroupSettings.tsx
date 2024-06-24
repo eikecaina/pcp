@@ -17,6 +17,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { formStyle } from "./Style";
 import {
   DeleteButton,
+  EditButton,
+  NewButton,
   RadioButtons,
   SaveButton,
   SelectRadio,
@@ -41,7 +43,7 @@ interface Group {
 }
 
 const GroupSettings: React.FC = () => {
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState(2);
   const [formData, setFormData] = useState<any>({});
   const [groups, setGroups] = useState<Group[]>([]);
   const [messageApi, contextHolder] = message.useMessage();
@@ -51,15 +53,8 @@ const GroupSettings: React.FC = () => {
   const { Option } = Select;
 
   const clearInputs = () => {
-    setFormData({
-      id: '',
-      group: '',
-      desc: '',
-      status: '',
-      email: '',
-    });
+    setFormData({});
   };
-
 
   const success = () => {
     message
@@ -73,7 +68,7 @@ const GroupSettings: React.FC = () => {
           if (formData.id) {
             await Update(formData);
           } else {
-            await Save(formData); 
+            await Save(formData);
             clearInputs();
           }
           setFetchData(true);
@@ -104,26 +99,26 @@ const GroupSettings: React.FC = () => {
     });
   };
 
-  const onChange = (e: RadioChangeEvent) => {
-    const selectedValue = e.target.value;
-    if (selectedValue === 1) {
-      setFormData({});
-    }
-    setValue(selectedValue);
-  };
-
   useEffect(() => {
     const fetchGroups = async () => {
       if (fetchData) {
         try {
           const response = await GetAllGroup();
-          const groupData = response.result.map((group: { id: any; ds_Group: string; ds_Desc: string; ds_Email: string; ds_Blocked: string; }) => ({
-            id: group.id,
-            group: group.ds_Group,
-            desc: group.ds_Desc,
-            email: group.ds_Email,
-            status: group.ds_Blocked,
-          }));
+          const groupData = response.result.map(
+            (group: {
+              id: any;
+              ds_Group: string;
+              ds_Desc: string;
+              ds_Email: string;
+              ds_Blocked: string;
+            }) => ({
+              id: group.id,
+              group: group.ds_Group,
+              desc: group.ds_Desc,
+              email: group.ds_Email,
+              status: group.ds_Blocked,
+            })
+          );
           setGroups(groupData);
         } catch (error) {
           console.error("Erro ao buscar grupos:", error);
@@ -132,7 +127,7 @@ const GroupSettings: React.FC = () => {
         }
       }
     };
-  
+
     fetchGroups();
   }, [fetchData]);
 
@@ -152,23 +147,32 @@ const GroupSettings: React.FC = () => {
         status: selectedGroup.status,
       });
     }
+    console.log(formData);
+    
   };
 
   const handleSelectChange = (value: string) => {
     setFormData({ ...formData, status: value });
   };
 
+  const newFunction = () => {
+    setValue(1);
+    clearInputs();
+  };
+
+  const editFunction = () => {
+    setValue(3);
+  };
+
   return (
     <>
       <div style={{ display: "flex" }}>
-        <RadioButtons onChange={onChange} value={value} />
-        <div style={{ marginLeft: 15 }}></div>
         <Form.Item style={{ width: "50%" }} label={t("labels.group")}>
           <Select
-            style={formStyle("calc(25% - 8px)", "8px")}
-            disabled={value === 1}
+            style={formStyle("calc(50% - 8px)", "8px")}
             onChange={handleSelectGroupChange}
-            value={value === 2 ? formData.group : null}
+            value={value === 1 ? null : formData.group}
+            disabled={value === 1}
           >
             {groups.map((group) => (
               <Option key={group.id} value={group.id}>
@@ -180,7 +184,6 @@ const GroupSettings: React.FC = () => {
       </div>
       <Form layout="vertical">
         <div>
-          <Input className="id-verification" hidden value={formData.id}></Input>
           <Row gutter={10}>
             <Col span={24}>
               <Card title={t("titles.definition")} bodyStyle={{ padding: 10 }}>
@@ -189,6 +192,7 @@ const GroupSettings: React.FC = () => {
                   style={formStyle("calc(33.33% - 8px)", "8px")}
                 >
                   <Input
+                    disabled={value === 2}
                     value={formData.group}
                     onChange={(e) => handleInputChange("group", e.target.value)}
                   />
@@ -198,6 +202,7 @@ const GroupSettings: React.FC = () => {
                   style={formStyle("calc(33.33% - 8px)", "8px")}
                 >
                   <Select
+                    disabled={value === 2}
                     value={formData.status}
                     options={[{ value: "Ativo" }, { value: "Bloqueado" }]}
                     onChange={handleSelectChange}
@@ -208,6 +213,7 @@ const GroupSettings: React.FC = () => {
                   style={formStyle("calc(33.33%)")}
                 >
                   <Input
+                    disabled={value === 2}
                     value={formData.email}
                     onChange={(e) => handleInputChange("email", e.target.value)}
                   />
@@ -217,6 +223,7 @@ const GroupSettings: React.FC = () => {
                   style={{ marginBottom: 20 }}
                 >
                   <TextArea
+                    disabled={value === 2}
                     value={formData.desc}
                     style={{ resize: "none", height: "80px" }}
                     onChange={(e) => handleInputChange("desc", e.target.value)}
@@ -229,6 +236,8 @@ const GroupSettings: React.FC = () => {
       </Form>
       <div style={{ margin: 10, float: "right" }}>
         {contextHolder}
+        <NewButton onClick={newFunction} />
+        <EditButton onClick={editFunction} />
         <DeleteButton onClick={confirmDelete} />
         <SaveButton onClick={success} />
       </div>

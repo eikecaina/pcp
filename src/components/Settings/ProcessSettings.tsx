@@ -5,53 +5,244 @@ import {
   DatePicker,
   Form,
   Input,
+  InputNumber,
+  Modal,
   Radio,
   RadioChangeEvent,
   Row,
   Select,
   Tree,
+  message,
 } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { formStyle } from "./Style";
 import { DataFetcher } from "components/DataFetcherJson";
 import {
   DeleteButton,
+  EditButton,
+  NewButton,
   RadioButtons,
   SaveButton,
   SelectRadio,
 } from "./ButtonsComponent";
 import CustomInputNumber from "components/CustomInputNumber";
 import { useTranslation } from "react-i18next";
+import {
+  Delete,
+  GetAllProcess,
+  Save,
+  Update,
+} from "@/app/api/services/Process/data";
+import { UUID } from "crypto";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { GetAllCalendar } from "@/app/api/services/Calendar/data";
+
+const { Option } = Select;
+
+interface Process {
+  id: UUID;
+  process: string;
+  description: string;
+  quotation: boolean;
+  delay: boolean;
+  factory: boolean;
+  time: number;
+  calendar: UUID;
+}
+
+interface Calendar {
+  id: UUID;
+  calendar: string;
+}
 
 const ProcessSettings: React.FC = () => {
-  const [value, setValue] = useState(1);
-  const onChange = (e: RadioChangeEvent) => {
-    setValue(e.target.value);
+  const [value, setValue] = useState(2);
+  const [formData, setFormData] = useState<any>({});
+  const [fetchData, setFetchData] = useState(true);
+  const [processes, setProcesses] = useState<Process[]>([]);
+  const [calendar, setCalendar] = useState<Calendar[]>([]);
+  const [valueTime, setValueTime] = useState(1);
+
+  const clearInputs = () => {
+    setFormData({
+      process: "",
+      description: "",
+      quotation: "",
+      delay: "",
+      factory: "",
+      time: "",
+      calendar: "",
+    });
   };
 
-  const [valueTime, setValueTime] = useState(1);
+  const success = () => {
+    message
+      .open({
+        type: "loading",
+        content: "Salvando..",
+        duration: 2.5,
+      })
+      .then(async () => {
+        try {
+          if (formData.id) {
+            await Update(formData);
+          } else {
+            await Save(formData);
+            clearInputs();
+          }
+          setFetchData(true);
+          message.success("Salvo com sucesso!", 2.5);
+        } catch (error) {
+          message.error("Não foi possível salvar");
+        }
+      });
+  };
+
+  const confirmDelete = () => {
+    Modal.confirm({
+      title: t("generalButtons.deleteButton"),
+      icon: <ExclamationCircleOutlined />,
+      content: "Deseja excluir o Valor?",
+      okText: t("generalButtons.confirmButton"),
+      cancelText: t("generalButtons.cancelButton"),
+      async onOk() {
+        try {
+          await Delete(formData);
+          clearInputs();
+          setFetchData(true);
+          message.success("Excluido com sucesso!");
+        } catch (error) {
+          message.error("Não foi possivel excluir!");
+        }
+      },
+    });
+  };
+
+  const handleInputChange = (fieldName: string, value: any) => {
+    setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const handleSelectProcessChange = (selectedProcessId: any) => {
+    const selectedProcess = processes.find(
+      (process) => process.id === selectedProcessId
+    );
+    if (selectedProcess) {
+      setFormData({
+        ...formData,
+        id: selectedProcess.id,
+        process: selectedProcess.process,
+        description: selectedProcess.description,
+        quotation: selectedProcess.quotation,
+        delay: selectedProcess.delay,
+        factory: selectedProcess.factory,
+        time: selectedProcess.time,
+        calendar: selectedProcess.calendar,
+      });
+    }
+    console.log(formData);
+  };
+
+  const handleSelectCalendarChange = (calendar: any) => {
+    setFormData({ ...formData, calendar: calendar });
+  };
+
+  const fetchProcess = async () => {
+    try {
+      const response = await GetAllProcess();
+      const processData = response.result.map(
+        (process: {
+          id: UUID;
+          ds_Process: string;
+          ds_Description: string;
+          id_Quotation: boolean;
+          id_Delay: boolean;
+          id_Factory: boolean;
+          vl_Time: number;
+          cd_Calendar: UUID;
+        }) => ({
+          id: process.id,
+          process: process.ds_Process,
+          description: process.ds_Description,
+          quotation: process.id_Quotation,
+          delay: process.id_Delay,
+          factory: process.id_Factory,
+          time: process.vl_Time,
+          calendar: process.cd_Calendar,
+        })
+      );
+      setProcesses(processData);
+    } catch (error) {
+      console.error("Erro ao buscar valores:", error);
+    }
+  };
+
+  const fetchCalendars = async (setCalendars: any) => {
+    try {
+      const response = await GetAllCalendar();
+      const calendarData = response.result.map(
+        (calendar: { id: UUID; ds_Calendar: string }) => ({
+          id: calendar.id,
+          calendar: calendar.ds_Calendar,
+        })
+      );
+      setCalendars(calendarData);
+    } catch (error) {
+      console.error("Erro ao buscar calendários:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (fetchData) {
+      fetchProcess().then(() => setFetchData(false));
+    }
+  }, [fetchData, setProcesses, setFetchData]);
+
+  useEffect(() => {
+    if (fetchData) {
+      fetchCalendars(setCalendar).then(() => setFetchData(false));
+    }
+  }, [handleSelectCalendarChange]);
+
+  const onChange = (e: RadioChangeEvent) => {
+    const selectedValue = e.target.value;
+    if (selectedValue === 1) {
+      setFormData({});
+    }
+    setValue(selectedValue);
+  };
+
   const onChangeTime = (e: RadioChangeEvent) => {
     setValueTime(e.target.value);
   };
 
-  const {t} = useTranslation("layout");
+  const newFunction = () => {
+    setValue(1);
+    clearInputs();
+  };
 
-  const options = [
-    { label: t("labels.visibleQuotations"), value: "Visivel para cotação" },
-    { label: t("labels.dalayer"), value: "Atrasar" },
-    { label: t("labels.manufacturingProcess"), value: "Processo fabril" },
-  ];
+  const editFunction = () => {
+    setValue(3);
+  };
+
+  const { t } = useTranslation("layout");
 
   return (
     <>
       <div style={{ display: "flex" }}>
-        <RadioButtons onChange={onChange} value={value} />
-        <div style={{ marginLeft: 15 }}></div>
-        <SelectRadio
-          style={formStyle("calc(25% - 8px)", "8px")}
-          type={t("labels.list")}
-          value={value}
-        />
+        <Form.Item style={{ width: "50%" }} label={t("labels.process")}>
+          <Select
+            style={formStyle("calc(50% - 8px)", "8px")}
+            disabled={value === 1}
+            value={value === 3 ? formData.process : null}
+            onChange={handleSelectProcessChange}
+          >
+            {processes.map((process) => (
+              <Option value={process.id} key={process.id}>
+                {process.process}
+              </Option>
+            ))}
+          </Select>
+        </Form.Item>
       </div>
       <Form layout="vertical">
         <Row gutter={10}>
@@ -65,31 +256,70 @@ const ProcessSettings: React.FC = () => {
                 style={formStyle("calc(100% - 8px)", "8px")}
                 label={t("labels.name")}
               >
-                <Input />
+                <Input
+                  disabled={value === 2}
+                  value={formData.process}
+                  onChange={(e) => handleInputChange("process", e.target.value)}
+                />
               </Form.Item>
               <Form.Item
                 style={formStyle("calc(100% - 8px)", "8px")}
                 label={t("labels.description")}
               >
-                <Input />
+                <Input
+                  disabled={value === 2}
+                  value={formData.description}
+                  onChange={(e) =>
+                    handleInputChange("description", e.target.value)
+                  }
+                />
               </Form.Item>
               <Form.Item
                 style={formStyle("calc(100% - 8px)", "8px")}
                 label={t("labels.calendar")}
               >
-                <Select />
+                <Select
+                  disabled={value === 2}
+                  value={formData.calendar}
+                  onChange={handleSelectCalendarChange}
+                >
+                  {calendar.map((calendar) => (
+                    <Option key={calendar.id} value={calendar.id}>
+                      {calendar.calendar}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
-              <Checkbox.Group style={{ width: "100%", display: "grid" }}>
-                {options.map((option) => (
-                  <Checkbox
-                    key={option.value}
-                    value={option.value}
-                    style={{ margin: "7px" }}
-                  >
-                    {option.label}
-                  </Checkbox>
-                ))}
-              </Checkbox.Group>
+              <div style={{ width: "100%", display: "grid" }}>
+                <Checkbox
+                  disabled={value === 2}
+                  checked={formData.quotation}
+                  onChange={(e) =>
+                    handleInputChange("quotation", e.target.checked)
+                  }
+                  style={{ margin: "7px" }}
+                >
+                  {t("labels.visibleQuotations")}
+                </Checkbox>
+                <Checkbox
+                  disabled={value === 2}
+                  onChange={(e) => handleInputChange("delay", e.target.checked)}
+                  checked={formData.delay}
+                  style={{ margin: "7px" }}
+                >
+                  {t("labels.dalayer")}
+                </Checkbox>
+                <Checkbox
+                  disabled={value === 2}
+                  onChange={(e) =>
+                    handleInputChange("factory", e.target.checked)
+                  }
+                  checked={formData.factory}
+                  style={{ margin: "7px" }}
+                >
+                  {t("labels.manufacturingProcess")}
+                </Checkbox>
+              </div>
             </Card>
           </Col>
 
@@ -102,14 +332,16 @@ const ProcessSettings: React.FC = () => {
               <Col span={24}>
                 <Radio.Group onChange={onChangeTime} value={valueTime}>
                   <Radio value={1}>
-                  {t("labels.fixedTime")}
-                    <CustomInputNumber
-                      disabled={valueTime === 2 || valueTime === 3}
+                    {t("labels.fixedTime")}
+                    <InputNumber
+                      disabled={value === 2}
                       style={{ marginLeft: 5, width: "30%" }}
                       placeholder="0"
+                      value={formData.time}
+                      onChange={(e) => handleInputChange("time", value)}
                     />
                     <Select
-                      disabled={valueTime === 2 || valueTime === 3}
+                      disabled={value === 2}
                       style={{ marginLeft: 5, width: "45%" }}
                       placeholder="Dia"
                     />
@@ -125,7 +357,10 @@ const ProcessSettings: React.FC = () => {
                         >
                           <Select showSearch />
                         </Form.Item>
-                        <Form.Item label={t("labels.period")} style={formStyle("calc(50% - 5px)", "5px")}>
+                        <Form.Item
+                          label={t("labels.period")}
+                          style={formStyle("calc(50% - 5px)", "5px")}
+                        >
                           <Select />
                         </Form.Item>
                         <Form.Item
@@ -160,32 +395,24 @@ const ProcessSettings: React.FC = () => {
                       label="Características"
                       style={{ marginTop: 20, marginBottom: 0 }}
                     >
-                      <DataFetcher
-                        apiUrl="http://localhost:3000/api/getData"
-                        tipo="processos"
-                      >
-                        {(treeData) => (
-                          <>
-                            <div
-                              style={{
-                                height: "250px",
-                                overflowX: "auto",
-                              }}
-                            >
-                              <Tree
-                                style={{
-                                  height: "100%",
-                                  textOverflow: "ellipsis",
-                                  whiteSpace: "nowrap",
-                                }}
-                                showLine={true}
-                                defaultExpandedKeys={["0-0-0"]}
-                                treeData={treeData}
-                              />
-                            </div>
-                          </>
-                        )}
-                      </DataFetcher>
+                      <>
+                        <div
+                          style={{
+                            height: "250px",
+                            overflowX: "auto",
+                          }}
+                        >
+                          <Tree
+                            style={{
+                              height: "100%",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                            showLine={true}
+                            defaultExpandedKeys={["0-0-0"]}
+                          />
+                        </div>
+                      </>
                     </Form.Item>
                   ) : null}
                 </Radio.Group>
@@ -194,8 +421,10 @@ const ProcessSettings: React.FC = () => {
           </Col>
         </Row>
         <div style={{ margin: 10, float: "right" }}>
-          <DeleteButton />
-          <SaveButton />
+          <NewButton onClick={newFunction} />
+          <EditButton onClick={editFunction} />
+          <DeleteButton onClick={confirmDelete} />
+          <SaveButton onClick={success} />
         </div>
       </Form>
     </>
