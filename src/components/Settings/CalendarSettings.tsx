@@ -81,7 +81,10 @@ interface Period {
 
 export const CalendarSettings = () => {
   const [value, setValue] = useState(2);
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<any>({
+    idRepeat: false,
+    idBussinesDay: false,
+  });
   const [calendars, setCalendars] = useState<Calendar[]>([]);
   const [periods, setPeriods] = useState<Period[]>([]);
   const [days, setDays] = useState<Days[]>([]);
@@ -127,11 +130,9 @@ export const CalendarSettings = () => {
       })
       .then(async () => {
         try {
-          
-         
-            await SaveDay(formData);
-            clearInputs();
-         
+          await SaveDay(formData);
+          clearInputs();
+
           setFetchData(true);
           message.success("Salvo com sucesso!", 2.5);
         } catch (error) {
@@ -308,7 +309,6 @@ export const CalendarSettings = () => {
   const editFunction = () => {
     setValue(3);
   };
-
   return (
     <>
       <div style={{ display: "flex" }}>
@@ -375,11 +375,9 @@ export const CalendarSettings = () => {
           </Col>
           <Col span={4}>
             <Card style={{ height: 325 }} bodyStyle={{ padding: 0 }}>
-             {days.map((day) =>(
-              <li>
-                {day.dsCalendarDay}
-              </li>
-             ))}
+              {days.map((day) => (
+                <li>{day.dsCalendarDay}</li>
+              ))}
             </Card>
           </Col>
           <Col span={5}>
@@ -430,6 +428,7 @@ export const CalendarSettings = () => {
                   style={formStyle("calc(23% - 8px)", "8px")}
                 >
                   <Checkbox
+                    checked={formData.idBusinessDay}
                     onChange={(e) =>
                       handleInputDayChange("idBusinessDay", e.target.checked)
                     }
@@ -442,7 +441,7 @@ export const CalendarSettings = () => {
             <Card title={t("labels.repeat")} bodyStyle={{ padding: 10 }}>
               <Form.Item style={formStyle("100%")} label="Nunca">
                 <Checkbox
-                  value={false}
+                  checked={formData.idRepeat}
                   onChange={(e) =>
                     handleInputDayChange("idRepeat", e.target.checked)
                   }
