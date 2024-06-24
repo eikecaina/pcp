@@ -42,7 +42,7 @@ export async function Save(formData: FormData) {
     id: formData.id,
     cd_Family: formData.cdFamily,
     cd_Resource_Parent: formData.cdResourceParent,
-    cd_Resource_SubResource: formData.cdResourceSubResource,
+    cd_Resource_Sub_Resource: formData.cdResourceSubResource,
     vl_Time_Setup_Start: formData.vlTimeSetupStart,
     cd_Period_Setup_Start: formData.cdPeriodSetupStart,
     vl_Time_Setup_End: formData.vlTimeSetupEnd,

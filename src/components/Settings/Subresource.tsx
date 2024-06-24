@@ -202,7 +202,13 @@ const SubResource: React.FC = () => {
             style={formStyle("calc(50%)")}
             value={value === 1 ? null : null}
             disabled={value === 1}
-          ></Select>
+          >
+            {resource.map((resource) => (
+              <Option key={resource.id} value={resource.id}>
+                {resource.dsResource}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
       </div>
       <Card bodyStyle={{ padding: 10 }}>
