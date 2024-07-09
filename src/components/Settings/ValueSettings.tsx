@@ -28,12 +28,14 @@ import { useTranslation } from "react-i18next";
 import {
   Delete,
   GetAllValue,
+  GetWithChildrenValues,
   Save,
   Update,
 } from "@/app/api/services/Value/data";
 import { UUID } from "crypto";
-import { GetAllCharact } from "@/app/api/services/Characteristc/data";
+import { GetAllCharact, GetCharactFromId } from "@/app/api/services/Characteristc/data";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import type { TreeDataNode, TreeProps } from "antd";
 
 const { Option } = Select;
 
@@ -51,7 +53,26 @@ interface Value {
 interface Charact {
   id: UUID;
   charact: string;
+  position: number;
 }
+
+interface TreeData {
+  id: UUID;
+  original: UUID;
+  restrictive: UUID;
+}
+
+const generateTreeData = (
+  title: string | JSX.Element,
+  key: string,
+  children: TreeDataNode[] = [],
+  additionalData: Record<string, any> = {}
+): TreeDataNode => ({
+  title,
+  key,
+  children,
+  ...additionalData,
+});
 
 const ValueSettings: React.FC = () => {
   const { t } = useTranslation("layout");
@@ -61,6 +82,7 @@ const ValueSettings: React.FC = () => {
   const [values, setValues] = useState<Value[]>([]);
   const [characts, setCharacts] = useState<Charact[]>([]);
   const [fetchData, setFetchData] = useState(true);
+  const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
 
   const clearInputs = () => {
     setFormData({});
@@ -180,6 +202,45 @@ const ValueSettings: React.FC = () => {
     }
   };
 
+  const fetchTree = async () => {
+    try {
+      const response = await GetWithChildrenValues("e4ede3b9-62fb-47fe-9ab5-3210f8137a1f");
+      
+      if (response.result) {
+        const responseCharact = await GetCharactFromId(response.result.cd_Caract);
+        const cdValueOriginal = response.result.children?.[length]?.cd_Value_Original;
+        
+        if (cdValueOriginal) {
+          const responseChildren = await GetWithChildrenValues(cdValueOriginal);
+          const responseCharactChildren = await GetCharactFromId(responseChildren.result.cd_Caract)
+          
+          const responseData = {
+            title: `${responseCharact.ds_Caract}: ${response.result.ds_Value}`,
+            key: response.result.id,
+            children: [
+              {
+                title: `${responseCharactChildren.ds_Caract}: ${responseChildren.result.ds_Value}`,
+                key: responseChildren.result.id
+              }
+            ],
+          };
+  
+          setTreeData([responseData]);
+        } else {
+          console.warn("Não foi possível encontrar cd_Value_Original nos dados retornados.");
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao buscar restritivos:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (fetchData) {
+      fetchTree();
+    }
+  }, [fetchData]);
+
   useEffect(() => {
     if (fetchData) {
       fetchValues().then(() => setFetchData(false));
@@ -187,8 +248,10 @@ const ValueSettings: React.FC = () => {
   }, [fetchData]);
 
   useEffect(() => {
-    fetchCharacts();
-  }, [handleSelectCaractChange]);
+    if (fetchData) {
+      fetchCharacts();
+    }
+  }, [fetchData, handleSelectCaractChange]);
 
   const newFunction = () => {
     setValue(1);
@@ -225,6 +288,7 @@ const ValueSettings: React.FC = () => {
             style={{ height: "450px", overflowX: "auto" }}
           >
             <Tree
+              treeData={treeData}
               checkable
               style={{
                 height: "100%",
@@ -233,7 +297,6 @@ const ValueSettings: React.FC = () => {
                 whiteSpace: "nowrap",
               }}
               showLine={true}
-              defaultExpandedKeys={["0-0-0"]}
             />
           </Card>
         </Col>

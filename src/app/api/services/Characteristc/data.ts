@@ -34,9 +34,9 @@ export async function GetAllCharactType() {
   }
 }
 
-export async function GetDataFromId(id: number) {
+export async function GetCharactFromId(id: UUID) {
   try {
-    return await api.get(`/Charact/Get/${id}`).then((res) => {
+    return await api.get(`/Characteristic/Get/${id}`).then((res) => {
       return res.data;
     });
   } catch (error) {

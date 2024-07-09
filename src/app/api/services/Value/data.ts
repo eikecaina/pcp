@@ -23,6 +23,16 @@ export async function GetAllValue() {
   }
 }
 
+export async function GetWithChildrenValues(id: UUID) {
+  try {
+    return await api.get(`/Value/GetWithChildrenValues/${id}`).then((r) => {
+      return r.data;
+    });
+  } catch (error) {
+    console.log("Erro ao Buscar:", error);
+  }
+}
+
 export async function GetDataFromId(id: number) {
   try {
     return await api.get(`/Value/Get/${id}`).then((res) => {
@@ -54,7 +64,7 @@ export async function Save(formData: FormData) {
     return response.data;
   } catch (error) {
     console.error("Erro ao salvar:", error);
-    console.log(formData);
+    console.log(rec);
     throw error;
   }
 }
