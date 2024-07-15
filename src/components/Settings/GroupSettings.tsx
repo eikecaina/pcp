@@ -104,7 +104,7 @@ const GroupSettings: React.FC = () => {
       if (fetchData) {
         try {
           const response = await GetAllGroup();
-          const groupData = response.result.map(
+          const groupData = response.result.$values.map(
             (group: {
               id: any;
               ds_Group: string;

@@ -77,7 +77,7 @@ export const Connections: React.FC = () => {
   const { t } = useTranslation("layout");
   return (
     <>
-      <Form.Item style={{ width: "25%" }} label={t("labels.process")}>
+      <Form.Item style={{ width: "25%" }} label={t("labels.process") + " Ligação"}>
         <Select />
       </Form.Item>
       <Row gutter={10}>

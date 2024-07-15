@@ -33,7 +33,10 @@ import {
   Update,
 } from "@/app/api/services/Value/data";
 import { UUID } from "crypto";
-import { GetAllCharact, GetCharactFromId } from "@/app/api/services/Characteristc/data";
+import {
+  GetAllCharact,
+  GetCharactFromId,
+} from "@/app/api/services/Characteristc/data";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import type { TreeDataNode, TreeProps } from "antd";
 
@@ -160,7 +163,7 @@ const ValueSettings: React.FC = () => {
   const fetchValues = async () => {
     try {
       const response = await GetAllValue();
-      const valueData = response.result.map(
+      const valueData = response.result.$values.map(
         (value: {
           id: UUID;
           ds_Value: string;
@@ -190,7 +193,7 @@ const ValueSettings: React.FC = () => {
   const fetchCharacts = async () => {
     try {
       const response = await GetAllCharact();
-      const charactData = response.result.map(
+      const charactData = response.result.$values.map(
         (charact: { id: UUID; ds_Caract: string }) => ({
           id: charact.id,
           charact: charact.ds_Caract,
@@ -204,36 +207,58 @@ const ValueSettings: React.FC = () => {
 
   const fetchTree = async () => {
     try {
-      const response = await GetWithChildrenValues("e4ede3b9-62fb-47fe-9ab5-3210f8137a1f");
+      const response = await GetAllValue();
+
+      const mapChildren = (node: any, parentKey: string): any => {
+        const key = `${parentKey}-${node.$id}`;
+        const title = node.characteristic
+          ? `${node.characteristic.ds_Caract}: ${node.ds_Value}`
+          : `${node.ds_Caract}: ${node.ds_Value}`;
       
-      if (response.result) {
-        const responseCharact = await GetCharactFromId(response.result.cd_Caract);
-        const cdValueOriginal = response.result.children?.[length]?.cd_Value_Original;
-        
-        if (cdValueOriginal) {
-          const responseChildren = await GetWithChildrenValues(cdValueOriginal);
-          const responseCharactChildren = await GetCharactFromId(responseChildren.result.cd_Caract)
-          
-          const responseData = {
-            title: `${responseCharact.ds_Caract}: ${response.result.ds_Value}`,
-            key: response.result.id,
-            children: [
-              {
-                title: `${responseCharactChildren.ds_Caract}: ${responseChildren.result.ds_Value}`,
-                key: responseChildren.result.id
-              }
-            ],
-          };
-  
-          setTreeData([responseData]);
-        } else {
-          console.warn("Não foi possível encontrar cd_Value_Original nos dados retornados.");
+        let children = [];
+      
+        // Verifica se há filhos e mapeia recursivamente
+        if (node.children?.$values) {
+          children = node.children.$values.map((child: any, index: number) =>
+            mapChildren(child, key)
+          );
         }
-      }
+      
+        // Retorna o nó somente com children se houver filhos
+        return {
+          title: title,
+          key: key,
+          children: children.length > 0 ? children : undefined, // Define children como undefined se estiver vazio
+        };
+      };
+
+      const resultValues = response.result.$values.map((value: any) =>
+        mapChildren(value, "0")
+      );
+
+      console.log(resultValues);
+
+      setTreeData(resultValues);
     } catch (error) {
       console.error("Erro ao buscar restritivos:", error);
     }
   };
+
+  const fetchMock = async () => {
+    try {
+      const response = await fetch(
+        "http://localhost:3000/api/services/valuesMock"
+      );
+      const data = await response.json();
+      //return setTreeData(data.result);
+    } catch (error) {
+      console.error("Erro ao buscar os dados da API:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMock();
+  }, []);
 
   useEffect(() => {
     if (fetchData) {

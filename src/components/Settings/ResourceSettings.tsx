@@ -140,7 +140,7 @@ const ResourceSettings: React.FC = () => {
   const fetchResource = async () => {
     try {
       const response = await GetAllResource();
-      const resourceData = response.result.map(
+      const resourceData = response.result.$values.map(
         (resource: {
           id: UUID;
           ds_Resource: string;
@@ -163,7 +163,7 @@ const ResourceSettings: React.FC = () => {
   const fetchCalendar = async () => {
     try {
       const response = await GetAllCalendar();
-      const calendarData = response.result.map(
+      const calendarData = response.result.$values.map(
         (calendar: { id: UUID; ds_Calendar: string }) => ({
           id: calendar.id,
           calendar: calendar.ds_Calendar,

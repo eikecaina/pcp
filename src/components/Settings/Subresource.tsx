@@ -136,7 +136,7 @@ const SubResource: React.FC = () => {
   const fetchResource = async () => {
     try {
       const response = await GetAllResource();
-      const resourceData = response.result.map(
+      const resourceData = response.result.$values.map(
         (resource: { id: UUID; ds_Resource: string }) => ({
           id: resource.id,
           dsResource: resource.ds_Resource,
@@ -157,7 +157,7 @@ const SubResource: React.FC = () => {
   const fetchFamily = async () => {
     try {
       const response = await GetAllFamily();
-      const familyData = response.result.map(
+      const familyData = response.result.$values.map(
         (family: { id: UUID; ds_Family: string }) => ({
           id: family.id,
           dsFamily: family.ds_Family,
@@ -178,7 +178,7 @@ const SubResource: React.FC = () => {
   const fetchPeriods = async () => {
     try {
       const response = await GetAllPeriod();
-      const periodData = response.result.map(
+      const periodData = response.result.$values.map(
         (period: { id: UUID; ds_Period: string }) => ({
           id: period.id,
           period: period.ds_Period,

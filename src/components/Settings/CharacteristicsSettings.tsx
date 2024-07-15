@@ -150,7 +150,7 @@ const CharacteristicsSettings: React.FC = () => {
   const fetchCaract = async () => {
     try {
       const response = await GetAllCharact();
-      const charactData = response.result.map(
+      const charactData = response.result.$values.map(
         (charact: {
           id: UUID;
           ds_Caract: string;
@@ -177,7 +177,7 @@ const CharacteristicsSettings: React.FC = () => {
   const fetchCaractType = async () => {
     try {
       const response = await GetAllCharactType();
-      const charactTypeData = response.result.map(
+      const charactTypeData = response.result.$values.map(
         (charactType: { id: UUID; ds_Caract_Type: string }) => ({
           id: charactType.id,
           charactType: charactType.ds_Caract_Type,

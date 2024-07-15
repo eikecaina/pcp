@@ -231,7 +231,7 @@ export const CalendarSettings = () => {
   const fetchPeriods = async () => {
     try {
       const response = await GetAllPeriod();
-      const periodData = response.result.map(
+      const periodData = response.result.$values.map(
         (period: { id: UUID; ds_Period: string }) => ({
           id: period.id,
           period: period.ds_Period,
@@ -246,7 +246,7 @@ export const CalendarSettings = () => {
   const fetchCalendars = async (setCalendars: any) => {
     try {
       const response = await GetAllCalendar();
-      const calendarData = response.result.map(
+      const calendarData = response.result.$values.map(
         (calendar: {
           id: UUID;
           ds_Calendar: string;

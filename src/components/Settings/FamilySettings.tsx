@@ -105,7 +105,7 @@ const FamilySttings: React.FC = () => {
   const fetchGroups = async () => {
     try {
       const response = await GetAllGroup();
-      const groupData = response.result.map(
+      const groupData = response.result.$values.map(
         (group: { id: UUID; ds_Group: string }) => ({
           id: group.id,
           group: group.ds_Group,
@@ -123,7 +123,7 @@ const FamilySttings: React.FC = () => {
   const fetchFamilys = async () => {
     try {
       const response = await GetAllFamily();
-      const familyData = response.result.map(
+      const familyData = response.result.$values.map(
         (family: {
           id: UUID;
           ds_Family: string;

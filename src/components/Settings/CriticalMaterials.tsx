@@ -67,7 +67,10 @@ export const Material: React.FC = () => {
       <Form style={{ marginTop: 10 }} layout="vertical">
         <Row gutter={10}>
           <Col span={12}>
-            <Card bodyStyle={{ padding: 10 }} title={t("titles.characteristic")}>
+            <Card
+              bodyStyle={{ padding: 10 }}
+              title={t("titles.characteristic")}
+            >
               <div style={{ marginTop: 5, width: "100%" }}>
                 <RadioButtons value={value} onChange={onChange} />
               </div>
@@ -78,27 +81,17 @@ export const Material: React.FC = () => {
                   overflowY: "auto",
                 }}
               >
-                <DataFetcher
-                  apiUrl="http://localhost:3000/api/getData"
-                  tipo="processos"
-                >
-                  {(treeData) => (
-                    <>
-                      <Tree
-                        checkable
-                        style={{
-                          height: "100%",
-                          maxHeight: 207,
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                        }}
-                        showLine={true}
-                        defaultExpandedKeys={["0-0-0"]}
-                        treeData={treeData}
-                      />
-                    </>
-                  )}
-                </DataFetcher>
+                <Tree
+                  checkable
+                  style={{
+                    height: "100%",
+                    maxHeight: 207,
+                    textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}
+                  showLine={true}
+                  defaultExpandedKeys={["0-0-0"]}
+                />
               </div>
               <SelectRadio
                 style={formStyle("97%")}
@@ -201,10 +194,16 @@ export const Impact: React.FC = () => {
             {t("generalButtons.editButton")}
           </Button>
         </div>
-        <Form.Item style={formStyle("calc(50% - 5px)", "5px")} label={t("labels.material")}>
+        <Form.Item
+          style={formStyle("calc(50% - 5px)", "5px")}
+          label={t("labels.material")}
+        >
           <Select disabled={value === 2} />
         </Form.Item>
-        <Form.Item label={t("labels.family")} style={formStyle("calc(50% - 5px)", "5px")}>
+        <Form.Item
+          label={t("labels.family")}
+          style={formStyle("calc(50% - 5px)", "5px")}
+        >
           <Cascader
             disabled={value === 1}
             showSearch={{ filter: searchOptions }}
@@ -226,13 +225,16 @@ export const Impact: React.FC = () => {
         >
           <Select />
         </Form.Item>
-        <Form.Item label={t("labels.impactedProcess")} style={formStyle("33.33%")}>
+        <Form.Item
+          label={t("labels.impactedProcess")}
+          style={formStyle("33.33%")}
+        >
           <Select />
         </Form.Item>
       </Card>
       <div style={{ float: "right", marginTop: 10 }}>
         <Button type="primary" icon={<SaveOutlined />}>
-         {t("generalButtons.saveButton")}
+          {t("generalButtons.saveButton")}
         </Button>
       </div>
     </Form>
