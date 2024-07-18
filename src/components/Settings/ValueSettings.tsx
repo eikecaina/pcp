@@ -28,7 +28,8 @@ import { useTranslation } from "react-i18next";
 import {
   Delete,
   GetAllValue,
-  GetWithChildrenValues,
+  GetDataFromId,
+  GetWithChild,
   Save,
   Update,
 } from "@/app/api/services/Value/data";
@@ -59,23 +60,9 @@ interface Charact {
   position: number;
 }
 
-interface TreeData {
+interface ExtendedDataNode extends TreeDataNode {
   id: UUID;
-  original: UUID;
-  restrictive: UUID;
 }
-
-const generateTreeData = (
-  title: string | JSX.Element,
-  key: string,
-  children: TreeDataNode[] = [],
-  additionalData: Record<string, any> = {}
-): TreeDataNode => ({
-  title,
-  key,
-  children,
-  ...additionalData,
-});
 
 const ValueSettings: React.FC = () => {
   const { t } = useTranslation("layout");
@@ -85,7 +72,7 @@ const ValueSettings: React.FC = () => {
   const [values, setValues] = useState<Value[]>([]);
   const [characts, setCharacts] = useState<Charact[]>([]);
   const [fetchData, setFetchData] = useState(true);
-  const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
+  const [treeData, setTreeData] = useState<ExtendedDataNode[]>([]);
 
   const clearInputs = () => {
     setFormData({});
@@ -163,7 +150,7 @@ const ValueSettings: React.FC = () => {
   const fetchValues = async () => {
     try {
       const response = await GetAllValue();
-      const valueData = response.result.$values.map(
+      const valueData = response.result.map(
         (value: {
           id: UUID;
           ds_Value: string;
@@ -193,7 +180,7 @@ const ValueSettings: React.FC = () => {
   const fetchCharacts = async () => {
     try {
       const response = await GetAllCharact();
-      const charactData = response.result.$values.map(
+      const charactData = response.result.map(
         (charact: { id: UUID; ds_Caract: string }) => ({
           id: charact.id,
           charact: charact.ds_Caract,
@@ -207,58 +194,62 @@ const ValueSettings: React.FC = () => {
 
   const fetchTree = async () => {
     try {
-      const response = await GetAllValue();
+      const response = await GetWithChild();
+      const targetParentId = "49f0343a-60ab-473a-b167-d893f52e6c35";
+      let nodeCount = 0;
+      let parentKey = "0";
 
-      const mapChildren = (node: any, parentKey: string): any => {
-        const key = `${parentKey}-${node.$id}`;
-        const title = node.characteristic
-          ? `${node.characteristic.ds_Caract}: ${node.ds_Value}`
-          : `${node.ds_Caract}: ${node.ds_Value}`;
-      
-        let children = [];
-      
-        // Verifica se há filhos e mapeia recursivamente
-        if (node.children?.$values) {
-          children = node.children.$values.map((child: any, index: number) =>
-            mapChildren(child, key)
-          );
+      const buildTreeNode = async (
+        parentId: UUID,
+        parentKey: string
+      ): Promise<ExtendedDataNode[]> => {
+        const treeData: ExtendedDataNode[] = [];
+
+        for (const item of response.result) {
+          if (item.parent_value_id === parentId) {
+            const node: ExtendedDataNode = {     
+              id: item.value_id,       
+              title: `${item.characteristic_display}: ${item.value_description}`,
+              key: `${parentKey}-${nodeCount++}`,
+              children: [],
+            };
+            if (item.children_value_id && item.children_value_id.length > 0) {
+              const childrenNodes = await Promise.all(
+                item.children_value_id.map(
+                  async (childValueId: UUID, index: number) => {
+                    const responseChildren = await GetDataFromId(childValueId);
+                    const childNodes = await buildTreeNode(
+                      childValueId,
+                      `${parentKey}-${node.key}-${index}`
+                    );                   
+                    return {
+                      id: responseChildren.value_id,
+                      title: `${responseChildren.characteristic_display}: ${responseChildren.value_description}`,
+                      key: `${parentKey}-${node.key}-${index}`,
+                      children: childNodes,
+                    };
+                  }
+                )
+              );
+              node.children = childrenNodes;
+            }
+            treeData.push(node);
+          }
         }
-      
-        // Retorna o nó somente com children se houver filhos
-        return {
-          title: title,
-          key: key,
-          children: children.length > 0 ? children : undefined, // Define children como undefined se estiver vazio
-        };
+        return treeData;
       };
+      const treeData = await buildTreeNode(targetParentId, parentKey);
 
-      const resultValues = response.result.$values.map((value: any) =>
-        mapChildren(value, "0")
-      );
-
-      console.log(resultValues);
-
-      setTreeData(resultValues);
+      setTreeData(treeData);
     } catch (error) {
       console.error("Erro ao buscar restritivos:", error);
     }
   };
 
-  const fetchMock = async () => {
-    try {
-      const response = await fetch(
-        "http://localhost:3000/api/services/valuesMock"
-      );
-      const data = await response.json();
-      //return setTreeData(data.result);
-    } catch (error) {
-      console.error("Erro ao buscar os dados da API:", error);
-    }
+  const onSelect: TreeProps<ExtendedDataNode>['onSelect'] = (selectedKeys, info) => {
+    formData.parent_value_id = info.node.id;
+    console.log(info.node);
   };
-
-  useEffect(() => {
-    fetchMock();
-  }, []);
 
   useEffect(() => {
     if (fetchData) {
@@ -314,7 +305,7 @@ const ValueSettings: React.FC = () => {
           >
             <Tree
               treeData={treeData}
-              checkable
+              onSelect={onSelect}
               style={{
                 height: "100%",
                 maxHeight: 607,

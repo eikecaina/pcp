@@ -8,6 +8,7 @@ import {
   Row,
   Select,
   Tree,
+  TreeDataNode,
   message,
 } from "antd";
 
@@ -33,6 +34,7 @@ import {
 } from "@/app/api/services/Family/data";
 import { GetAllGroup } from "@/app/api/services/Group/data";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { GetAllValue } from "@/app/api/services/Value/data";
 
 const { Option } = Select;
 
@@ -54,6 +56,7 @@ const FamilySttings: React.FC = () => {
   const [groups, setGroups] = useState<Group[]>([]);
   const [familys, setFamilys] = useState<Family[]>([]);
   const [fetchData, setFetchData] = useState(true);
+  const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
 
   const clearInputs = () => {
     setFormData({});
@@ -105,7 +108,7 @@ const FamilySttings: React.FC = () => {
   const fetchGroups = async () => {
     try {
       const response = await GetAllGroup();
-      const groupData = response.result.$values.map(
+      const groupData = response.result.map(
         (group: { id: UUID; ds_Group: string }) => ({
           id: group.id,
           group: group.ds_Group,
@@ -120,10 +123,51 @@ const FamilySttings: React.FC = () => {
     fetchGroups();
   }, []);
 
+  const fetchTree = async () => {
+    try {
+      const response = await GetAllValue();
+
+      const mapChildren = (node: any, parentKey: string): any => {
+        const key = `${parentKey}-${node.$id}`;
+        const title = node.characteristic
+          ? `${node.characteristic.ds_Caract}: ${node.ds_Value}`
+          : `${node.ds_Caract}: ${node.ds_Value}`;
+
+        let children = [];
+
+        if (node.children) {
+          children = node.children.map((child: any, index: number) =>
+            mapChildren(child, key)
+          );
+        }
+
+        return {
+          title: title,
+          key: key,
+          children: children.length > 0 ? children : undefined,
+        };
+      };
+
+      const resultValues = response.result.map((value: any) =>
+        mapChildren(value, "0")
+      );
+
+      setTreeData(resultValues);
+    } catch (error) {
+      console.error("Erro ao buscar restritivos:", error);
+    }
+  };
+
+  useEffect(() => {
+    if (fetchData) {
+      fetchTree();
+    }
+  }, [fetchData]);
+
   const fetchFamilys = async () => {
     try {
       const response = await GetAllFamily();
-      const familyData = response.result.$values.map(
+      const familyData = response.result.map(
         (family: {
           id: UUID;
           ds_Family: string;
@@ -249,7 +293,7 @@ const FamilySttings: React.FC = () => {
                 bodyStyle={{ height: "300px", overflowX: "auto", padding: 5 }}
               >
                 <Tree
-                  checkable
+                  treeData={treeData}
                   style={{
                     height: "100%",
                     maxHeight: 607,

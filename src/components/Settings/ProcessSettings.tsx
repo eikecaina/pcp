@@ -149,7 +149,7 @@ const ProcessSettings: React.FC = () => {
   const fetchProcess = async () => {
     try {
       const response = await GetAllProcess();
-      const processData = response.result.$values.map(
+      const processData = response.result.map(
         (process: {
           id: UUID;
           ds_Process: string;
@@ -179,7 +179,7 @@ const ProcessSettings: React.FC = () => {
   const fetchCalendars = async (setCalendars: any) => {
     try {
       const response = await GetAllCalendar();
-      const calendarData = response.result.$values.map(
+      const calendarData = response.result.map(
         (calendar: { id: UUID; ds_Calendar: string }) => ({
           id: calendar.id,
           calendar: calendar.ds_Calendar,
