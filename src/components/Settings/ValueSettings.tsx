@@ -40,6 +40,7 @@ import {
 } from "@/app/api/services/Characteristc/data";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import type { TreeDataNode, TreeProps } from "antd";
+import { TreeValues } from "../TreeData";
 
 const { Option } = Select;
 
@@ -60,10 +61,6 @@ interface Charact {
   position: number;
 }
 
-interface ExtendedDataNode extends TreeDataNode {
-  id: UUID;
-}
-
 const ValueSettings: React.FC = () => {
   const { t } = useTranslation("layout");
 
@@ -72,7 +69,6 @@ const ValueSettings: React.FC = () => {
   const [values, setValues] = useState<Value[]>([]);
   const [characts, setCharacts] = useState<Charact[]>([]);
   const [fetchData, setFetchData] = useState(true);
-  const [treeData, setTreeData] = useState<ExtendedDataNode[]>([]);
 
   const clearInputs = () => {
     setFormData({});
@@ -192,71 +188,6 @@ const ValueSettings: React.FC = () => {
     }
   };
 
-  const fetchTree = async () => {
-    try {
-      const response = await GetWithChild();
-      const targetParentId = "49f0343a-60ab-473a-b167-d893f52e6c35";
-      let nodeCount = 0;
-      let parentKey = "0";
-
-      const buildTreeNode = async (
-        parentId: UUID,
-        parentKey: string
-      ): Promise<ExtendedDataNode[]> => {
-        const treeData: ExtendedDataNode[] = [];
-
-        for (const item of response.result) {
-          if (item.parent_value_id === parentId) {
-            const node: ExtendedDataNode = {     
-              id: item.value_id,       
-              title: `${item.characteristic_display}: ${item.value_description}`,
-              key: `${parentKey}-${nodeCount++}`,
-              children: [],
-            };
-            if (item.children_value_id && item.children_value_id.length > 0) {
-              const childrenNodes = await Promise.all(
-                item.children_value_id.map(
-                  async (childValueId: UUID, index: number) => {
-                    const responseChildren = await GetDataFromId(childValueId);
-                    const childNodes = await buildTreeNode(
-                      childValueId,
-                      `${parentKey}-${node.key}-${index}`
-                    );                   
-                    return {
-                      id: responseChildren.value_id,
-                      title: `${responseChildren.characteristic_display}: ${responseChildren.value_description}`,
-                      key: `${parentKey}-${node.key}-${index}`,
-                      children: childNodes,
-                    };
-                  }
-                )
-              );
-              node.children = childrenNodes;
-            }
-            treeData.push(node);
-          }
-        }
-        return treeData;
-      };
-      const treeData = await buildTreeNode(targetParentId, parentKey);
-
-      setTreeData(treeData);
-    } catch (error) {
-      console.error("Erro ao buscar restritivos:", error);
-    }
-  };
-
-  const onSelect: TreeProps<ExtendedDataNode>['onSelect'] = (selectedKeys, info) => {
-    formData.parent_value_id = info.node.id;
-    console.log(info.node);
-  };
-
-  useEffect(() => {
-    if (fetchData) {
-      fetchTree();
-    }
-  }, [fetchData]);
-
   useEffect(() => {
     if (fetchData) {
       fetchValues().then(() => setFetchData(false));
@@ -303,16 +234,10 @@ const ValueSettings: React.FC = () => {
             title={t("titles.definitionFamily")}
             style={{ height: "450px", overflowX: "auto" }}
           >
-            <Tree
-              treeData={treeData}
-              onSelect={onSelect}
-              style={{
-                height: "100%",
-                maxHeight: 607,
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-              showLine={true}
+            <TreeValues
+              setFormData={setFormData}
+              fetchData={fetchData}
+              setFetchData={setFetchData}
             />
           </Card>
         </Col>

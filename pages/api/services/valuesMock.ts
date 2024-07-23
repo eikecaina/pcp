@@ -1,51 +1,164 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-export default function hanlderMock(req: NextApiRequest, res: NextApiResponse) {
-  const caractName = [
-    {
-      caractDs: "Meio",
-    },
-    {
-      caractDs: "Potência",
-    },
-    {
-      caractDs: "Classe de tensão",
-    },
-  ];
-  
+export default function ds_QuotationsRes(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   res.status(200).json({
     result: [
       {
-        title: `${caractName[0].caractDs}: Óleo`,
-        key: "0-0",
-        children: [
-          {
-            title: `${caractName[1].caractDs}: 0 > 15`,
-            key: "0-0-0",
-            children: [
-              {
-                title: `${caractName[2].caractDs}: 0 > 15`,
-                key: "0-0-0-0",
-              },
-            ],
-          },
-        ],
+        user: "Maria Silva",
+        ds_Customer: "Tech Innovators",
+        ds_Quotation: "QT-2023-001",
+        ds_Ov: "SO-2023-456",
+        dt_Created: "23/02/2024",
       },
       {
-        title: `${caractName[0].caractDs}: Seco`,
-        key: "0-1",
-        children: [
-          {
-            title: `${caractName[1].caractDs}: 0 > 500`,
-            key: "0-1-0",
-            children: [
-              {
-                title: `${caractName[2].caractDs}: 0 > 15`,
-                key: "0-0-0-1",
-              },
-            ],
-          },
-        ],
+        user: "João Pereira",
+        ds_Customer: "Alpha Solutions",
+        ds_Quotation: "QT-2023-002",
+        ds_Ov: "SO-2023-457",
+        dt_Created: "15/03/2024",
+      },
+      {
+        user: "Ana Costa",
+        ds_Customer: "Beta Technologies",
+        ds_Quotation: "QT-2023-003",
+        ds_Ov: "SO-2023-458",
+        dt_Created: "07/04/2024",
+      },
+      {
+        user: "Carlos Souza",
+        ds_Customer: "Gamma Enterprises",
+        ds_Quotation: "QT-2023-004",
+        ds_Ov: "SO-2023-459",
+        dt_Created: "21/05/2024",
+      },
+      {
+        user: "Fernanda Lima",
+        ds_Customer: "Delta Corp",
+        ds_Quotation: "QT-2023-005",
+        ds_Ov: "SO-2023-460",
+        dt_Created: "12/06/2024",
+      },
+      {
+        user: "Pedro Santos",
+        ds_Customer: "Omega Systems",
+        ds_Quotation: "QT-2023-006",
+        ds_Ov: "SO-2023-461",
+        dt_Created: "03/07/2024",
+      },
+      {
+        user: "Lucas Almeida",
+        ds_Customer: "Epsilon Networks",
+        ds_Quotation: "QT-2023-007",
+        ds_Ov: "SO-2023-462",
+        dt_Created: "18/08/2024",
+      },
+      {
+        user: "Juliana Oliveira",
+        ds_Customer: "Zeta Solutions",
+        ds_Quotation: "QT-2023-008",
+        ds_Ov: "SO-2023-463",
+        dt_Created: "05/09/2024",
+      },
+      {
+        user: "Rafael Mendes",
+        ds_Customer: "Theta Technologies",
+        ds_Quotation: "QT-2023-009",
+        ds_Ov: "SO-2023-464",
+        dt_Created: "14/10/2024",
+      },
+      {
+        user: "Gabriela Rocha",
+        ds_Customer: "Iota Innovations",
+        ds_Quotation: "QT-2023-010",
+        ds_Ov: "SO-2023-465",
+        dt_Created: "27/11/2024",
+      },
+      {
+        user: "Bruno Teixeira",
+        ds_Customer: "Zeta Solutions",
+        ds_Quotation: "QT-2022-001",
+        ds_Ov: "SO-2022-456",
+        dt_Created: "15/01/2022",
+      },
+      {
+        user: "Larissa Andrade",
+        ds_Customer: "Alpha Innovators",
+        ds_Quotation: "QT-2022-002",
+        ds_Ov: "SO-2022-457",
+        dt_Created: "23/02/2022",
+      },
+      {
+        user: "Rodrigo Fernandes",
+        ds_Customer: "Tech Ventures",
+        ds_Quotation: "QT-2022-003",
+        ds_Ov: "SO-2022-458",
+        dt_Created: "08/03/2022",
+      },
+      {
+        user: "Bianca Cardoso",
+        ds_Customer: "Delta Technologies",
+        ds_Quotation: "QT-2022-004",
+        ds_Ov: "SO-2022-459",
+        dt_Created: "19/04/2022",
+      },
+      {
+        user: "Eduardo Moreira",
+        ds_Customer: "Epsilon Enterprises",
+        ds_Quotation: "QT-2022-005",
+        ds_Ov: "SO-2022-460",
+        dt_Created: "05/05/2022",
+      },
+      {
+        user: "Vivian Mendes",
+        ds_Customer: "Gamma Innovations",
+        ds_Quotation: "QT-2022-006",
+        ds_Ov: "SO-2022-461",
+        dt_Created: "14/06/2022",
+      },
+      {
+        user: "Renato Lima",
+        ds_Customer: "Lambda Corp",
+        ds_Quotation: "QT-2021-001",
+        ds_Ov: "SO-2021-456",
+        dt_Created: "12/01/2021",
+      },
+      {
+        user: "Helena Martins",
+        ds_Customer: "Mu Technologies",
+        ds_Quotation: "QT-2021-002",
+        ds_Ov: "SO-2021-457",
+        dt_Created: "21/02/2021",
+      },
+      {
+        user: "Fábio Santos",
+        ds_Customer: "Nu Solutions",
+        ds_Quotation: "QT-2021-003",
+        ds_Ov: "SO-2021-458",
+        dt_Created: "10/03/2021",
+      },
+      {
+        user: "Juliana Costa",
+        ds_Customer: "Pi Innovators",
+        ds_Quotation: "QT-2021-004",
+        ds_Ov: "SO-2021-459",
+        dt_Created: "25/04/2021",
+      },
+      {
+        user: "Daniel Souza",
+        ds_Customer: "Sigma Ventures",
+        ds_Quotation: "QT-2021-005",
+        ds_Ov: "SO-2021-460",
+        dt_Created: "06/05/2021",
+      },
+      {
+        user: "Mariana Rocha",
+        ds_Customer: "Theta Solutions",
+        ds_Quotation: "QT-2021-006",
+        ds_Ov: "SO-2021-461",
+        dt_Created: "18/06/2021",
       },
     ],
   });

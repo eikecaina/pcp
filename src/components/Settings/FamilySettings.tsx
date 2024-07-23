@@ -35,6 +35,7 @@ import {
 import { GetAllGroup } from "@/app/api/services/Group/data";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { GetAllValue } from "@/app/api/services/Value/data";
+import { TreeValues } from "../TreeData";
 
 const { Option } = Select;
 
@@ -56,7 +57,6 @@ const FamilySttings: React.FC = () => {
   const [groups, setGroups] = useState<Group[]>([]);
   const [familys, setFamilys] = useState<Family[]>([]);
   const [fetchData, setFetchData] = useState(true);
-  const [treeData, setTreeData] = useState<TreeDataNode[]>([]);
 
   const clearInputs = () => {
     setFormData({});
@@ -122,47 +122,6 @@ const FamilySttings: React.FC = () => {
   useEffect(() => {
     fetchGroups();
   }, []);
-
-  const fetchTree = async () => {
-    try {
-      const response = await GetAllValue();
-
-      const mapChildren = (node: any, parentKey: string): any => {
-        const key = `${parentKey}-${node.$id}`;
-        const title = node.characteristic
-          ? `${node.characteristic.ds_Caract}: ${node.ds_Value}`
-          : `${node.ds_Caract}: ${node.ds_Value}`;
-
-        let children = [];
-
-        if (node.children) {
-          children = node.children.map((child: any, index: number) =>
-            mapChildren(child, key)
-          );
-        }
-
-        return {
-          title: title,
-          key: key,
-          children: children.length > 0 ? children : undefined,
-        };
-      };
-
-      const resultValues = response.result.map((value: any) =>
-        mapChildren(value, "0")
-      );
-
-      setTreeData(resultValues);
-    } catch (error) {
-      console.error("Erro ao buscar restritivos:", error);
-    }
-  };
-
-  useEffect(() => {
-    if (fetchData) {
-      fetchTree();
-    }
-  }, [fetchData]);
 
   const fetchFamilys = async () => {
     try {
@@ -292,27 +251,12 @@ const FamilySttings: React.FC = () => {
                 title={t("titles.valuesFamily")}
                 bodyStyle={{ height: "300px", overflowX: "auto", padding: 5 }}
               >
-                <Tree
-                  treeData={treeData}
-                  style={{
-                    height: "100%",
-                    maxHeight: 607,
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                  showLine={true}
-                  defaultExpandedKeys={["0-0-0"]}
+                <TreeValues
+                  setFormData={setFormData}
+                  fetchData={fetchData}
+                  setFetchData={setFetchData}
+                  checkable
                 />
-                <div style={{ padding: 10 }}>
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      alignContent: "center",
-                      justifyContent: "space-evenly",
-                    }}
-                  ></div>
-                </div>
               </Card>
             </Col>
           </Row>
