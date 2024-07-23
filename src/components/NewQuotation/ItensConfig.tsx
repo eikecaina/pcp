@@ -16,6 +16,7 @@ import {
   FloatButton,
   Form,
   Input,
+  InputNumber,
   Modal,
   Row,
   Select,
@@ -35,12 +36,13 @@ import GeneralSettings from "components/Settings/GeneralSettings";
 import { saveDataForm } from "@/app/api/services/Example/apiUtils";
 
 import dayjs from "dayjs";
+import { TreeValues } from "../TreeData";
 
 interface FormData {
-  client: string;
-  quotation: number | null;
-  salesOrder: number | null;
-  created: string;
+  ds_Customer: string;
+  ds_Quotation: number | null;
+  ds_Ov: number | null;
+  dt_Created: string;
   user: string;
 }
 
@@ -48,6 +50,12 @@ export const GeneralData: React.FC = () => {
   const [selectOptions, setSelectOptions] = useState([{ value: "10" }]);
   const [selectedItem, setSelectedItem] = useState(10);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showPower, setShowPower] = useState(false);
+  const [showVoltage, setShowVoltage] = useState(false);
+  const [showMaterial, setShowMaterial] = useState(false);
+  const [isModalConfigOpen, setIsModalConfigOpen] = useState(false);
+  const [formValid, setValidForm] = useState(false);
+  const [alertInput, setAlertInput] = useState(true);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -76,10 +84,22 @@ export const GeneralData: React.FC = () => {
     });
   };
 
-  const [showPower, setShowPower] = useState(false);
-  const [showVoltage, setShowVoltage] = useState(false);
-  const [showMaterial, setShowMaterial] = useState(false);
-  const [isModalConfigOpen, setIsModalConfigOpen] = useState(false);
+  const removeOption = () => {
+    if (selectOptions.length === 0) {
+      message.error("Nenhum item para excluir");
+      return;
+    }
+
+    const newOptions = selectOptions.slice(0, -1);
+    const newSelectedItem: any =
+      newOptions.length > 0
+        ? parseInt(newOptions[newOptions.length - 1].value)
+        : null;
+
+    setSelectOptions(newOptions);
+    setSelectedItem(newSelectedItem);
+    message.success("Item Excluído");
+  };
 
   const openModalConfig = async () => {
     setIsModalConfigOpen(true);
@@ -99,29 +119,27 @@ export const GeneralData: React.FC = () => {
 
   const [formData, setFormData] = useState<FormData>({
     user: "e-eike",
-    client: "",
-    quotation: null,
-    salesOrder: null,
-    created: dayjs().format("DD/MM/YYYY"),
+    ds_Customer: "",
+    ds_Quotation: null,
+    ds_Ov: null,
+    dt_Created: dayjs().format("DD/MM/YYYY"),
   });
-  const [formValid, setValidForm] = useState(false);
-  const [alertInput, setAlertInput] = useState(true);
 
   const handleSaveClick = async (id: any) => {
     setValidForm(true);
     if (
-      formData.client !== "" &&
-      formData.quotation !== null &&
-      formData.salesOrder !== null
+      formData.ds_Customer !== "" &&
+      formData.ds_Quotation !== null &&
+      formData.ds_Ov !== null
     ) {
       const success = await saveDataForm(id, formData);
       if (success) {
         setFormData({
           user: "e-eike",
-          client: "",
-          quotation: null,
-          salesOrder: null,
-          created: dayjs().format("DD/MM/YYYY"),
+          ds_Customer: "",
+          ds_Quotation: null,
+          ds_Ov: null,
+          dt_Created: dayjs().format("DD/MM/YYYY"),
         });
         setValidForm(false);
         message.success("Nova cotação criada");
@@ -137,10 +155,10 @@ export const GeneralData: React.FC = () => {
       const selectedRowData = selectedData[0];
       setFormData({
         user: selectedRowData.user || "",
-        client: selectedRowData.client || "",
-        quotation: selectedRowData.quotation || null,
-        salesOrder: selectedRowData.salesOrder || null,
-        created: selectedRowData.created || "",
+        ds_Customer: selectedRowData.ds_Customer || "",
+        ds_Quotation: selectedRowData.ds_Quotation || null,
+        ds_Ov: selectedRowData.ds_Ov || null,
+        dt_Created: selectedRowData.dt_Created || "",
       });
     }
   };
@@ -154,178 +172,181 @@ export const GeneralData: React.FC = () => {
 
   return (
     <>
-    <div style={{height: '100%'}}>
-      <Row style={{ padding: 10 }}>
-        <Form layout="vertical">
-          <Form.Item
-            name="item"
-            required={alertInput === false}
-            style={{
-              display: "inline-block",
-              width: "calc(50% - 8px)",
-            }}
-            label={t("labels.client")}
-          >
-            <Space.Compact style={{ width: "100%" }}>
-              <Input
-                name="client"
-                value={formData.client}
-                onChange={(e) => handleInputChange("client", e.target.value)}
-              />
-              <Tooltip title="Abrir Cotação">
-                <Button
-                  type="primary"
-                  style={{ borderRadius: 3 }}
-                  onClick={handleOpenModal}
-                >
-                  <SearchOutlined />
-                </Button>
-              </Tooltip>
-              <SearchQuotation
-                onRowSelect={handleRowSelect}
-                isModalOpen={isModalOpen}
-                setModalIsOpen={setIsModalOpen}
-              />
-            </Space.Compact>
-          </Form.Item>
+      <div style={{ height: "100%" }}>
+        <Row style={{ padding: 10 }}>
+          <Form layout="vertical">
+            <Form.Item
+              name="item"
+              required
+              style={{
+                display: "inline-block",
+                width: "calc(50% - 8px)",
+              }}
+              label={t("labels.client")}
+            >
+              <Space.Compact style={{ width: "100%" }}>
+                <Input
+                  name="ds_Customer"
+                  value={formData.ds_Customer}
+                  onChange={(e) =>
+                    handleInputChange("ds_Customer", e.target.value)
+                  }
+                />
+                <Tooltip title="Abrir Cotação">
+                  <Button
+                    type="primary"
+                    style={{ borderRadius: 3 }}
+                    onClick={handleOpenModal}
+                  >
+                    <SearchOutlined />
+                  </Button>
+                </Tooltip>
+                <SearchQuotation
+                  onRowSelect={handleRowSelect}
+                  isModalOpen={isModalOpen}
+                  setModalIsOpen={setIsModalOpen}
+                />
+              </Space.Compact>
+            </Form.Item>
 
-          <Form.Item
-            style={{
-              display: "inline-block",
-              width: "calc(50% - 8px)",
-              margin: "0 8px",
-            }}
-            label={t("labels.item")}
-          >
-            <Space.Compact style={{ width: "100%" }}>
-              <Tooltip title="Remover Item">
-                <Button type="primary" onClick={confirmDelete}>
-                  <MinusOutlined />
-                </Button>
-              </Tooltip>
+            <Form.Item
+              style={{
+                display: "inline-block",
+                width: "calc(50% - 8px)",
+                margin: "0 8px",
+              }}
+              label={t("labels.item")}
+            >
+              <Space.Compact style={{ width: "100%" }}>
+                <Tooltip title="Remover Item">
+                  <Button type="primary" onClick={removeOption}>
+                    <MinusOutlined />
+                  </Button>
+                </Tooltip>
 
+                <Select
+                  value={selectedItem}
+                  onChange={(value) => setSelectedItem(value)}
+                  options={selectOptions}
+                />
+                <Tooltip title="Adicionar Item">
+                  <Button type="primary" onClick={addOptions}>
+                    <PlusOutlined />
+                  </Button>
+                </Tooltip>
+              </Space.Compact>
+            </Form.Item>
+
+            <Form.Item
+              style={{ display: "inline-block", width: "calc(50% - 8px)" }}
+              label={t("labels.quotation")}
+              required
+            >
+              <InputNumber
+                name="ds_Quotation"
+                value={formData.ds_Quotation}
+                onChange={(value) =>
+                  typeof value === "number"
+                    ? handleInputChange("ds_Quotation", value)
+                    : handleInputChange("ds_Quotation", null)
+                }
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+
+            <Form.Item
+              style={{
+                display: "inline-block",
+                width: "calc(50% - 8px)",
+                margin: "0 8px",
+              }}
+              label={t("labels.salesOrder")}
+              required
+            >
+              <CustomInputNumber
+                name="ds_Ov"
+                value={formData.ds_Ov}
+                onChange={(value) =>
+                  typeof value === "number"
+                    ? handleInputChange("ds_Ov", value)
+                    : handleInputChange("ds_Ov", null)
+                }
+                style={{ width: "100%" }}
+              />
+            </Form.Item>
+          </Form>
+        </Row>
+        <Divider orientation="left" style={{ marginTop: "10px 0 0px 0" }}>
+          {t("titles.productConfig")}
+        </Divider>
+        <div style={{ overflowY: "auto", padding: 10, maxHeight: "40vh" }}>
+          <Form layout="vertical">
+            <Form.Item colon={false} label={t("labels.operation")}>
               <Select
-                value={selectedItem}
-                onChange={(value) => setSelectedItem(value)}
-                options={selectOptions}
-              />
-              <Tooltip title="Adicionar Item">
-                <Button type="primary" onClick={addOptions}>
-                  <PlusOutlined />
-                </Button>
-              </Tooltip>
-            </Space.Compact>
-          </Form.Item>
-
-          <Form.Item
-            style={{ display: "inline-block", width: "calc(50% - 8px)" }}
-            label={t("labels.quotation")}
-            required={alertInput === false}
-          >
-            <CustomInputNumber
-              name="quotation"
-              value={formData.quotation}
-              onChange={(value) =>
-                typeof value === "number"
-                  ? handleInputChange("quotation", value)
-                  : handleInputChange("quotation", null)
-              }
-              style={{ width: "100%" }}
-            />
-          </Form.Item>
-
-          <Form.Item
-            style={{
-              display: "inline-block",
-              width: "calc(50% - 8px)",
-              margin: "0 8px",
-            }}
-            label={t("labels.salesOrder")}
-            required={alertInput === false}
-          >
-            <CustomInputNumber
-              name="salesOrder"
-              value={formData.salesOrder}
-              onChange={(value) =>
-                typeof value === "number"
-                  ? handleInputChange("salesOrder", value)
-                  : handleInputChange("salesOrder", null)
-              }
-              style={{ width: "100%" }}
-            />
-          </Form.Item>
-        </Form>
-      </Row>
-      <Divider orientation="left" style={{ marginTop: "10px 0 0px 0" }}>
-        {t("titles.productConfig")}
-      </Divider>
-      <div style={{ overflowY: "auto", padding: 10, maxHeight: "40vh" }}>
-        <Form layout="vertical">
-          <Form.Item colon={false} label={t("labels.operation")}>
-            <Select
-              options={[{ value: "Óleo" }, { value: "Seco" }]}
-              onChange={handleOperetion}
-            />
-          </Form.Item>
-          {showPower && (
-            <Form.Item label="Potência em kVA" style={{ width: "100%" }}>
-              <Select
-                options={[{ value: "0 a 15" }]}
+                options={[{ value: "Óleo" }, { value: "Seco" }]}
                 onChange={handleOperetion}
               />
             </Form.Item>
-          )}
-          {showVoltage && (
-            <Form.Item label="Classe de tensão">
-              <Select
-                options={[{ value: "15 a 36" }]}
-                onChange={handleOperetion}
-              />
-            </Form.Item>
-          )}
-          {showMaterial && (
-            <Form.Item label="Materiais críticos">
-              <Select options={[{ value: "Bucha" }]} />
-            </Form.Item>
-          )}
-        </Form>
-      </div>
-      <div
-        style={{
-          position: "absolute",
-          display: "flex",
-          justifyContent: "space-evenly",
-          width: "100%",
-          bottom: 7,
-        }}
-      >
-        <Button
-          style={{ width: "24%" }}
-          onClick={openModalConfig}
-          type="primary"
-        >
-          {t("generalButtons.configButton")}
-        </Button>
-        <Button style={{ width: "24%" }} type="primary">
-          {t("generalButtons.calcButton")}
-        </Button>
-        <Button style={{ width: "24%" }} type="primary">
-          {t("generalButtons.consumeButton")}
-        </Button>
-        <Button
-          htmlType="submit"
-          onClick={handleSaveClick}
-          style={{ width: "24%" }}
-          type="primary"
-        >
-          {t("generalButtons.saveButton")}
-        </Button>
-      </div>
+            {showPower && (
+              <Form.Item label="Potência em kVA" style={{ width: "100%" }}>
+                <Select
+                  options={[{ value: "0 a 15" }]}
+                  onChange={handleOperetion}
+                />
+              </Form.Item>
+            )}
+            {showVoltage && (
+              <Form.Item label="Classe de tensão">
+                <Select
+                  options={[{ value: "15 a 36" }]}
+                  onChange={handleOperetion}
+                />
+              </Form.Item>
+            )}
+            {showMaterial && (
+              <Form.Item label="Materiais críticos">
+                <Select options={[{ value: "Bucha" }]} />
+              </Form.Item>
+            )}
+          </Form>
+        </div>
 
-      {isModalConfigOpen && (
-        <ConfigModal setIsModalConfigOpen={setIsModalConfigOpen} />
-      )}
-    </div>
+        <div
+          style={{
+            position: "absolute",
+            display: "flex",
+            justifyContent: "space-evenly",
+            width: "100%",
+            bottom: 7,
+          }}
+        >
+          <Button
+            style={{ width: "24%" }}
+            onClick={openModalConfig}
+            type="primary"
+          >
+            {t("generalButtons.configButton")}
+          </Button>
+          <Button style={{ width: "24%" }} type="primary">
+            {t("generalButtons.calcButton")}
+          </Button>
+          <Button style={{ width: "24%" }} type="primary">
+            {t("generalButtons.consumeButton")}
+          </Button>
+          <Button
+            htmlType="submit"
+            onClick={handleSaveClick}
+            style={{ width: "24%" }}
+            type="primary"
+          >
+            {t("generalButtons.saveButton")}
+          </Button>
+        </div>
+
+        {isModalConfigOpen && (
+          <ConfigModal setIsModalConfigOpen={setIsModalConfigOpen} />
+        )}
+      </div>
     </>
   );
 };

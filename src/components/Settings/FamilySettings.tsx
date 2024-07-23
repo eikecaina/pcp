@@ -8,6 +8,7 @@ import {
   Row,
   Select,
   Tree,
+  TreeDataNode,
   message,
 } from "antd";
 
@@ -33,6 +34,8 @@ import {
 } from "@/app/api/services/Family/data";
 import { GetAllGroup } from "@/app/api/services/Group/data";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { GetAllValue } from "@/app/api/services/Value/data";
+import { TreeValues } from "../TreeData";
 
 const { Option } = Select;
 
@@ -248,27 +251,12 @@ const FamilySttings: React.FC = () => {
                 title={t("titles.valuesFamily")}
                 bodyStyle={{ height: "300px", overflowX: "auto", padding: 5 }}
               >
-                <Tree
+                <TreeValues
+                  setFormData={setFormData}
+                  fetchData={fetchData}
+                  setFetchData={setFetchData}
                   checkable
-                  style={{
-                    height: "100%",
-                    maxHeight: 607,
-                    textOverflow: "ellipsis",
-                    whiteSpace: "nowrap",
-                  }}
-                  showLine={true}
-                  defaultExpandedKeys={["0-0-0"]}
                 />
-                <div style={{ padding: 10 }}>
-                  <div
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      alignContent: "center",
-                      justifyContent: "space-evenly",
-                    }}
-                  ></div>
-                </div>
               </Card>
             </Col>
           </Row>

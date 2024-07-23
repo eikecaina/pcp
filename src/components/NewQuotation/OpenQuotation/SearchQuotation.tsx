@@ -12,6 +12,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Modal, Spin } from "antd";
 import { useTranslation } from "react-i18next";
 import Loading from "components/Loading";
+import axios from "axios";
 
 interface SearchQuotationProps {
   isModalOpen: boolean;
@@ -44,8 +45,8 @@ const filterParams: IDateFilterParams = {
     return 0;
   },
   minValidYear: 2000,
-  maxValidYear: 2021,
-  inRangeFloatingFilterDateFormat: "Do MMM YYYY",
+  maxValidYear: 2024,
+  inRangeFloatingFilterDateFormat: "DD MM YYYY",
 };
 
 const SearchQuotation: React.FC<SearchQuotationProps> = ({
@@ -57,12 +58,12 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
   const gridRef = useRef<AgGridReact>(null);
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     { headerName: t("labels.user"), field: "user" },
-    { headerName: t("labels.client"), field: "client" },
-    { headerName: t("labels.quotation"), field: "quotation" },
-    { headerName: t("labels.salesOrder"), field: "salesOrder" },
+    { headerName: t("labels.client"), field: "ds_Customer" },
+    { headerName: t("labels.quotation"), field: "ds_Quotation" },
+    { headerName: t("labels.salesOrder"), field: "ds_Ov" },
     {
       headerName: t("labels.created"),
-      field: "created",
+      field: "dt_Created",
       filter: "agDateColumnFilter",
       filterParams: filterParams,
     },
@@ -104,8 +105,8 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // const response = await axios.get("http://localhost:3000/api/route");
-        // setRowData(response.data.data);
+         const response = await axios.get("http://localhost:3000/api/services/valuesMock");
+         setRowData(response.data.result);
       } catch (error) {
         console.error("Erro ao obter os dados:", error);
       }

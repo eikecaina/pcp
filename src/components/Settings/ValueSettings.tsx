@@ -28,12 +28,19 @@ import { useTranslation } from "react-i18next";
 import {
   Delete,
   GetAllValue,
+  GetDataFromId,
+  GetWithChild,
   Save,
   Update,
 } from "@/app/api/services/Value/data";
 import { UUID } from "crypto";
-import { GetAllCharact } from "@/app/api/services/Characteristc/data";
+import {
+  GetAllCharact,
+  GetCharactFromId,
+} from "@/app/api/services/Characteristc/data";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
+import type { TreeDataNode, TreeProps } from "antd";
+import { TreeValues } from "../TreeData";
 
 const { Option } = Select;
 
@@ -51,6 +58,7 @@ interface Value {
 interface Charact {
   id: UUID;
   charact: string;
+  position: number;
 }
 
 const ValueSettings: React.FC = () => {
@@ -187,8 +195,10 @@ const ValueSettings: React.FC = () => {
   }, [fetchData]);
 
   useEffect(() => {
-    fetchCharacts();
-  }, [handleSelectCaractChange]);
+    if (fetchData) {
+      fetchCharacts();
+    }
+  }, [fetchData, handleSelectCaractChange]);
 
   const newFunction = () => {
     setValue(1);
@@ -224,16 +234,10 @@ const ValueSettings: React.FC = () => {
             title={t("titles.definitionFamily")}
             style={{ height: "450px", overflowX: "auto" }}
           >
-            <Tree
-              checkable
-              style={{
-                height: "100%",
-                maxHeight: 607,
-                textOverflow: "ellipsis",
-                whiteSpace: "nowrap",
-              }}
-              showLine={true}
-              defaultExpandedKeys={["0-0-0"]}
+            <TreeValues
+              setFormData={setFormData}
+              fetchData={fetchData}
+              setFetchData={setFetchData}
             />
           </Card>
         </Col>

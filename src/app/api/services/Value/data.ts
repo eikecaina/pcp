@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import api from "../api";
 import { UUID } from "crypto";
 
@@ -11,6 +10,7 @@ interface FormData {
   repeatApproved: boolean;
   newCertificate: boolean;
   repeatCertificate: boolean;
+  parent_value_id: UUID;
 }
 
 export async function GetAllValue() {
@@ -23,9 +23,19 @@ export async function GetAllValue() {
   }
 }
 
-export async function GetDataFromId(id: number) {
+export async function GetWithChild() {
   try {
-    return await api.get(`/Value/Get/${id}`).then((res) => {
+    return await api.get(`/Value/GetWithChild/`).then((r) => {
+      return r.data;
+    });
+  } catch (error) {
+    console.log("Erro ao Buscar:", error);
+  }
+}
+
+export async function GetDataFromId(id: UUID) {
+  try {
+    return await api.get(`/Value/${id}`).then((res) => {
       return res.data;
     });
   } catch (error) {
@@ -45,6 +55,7 @@ export async function Save(formData: FormData) {
     id_Allow_Repeat_Certificate: formData.repeatCertificate,
     cd_Audit_Modified_User: "Eike",
     cd_Audit_Created_User: "Eike",
+    parentId: formData.parent_value_id,
   };
 
   try {
@@ -54,7 +65,7 @@ export async function Save(formData: FormData) {
     return response.data;
   } catch (error) {
     console.error("Erro ao salvar:", error);
-    console.log(formData);
+    console.log(rec);
     throw error;
   }
 }
@@ -72,6 +83,7 @@ export async function Update(formData: any) {
       id_Allow_Repeat_Certificate: formData.repeatCertificate,
       cd_Audit_Modified_User: "Eike",
       cd_Audit_Created_User: "Eike",
+      parentId: formData.parent_value_id,
     };
 
     return await api.put(`/Value/Update`, rec).then((res) => {

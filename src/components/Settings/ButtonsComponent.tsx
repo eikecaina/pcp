@@ -116,6 +116,7 @@ export const RadioButtons: React.FC<RadioValue> = ({
   const { t } = useTranslation("layout");
   return (
     <Radio.Group
+    disabled
       value={value}
       onChange={onChange}
       defaultValue={1}

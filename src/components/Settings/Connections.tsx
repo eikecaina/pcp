@@ -12,10 +12,13 @@ import {
   RadioChangeEvent,
   Row,
   Select,
+  message,
 } from "antd";
 import React, { useState } from "react";
 import {
   DeleteButton,
+  EditButton,
+  NewButton,
   RadioButtons,
   SaveButton,
   SelectRadio,
@@ -23,30 +26,63 @@ import {
 import { formStyle } from "./Style";
 import CustomInputNumber from "components/CustomInputNumber";
 import { useTranslation } from "react-i18next";
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+import { Delete, Save, Update } from "@/app/api/services/Connection/data";
 
 export const Connections: React.FC = () => {
-  const [value, setValue] = useState(1);
-
-  const onChange = (e: RadioChangeEvent) => {
-    setValue(e.target.value);
-  };
-  const [valueRadioModal, setValueRadioModal] = useState(1);
-
-  const onChangeRadioModal = (e: RadioChangeEvent) => {
-    setValueRadioModal(e.target.value);
-  };
-  const [valueModal, setValueModal] = useState(1);
-
-  const onChangeModal = (e: RadioChangeEvent) => {
-    setValueModal(e.target.value);
-  };
-  const [exitValue, setExitValue] = useState(1);
-
-  const onChangeExit = (e: RadioChangeEvent) => {
-    setExitValue(e.target.value);
-  };
-
+  const [valueEntry, setValueEntry] = useState(2);
+  const [valueOutput, setValueOutput] = useState(2);
+  const [formData, setFormData] = useState<any>({});
+  const [fetchData, setFetchData] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalExitOpen, setIsModalExitOpen] = useState(false);
+
+  const clearInputs = () => {
+    setFormData({});
+  };
+
+  const success = () => {
+    message
+      .open({
+        type: "loading",
+        content: "Salvando..",
+        duration: 2.5,
+      })
+      .then(async () => {
+        try {
+          if (formData.id) {
+            await Update(formData);
+          } else {
+            await Save(formData);
+            clearInputs();
+          }
+          setFetchData(true);
+          message.success("Salvo com sucesso!", 2.5);
+        } catch (error) {
+          message.error("Não foi possível salvar");
+        }
+      });
+  };
+
+  const confirmDelete = () => {
+    Modal.confirm({
+      title: t("generalButtons.deleteButton"),
+      icon: <ExclamationCircleOutlined />,
+      content: "Deseja excluir o Valor?",
+      okText: t("generalButtons.confirmButton"),
+      cancelText: t("generalButtons.cancelButton"),
+      async onOk() {
+        try {
+          await Delete(formData);
+          clearInputs();
+          setFetchData(true);
+          message.success("Excluido com sucesso!");
+        } catch (error) {
+          message.error("Não foi possivel excluir!");
+        }
+      },
+    });
+  };
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -60,8 +96,6 @@ export const Connections: React.FC = () => {
     setIsModalOpen(false);
   };
 
-  const [isModalExitOpen, setIsModalExitOpen] = useState(false);
-
   const showModalExit = () => {
     setIsModalExitOpen(true);
   };
@@ -74,51 +108,69 @@ export const Connections: React.FC = () => {
     setIsModalExitOpen(false);
   };
 
+  const newFunctionEntry = () => {
+    setValueEntry(1);
+    clearInputs();
+  };
+
+  const editFunctionEntry = () => {
+    setValueEntry(3);
+  };
+
+  const newFunctionOutput = () => {
+    setValueOutput(1);
+    clearInputs();
+  };
+
+  const editFunctionOutput = () => {
+    setValueOutput(3);
+  };
+
   const { t } = useTranslation("layout");
   return (
     <>
-      <Form.Item style={{ width: "25%" }} label={t("labels.process")}>
+      <Form.Item
+        style={{ width: "25%" }}
+        label={t("labels.process") + " Ligação"}
+      >
         <Select />
       </Form.Item>
       <Row gutter={10}>
         <Col span={12}>
           <Card bodyStyle={{ padding: 10 }} title={t("titles.entry")}>
-            <div style={{ marginTop: 5, width: "100%" }}>
-              <RadioButtons value={value} onChange={onChange} />
-            </div>
             <Form layout="vertical">
               <Form.Item
-                label={t("labels.entryProcess")}
-                style={formStyle("calc(50% - 5px)", "5px")}
+                label={t("labels.process")}
+                style={formStyle("calc(100%)")}
               >
-                <Select />
+                <Select disabled={valueEntry === 1} />
               </Form.Item>
-              <Form.Item label={t("labels.outputProcess")} style={formStyle("50%")}>
-                <Select />
-              </Form.Item>
+
               <Form.Item
                 label={t("labels.time")}
                 style={formStyle("calc(20% - 5px)", "5px")}
               >
-                <CustomInputNumber style={{ width: "100%" }} placeholder="0" />
+                <CustomInputNumber disabled={valueEntry === 1} style={{ width: "100%" }} placeholder="0" />
               </Form.Item>
               <Form.Item label=" " style={formStyle("calc(20% - 5px)", "5px")}>
-                <Select />
+                <Select disabled={valueEntry === 1} />
               </Form.Item>
               <Form.Item label={t("labels.type")} style={formStyle("60%")}>
-                <Select />
+                <Select disabled={valueEntry === 1} />
               </Form.Item>
               <Form.Item>
-                <Checkbox>{t("labels.elapsedDays")}</Checkbox>
+                <Checkbox disabled={valueEntry === 1}>{t("labels.elapsedDays")}</Checkbox>
               </Form.Item>
               <Form.Item>
-                <Button onClick={showModal} type="primary">
+                <Button disabled onClick={showModal} type="primary">
                   {t("labels.rules")}
                 </Button>
               </Form.Item>
-              <div style={{ float: "right" }}>
-                <SaveButton />
-                <DeleteButton />
+              <div style={{ margin: 10, float: "right" }}>
+                <NewButton onClick={newFunctionEntry} />
+                <EditButton onClick={editFunctionEntry} />
+                <DeleteButton onClick={confirmDelete} />
+                <SaveButton onClick={success} />
               </div>
             </Form>
           </Card>
@@ -126,42 +178,35 @@ export const Connections: React.FC = () => {
 
         <Col span={12}>
           <Card bodyStyle={{ padding: 10 }} title={t("titles.output")}>
-            <div style={{ marginTop: 5, width: "100%" }}>
-              <RadioButtons value={exitValue} onChange={onChangeExit} />
-            </div>
             <Form layout="vertical">
-              <Form.Item
-                label={t("labels.entryProcess")}
-                style={formStyle("calc(50% - 5px)", "5px")}
-              >
-                <Select />
-              </Form.Item>
-              <Form.Item label={t("labels.outputProcess")} style={formStyle("50%")}>
-                <Select />
+              <Form.Item label={t("labels.process")} style={formStyle("100%")}>
+                <Select disabled={valueOutput === 1}/>
               </Form.Item>
               <Form.Item
                 label={t("labels.time")}
                 style={formStyle("calc(20% - 5px)", "5px")}
               >
-                <CustomInputNumber style={{ width: "100%" }} placeholder="0" />
+                <CustomInputNumber disabled={valueOutput === 1} style={{ width: "100%" }} placeholder="0" />
               </Form.Item>
               <Form.Item label=" " style={formStyle("calc(20% - 5px)", "5px")}>
-                <Select />
+                <Select disabled={valueOutput === 1} />
               </Form.Item>
               <Form.Item label={t("labels.type")} style={formStyle("60%")}>
-                <Select />
+                <Select disabled={valueOutput === 1} />
               </Form.Item>
               <Form.Item>
-                <Checkbox>{t("labels.elapsedDays")}</Checkbox>
+                <Checkbox disabled={valueOutput === 1}>{t("labels.elapsedDays")}</Checkbox>
               </Form.Item>
               <Form.Item>
-                <Button onClick={showModalExit} type="primary">
+                <Button disabled onClick={showModalExit} type="primary">
                   {t("labels.rules")}
                 </Button>
               </Form.Item>
-              <div style={{ float: "right" }}>
-                <SaveButton />
-                <DeleteButton />
+              <div style={{ margin: 10, float: "right" }}>
+                <NewButton onClick={newFunctionOutput} />
+                <EditButton onClick={editFunctionOutput} />
+                <DeleteButton onClick={confirmDelete} />
+                <SaveButton onClick={success} />
               </div>
             </Form>
           </Card>
@@ -178,7 +223,10 @@ export const Connections: React.FC = () => {
           <div style={{ marginRight: 15 }}>
             <Button type="primary">{t("generalButtons.newButton")}</Button>
           </div>
-          <Form.Item label={t("labels.rules")} style={formStyle("calc(40% - 2px)", "6px")}>
+          <Form.Item
+            label={t("labels.rules")}
+            style={formStyle("calc(40% - 2px)", "6px")}
+          >
             <Select />
           </Form.Item>
         </div>
@@ -191,7 +239,7 @@ export const Connections: React.FC = () => {
                 </Form.Item>
                 <Form.Item>
                   <Radio value={2}>
-                   {t("labels.completionProcess")}
+                    {t("labels.completionProcess")}
                     <DatePicker
                       style={{ marginLeft: 10 }}
                       format={"DD/MM/YYYY"}
@@ -231,7 +279,10 @@ export const Connections: React.FC = () => {
           <div style={{ marginRight: 15 }}>
             <Button type="primary">{t("generalButtons.newButton")}</Button>
           </div>
-          <Form.Item label={t("labels.rules")} style={formStyle("calc(40% - 2px)", "6px")}>
+          <Form.Item
+            label={t("labels.rules")}
+            style={formStyle("calc(40% - 2px)", "6px")}
+          >
             <Select />
           </Form.Item>
         </div>
@@ -258,7 +309,7 @@ export const Connections: React.FC = () => {
             <Card title={t("titles.exitAction")} bodyStyle={{ padding: 10 }}>
               <Form.Item>
                 <Checkbox>
-                {t("labels.start")}
+                  {t("labels.start")}
                   <DatePicker style={{ marginLeft: 10 }} showTime />
                 </Checkbox>
               </Form.Item>
