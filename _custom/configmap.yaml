@@ -7,4 +7,5 @@ metadata:
   namespace: ${NAMESPACE}
 data:
   APP_ENV: $APP_ENV
-  TOKEN_KEY: $TOKEN_KEY
+
+  # TOKEN_KEY: $TOKEN_KEY

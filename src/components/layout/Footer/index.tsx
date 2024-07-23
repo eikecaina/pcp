@@ -9,7 +9,7 @@ export interface FooterProps {
 export const Footer: React.FC<FooterProps> = ({ className }) => {
   // const { t } = useTranslation("layout");
 
-  const siteName = process.env.SITE_NAME;
+  const siteName = process.env.SITE_NAME + ' - ' + process.env.APP_ENV?.toUpperCase();
   // const siteName = "WTPC"
 
   return (
