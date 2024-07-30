@@ -1,4 +1,9 @@
-import { DeleteOutlined, EditOutlined, PlusOutlined, SaveOutlined } from "@ant-design/icons";
+import {
+  DeleteOutlined,
+  EditOutlined,
+  PlusOutlined,
+  SaveOutlined,
+} from "@ant-design/icons";
 import {
   Button,
   Form,
@@ -57,6 +62,7 @@ export const SaveButton: React.FC<Buttons> = ({
   return (
     <Tooltip title={t("generalButtons.saveButton")}>
       <Button
+        htmlType="submit"
         onChange={onChange}
         onClick={onClick}
         style={buttonStyle}
@@ -116,7 +122,7 @@ export const RadioButtons: React.FC<RadioValue> = ({
   const { t } = useTranslation("layout");
   return (
     <Radio.Group
-    disabled
+      disabled
       value={value}
       onChange={onChange}
       defaultValue={1}

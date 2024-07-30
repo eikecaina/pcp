@@ -56,6 +56,9 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
 }) => {
   const { t } = useTranslation("layout");
   const gridRef = useRef<AgGridReact>(null);
+  const [rowData, setRowData] = useState([]);
+  const [selectedRow, setSelectedRow] = useState<any[] | null>(null);
+  const [loading, setLoading] = useState(false);
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     { headerName: t("labels.user"), field: "user" },
     { headerName: t("labels.client"), field: "ds_Customer" },
@@ -100,7 +103,7 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
   const handleCancel = () => {
     setModalIsOpen(false);
   };
-  const [rowData, setRowData] = useState([]);
+ 
 
   useEffect(() => {
     const fetchData = async () => {
@@ -114,8 +117,6 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
     fetchData();
   }, [isModalOpen]);
 
-  const [selectedRow, setSelectedRow] = useState<any[] | null>(null);
-  const [loading, setLoading] = useState(false);
 
   const handleOpen = () => {
     setLoading(true);

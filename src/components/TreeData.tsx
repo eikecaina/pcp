@@ -3,6 +3,8 @@ import { useEffect, useState } from "react";
 import { GetDataFromId, GetWithChild } from "@/app/api/services/Value/data";
 import { UUID } from "crypto";
 import type { TreeDataNode, TreeProps } from "antd";
+import { TreeSelect } from 'antd';
+import type { TreeSelectProps } from 'antd';
 
 interface ExtendedDataNode extends TreeDataNode {
   id?: UUID;
@@ -36,7 +38,7 @@ export const TreeValues: React.FC<TreeValuesProps> = ({
       ): Promise<ExtendedDataNode[]> => {
         const treeData: ExtendedDataNode[] = [];
 
-        for (const item of response.result) {
+        for (const item of response) {
           if (item.parent_value_id === parentId) {
             const node: ExtendedDataNode = {
               id: item.value_id,
@@ -167,8 +169,6 @@ export const TreeValues: React.FC<TreeValuesProps> = ({
       checkable={checkable}
       treeData={treeData}
       onSelect={onSelect}
-      onDrop={onDrop}
-      draggable
       style={{
         height: "100%",
         maxHeight: 607,

@@ -75,27 +75,19 @@ const ProcessSettings: React.FC = () => {
     });
   };
 
-  const success = () => {
-    message
-      .open({
-        type: "loading",
-        content: "Salvando..",
-        duration: 2.5,
-      })
-      .then(async () => {
-        try {
-          if (formData.id) {
-            await Update(formData);
-          } else {
-            await Save(formData);
-            clearInputs();
-          }
-          setFetchData(true);
-          message.success("Salvo com sucesso!", 2.5);
-        } catch (error) {
-          message.error("Não foi possível salvar");
-        }
-      });
+  const success = async () => {
+    try {
+      if (formData.id) {
+        await Update(formData);
+      } else {
+        await Save(formData);
+      }
+      clearInputs();
+      setFetchData(true);
+      message.success("Salvo com sucesso!");
+    } catch (error) {
+      message.error("Não foi possível salvar");
+    }
   };
 
   const confirmDelete = () => {
@@ -149,7 +141,7 @@ const ProcessSettings: React.FC = () => {
   const fetchProcess = async () => {
     try {
       const response = await GetAllProcess();
-      const processData = response.result.map(
+      const processData = response.map(
         (process: {
           id: UUID;
           ds_Process: string;
@@ -179,7 +171,7 @@ const ProcessSettings: React.FC = () => {
   const fetchCalendars = async (setCalendars: any) => {
     try {
       const response = await GetAllCalendar();
-      const calendarData = response.result.map(
+      const calendarData = response.map(
         (calendar: { id: UUID; ds_Calendar: string }) => ({
           id: calendar.id,
           calendar: calendar.ds_Calendar,

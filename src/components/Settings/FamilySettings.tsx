@@ -62,27 +62,19 @@ const FamilySttings: React.FC = () => {
     setFormData({});
   };
 
-  const success = () => {
-    message
-      .open({
-        type: "loading",
-        content: "Salvando..",
-        duration: 2.5,
-      })
-      .then(async () => {
-        try {
-          if (formData.id) {
-            await Update(formData);
-          } else {
-            await Save(formData);
-            clearInputs();
-          }
-          setFetchData(true);
-          message.success("Salvo com sucesso!", 2.5);
-        } catch (error) {
-          message.error("Não foi possível salvar");
-        }
-      });
+  const success = async () => {
+    try {
+      if (formData.id) {
+        await Update(formData);
+      } else {
+        await Save(formData);
+      }
+      clearInputs();
+      setFetchData(true);
+      message.success("Salvo com sucesso!");
+    } catch (error) {
+      message.error("Não foi possível salvar");
+    }
   };
 
   const confirmDelete = () => {
@@ -108,7 +100,7 @@ const FamilySttings: React.FC = () => {
   const fetchGroups = async () => {
     try {
       const response = await GetAllGroup();
-      const groupData = response.result.map(
+      const groupData = response.map(
         (group: { id: UUID; ds_Group: string }) => ({
           id: group.id,
           group: group.ds_Group,
@@ -126,7 +118,7 @@ const FamilySttings: React.FC = () => {
   const fetchFamilys = async () => {
     try {
       const response = await GetAllFamily();
-      const familyData = response.result.map(
+      const familyData = response.map(
         (family: {
           id: UUID;
           ds_Family: string;
@@ -209,6 +201,8 @@ const FamilySttings: React.FC = () => {
             <Col span={24}>
               <Card title={t("titles.definition")} bodyStyle={{ padding: 10 }}>
                 <Form.Item
+                  name="name"
+                  rules={[{ required: true, message: "Preencha o Nome" }]}
                   style={formStyle("calc(33% - 8px", "8px")}
                   label={t("labels.name")}
                 >

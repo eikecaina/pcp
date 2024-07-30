@@ -65,27 +65,19 @@ const CharacteristicsSettings: React.FC = () => {
     });
   };
 
-  const success = () => {
-    message
-      .open({
-        type: "loading",
-        content: "Salvando..",
-        duration: 2.5,
-      })
-      .then(async () => {
-        try {
-          if (formData.id) {
-            await Update(formData);
-          } else {
-            await Save(formData);
-            clearInputs();
-          }
-          setFetchData(true);
-          message.success("Salvo com sucesso!", 2.5);
-        } catch (error) {
-          message.error("Não foi possível salvar");
-        }
-      });
+  const success = async () => {
+    try {
+      if (formData.id) {
+        await Update(formData);
+      } else {
+        await Save(formData);
+      }
+      clearInputs();
+      setFetchData(true);
+      message.success("Salvo com sucesso!");
+    } catch (error) {
+      message.error("Não foi possível salvar");
+    }
   };
 
   const confirmDelete = () => {
@@ -150,7 +142,7 @@ const CharacteristicsSettings: React.FC = () => {
   const fetchCaract = async () => {
     try {
       const response = await GetAllCharact();
-      const charactData = response.result.map(
+      const charactData = response.map(
         (charact: {
           id: UUID;
           ds_Caract: string;
@@ -177,7 +169,7 @@ const CharacteristicsSettings: React.FC = () => {
   const fetchCaractType = async () => {
     try {
       const response = await GetAllCharactType();
-      const charactTypeData = response.result.map(
+      const charactTypeData = response.map(
         (charactType: { id: UUID; ds_Caract_Type: string }) => ({
           id: charactType.id,
           charactType: charactType.ds_Caract_Type,
@@ -236,6 +228,8 @@ const CharacteristicsSettings: React.FC = () => {
             <Col span={24}>
               <Card title={t("titles.definition")} bodyStyle={{ padding: 10 }}>
                 <Form.Item
+                  name="name"
+                  rules={[{ required: true, message: "Preencha o Nome" }]}
                   label={t("labels.name")}
                   style={formStyle("calc(28.33% - 8px)", "8px")}
                 >
@@ -271,7 +265,12 @@ const CharacteristicsSettings: React.FC = () => {
                     onChange={handleSelectNumberChange}
                   />
                 </Form.Item>
-                <Form.Item label={t("labels.type")} style={formStyle("28.33%")}>
+                <Form.Item
+                  name="type"
+                  rules={[{ required: true, message: "Preencha o Tipo" }]}
+                  label={t("labels.type")}
+                  style={formStyle("28.33%")}
+                >
                   <Select
                     disabled={value === 2}
                     value={formData.type}

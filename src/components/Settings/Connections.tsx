@@ -41,27 +41,19 @@ export const Connections: React.FC = () => {
     setFormData({});
   };
 
-  const success = () => {
-    message
-      .open({
-        type: "loading",
-        content: "Salvando..",
-        duration: 2.5,
-      })
-      .then(async () => {
-        try {
-          if (formData.id) {
-            await Update(formData);
-          } else {
-            await Save(formData);
-            clearInputs();
-          }
-          setFetchData(true);
-          message.success("Salvo com sucesso!", 2.5);
-        } catch (error) {
-          message.error("Não foi possível salvar");
-        }
-      });
+  const success = async () => {
+    try {
+      if (formData.id) {
+        await Update(formData);
+      } else {
+        await Save(formData);
+      }
+      clearInputs();
+      setFetchData(true);
+      message.success("Salvo com sucesso!");
+    } catch (error) {
+      message.error("Não foi possível salvar");
+    }
   };
 
   const confirmDelete = () => {

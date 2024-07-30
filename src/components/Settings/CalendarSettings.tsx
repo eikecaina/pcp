@@ -97,28 +97,19 @@ export const CalendarSettings = () => {
     setFormData({});
   };
 
-  const success = () => {
-    message
-      .open({
-        type: "loading",
-        content: "Salvando..",
-        duration: 2.5,
-      })
-      .then(async () => {
-        try {
-          if (formData.id) {
-            await Update(formData);
-            clearInputs();
-          } else {
-            await Save(formData);
-            clearInputs();
-          }
-          setFetchData(true);
-          message.success("Salvo com sucesso!", 2.5);
-        } catch (error) {
-          message.error("Não foi possível salvar");
-        }
-      });
+  const success = async () => {
+    try {
+      if (formData.id) {
+        await Update(formData);
+      } else {
+        await Save(formData);
+      }
+      clearInputs();
+      setFetchData(true);
+      message.success("Salvo com sucesso!");
+    } catch (error) {
+      message.error("Não foi possível salvar");
+    }
   };
 
   const successDay = () => {
@@ -231,7 +222,7 @@ export const CalendarSettings = () => {
   const fetchPeriods = async () => {
     try {
       const response = await GetAllPeriod();
-      const periodData = response.result.map(
+      const periodData = response.map(
         (period: { id: UUID; ds_Period: string }) => ({
           id: period.id,
           period: period.ds_Period,
@@ -246,7 +237,7 @@ export const CalendarSettings = () => {
   const fetchCalendars = async (setCalendars: any) => {
     try {
       const response = await GetAllCalendar();
-      const calendarData = response.result.map(
+      const calendarData = response.map(
         (calendar: {
           id: UUID;
           ds_Calendar: string;
@@ -327,17 +318,24 @@ export const CalendarSettings = () => {
           </Select>
         </Form.Item>
       </div>
-      <Form layout="vertical">
+      <Form
+        initialValues={{ remember: true }}
+        autoComplete="off"
+        layout="vertical"
+      >
         <Row gutter={5}>
           <Col span={15} style={{ display: "flex" }}>
             <Card style={{ width: "100%" }} bodyStyle={{ padding: 0 }}>
               <div style={{ margin: 10 }}>
                 <Form.Item
+                  rules={[{ required: true, message: "Preencha o Nome" }]}
+                  name="calendar"
                   label={t("labels.name")}
                   style={formStyle("calc(50% - 8px)", "8px")}
                 >
                   <Input
                     disabled={value === 2}
+                    name="calendar"
                     value={formData.calendar}
                     onChange={(e) =>
                       handleInputChange("calendar", e.target.value)
@@ -403,8 +401,14 @@ export const CalendarSettings = () => {
           <Col span={8}>
             <Card title={t("titles.occurrence")} bodyStyle={{ padding: 10 }}>
               <div style={{ width: "100%" }}>
-                <Form.Item label={t("labels.name")} style={formStyle("50%")}>
+                <Form.Item
+                  rules={[{ required: true, message: "Preencha o Nome" }]}
+                  label={t("labels.name")}
+                  name="day"
+                  style={formStyle("50%")}
+                >
                   <Input
+                    name="day"
                     size="small"
                     onChange={(e) =>
                       handleInputDayChange("dsCalendarDay", e.target.value)
