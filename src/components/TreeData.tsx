@@ -3,11 +3,10 @@ import { useEffect, useState } from "react";
 import { GetDataFromId, GetWithChild } from "@/app/api/services/Value/data";
 import { UUID } from "crypto";
 import type { TreeDataNode, TreeProps } from "antd";
-import { TreeSelect } from 'antd';
-import type { TreeSelectProps } from 'antd';
 
 interface ExtendedDataNode extends TreeDataNode {
   id?: UUID;
+  disabled?: boolean;
 }
 
 interface TreeValuesProps {
@@ -24,6 +23,7 @@ export const TreeValues: React.FC<TreeValuesProps> = ({
   checkable,
 }) => {
   const [treeData, setTreeData] = useState<ExtendedDataNode[]>([]);
+  const [selectedNodes, setSelectedNodes] = useState<any[]>([]);
 
   const fetchTree = async () => {
     try {
@@ -91,71 +91,24 @@ export const TreeValues: React.FC<TreeValuesProps> = ({
     console.log(info.node);
   };
 
-  const onDrop: TreeProps<ExtendedDataNode>["onDrop"] = (info) => {
-    const dropKey = info.node.key as string;
-    const dragKey = info.dragNode.key as string;
-    const dropPos = info.node.pos.split("-");
-    const dropPosition =
-      info.dropPosition - Number(dropPos[dropPos.length - 1]);
+  const onCheck: TreeProps<ExtendedDataNode>["onCheck"] = (
+    checkedKeys,
+    info
+  ) => {
+    const { checked } = info;
+    const nodeId = info.node.id;
 
-    const data = [...treeData];
-
-    let dragObj: ExtendedDataNode;
-    const loop = (
-      data: ExtendedDataNode[],
-      key: string,
-      callback: (
-        node: ExtendedDataNode,
-        i: number,
-        arr: ExtendedDataNode[]
-      ) => void
-    ) => {
-      for (let i = 0; i < data.length; i++) {
-        if (data[i].key === key) {
-          callback(data[i], i, data);
-          return;
-        }
-        if (data[i].children) {
-          loop(data[i].children!, key, callback);
-        }
-      }
-    };
-
-    loop(data, dragKey, (item, index, arr) => {
-      arr.splice(index, 1);
-      dragObj = item;
-    });
-
-    if (!info.dropToGap) {
-      loop(data, dropKey, (item) => {
-        item.children = item.children || [];
-        item.children.push(dragObj!);
-      });
-    } else if (
-      (info.node.children || []).length > 0 &&
-      info.node.expanded &&
-      dropPosition === 1
-      
-    ) {
-      loop(data, dropKey, (item) => {
-        item.children = item.children || [];
-        item.children.unshift(dragObj!);
-      });
+    if (checked) {
+      setSelectedNodes([...selectedNodes, nodeId]);
     } else {
-      let ar: ExtendedDataNode[] = [];
-      let i: number;
-      loop(data, dropKey, (item, index, arr) => {
-        ar = arr;
-        i = index;
-      });
-      if (dropPosition === -1) {
-        ar.splice(i!, 0, dragObj!);
-      } else {
-        ar.splice(i! + 1, 0, dragObj!);
-      }
+      setSelectedNodes(selectedNodes.filter(id => id !== nodeId));
     }
 
-    setTreeData(data);
+    setFormData((prevFormData: any) => ({
+      ...prevFormData,
+      parent_value_id: nodeId,
+    }));
+    console.log(info.node);
   };
 
   useEffect(() => {
@@ -164,11 +117,31 @@ export const TreeValues: React.FC<TreeValuesProps> = ({
     }
   }, [fetchData]);
 
+  useEffect(() => {
+    const updateDisabledNodes = (nodes: ExtendedDataNode[], parentDisabled: boolean = false): ExtendedDataNode[] => {
+      return nodes.map(node => {
+        const isDisabled = parentDisabled || (
+          (selectedNodes.includes('e4ede3b9-62fb-47fe-9ab5-3210f8137a1f') && node.id === '312d9f38-7cdb-48ce-94bb-fedfc504682c') ||
+          (selectedNodes.includes('312d9f38-7cdb-48ce-94bb-fedfc504682c') && node.id === 'e4ede3b9-62fb-47fe-9ab5-3210f8137a1f')
+        );
+  
+        return {
+          ...node,
+          disabled: isDisabled,
+          children: node.children ? updateDisabledNodes(node.children, isDisabled) : undefined,
+        };
+      });
+    };
+  
+    setTreeData(prevTreeData => updateDisabledNodes(prevTreeData));
+  }, [selectedNodes]);
+
   return (
     <Tree
       checkable={checkable}
       treeData={treeData}
       onSelect={onSelect}
+      onCheck={onCheck}
       style={{
         height: "100%",
         maxHeight: 607,
