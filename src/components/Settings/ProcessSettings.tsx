@@ -195,14 +195,6 @@ const ProcessSettings: React.FC = () => {
     }
   }, [handleSelectCalendarChange]);
 
-  const onChange = (e: RadioChangeEvent) => {
-    const selectedValue = e.target.value;
-    if (selectedValue === 1) {
-      setFormData({});
-    }
-    setValue(selectedValue);
-  };
-
   const onChangeTime = (e: RadioChangeEvent) => {
     setValueTime(e.target.value);
   };
@@ -225,7 +217,7 @@ const ProcessSettings: React.FC = () => {
           <Select
             style={formStyle("calc(50% - 8px)", "8px")}
             disabled={value === 1}
-            value={value === 3 ? formData.process : null}
+            value={value === 3 ? null : formData.process}
             onChange={handleSelectProcessChange}
           >
             {processes.map((process) => (
