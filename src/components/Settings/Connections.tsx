@@ -142,7 +142,7 @@ export const Connections: React.FC = () => {
         id: selectedProcess.id,
         cdProcessEntry: selectedProcess.dsProcess,
       });
-  
+
       setSelectedProcessId(selectedProcess.id);
       setFetchData(true);
     }
@@ -201,9 +201,9 @@ export const Connections: React.FC = () => {
     }
   }, [fetchData]);
 
-  const fetchConnection = async (processId: UUID) => {
+  const fetchConnection = async () => {
     try {
-      const response = await GetConnectionsByProcess(processId);
+      const response = await GetAllConnection();
       const connectionData = response.map(
         (connection: {
           id: UUID;
@@ -231,11 +231,10 @@ export const Connections: React.FC = () => {
   };
 
   useEffect(() => {
-    if (fetchData && selectedProcessId) {
-      fetchConnection(selectedProcessId);
-      setFetchData(false);
+    if (fetchData) {
+      fetchConnection();
     }
-  }, [fetchData, selectedProcessId]);
+  }, [fetchData]);
 
   const fetchPeriod = async () => {
     try {
@@ -275,8 +274,6 @@ export const Connections: React.FC = () => {
     }
   }, [fetchData]);
 
- 
-
   const { t } = useTranslation("layout");
   return (
     <>
@@ -301,13 +298,7 @@ export const Connections: React.FC = () => {
             onChange={handleSelectProcessChange}
             value={value === 1 ? null : formData.dsProcess}
             disabled={value === 1}
-          >
-            {process.map((process) => (
-              <Option key={process.id} value={process.id}>
-                {process.dsProcess}
-              </Option>
-            ))}
-          </Select>
+          ></Select>
         </Form.Item>
         <Form.Item style={{ width: "50%" }} label="Processos Saida">
           <Select
@@ -315,13 +306,7 @@ export const Connections: React.FC = () => {
             onChange={handleSelectProcessChange}
             value={value === 1 ? null : formData.dsProcess}
             disabled={value === 1}
-          >
-            {process.map((process) => (
-              <Option key={process.id} value={process.id}>
-                {process.dsProcess}
-              </Option>
-            ))}
-          </Select>
+          ></Select>
         </Form.Item>
       </div>
       <Row gutter={10}>
@@ -329,11 +314,12 @@ export const Connections: React.FC = () => {
           <Card bodyStyle={{ padding: 10 }} title={t("titles.entry")}>
             <Form layout="vertical">
               <Form.Item
-                label={t("labels.process")}
-                style={formStyle("calc(100%)")}
+                label="Processo de entrada"
+                style={formStyle("calc(50% - 5px)", "5px")}
               >
                 <Select
                   disabled={valueEntry === 1}
+                  value={formData.dsProcess}
                   onChange={(value) => handleSelect("cdProcessEntry", value)}
                 >
                   {process.map((process) => (
@@ -342,6 +328,16 @@ export const Connections: React.FC = () => {
                     </Option>
                   ))}
                 </Select>
+              </Form.Item>
+              <Form.Item
+                label="Processo de saida"
+                style={formStyle("calc(50%)")}
+              >
+                <Select
+                  disabled
+                  value={formData.cdProcessEntry}
+                  onChange={(value) => handleSelect("cdProcessExit", value)}
+                ></Select>
               </Form.Item>
 
               <Form.Item
@@ -361,13 +357,7 @@ export const Connections: React.FC = () => {
                   disabled={valueEntry === 1}
                   value={formData.cdPeriod}
                   onChange={(value) => handleSelect("cdPeriod", value)}
-                >
-                  {period.map((period) => (
-                    <Option key={period.id} value={period.id}>
-                      {period.period}
-                    </Option>
-                  ))}
-                </Select>
+                ></Select>
               </Form.Item>
               <Form.Item label={t("labels.type")} style={formStyle("60%")}>
                 <Select
@@ -407,12 +397,27 @@ export const Connections: React.FC = () => {
         <Col span={12}>
           <Card bodyStyle={{ padding: 10 }} title={t("titles.output")}>
             <Form layout="vertical">
-              <Form.Item label={t("labels.process")} style={formStyle("100%")}>
+              <Form.Item
+                label="Processo de entrada"
+                style={formStyle("calc(50% - 5px)", "5px")}
+              >
                 <Select
-                  disabled={valueOutput === 1}
-                  value={formData.cdOutputProcess}
-                  onChange={(value) => handleSelect("cdProcessExit", value)}
+                  disabled
+                  value={formData.cdProcessEntry}
+                  onChange={(value) => handleSelect("cdProcessEntry", value)}
                 >
+                  {process.map((process) => (
+                    <Option key={process.id} value={process.id}>
+                      {process.dsProcess}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+              <Form.Item
+                label="Processo de saida"
+                style={formStyle("calc(50%)")}
+              >
+                <Select>
                   {process.map((process) => (
                     <Option key={process.id} value={process.id}>
                       {process.dsProcess}

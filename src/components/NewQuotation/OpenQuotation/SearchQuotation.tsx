@@ -1,7 +1,6 @@
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
-
 import {
   ColDef,
   GridApi,
@@ -12,7 +11,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Modal, Spin } from "antd";
 import { useTranslation } from "react-i18next";
 import Loading from "components/Loading";
-import axios from "axios";
 
 interface SearchQuotationProps {
   isModalOpen: boolean;
