@@ -4,8 +4,8 @@ import { UUID } from "crypto";
 
 interface FormData {
   id: UUID;
-  cdInputProcess: UUID;
-  cdOutputProcess: UUID;
+  cdProcessEntry: UUID;
+  cdProcessExit: UUID;
   vlTime: number;
   cdPeriod: UUID;
   cdProcessConnectionType: UUID;
@@ -46,11 +46,23 @@ export async function GetDataFromId(id: UUID) {
   }
 }
 
+export async function GetConnectionsByProcess(id: UUID) {
+  try {
+    return await api.get(`/Process/GetConnectionsByProcess/${id}`).then((res) => {
+      console.log(res.data);
+      return res.data;
+    });
+    
+  } catch (error) {
+    console.log("Erro ao salvar:", error);
+  }
+}
+
 export async function Save(formData: FormData) {
   const rec = {
     id: formData.id,
-    cd_Input_Process: formData.cdInputProcess,
-    cd_Output_Process: formData.cdOutputProcess,
+    cd_Process_Entry: formData.cdProcessEntry,
+    cd_Process_Exit: formData.cdProcessExit,
     vl_Time: formData.vlTime,
     cd_Period: formData.cdPeriod,
     cd_Process_Connection_Type: formData.cdProcessConnectionType,
@@ -77,8 +89,8 @@ export async function Update(formData: FormData) {
   try {
     let data = {
       id: formData.id,
-      cd_Input_Process: formData.cdInputProcess,
-      cd_Output_Process: formData.cdOutputProcess,
+      cd_Process_Entry: formData.cdProcessEntry,
+      cd_Process_Exit: formData.cdProcessExit,
       vl_Time: formData.vlTime,
       cd_Period: formData.cdPeriod,
       cd_Process_Connection_Type: formData.cdProcessConnectionType,
