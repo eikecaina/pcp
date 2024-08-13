@@ -27,11 +27,12 @@ export async function GetAllProcess() {
   }
 }
 
-export async function GetDataFromId(id: UUID) {
+export async function GetConnectionsByProcess(id: UUID) {
   try {
-    return await api.get(`/Process/Get/${id}`).then((res) => {
+    return await api.get(`/Process/GetConnectionsByProcess/${id}`).then((res) => {
       return res.data;
     });
+    
   } catch (error) {
     console.log("Erro ao salvar:", error);
   }

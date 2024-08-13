@@ -30,14 +30,15 @@ import { useTranslation } from "react-i18next";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import {
   Delete,
-  GetAllConnection,
   GetAllConnectionType,
-  GetConnectionsByProcess,
   Save,
   Update,
 } from "@/app/api/services/Connection/data";
 import { UUID } from "crypto";
-import { GetAllProcess } from "@/app/api/services/Process/data";
+import {
+  GetAllProcess,
+  GetConnectionsByProcess,
+} from "@/app/api/services/Process/data";
 import { GetAllPeriod } from "@/app/api/services/Period/data";
 
 const { Option } = Select;
@@ -67,6 +68,19 @@ interface Period {
   period: string;
 }
 
+interface Connection {
+  id: UUID;
+  cdProcessEntry: UUID;
+  dsProcessEntry: string;
+  cdProcessExit: UUID;
+  dsProcessExit: string;
+}
+
+interface ProcessListData {
+  process_Input_Connections: Connection[];
+  process_Output_Connections: Connection[];
+}
+
 export const Connections: React.FC = () => {
   const [valueEntry, setValueEntry] = useState(1);
   const [valueOutput, setValueOutput] = useState(1);
@@ -74,12 +88,11 @@ export const Connections: React.FC = () => {
   const [fetchData, setFetchData] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isModalExitOpen, setIsModalExitOpen] = useState(false);
-  const [connections, setConnection] = useState<Connection[]>([]);
   const [process, setProcess] = useState<Process[]>([]);
   const [processConnType, setProcessConType] = useState<ConnectionType[]>([]);
   const [period, setPeriod] = useState<Period[]>([]);
-  const [selectedProcessId, setSelectedProcessId] = useState<any>();
   const [periods, setPeriods] = useState<Period[]>([]);
+  const [processList, setProcessList] = useState<ProcessListData>();
   const [form] = Form.useForm();
   const numEntry: any = 0;
   const numOut: any = 0;
@@ -149,6 +162,7 @@ export const Connections: React.FC = () => {
     const selectedProcess = process.find(
       (process) => process.id === selectedProcessId
     );
+
     if (selectedProcess) {
       setFormData({
         ...formData,
@@ -157,9 +171,45 @@ export const Connections: React.FC = () => {
         cdProcessEntry: selectedProcess.id,
       });
 
-      setSelectedProcessId(selectedProcess.id);
+      const response = await GetConnectionsByProcess(selectedProcessId);
+      //console.log(response);
+
+      const processListData: ProcessListData = {
+        process_Input_Connections: response.process_Input_Connections.map(
+          (connection: {
+            id: string;
+            cd_Process_Entry: string; // Use `string` se UUID for um tipo de string
+            ds_Process_Entry: string;
+            cd_Process_Exit: string;
+            ds_Process_Exit: string | null;
+          }) => ({
+            cdProcessEntry: connection.cd_Process_Entry,
+            dsProcessEntry: connection.ds_Process_Entry,
+            cdProcessExit: connection.cd_Process_Exit,
+            dsProcessExit: connection.ds_Process_Exit,
+          })
+        ),
+
+        process_Output_Connections: response.process_Output_Connections.map(
+          (connection: {
+            id: string;
+            cd_Process_Entry: string; // Use `string` se UUID for um tipo de string
+            ds_Process_Entry: string;
+            cd_Process_Exit: string;
+            ds_Process_Exit: string | null;
+          }) => ({
+            cdProcessEntry: connection.cd_Process_Entry,
+            dsProcessEntry: connection.ds_Process_Entry,
+            cdProcessExit: connection.cd_Process_Exit,
+            dsProcessExit: connection.ds_Process_Exit,
+          })
+        ),
+      };
+
+      setProcessList(processListData);
       setFetchData(true);
     }
+    console.log(processList?.process_Input_Connections);
   };
 
   const handleSelect = (fieldName: string, value: any) => {
@@ -167,7 +217,6 @@ export const Connections: React.FC = () => {
       ...formData,
       [fieldName]: value,
     });
-    console.log(formData);
   };
 
   const handleInputNumberChange = (fieldName: string, value: number) => {
@@ -238,41 +287,6 @@ export const Connections: React.FC = () => {
     }
   }, [fetchData]);
 
-  const fetchConnection = async () => {
-    try {
-      const response = await GetAllConnection();
-      const connectionData = response.map(
-        (connection: {
-          id: UUID;
-          cd_Process_Entry: UUID;
-          cd_Process_Exit: UUID;
-          vl_Time: number;
-          cd_Period: UUID;
-          cd_Process_Connection_Type: UUID;
-          id_Elapsed_Day: boolean;
-        }) => ({
-          id: connection.id,
-          cdProcessEntry: connection.cd_Process_Entry,
-          cdProcessExit: connection.cd_Process_Exit,
-          vlTime: connection.vl_Time,
-          cdPeriod: connection.cd_Period,
-          cdProcessConnectionType: connection.cd_Process_Connection_Type,
-          idElapsedDay: connection.id_Elapsed_Day,
-        })
-      );
-      setConnection(connectionData);
-      console.log(formData);
-    } catch (error) {
-      console.error("Erro ao buscar conexões");
-    }
-  };
-
-  useEffect(() => {
-    if (fetchData) {
-      fetchConnection();
-    }
-  }, [fetchData]);
-
   const fetchPeriod = async () => {
     try {
       const response = await GetAllPeriod();
@@ -311,20 +325,6 @@ export const Connections: React.FC = () => {
     }
   }, [fetchData]);
 
-  const fetchConnectionProcess = async () => {
-    try {
-      const response = await GetConnectionsByProcess(selectedProcessId);
-
-      console.log(response);
-    } catch (error) {
-      console.log("n deu");
-    }
-  };
-
-  useEffect(() => {
-    fetchConnectionProcess();
-  }, [fetchData]);
-
   const { t } = useTranslation("layout");
   return (
     <>
@@ -347,14 +347,29 @@ export const Connections: React.FC = () => {
             style={formStyle("calc(100% - 8px)", "8px")}
             onChange={handleSelectProcessChange}
             value={formData.dsProcess}
-          ></Select>
+          >
+            {processList?.process_Input_Connections.map((process) => (
+              <Option
+                key={process.cdProcessEntry}
+                value={process.cdProcessEntry}
+              >
+                {process.dsProcessEntry}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
         <Form.Item style={{ width: "50%" }} label="Processos Saida">
           <Select
             style={{ width: "100%" }}
             onChange={handleSelectProcessChange}
             value={formData.dsProcess}
-          ></Select>
+          >
+            {processList?.process_Output_Connections.map((process) => (
+              <Option key={process.cdProcessExit} value={process.cdProcessExit}>
+                {process.dsProcessExit}
+              </Option>
+            ))}
+          </Select>
         </Form.Item>
       </div>
       <Row gutter={10}>

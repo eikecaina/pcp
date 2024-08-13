@@ -46,18 +46,6 @@ export async function GetDataFromId(id: UUID) {
   }
 }
 
-export async function GetConnectionsByProcess(id: UUID) {
-  try {
-    return await api.get(`/Process/GetConnectionsByProcess/${id}`).then((res) => {
-      console.log(res.data);
-      return res.data;
-    });
-    
-  } catch (error) {
-    console.log("Erro ao salvar:", error);
-  }
-}
-
 export async function Save(formData: FormData) {
   const rec = {
     id: formData.id,
@@ -74,7 +62,7 @@ export async function Save(formData: FormData) {
   };
 
   try {
-    const response = await api.post(`/Connection`, rec);
+    const response = await api.post(`/ProcessConnection`, rec);
     console.log(rec);
 
     return response.data;
