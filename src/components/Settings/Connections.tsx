@@ -109,6 +109,8 @@ export const Connections: React.FC = () => {
     form.resetFields(["typeOutput"]);
     form.resetFields(["dayOutput"]);
     form.resetFields(["timeOutput"]);
+    form.resetFields(["initialProcess"]);
+    form.resetFields(["entryConn"]);
   };
 
   const success = async () => {
@@ -123,6 +125,17 @@ export const Connections: React.FC = () => {
       message.success("Salvo com sucesso!");
     } catch (error) {
       message.error("Não foi possível salvar");
+    }
+  };
+
+  const update = async () => {
+    try {
+      await Update(formData);
+      clearInputs();
+      setFetchData(true);
+      message.success("Atualizado com sucesso!");
+    } catch (error) {
+      message.error("Não foi possível atualizar");
     }
   };
 
@@ -167,22 +180,22 @@ export const Connections: React.FC = () => {
       setFormData({
         ...formData,
         id: selectedProcess.id,
-        cdProcessExit: selectedProcess.id,
         cdProcessEntry: selectedProcess.id,
+        cdProcessExit: selectedProcess.id,
       });
 
       const response = await GetConnectionsByProcess(selectedProcessId);
-      //console.log(response);
 
       const processListData: ProcessListData = {
         process_Input_Connections: response.process_Input_Connections.map(
           (connection: {
-            id: string;
-            cd_Process_Entry: string; // Use `string` se UUID for um tipo de string
+            id: UUID;
+            cd_Process_Entry: UUID;
             ds_Process_Entry: string;
-            cd_Process_Exit: string;
+            cd_Process_Exit: UUID;
             ds_Process_Exit: string | null;
           }) => ({
+            id: connection.id,
             cdProcessEntry: connection.cd_Process_Entry,
             dsProcessEntry: connection.ds_Process_Entry,
             cdProcessExit: connection.cd_Process_Exit,
@@ -192,12 +205,13 @@ export const Connections: React.FC = () => {
 
         process_Output_Connections: response.process_Output_Connections.map(
           (connection: {
-            id: string;
-            cd_Process_Entry: string; // Use `string` se UUID for um tipo de string
+            id: UUID;
+            cd_Process_Entry: UUID;
             ds_Process_Entry: string;
-            cd_Process_Exit: string;
+            cd_Process_Exit: UUID;
             ds_Process_Exit: string | null;
           }) => ({
+            id: connection.id,
             cdProcessEntry: connection.cd_Process_Entry,
             dsProcessEntry: connection.ds_Process_Entry,
             cdProcessExit: connection.cd_Process_Exit,
@@ -205,7 +219,7 @@ export const Connections: React.FC = () => {
           })
         ),
       };
-
+      console.log(processListData);
       setProcessList(processListData);
       setFetchData(true);
     }
@@ -234,10 +248,6 @@ export const Connections: React.FC = () => {
   const newFunctionEntry = () => {
     setValueEntry(2);
     setValueOutput(1);
-  };
-
-  const editFunctionEntry = () => {
-    setValueEntry(2);
   };
 
   const newFunctionOutput = () => {
@@ -327,13 +337,16 @@ export const Connections: React.FC = () => {
 
   const { t } = useTranslation("layout");
   return (
-    <>
+    <Form form={form} layout="vertical">
       <div style={{ display: "flex", width: "100%" }}>
-        <Form.Item style={{ width: "50%" }} label="Processo">
+        <Form.Item
+          style={{ width: "50%" }}
+          label="Processo"
+          name="initialProcess"
+        >
           <Select
             style={formStyle("calc(100% - 8px)", "8px")}
             onChange={handleSelectProcessChange}
-            value={formData.dsProcess}
           >
             {process.map((process) => (
               <Option key={process.id} value={process.id}>
@@ -342,17 +355,17 @@ export const Connections: React.FC = () => {
             ))}
           </Select>
         </Form.Item>
-        <Form.Item style={{ width: "50%" }} label="Processos Entrada">
+        <Form.Item
+          style={{ width: "50%" }}
+          label="Processos Entrada"
+          name="entryConn"
+        >
           <Select
             style={formStyle("calc(100% - 8px)", "8px")}
-            onChange={handleSelectProcessChange}
-            value={formData.dsProcess}
+            onChange={(value) => handleSelect("id", value)}
           >
             {processList?.process_Input_Connections.map((process) => (
-              <Option
-                key={process.cdProcessEntry}
-                value={process.cdProcessEntry}
-              >
+              <Option key={process.id} value={process.id}>
                 {process.dsProcessEntry}
               </Option>
             ))}
@@ -361,11 +374,10 @@ export const Connections: React.FC = () => {
         <Form.Item style={{ width: "50%" }} label="Processos Saida">
           <Select
             style={{ width: "100%" }}
-            onChange={handleSelectProcessChange}
-            value={formData.dsProcess}
+            onChange={(value) => handleSelect("id", value)}
           >
             {processList?.process_Output_Connections.map((process) => (
-              <Option key={process.cdProcessExit} value={process.cdProcessExit}>
+              <Option key={process.id} value={process.id}>
                 {process.dsProcessExit}
               </Option>
             ))}
@@ -375,209 +387,202 @@ export const Connections: React.FC = () => {
       <Row gutter={10}>
         <Col span={12}>
           <Card bodyStyle={{ padding: 10 }} title={t("titles.entry")}>
-            <Form form={form} layout="vertical">
-              <Form.Item
-                label="Processo de entrada"
-                style={formStyle("calc(50% - 5px)", "5px")}
-                name="inputEntry"
+            <Form.Item
+              label="Processo de entrada"
+              style={formStyle("calc(50% - 5px)", "5px")}
+              name="inputEntry"
+            >
+              <Select
+                disabled={valueEntry === 1}
+                onChange={(value) => handleSelect("cdProcessEntry", value)}
               >
-                <Select
-                  disabled={valueEntry === 1}
-                  onChange={(value) => handleSelect("cdProcessEntry", value)}
-                  value={formData.cdProcessEntry}
-                >
-                  {process.map((process) => (
-                    <Option key={process.id} value={process.id}>
-                      {process.dsProcess}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                label="Processo de saida"
-                style={formStyle("calc(50%)")}
-              >
-                <Select disabled value={formData.id}>
-                  {process.map((process) => (
-                    <Option key={process.id} value={process.id}>
-                      {process.dsProcess}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
+                {process.map((process) => (
+                  <Option key={process.id} value={process.id}>
+                    {process.dsProcess}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="initialProcess"
+              label="Processo de saida"
+              style={formStyle("calc(50%)")}
+            >
+              <Select disabled value={formData.id}>
+                {process.map((process) => (
+                  <Option key={process.id} value={process.id}>
+                    {process.dsProcess}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
 
-              <Form.Item
-                label={t("labels.time")}
-                style={formStyle("calc(20% - 5px)", "5px")}
-                name="timeEntry"
+            <Form.Item
+              label={t("labels.time")}
+              style={formStyle("calc(20% - 5px)", "5px")}
+              name="timeEntry"
+            >
+              <InputNumber
+                disabled={valueEntry === 1}
+                style={{ width: "100%" }}
+                placeholder="0"
+                value={numOut}
+                onChange={(value) => handleInputNumberChange("vlTime", value)}
+              />
+            </Form.Item>
+            <Form.Item
+              name="periodEntry"
+              label=" "
+              style={formStyle("calc(20% - 5px)", "5px")}
+            >
+              <Select
+                disabled={valueEntry === 1}
+                onChange={(value) => handleSelect("cdPeriod", value)}
               >
-                <InputNumber
-                  disabled={valueEntry === 1}
-                  style={{ width: "100%" }}
-                  placeholder="0"
-                  value={numOut}
-                  onChange={(value) => handleInputNumberChange("vlTime", value)}
-                />
-              </Form.Item>
-              <Form.Item
-                name="periodEntry"
-                label=" "
-                style={formStyle("calc(20% - 5px)", "5px")}
+                {periods.map((period) => (
+                  <Option key={period.id} value={period.id}>
+                    {period.period}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="typeEntry"
+              label={t("labels.type")}
+              style={formStyle("60%")}
+            >
+              <Select
+                disabled={valueEntry === 1}
+                onChange={(value) =>
+                  handleSelect("cdProcessConnectionType", value)
+                }
               >
-                <Select
-                  disabled={valueEntry === 1}
-                  onChange={(value) => handleSelect("cdPeriod", value)}
-                >
-                  {periods.map((period) => (
-                    <Option key={period.id} value={period.id}>
-                      {period.period}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                name="typeEntry"
-                label={t("labels.type")}
-                style={formStyle("60%")}
+                {processConnType.map((processConnType) => (
+                  <Option key={processConnType.id} value={processConnType.id}>
+                    {processConnType.dsProcessConnectionType}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name="dayEntry">
+              <Checkbox
+                disabled={valueEntry === 1}
+                onChange={(e) => handleSelect("idElapsedDay", e.target.checked)}
               >
-                <Select
-                  disabled={valueEntry === 1}
-                  onChange={(value) =>
-                    handleSelect("cdProcessConnectionType", value)
-                  }
-                >
-                  {processConnType.map((processConnType) => (
-                    <Option key={processConnType.id} value={processConnType.id}>
-                      {processConnType.dsProcessConnectionType}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item name="dayEntry">
-                <Checkbox
-                  disabled={valueEntry === 1}
-                  onChange={(e) =>
-                    handleSelect("idElapsedDay", e.target.checked)
-                  }
-                >
-                  {t("labels.elapsedDays")}
-                </Checkbox>
-              </Form.Item>
-              <Form.Item>
-                <Button disabled onClick={showModal} type="primary">
-                  {t("labels.rules")}
-                </Button>
-              </Form.Item>
-              <div style={{ margin: 10, float: "right" }}>
-                <NewButton onClick={newFunctionEntry} />
-                <EditButton onClick={editFunctionEntry} />
-                <DeleteButton onClick={confirmDelete} />
-                <SaveButton onClick={success} />
-              </div>
-            </Form>
+                {t("labels.elapsedDays")}
+              </Checkbox>
+            </Form.Item>
+            <Form.Item>
+              <Button disabled onClick={showModal} type="primary">
+                {t("labels.rules")}
+              </Button>
+            </Form.Item>
+            <div style={{ margin: 10, float: "right" }}>
+              <NewButton onClick={newFunctionEntry} />
+              <EditButton onClick={update} />
+              <DeleteButton onClick={confirmDelete} />
+              <SaveButton onClick={success} />
+            </div>
           </Card>
         </Col>
 
         <Col span={12}>
           <Card bodyStyle={{ padding: 10 }} title={t("titles.output")}>
-            <Form form={form} layout="vertical">
-              <Form.Item
-                label="Processo de entrada"
-                style={formStyle("calc(50% - 5px)", "5px")}
+            <Form.Item
+              label="Processo de entrada"
+              style={formStyle("calc(50% - 5px)", "5px")}
+              name="initialProcess"
+            >
+              <Select disabled value={formData.id}>
+                {process.map((process) => (
+                  <Option key={process.id} value={process.id}>
+                    {process.dsProcess}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label="Processo de saida"
+              style={formStyle("calc(50%)")}
+              name="inputOutput"
+            >
+              <Select
+                disabled={valueOutput === 1}
+                onChange={(value) => handleSelect("cdProcessExit", value)}
               >
-                <Select disabled value={formData.id}>
-                  {process.map((process) => (
-                    <Option key={process.id} value={process.id}>
-                      {process.dsProcess}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                label="Processo de saida"
-                style={formStyle("calc(50%)")}
-                name="inputOutput"
+                {process.map((process) => (
+                  <Option key={process.id} value={process.id}>
+                    {process.dsProcess}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              label={t("labels.time")}
+              style={formStyle("calc(20% - 5px)", "5px")}
+              name="timeOutput"
+            >
+              <InputNumber
+                disabled={valueOutput === 1}
+                style={{ width: "100%" }}
+                placeholder="0"
+                value={numEntry}
+                onChange={(value) => handleInputNumberChange("vlTime", value)}
+              />
+            </Form.Item>
+            <Form.Item
+              name="periodOutput"
+              label=" "
+              style={formStyle("calc(20% - 5px)", "5px")}
+            >
+              <Select
+                disabled={valueOutput === 1}
+                onChange={(value) => handleSelect("cdPeriod", value)}
               >
-                <Select
-                  disabled={valueOutput === 1}
-                  onChange={(value) => handleSelect("cdProcessExit", value)}
-                >
-                  {process.map((process) => (
-                    <Option key={process.id} value={process.id}>
-                      {process.dsProcess}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                label={t("labels.time")}
-                style={formStyle("calc(20% - 5px)", "5px")}
-                name="timeOutput"
+                {period.map((period) => (
+                  <Option key={period.id} value={period.id}>
+                    {period.period}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item
+              name="typeOutput"
+              label={t("labels.type")}
+              style={formStyle("60%")}
+            >
+              <Select
+                disabled={valueOutput === 1}
+                onChange={(value) =>
+                  handleSelect("cdProcessConnectionType", value)
+                }
               >
-                <InputNumber
-                  disabled={valueOutput === 1}
-                  style={{ width: "100%" }}
-                  placeholder="0"
-                  value={numEntry}
-                  onChange={(value) => handleInputNumberChange("vlTime", value)}
-                />
-              </Form.Item>
-              <Form.Item
-                name="periodOutput"
-                label=" "
-                style={formStyle("calc(20% - 5px)", "5px")}
+                {processConnType.map((processConnType) => (
+                  <Option key={processConnType.id} value={processConnType.id}>
+                    {processConnType.dsProcessConnectionType}
+                  </Option>
+                ))}
+              </Select>
+            </Form.Item>
+            <Form.Item name="dayOutput">
+              <Checkbox
+                disabled={valueOutput === 1}
+                onChange={(e) => handleSelect("idElapsedDay", e.target.checked)}
               >
-                <Select
-                  disabled={valueOutput === 1}
-                  onChange={(value) => handleSelect("cdPeriod", value)}
-                >
-                  {period.map((period) => (
-                    <Option key={period.id} value={period.id}>
-                      {period.period}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item
-                name="typeOutput"
-                label={t("labels.type")}
-                style={formStyle("60%")}
-              >
-                <Select
-                  disabled={valueOutput === 1}
-                  onChange={(value) =>
-                    handleSelect("cdProcessConnectionType", value)
-                  }
-                >
-                  {processConnType.map((processConnType) => (
-                    <Option key={processConnType.id} value={processConnType.id}>
-                      {processConnType.dsProcessConnectionType}
-                    </Option>
-                  ))}
-                </Select>
-              </Form.Item>
-              <Form.Item name="dayOutput">
-                <Checkbox
-                  disabled={valueOutput === 1}
-                  onChange={(e) =>
-                    handleSelect("idElapsedDay", e.target.checked)
-                  }
-                >
-                  {t("labels.elapsedDays")}
-                </Checkbox>
-              </Form.Item>
-              <Form.Item>
-                <Button disabled onClick={showModal} type="primary">
-                  {t("labels.rules")}
-                </Button>
-              </Form.Item>
-              <div style={{ margin: 10, float: "right" }}>
-                <NewButton onClick={newFunctionOutput} />
-                <EditButton onClick={editFunctionOutput} />
-                <DeleteButton onClick={confirmDelete} />
-                <SaveButton onClick={success} />
-              </div>
-            </Form>
+                {t("labels.elapsedDays")}
+              </Checkbox>
+            </Form.Item>
+            <Form.Item>
+              <Button disabled onClick={showModal} type="primary">
+                {t("labels.rules")}
+              </Button>
+            </Form.Item>
+            <div style={{ margin: 10, float: "right" }}>
+              <NewButton onClick={newFunctionOutput} />
+              <EditButton onClick={update} />
+              <DeleteButton onClick={confirmDelete} />
+              <SaveButton onClick={success} />
+            </div>
           </Card>
         </Col>
       </Row>
@@ -690,6 +695,6 @@ export const Connections: React.FC = () => {
           </Col>
         </Row>
       </Modal>
-    </>
+    </Form>
   );
 };

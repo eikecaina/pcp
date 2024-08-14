@@ -38,7 +38,7 @@ export async function GetAllConnectionType() {
 
 export async function GetDataFromId(id: UUID) {
   try {
-    return await api.get(`/Connection/Get/${id}`).then((res) => {
+    return await api.get(`/ProcessConnection/Get/${id}`).then((res) => {
       return res.data;
     });
   } catch (error) {
@@ -48,7 +48,6 @@ export async function GetDataFromId(id: UUID) {
 
 export async function Save(formData: FormData) {
   const rec = {
-    id: formData.id,
     cd_Process_Entry: formData.cdProcessEntry,
     cd_Process_Exit: formData.cdProcessExit,
     vl_Time: formData.vlTime,
@@ -83,13 +82,13 @@ export async function Update(formData: FormData) {
       cd_Period: formData.cdPeriod,
       cd_Process_Connection_Type: formData.cdProcessConnectionType,
       id_Elapsed_Day: formData.idElapsedDay,
-      dt_Audit_Created: formData.dtAuditCreated,
-      ds_Audit_Created_User: formData.dsAuditCreatedUser,
-      dt_Audit_Modified: formData.dtAuditModified,
-      ds_Audit_Modified_User: formData.dsAuditModifiedUser,
+      dt_Audit_Created: new Date(),
+      ds_Audit_Created_User: "Eike",
+      dt_Audit_Modified: new Date(),
+      ds_Audit_Modified_User: "Eike",
     };
 
-    return await api.put(`/Connection/Update`, data).then((res) => {
+    return await api.put(`/ProcessConnection/Update`, data).then((res) => {
       console.log(data);
       return res.data;
     });
