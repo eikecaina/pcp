@@ -333,7 +333,7 @@ const ResourceSettings: React.FC = () => {
       </Card>
 
       <Modal
-        title="Disponibilidadee"
+        title="Disponibilidade"
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
