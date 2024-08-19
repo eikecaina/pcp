@@ -30,6 +30,10 @@ import {
 } from "@/app/api/services/Resource/data";
 import { UUID } from "crypto";
 import { GetAllCalendar } from "@/app/api/services/Calendar/data";
+import { TreeFamily, TreeProcess } from "../TreeData";
+
+import { DatePicker, Space } from "antd";
+const { RangePicker } = DatePicker;
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -201,7 +205,7 @@ const ResourceSettings: React.FC = () => {
           <Row gutter={20}>
             <Col span={24}>
               <Form.Item
-                style={formStyle("calc(50% - 5px)", "5px")}
+                style={formStyle("calc(33.33% - 5px)", "5px")}
                 label={t("labels.name")}
               >
                 <Input
@@ -212,9 +216,25 @@ const ResourceSettings: React.FC = () => {
                   }
                 />
               </Form.Item>
+              <Form.Item
+                style={formStyle("calc(8.55% - 5px)", "5px")}
+                label="Disponibilidade Diária"
+              >
+                <InputNumber disabled={value === 2} style={{ width: "100%" }} />
+              </Form.Item>
+              <Form.Item style={formStyle("calc(8% - 5px)", "5px")} label=" ">
+                <Select disabled={value === 2} />
+              </Form.Item>
 
               <Form.Item
-                style={formStyle("calc(50%)")}
+                style={formStyle("calc(16.65% - 5px)", "5px")}
+                label=" "
+              >
+                <RangePicker disabled={value === 2} style={{ width: "100%" }} />
+              </Form.Item>
+
+              <Form.Item
+                style={formStyle("calc(33.33%)")}
                 label={t("labels.calendar")}
               >
                 <Select
@@ -230,7 +250,7 @@ const ResourceSettings: React.FC = () => {
                 </Select>
               </Form.Item>
               <Form.Item
-                style={formStyle("calc(100% - 5px)", "5px")}
+                style={formStyle("calc(100%)")}
                 label={t("labels.description")}
               >
                 <TextArea
@@ -252,15 +272,11 @@ const ResourceSettings: React.FC = () => {
                     overflowX: "auto",
                   }}
                 >
-                  <Tree
+                  <TreeFamily
+                    setFormData={setFormData}
+                    fetchData={fetchData}
+                    setFetchData={setFetchData}
                     checkable
-                    style={{
-                      height: "100%",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                    showLine={true}
-                    defaultExpandedKeys={["0-0-0"]}
                   />
                 </div>
               </Card>
@@ -276,15 +292,11 @@ const ResourceSettings: React.FC = () => {
                     overflowX: "auto",
                   }}
                 >
-                  <Tree
+                  <TreeProcess
+                    setFormData={setFormData}
+                    fetchData={fetchData}
+                    setFetchData={setFetchData}
                     checkable
-                    style={{
-                      height: "100%",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                    showLine={true}
-                    defaultExpandedKeys={["0-0-0"]}
                   />
                 </div>
               </Card>

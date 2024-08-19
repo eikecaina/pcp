@@ -103,7 +103,7 @@ export async function Delete(formData: FormData) {
   };
 
   try {
-    return await api.delete(`/Connection/Delete/${rec.id}`).then((res) => {
+    return await api.delete(`ProcessConnection/Delete/${rec.id}`).then((res) => {
       console.log("Deletado com sucesso");
       return res.data;
     });

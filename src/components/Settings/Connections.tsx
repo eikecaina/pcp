@@ -115,11 +115,8 @@ export const Connections: React.FC = () => {
 
   const success = async () => {
     try {
-      //if (formData.id) {
-      //  await Update(formData);
-      // } else {
       await Save(formData);
-      // }
+      
       clearInputs();
       setFetchData(true);
       message.success("Salvo com sucesso!");
@@ -143,7 +140,7 @@ export const Connections: React.FC = () => {
     Modal.confirm({
       title: t("generalButtons.deleteButton"),
       icon: <ExclamationCircleOutlined />,
-      content: "Deseja excluir o Valor?",
+      content: "Deseja excluir o Conexão?",
       okText: t("generalButtons.confirmButton"),
       cancelText: t("generalButtons.cancelButton"),
       async onOk() {
@@ -253,10 +250,6 @@ export const Connections: React.FC = () => {
   const newFunctionOutput = () => {
     setValueOutput(2);
     setValueEntry(1);
-  };
-
-  const editFunctionOutput = () => {
-    setValueOutput(3);
   };
 
   const fetchPeriods = async () => {
