@@ -55,7 +55,7 @@ export async function Save(formData: FormData) {
     id_Allow_Repeat_Certificate: formData.repeatCertificate,
     cd_Audit_Modified_User: "Eike",
     cd_Audit_Created_User: "Eike",
-    parentId: formData.parent_value_id,
+    parent_value_id: formData.parent_value_id,
   };
 
   try {
@@ -83,7 +83,7 @@ export async function Update(formData: any) {
       id_Allow_Repeat_Certificate: formData.repeatCertificate,
       cd_Audit_Modified_User: "Eike",
       cd_Audit_Created_User: "Eike",
-      parentId: formData.parent_value_id,
+      parent_value_id: formData.parent_value_id,
     };
 
     return await api.put(`/Value/Update`, rec).then((res) => {

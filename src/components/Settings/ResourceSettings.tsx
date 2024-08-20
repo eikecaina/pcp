@@ -36,7 +36,7 @@ import {
 } from "@/app/api/services/Resource/data";
 import { UUID } from "crypto";
 import { GetAllCalendar } from "@/app/api/services/Calendar/data";
-import { TreeFamily, TreeProcess } from "../TreeData";
+import { TreeFamily, TreeProcess, TreeProcessFamily } from "../TreeData";
 
 import { DatePicker, Space } from "antd";
 const { RangePicker } = DatePicker;
@@ -293,7 +293,7 @@ const ResourceSettings: React.FC = () => {
                     overflowX: "auto",
                   }}
                 >
-                  <TreeFamily
+                  <TreeProcessFamily
                     setFormData={setFormData}
                     fetchData={fetchData}
                     setFetchData={setFetchData}
