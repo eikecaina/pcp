@@ -44,7 +44,7 @@ export const TreeValues: React.FC<TreeValuesProps> = ({
           if (item.parent_value_id === parentId) {
             const node: ExtendedDataNode = {
               id: item.value_id,
-              title: `${item.characteristic_display}: ${item.value_description}`,
+              title: `${item.characteristic_display}: ${item.ds_Value}`,
               key: `${parentKey}-${nodeCount++}`,
               children: [],
             };
@@ -59,7 +59,7 @@ export const TreeValues: React.FC<TreeValuesProps> = ({
                     );
                     return {
                       id: responseChildren.value_id,
-                      title: `${responseChildren.characteristic_display}: ${responseChildren.value_description}`,
+                      title: `${responseChildren.characteristic_display}: ${responseChildren.ds_Value}`,
                       key: `${parentKey}-${node.key}-${index}`,
                       children: childNodes,
                     };
@@ -170,26 +170,55 @@ export const TreeFamily: React.FC<TreeValuesProps> = ({
 }) => {
   const [treeData, setTreeData] = useState<ExtendedDataNode[]>([]);
 
-  const buildTree = (data: any) => {
-    return data.map((item: { dsFamily: string }, index: number) => ({
-      title: item.dsFamily,
-      key: `0-${index}`,
-    }));
-  };
-
   const fetchTree = async () => {
     try {
-      const response = await GetAllFamily();
-      const treeData = response.map(
-        (family: { id: string; ds_Family: string }) => ({
-          id: family.id,
-          dsFamily: family.ds_Family,
-        })
-      );
+      const response = await GetWithChild();
+      const targetParentId = "49f0343a-60ab-473a-b167-d893f52e6c35";
+      let nodeCount = 0;
+      let parentKey = "0";
 
-      const tree = buildTree(treeData);
+      const buildTreeNode = async (
+        parentId: UUID,
+        parentKey: string
+      ): Promise<ExtendedDataNode[]> => {
+        const treeData: ExtendedDataNode[] = [];
 
-      setTreeData(tree);
+        for (const item of response) {
+          if (item.parent_value_id === parentId) {
+            const node: ExtendedDataNode = {
+              id: item.value_id,
+              title: `${item.characteristic_display}: ${item.ds_Value}`,
+              key: `${parentKey}-${nodeCount++}`,
+              children: [],
+            };
+            if (item.children_value_id && item.children_value_id.length > 0) {
+              const childrenNodes = await Promise.all(
+                item.children_value_id.map(
+                  async (childValueId: UUID, index: number) => {
+                    const responseChildren = await GetDataFromId(childValueId);
+                    const childNodes = await buildTreeNode(
+                      childValueId,
+                      `${parentKey}-${node.key}-${index}`
+                    );
+                    return {
+                      id: responseChildren.value_id,
+                      title: `${responseChildren.characteristic_display}: ${responseChildren.ds_Value}`,
+                      key: `${parentKey}-${node.key}-${index}`,
+                      children: childNodes,
+                    };
+                  }
+                )
+              );
+              node.children = childrenNodes;
+            }
+            treeData.push(node);
+          }
+        }
+        return treeData;
+      };
+      const treeData = await buildTreeNode(targetParentId, parentKey);
+
+      setTreeData(treeData);
       setFetchData(false);
     } catch (error) {
       console.error("Erro ao buscar restritivos:", error);
@@ -202,9 +231,9 @@ export const TreeFamily: React.FC<TreeValuesProps> = ({
   ) => {
     setFormData((prevFormData: any) => ({
       ...prevFormData,
-      parent_value_id: info.node.id,
+      valueId: info.node.id,
     }));
-    console.log(info.node);
+    console.log(info.node.id);
   };
 
   const onCheck: TreeProps<ExtendedDataNode>["onCheck"] = () => {};

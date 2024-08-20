@@ -35,7 +35,7 @@ import {
 import { GetAllGroup } from "@/app/api/services/Group/data";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { GetAllValue } from "@/app/api/services/Value/data";
-import { TreeValues } from "../TreeData";
+import { TreeFamily, TreeValues } from "../TreeData";
 
 const { Option } = Select;
 
@@ -49,6 +49,7 @@ interface Family {
   family: string;
   plan: string;
   group: UUID;
+  valueId: UUID;
 }
 
 const FamilySttings: React.FC = () => {
@@ -124,11 +125,13 @@ const FamilySttings: React.FC = () => {
           ds_Family: string;
           id_Group: UUID;
           ds_Family_Planej: string;
+          valueId: UUID;
         }) => ({
           id: family.id,
           family: family.ds_Family,
           group: family.id_Group,
           plan: family.ds_Family_Planej,
+          valueId: family.valueId
         })
       );
       setFamilys(familyData);
@@ -245,11 +248,10 @@ const FamilySttings: React.FC = () => {
                 title={t("titles.valuesFamily")}
                 bodyStyle={{ height: "300px", overflowX: "auto", padding: 5 }}
               >
-                <TreeValues
+                <TreeFamily
                   setFormData={setFormData}
                   fetchData={fetchData}
                   setFetchData={setFetchData}
-                  checkable
                 />
               </Card>
             </Col>
