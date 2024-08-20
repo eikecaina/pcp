@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   Col,
   Form,
@@ -7,6 +8,7 @@ import {
   Modal,
   Row,
   Select,
+  Tooltip,
   Tree,
   message,
 } from "antd";
@@ -21,7 +23,11 @@ import {
   SelectRadio,
 } from "./ButtonsComponent";
 import { useTranslation } from "react-i18next";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+import {
+  ExclamationCircleOutlined,
+  MinusOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import {
   Delete,
   GetAllResource,
@@ -30,7 +36,7 @@ import {
 } from "@/app/api/services/Resource/data";
 import { UUID } from "crypto";
 import { GetAllCalendar } from "@/app/api/services/Calendar/data";
-import { TreeFamily, TreeProcess } from "../TreeData";
+import { TreeFamily, TreeProcess, TreeProcessFamily } from "../TreeData";
 
 import { DatePicker, Space } from "antd";
 const { RangePicker } = DatePicker;
@@ -60,6 +66,7 @@ const ResourceSettings: React.FC = () => {
   const [fetchData, setFetchData] = useState(true);
   const [resource, setResource] = useState<Resource[]>([]);
   const [calendars, setCalendars] = useState<Calendar[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const clearInputs = () => {
     setFormData({});
@@ -181,6 +188,18 @@ const ResourceSettings: React.FC = () => {
     }
   }, [fetchData]);
 
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
+
   const { t } = useTranslation("layout");
   return (
     <>
@@ -216,21 +235,23 @@ const ResourceSettings: React.FC = () => {
                   }
                 />
               </Form.Item>
-              <Form.Item
-                style={formStyle("calc(8.55% - 5px)", "5px")}
-                label="Disponibilidade Diária"
-              >
-                <InputNumber disabled={value === 2} style={{ width: "100%" }} />
-              </Form.Item>
-              <Form.Item style={formStyle("calc(8% - 5px)", "5px")} label=" ">
-                <Select disabled={value === 2} />
-              </Form.Item>
 
               <Form.Item
-                style={formStyle("calc(16.65% - 5px)", "5px")}
-                label=" "
+                style={{
+                  display: "inline-block",
+                  width: "calc(32.90% - 8px)",
+                  margin: "0 8px",
+                }}
+                label="Disponibilidade Diária"
               >
-                <RangePicker disabled={value === 2} style={{ width: "100%" }} />
+                <Space.Compact style={{ width: "100%" }}>
+                  <Select />
+                  <Tooltip title="Adicionar Item">
+                    <Button onClick={showModal} type="primary">
+                      <PlusOutlined />
+                    </Button>
+                  </Tooltip>
+                </Space.Compact>
               </Form.Item>
 
               <Form.Item
@@ -272,11 +293,10 @@ const ResourceSettings: React.FC = () => {
                     overflowX: "auto",
                   }}
                 >
-                  <TreeFamily
+                  <TreeProcessFamily
                     setFormData={setFormData}
                     fetchData={fetchData}
                     setFetchData={setFetchData}
-                    checkable
                   />
                 </div>
               </Card>
@@ -296,7 +316,6 @@ const ResourceSettings: React.FC = () => {
                     setFormData={setFormData}
                     fetchData={fetchData}
                     setFetchData={setFetchData}
-                    checkable
                   />
                 </div>
               </Card>
@@ -310,6 +329,39 @@ const ResourceSettings: React.FC = () => {
           </div>
         </Form>
       </Card>
+
+      <Modal
+        title="Disponibilidade"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        width={1090}
+        okText={t("generalButtons.openButton")}
+        cancelText={t("generalButtons.cancelButton")}
+      >
+        <Form.Item
+          colon={false}
+          style={formStyle("calc(33.33% - 5px)", "5px")}
+          label="Disponibilidade Diária"
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          colon={false}
+          style={formStyle("calc(33.33% - 5px)", "5px")}
+          label=" "
+        >
+          <Select />
+        </Form.Item>
+
+        <Form.Item
+          colon={false}
+          style={formStyle("calc(33.33% - 5px)", "5px")}
+          label=" "
+        >
+          <RangePicker style={{ width: "100%" }} />
+        </Form.Item>
+      </Modal>
     </>
   );
 };
