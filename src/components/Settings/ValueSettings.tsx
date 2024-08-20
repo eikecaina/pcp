@@ -53,6 +53,7 @@ interface Value {
   repeatApproved: boolean;
   newCertificate: boolean;
   repeatCertificate: boolean;
+  parent_value_id: UUID;
 }
 
 interface Charact {
@@ -74,27 +75,19 @@ const ValueSettings: React.FC = () => {
     setFormData({});
   };
 
-  const success = () => {
-    message
-      .open({
-        type: "loading",
-        content: "Salvando..",
-        duration: 2.5,
-      })
-      .then(async () => {
-        try {
-          if (formData.id) {
-            await Update(formData);
-          } else {
-            await Save(formData);
-            clearInputs();
-          }
-          setFetchData(true);
-          message.success("Salvo com sucesso!", 2.5);
-        } catch (error) {
-          message.error("Não foi possível salvar");
-        }
-      });
+  const success = async () => {
+    try {
+      if (formData.id) {
+        await Update(formData);
+      } else {
+        await Save(formData);
+      }
+      clearInputs();
+      setFetchData(true);
+      message.success("Salvo com sucesso!");
+    } catch (error) {
+      message.error("Não foi possível salvar");
+    }
   };
 
   const confirmDelete = () => {
@@ -134,6 +127,7 @@ const ValueSettings: React.FC = () => {
         repeatApproved: selectedValue.repeatApproved,
         newCertificate: selectedValue.newCertificate,
         repeatCertificate: selectedValue.repeatCertificate,
+        parent_value_id: selectedValue.parent_value_id,
       });
     }
     console.log(formData);
@@ -146,9 +140,11 @@ const ValueSettings: React.FC = () => {
   const fetchValues = async () => {
     try {
       const response = await GetAllValue();
-      const valueData = response.result.map(
+      console.log(response);
+      
+      const valueData = response.map(
         (value: {
-          id: UUID;
+          value_id: UUID;
           ds_Value: string;
           cd_Caract: UUID;
           vl_Position: number;
@@ -156,8 +152,9 @@ const ValueSettings: React.FC = () => {
           id_Allow_Repeat_Approved: boolean;
           id_Allow_New_Certificate: boolean;
           id_Allow_Repeat_Certificate: boolean;
+          parent_value_id: UUID;
         }) => ({
-          id: value.id,
+          id: value.value_id,
           value: value.ds_Value,
           charact: value.cd_Caract,
           position: value.vl_Position,
@@ -165,6 +162,7 @@ const ValueSettings: React.FC = () => {
           repeatApproved: value.id_Allow_Repeat_Approved,
           newCertificate: value.id_Allow_New_Certificate,
           repeatCertificate: value.id_Allow_Repeat_Certificate,
+          parent_value_id: value.parent_value_id,
         })
       );
       setValues(valueData);
@@ -176,7 +174,7 @@ const ValueSettings: React.FC = () => {
   const fetchCharacts = async () => {
     try {
       const response = await GetAllCharact();
-      const charactData = response.result.map(
+      const charactData = response.map(
         (charact: { id: UUID; ds_Caract: string }) => ({
           id: charact.id,
           charact: charact.ds_Caract,

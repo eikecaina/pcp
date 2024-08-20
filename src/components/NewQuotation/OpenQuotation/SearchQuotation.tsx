@@ -1,7 +1,6 @@
 import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
-
 import {
   ColDef,
   GridApi,
@@ -12,7 +11,6 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { Button, Modal, Spin } from "antd";
 import { useTranslation } from "react-i18next";
 import Loading from "components/Loading";
-import axios from "axios";
 
 interface SearchQuotationProps {
   isModalOpen: boolean;
@@ -56,6 +54,8 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
 }) => {
   const { t } = useTranslation("layout");
   const gridRef = useRef<AgGridReact>(null);
+  const [selectedRow, setSelectedRow] = useState<any[] | null>(null);
+  const [loading, setLoading] = useState(false);
   const [columnDefs, setColumnDefs] = useState<ColDef[]>([
     { headerName: t("labels.user"), field: "user" },
     { headerName: t("labels.client"), field: "ds_Customer" },
@@ -66,6 +66,163 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
       field: "dt_Created",
       filter: "agDateColumnFilter",
       filterParams: filterParams,
+    },
+  ]);
+
+  const [rowData, setRowData] = useState([
+    {
+      user: "Maria Silva",
+      ds_Customer: "Tech Innovators",
+      ds_Quotation: 2023001,
+      ds_Ov: 2023456,
+      dt_Created: "23/02/2024",
+    },
+    {
+      user: "João Pereira",
+      ds_Customer: "Alpha Solutions",
+      ds_Quotation: 2023002,
+      ds_Ov: 2023457,
+      dt_Created: "15/03/2024",
+    },
+    {
+      user: "Ana Costa",
+      ds_Customer: "Beta Technologies",
+      ds_Quotation: 2023003,
+      ds_Ov: 2023458,
+      dt_Created: "07/04/2024",
+    },
+    {
+      user: "Carlos Souza",
+      ds_Customer: "Gamma Enterprises",
+      ds_Quotation: 2023004,
+      ds_Ov: 2023459,
+      dt_Created: "21/05/2024",
+    },
+    {
+      user: "Fernanda Lima",
+      ds_Customer: "Delta Corp",
+      ds_Quotation: 2023005,
+      ds_Ov: 2023460,
+      dt_Created: "12/06/2024",
+    },
+    {
+      user: "Pedro Santos",
+      ds_Customer: "Omega Systems",
+      ds_Quotation: 2023006,
+      ds_Ov: 2023461,
+      dt_Created: "03/07/2024",
+    },
+    {
+      user: "Lucas Almeida",
+      ds_Customer: "Epsilon Networks",
+      ds_Quotation: 2023007,
+      ds_Ov: 2023462,
+      dt_Created: "18/08/2024",
+    },
+    {
+      user: "Juliana Oliveira",
+      ds_Customer: "Zeta Solutions",
+      ds_Quotation: 2023008,
+      ds_Ov: 2023463,
+      dt_Created: "05/09/2024",
+    },
+    {
+      user: "Rafael Mendes",
+      ds_Customer: "Theta Technologies",
+      ds_Quotation: 2023009,
+      ds_Ov: 2023464,
+      dt_Created: "14/10/2024",
+    },
+    {
+      user: "Gabriela Rocha",
+      ds_Customer: "Iota Innovations",
+      ds_Quotation: 2023010,
+      ds_Ov: 2023465,
+      dt_Created: "27/11/2024",
+    },
+    {
+      user: "Bruno Teixeira",
+      ds_Customer: "Zeta Solutions",
+      ds_Quotation: 2022001,
+      ds_Ov: 2022456,
+      dt_Created: "15/01/2022",
+    },
+    {
+      user: "Larissa Andrade",
+      ds_Customer: "Alpha Innovators",
+      ds_Quotation: 2022002,
+      ds_Ov: 2022457,
+      dt_Created: "23/02/2022",
+    },
+    {
+      user: "Rodrigo Fernandes",
+      ds_Customer: "Tech Ventures",
+      ds_Quotation: 2022003,
+      ds_Ov: 2022458,
+      dt_Created: "08/03/2022",
+    },
+    {
+      user: "Bianca Cardoso",
+      ds_Customer: "Delta Technologies",
+      ds_Quotation: 2022004,
+      ds_Ov: 2022459,
+      dt_Created: "19/04/2022",
+    },
+    {
+      user: "Eduardo Moreira",
+      ds_Customer: "Epsilon Enterprises",
+      ds_Quotation: 2022005,
+      ds_Ov: 2022460,
+      dt_Created: "05/05/2022",
+    },
+    {
+      user: "Vivian Mendes",
+      ds_Customer: "Gamma Innovations",
+      ds_Quotation: 2022006,
+      ds_Ov: 2022461,
+      dt_Created: "14/06/2022",
+    },
+    {
+      user: "Renato Lima",
+      ds_Customer: "Lambda Corp",
+      ds_Quotation: 2021001,
+      ds_Ov: 2021456,
+      dt_Created: "12/01/2021",
+    },
+    {
+      user: "Helena Martins",
+      ds_Customer: "Mu Technologies",
+      ds_Quotation: 2021002,
+      ds_Ov: 2021457,
+      dt_Created: "21/02/2021",
+    },
+    {
+      user: "Fábio Santos",
+      ds_Customer: "Nu Solutions",
+      ds_Quotation: 2021003,
+      ds_Ov: 2021458,
+      dt_Created: "10/03/2021",
+    },
+    {
+      user: "Juliana Costa",
+      ds_Customer: "Pi Innovators",
+      ds_Quotation: 2021004,
+      ds_Ov: 2021459,
+      dt_Created: "25/04/2021",
+    },
+    {
+      user: "Daniel Souza",
+      ds_Customer: "Sigma Ventures",
+      ds_Quotation: 2021005,
+      ds_Ov: 2021460,
+      dt_Created: "06/05/2021",
+    },
+    {
+      user: "Mariana Rocha",
+      ds_Customer: "Theta Solutions",
+      ds_Quotation: 2021006,
+      ds_Ov: 2021461,
+      dt_Created: "18/06/2021",
     },
   ]);
 
@@ -100,22 +257,6 @@ const SearchQuotation: React.FC<SearchQuotationProps> = ({
   const handleCancel = () => {
     setModalIsOpen(false);
   };
-  const [rowData, setRowData] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-         const response = await axios.get("http://localhost:3000/api/services/valuesMock");
-         setRowData(response.data.result);
-      } catch (error) {
-        console.error("Erro ao obter os dados:", error);
-      }
-    };
-    fetchData();
-  }, [isModalOpen]);
-
-  const [selectedRow, setSelectedRow] = useState<any[] | null>(null);
-  const [loading, setLoading] = useState(false);
 
   const handleOpen = () => {
     setLoading(true);

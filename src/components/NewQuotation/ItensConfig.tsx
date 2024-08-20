@@ -50,12 +50,11 @@ export const GeneralData: React.FC = () => {
   const [selectOptions, setSelectOptions] = useState([{ value: "10" }]);
   const [selectedItem, setSelectedItem] = useState(10);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [showPower, setShowPower] = useState(false);
-  const [showVoltage, setShowVoltage] = useState(false);
-  const [showMaterial, setShowMaterial] = useState(false);
+
   const [isModalConfigOpen, setIsModalConfigOpen] = useState(false);
   const [formValid, setValidForm] = useState(false);
   const [alertInput, setAlertInput] = useState(true);
+  const [fetchData, setFetchData] = useState(true);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -103,16 +102,6 @@ export const GeneralData: React.FC = () => {
 
   const openModalConfig = async () => {
     setIsModalConfigOpen(true);
-  };
-
-  const handleOperetion = (value: string) => {
-    if (value === "Óleo") {
-      setShowPower(true);
-    } else if (value === "0 a 15") {
-      setShowVoltage(true);
-    } else if (value === "15 a 36") {
-      setShowMaterial(true);
-    }
   };
 
   const { t } = useTranslation("layout");
@@ -281,33 +270,12 @@ export const GeneralData: React.FC = () => {
         </Divider>
         <div style={{ overflowY: "auto", padding: 10, maxHeight: "40vh" }}>
           <Form layout="vertical">
-            <Form.Item colon={false} label={t("labels.operation")}>
-              <Select
-                options={[{ value: "Óleo" }, { value: "Seco" }]}
-                onChange={handleOperetion}
-              />
-            </Form.Item>
-            {showPower && (
-              <Form.Item label="Potência em kVA" style={{ width: "100%" }}>
-                <Select
-                  options={[{ value: "0 a 15" }]}
-                  onChange={handleOperetion}
-                />
-              </Form.Item>
-            )}
-            {showVoltage && (
-              <Form.Item label="Classe de tensão">
-                <Select
-                  options={[{ value: "15 a 36" }]}
-                  onChange={handleOperetion}
-                />
-              </Form.Item>
-            )}
-            {showMaterial && (
-              <Form.Item label="Materiais críticos">
-                <Select options={[{ value: "Bucha" }]} />
-              </Form.Item>
-            )}
+            <TreeValues
+              setFormData={setFormData}
+              fetchData={fetchData}
+              setFetchData={setFetchData}
+              checkable
+            />
           </Form>
         </div>
 

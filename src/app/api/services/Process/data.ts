@@ -13,12 +13,8 @@ interface FormData {
   definition: UUID;
   time: number;
   calendar: UUID;
-  dtAuditCreated: Date;
-  cdAuditCreatedUser: string;
-  dtAuditModified: Date;
-  cdAuditModifiedUser: string;
-  dsAuditCreatedUser: string;
-  dsAuditModifiedUser: string;
+  cdAuditModifiedUser: string,
+  dsAuditModifiedUser: string
 }
 
 export async function GetAllProcess() {
@@ -31,11 +27,12 @@ export async function GetAllProcess() {
   }
 }
 
-export async function GetDataFromId(id: UUID) {
+export async function GetConnectionsByProcess(id: UUID) {
   try {
-    return await api.get(`/Process/Get/${id}`).then((res) => {
+    return await api.get(`/Process/GetConnectionsByProcess/${id}`).then((res) => {
       return res.data;
     });
+    
   } catch (error) {
     console.log("Erro ao salvar:", error);
   }
@@ -49,16 +46,12 @@ export async function Save(formData: FormData) {
     id_Quotation: formData.quotation,
     id_Delay: formData.delay,
     id_Factory: formData.factory,
-    cd_Period: uuidv4(),
+    cd_Period: formData.period,
     id_Definition: uuidv4(),
     vl_Time: formData.time,
     cd_Calendar: uuidv4(),
-    dt_Audit_Created: Date.now,
-    cd_Audit_Created_User: '',
-    dt_Audit_Modified: Date.now,
-    cd_Audit_Modified_User: '',
-    ds_Audit_Created_User: '',
-    ds_Audit_Modified_User: ''
+    cdAuditModifiedUser: 'Eike',
+    dsAuditModifiedUser: 'Eike',
   };
 
   try {

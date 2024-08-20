@@ -36,6 +36,7 @@ import {
 import { UUID } from "crypto";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
 import { GetAllCalendar } from "@/app/api/services/Calendar/data";
+import { GetAllPeriod } from "@/app/api/services/Period/data";
 
 const { Option } = Select;
 
@@ -48,11 +49,17 @@ interface Process {
   factory: boolean;
   time: number;
   calendar: UUID;
+  period: UUID;
 }
 
 interface Calendar {
   id: UUID;
   calendar: string;
+}
+
+interface Period {
+  id: UUID;
+  period: string;
 }
 
 const ProcessSettings: React.FC = () => {
@@ -62,40 +69,25 @@ const ProcessSettings: React.FC = () => {
   const [processes, setProcesses] = useState<Process[]>([]);
   const [calendar, setCalendar] = useState<Calendar[]>([]);
   const [valueTime, setValueTime] = useState(1);
+  const [periods, setPeriods] = useState<Period[]>([]);
 
   const clearInputs = () => {
-    setFormData({
-      process: "",
-      description: "",
-      quotation: "",
-      delay: "",
-      factory: "",
-      time: "",
-      calendar: "",
-    });
+    setFormData({});
   };
 
-  const success = () => {
-    message
-      .open({
-        type: "loading",
-        content: "Salvando..",
-        duration: 2.5,
-      })
-      .then(async () => {
-        try {
-          if (formData.id) {
-            await Update(formData);
-          } else {
-            await Save(formData);
-            clearInputs();
-          }
-          setFetchData(true);
-          message.success("Salvo com sucesso!", 2.5);
-        } catch (error) {
-          message.error("Não foi possível salvar");
-        }
-      });
+  const success = async () => {
+    try {
+      if (formData.id) {
+        await Update(formData);
+      } else {
+        await Save(formData);
+      }
+      clearInputs();
+      setFetchData(true);
+      message.success("Salvo com sucesso!");
+    } catch (error) {
+      message.error("Não foi possível salvar");
+    }
   };
 
   const confirmDelete = () => {
@@ -137,6 +129,7 @@ const ProcessSettings: React.FC = () => {
         factory: selectedProcess.factory,
         time: selectedProcess.time,
         calendar: selectedProcess.calendar,
+        period: selectedProcess.period,
       });
     }
     console.log(formData);
@@ -149,7 +142,7 @@ const ProcessSettings: React.FC = () => {
   const fetchProcess = async () => {
     try {
       const response = await GetAllProcess();
-      const processData = response.result.map(
+      const processData = response.map(
         (process: {
           id: UUID;
           ds_Process: string;
@@ -179,7 +172,9 @@ const ProcessSettings: React.FC = () => {
   const fetchCalendars = async (setCalendars: any) => {
     try {
       const response = await GetAllCalendar();
-      const calendarData = response.result.map(
+      console.log(response);
+
+      const calendarData = response.map(
         (calendar: { id: UUID; ds_Calendar: string }) => ({
           id: calendar.id,
           calendar: calendar.ds_Calendar,
@@ -203,14 +198,6 @@ const ProcessSettings: React.FC = () => {
     }
   }, [handleSelectCalendarChange]);
 
-  const onChange = (e: RadioChangeEvent) => {
-    const selectedValue = e.target.value;
-    if (selectedValue === 1) {
-      setFormData({});
-    }
-    setValue(selectedValue);
-  };
-
   const onChangeTime = (e: RadioChangeEvent) => {
     setValueTime(e.target.value);
   };
@@ -224,6 +211,25 @@ const ProcessSettings: React.FC = () => {
     setValue(3);
   };
 
+  const fetchPeriods = async () => {
+    try {
+      const response = await GetAllPeriod();
+      const periodData = response.map(
+        (period: { id: UUID; ds_Period: string }) => ({
+          id: period.id,
+          period: period.ds_Period,
+        })
+      );
+      setPeriods(periodData);
+    } catch (error) {
+      console.error("Erro ao buscar periodos", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPeriods();
+  }, []);
+
   const { t } = useTranslation("layout");
 
   return (
@@ -233,7 +239,7 @@ const ProcessSettings: React.FC = () => {
           <Select
             style={formStyle("calc(50% - 8px)", "8px")}
             disabled={value === 1}
-            value={value === 3 ? formData.process : null}
+            value={value === 3 ? null : formData.process}
             onChange={handleSelectProcessChange}
           >
             {processes.map((process) => (
@@ -330,92 +336,99 @@ const ProcessSettings: React.FC = () => {
               bodyStyle={{ padding: 10, height: "100%" }}
             >
               <Col span={24}>
-                <Radio.Group onChange={onChangeTime} value={valueTime}>
-                  <Radio value={1}>
-                    {t("labels.fixedTime")}
-                    <InputNumber
-                      disabled={value === 2}
-                      style={{ marginLeft: 5, width: "30%" }}
-                      placeholder="0"
-                      value={formData.time}
-                      onChange={(e) => handleInputChange("time", value)}
-                    />
-                    <Select
-                      disabled={value === 2}
-                      style={{ marginLeft: 5, width: "45%" }}
-                      placeholder="Dia"
-                    />
-                  </Radio>
-                  <Radio value={2}>{t("labels.familyTime")}</Radio>
-                  <Radio value={3}>{t("labels.timeCharacteristic")}</Radio>
-                  {valueTime === 2 ? (
+                <Radio.Group
+                  onChange={onChangeTime}
+                  style={{ width: "100%" }}
+                  value={valueTime}
+                >
+                  <Radio value={1}>{t("labels.fixedTime")}</Radio>
+                  <InputNumber
+                    disabled={value === 2}
+                    style={{ marginLeft: 5 }}
+                    placeholder="0"
+                    value={formData.time}
+                    onChange={(e) => handleInputChange("time", e)}
+                  />
+                  <Select
+                    disabled={value === 2}
+                    style={{ margin: "0px 5px 0px 5px", width: "20%" }}
+                    value={formData.period}
+                    onChange={(value) => handleInputChange("period", value)}
+                  >
+                    {periods.map((period) => (
+                      <Option key={period.id} value={period.id}>
+                        {period.period}
+                      </Option>
+                    ))}
+                  </Select>
+                  <Radio disabled value={2}>{t("labels.familyTime")}</Radio>
+                  <Radio disabled value={3}>{t("labels.timeCharacteristic")}</Radio>
+                </Radio.Group>
+                {valueTime === 2 ? (
+                  <>
+                    <Form.Item
+                      style={formStyle("calc(50% - 5px)", "5px")}
+                      label={t("labels.family")}
+                    >
+                      <Select showSearch />
+                    </Form.Item>
+                    <Form.Item
+                      label={t("labels.period")}
+                      style={formStyle("calc(50% - 5px)", "5px")}
+                    >
+                      <Select />
+                    </Form.Item>
+                    <Form.Item
+                      label={t("labels.newApproval")}
+                      style={formStyle("calc(50% - 5px)", "5px")}
+                    >
+                      <InputNumber style={{ width: "100%" }} />
+                    </Form.Item>
+                    <Form.Item
+                      label={t("labels.newCertificate")}
+                      style={formStyle("calc(50% - 5px)", "5px")}
+                    >
+                      <InputNumber style={{ width: "100%" }} />
+                    </Form.Item>
+                    <Form.Item
+                      label={t("labels.repeatApproval")}
+                      style={formStyle("calc(50% - 5px)", "5px")}
+                    >
+                      <InputNumber style={{ width: "100%" }} />
+                    </Form.Item>
+                    <Form.Item
+                      label={t("labels.certificateRepetition")}
+                      style={formStyle("calc(50% - 5px)", "5px")}
+                    >
+                      <InputNumber style={{ width: "100%" }} />
+                    </Form.Item>
+                  </>
+                ) : null}
+                {valueTime === 3 ? (
+                  <Form.Item
+                    label="Características"
+                    style={{ marginTop: 20, marginBottom: 0 }}
+                  >
                     <>
-                      <div style={{ width: "40%", marginTop: 40 }}>
-                        <Form.Item
-                          style={formStyle("calc(50% - 5px)", "5px")}
-                          label={t("labels.family")}
-                        >
-                          <Select showSearch />
-                        </Form.Item>
-                        <Form.Item
-                          label={t("labels.period")}
-                          style={formStyle("calc(50% - 5px)", "5px")}
-                        >
-                          <Select />
-                        </Form.Item>
-                        <Form.Item
-                          label={t("labels.newApproval")}
-                          style={formStyle("calc(50% - 5px)", "5px")}
-                        >
-                          <CustomInputNumber style={{ width: "100%" }} />
-                        </Form.Item>
-                        <Form.Item
-                          label={t("labels.newCertificate")}
-                          style={formStyle("calc(50% - 5px)", "5px")}
-                        >
-                          <CustomInputNumber style={{ width: "100%" }} />
-                        </Form.Item>
-                        <Form.Item
-                          label={t("labels.repeatApproval")}
-                          style={formStyle("calc(50% - 5px)", "5px")}
-                        >
-                          <CustomInputNumber style={{ width: "100%" }} />
-                        </Form.Item>
-                        <Form.Item
-                          label={t("labels.certificateRepetition")}
-                          style={formStyle("calc(50% - 5px)", "5px")}
-                        >
-                          <CustomInputNumber style={{ width: "100%" }} />
-                        </Form.Item>
+                      <div
+                        style={{
+                          height: "250px",
+                          overflowX: "auto",
+                        }}
+                      >
+                        <Tree
+                          style={{
+                            height: "100%",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                          }}
+                          showLine={true}
+                          defaultExpandedKeys={["0-0-0"]}
+                        />
                       </div>
                     </>
-                  ) : null}
-                  {valueTime === 3 ? (
-                    <Form.Item
-                      label="Características"
-                      style={{ marginTop: 20, marginBottom: 0 }}
-                    >
-                      <>
-                        <div
-                          style={{
-                            height: "250px",
-                            overflowX: "auto",
-                          }}
-                        >
-                          <Tree
-                            style={{
-                              height: "100%",
-                              textOverflow: "ellipsis",
-                              whiteSpace: "nowrap",
-                            }}
-                            showLine={true}
-                            defaultExpandedKeys={["0-0-0"]}
-                          />
-                        </div>
-                      </>
-                    </Form.Item>
-                  ) : null}
-                </Radio.Group>
+                  </Form.Item>
+                ) : null}
               </Col>
             </Card>
           </Col>

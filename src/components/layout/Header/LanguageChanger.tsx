@@ -16,7 +16,7 @@ export default function LanguageChanger() {
   const { i18n } = useTranslation();
   const [loading, setLoading] = useState(false);
   const router = useRouter();
-  const currentPathname = usePathname();
+  const currentPathname: any = usePathname();
   const [currentLocale, setCurrentLocale] = useState(currentPathname.slice(1,6));
 
   const ChangeRoute = (newLocale: string, currentPath: string)=>{

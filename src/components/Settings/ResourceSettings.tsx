@@ -1,4 +1,5 @@
 import {
+  Button,
   Card,
   Col,
   Form,
@@ -7,6 +8,7 @@ import {
   Modal,
   Row,
   Select,
+  Tooltip,
   Tree,
   message,
 } from "antd";
@@ -21,7 +23,11 @@ import {
   SelectRadio,
 } from "./ButtonsComponent";
 import { useTranslation } from "react-i18next";
-import { ExclamationCircleOutlined } from "@ant-design/icons";
+import {
+  ExclamationCircleOutlined,
+  MinusOutlined,
+  PlusOutlined,
+} from "@ant-design/icons";
 import {
   Delete,
   GetAllResource,
@@ -30,6 +36,10 @@ import {
 } from "@/app/api/services/Resource/data";
 import { UUID } from "crypto";
 import { GetAllCalendar } from "@/app/api/services/Calendar/data";
+import { TreeFamily, TreeProcess, TreeProcessFamily } from "../TreeData";
+
+import { DatePicker, Space } from "antd";
+const { RangePicker } = DatePicker;
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -56,32 +66,25 @@ const ResourceSettings: React.FC = () => {
   const [fetchData, setFetchData] = useState(true);
   const [resource, setResource] = useState<Resource[]>([]);
   const [calendars, setCalendars] = useState<Calendar[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const clearInputs = () => {
     setFormData({});
   };
 
-  const success = () => {
-    message
-      .open({
-        type: "loading",
-        content: "Salvando..",
-        duration: 2.5,
-      })
-      .then(async () => {
-        try {
-          if (formData.id) {
-            await Update(formData);
-          } else {
-            await Save(formData);
-            clearInputs();
-          }
-          setFetchData(true);
-          message.success("Salvo com sucesso!", 2.5);
-        } catch (error) {
-          message.error("Não foi possível salvar");
-        }
-      });
+  const success = async () => {
+    try {
+      if (formData.id) {
+        await Update(formData);
+      } else {
+        await Save(formData);
+      }
+      clearInputs();
+      setFetchData(true);
+      message.success("Salvo com sucesso!");
+    } catch (error) {
+      message.error("Não foi possível salvar");
+    }
   };
 
   const confirmDelete = () => {
@@ -140,7 +143,7 @@ const ResourceSettings: React.FC = () => {
   const fetchResource = async () => {
     try {
       const response = await GetAllResource();
-      const resourceData = response.result.map(
+      const resourceData = response.map(
         (resource: {
           id: UUID;
           ds_Resource: string;
@@ -163,7 +166,7 @@ const ResourceSettings: React.FC = () => {
   const fetchCalendar = async () => {
     try {
       const response = await GetAllCalendar();
-      const calendarData = response.result.map(
+      const calendarData = response.map(
         (calendar: { id: UUID; ds_Calendar: string }) => ({
           id: calendar.id,
           calendar: calendar.ds_Calendar,
@@ -184,6 +187,18 @@ const ResourceSettings: React.FC = () => {
       fetchCalendar().then(() => setFormData(false));
     }
   }, [fetchData]);
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
 
   const { t } = useTranslation("layout");
   return (
@@ -209,7 +224,7 @@ const ResourceSettings: React.FC = () => {
           <Row gutter={20}>
             <Col span={24}>
               <Form.Item
-                style={formStyle("calc(50% - 5px)", "5px")}
+                style={formStyle("calc(33.33% - 5px)", "5px")}
                 label={t("labels.name")}
               >
                 <Input
@@ -222,7 +237,25 @@ const ResourceSettings: React.FC = () => {
               </Form.Item>
 
               <Form.Item
-                style={formStyle("calc(50%)")}
+                style={{
+                  display: "inline-block",
+                  width: "calc(32.90% - 8px)",
+                  margin: "0 8px",
+                }}
+                label="Disponibilidade Diária"
+              >
+                <Space.Compact style={{ width: "100%" }}>
+                  <Select />
+                  <Tooltip title="Adicionar Item">
+                    <Button onClick={showModal} type="primary">
+                      <PlusOutlined />
+                    </Button>
+                  </Tooltip>
+                </Space.Compact>
+              </Form.Item>
+
+              <Form.Item
+                style={formStyle("calc(33.33%)")}
                 label={t("labels.calendar")}
               >
                 <Select
@@ -238,7 +271,7 @@ const ResourceSettings: React.FC = () => {
                 </Select>
               </Form.Item>
               <Form.Item
-                style={formStyle("calc(100% - 5px)", "5px")}
+                style={formStyle("calc(100%)")}
                 label={t("labels.description")}
               >
                 <TextArea
@@ -260,15 +293,10 @@ const ResourceSettings: React.FC = () => {
                     overflowX: "auto",
                   }}
                 >
-                  <Tree
-                    checkable
-                    style={{
-                      height: "100%",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                    showLine={true}
-                    defaultExpandedKeys={["0-0-0"]}
+                  <TreeProcessFamily
+                    setFormData={setFormData}
+                    fetchData={fetchData}
+                    setFetchData={setFetchData}
                   />
                 </div>
               </Card>
@@ -284,15 +312,10 @@ const ResourceSettings: React.FC = () => {
                     overflowX: "auto",
                   }}
                 >
-                  <Tree
-                    checkable
-                    style={{
-                      height: "100%",
-                      textOverflow: "ellipsis",
-                      whiteSpace: "nowrap",
-                    }}
-                    showLine={true}
-                    defaultExpandedKeys={["0-0-0"]}
+                  <TreeProcess
+                    setFormData={setFormData}
+                    fetchData={fetchData}
+                    setFetchData={setFetchData}
                   />
                 </div>
               </Card>
@@ -306,6 +329,39 @@ const ResourceSettings: React.FC = () => {
           </div>
         </Form>
       </Card>
+
+      <Modal
+        title="Disponibilidade"
+        open={isModalOpen}
+        onOk={handleOk}
+        onCancel={handleCancel}
+        width={1090}
+        okText={t("generalButtons.openButton")}
+        cancelText={t("generalButtons.cancelButton")}
+      >
+        <Form.Item
+          colon={false}
+          style={formStyle("calc(33.33% - 5px)", "5px")}
+          label="Disponibilidade Diária"
+        >
+          <Input />
+        </Form.Item>
+        <Form.Item
+          colon={false}
+          style={formStyle("calc(33.33% - 5px)", "5px")}
+          label=" "
+        >
+          <Select />
+        </Form.Item>
+
+        <Form.Item
+          colon={false}
+          style={formStyle("calc(33.33% - 5px)", "5px")}
+          label=" "
+        >
+          <RangePicker style={{ width: "100%" }} />
+        </Form.Item>
+      </Modal>
     </>
   );
 };

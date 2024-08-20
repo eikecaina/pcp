@@ -25,7 +25,8 @@ const Resume: React.FC = () => {
   return (
     <Card bodyStyle={{ padding: 0 }} style={{ height: "100%" }}>
       <Tabs
-        tabBarStyle={{ padding: "0 0 0 15px" }}
+      
+        tabBarStyle={{ padding: "0 0 0 15px", margin: 0 }}
         tabBarGutter={20}
         type="line"
         style={{

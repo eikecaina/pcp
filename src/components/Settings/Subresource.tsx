@@ -66,27 +66,19 @@ const SubResource: React.FC = () => {
     setFormData({});
   };
 
-  const success = () => {
-    message
-      .open({
-        type: "loading",
-        content: "Salvando..",
-        duration: 2.5,
-      })
-      .then(async () => {
-        try {
-          if (formData.id) {
-            await Update(formData);
-          } else {
-            await Save(formData);
-            clearInputs();
-          }
-          setFetchData(true);
-          message.success("Salvo com sucesso!", 2.5);
-        } catch (error) {
-          message.error("Não foi possível salvar");
-        }
-      });
+  const success = async () => {
+    try {
+      if (formData.id) {
+        await Update(formData);
+      } else {
+        await Save(formData);
+      }
+      clearInputs();
+      setFetchData(true);
+      message.success("Salvo com sucesso!");
+    } catch (error) {
+      message.error("Não foi possível salvar");
+    }
   };
 
   const confirmDelete = () => {
@@ -136,7 +128,7 @@ const SubResource: React.FC = () => {
   const fetchResource = async () => {
     try {
       const response = await GetAllResource();
-      const resourceData = response.result.map(
+      const resourceData = response.map(
         (resource: { id: UUID; ds_Resource: string }) => ({
           id: resource.id,
           dsResource: resource.ds_Resource,
@@ -157,7 +149,7 @@ const SubResource: React.FC = () => {
   const fetchFamily = async () => {
     try {
       const response = await GetAllFamily();
-      const familyData = response.result.map(
+      const familyData = response.map(
         (family: { id: UUID; ds_Family: string }) => ({
           id: family.id,
           dsFamily: family.ds_Family,
@@ -178,7 +170,7 @@ const SubResource: React.FC = () => {
   const fetchPeriods = async () => {
     try {
       const response = await GetAllPeriod();
-      const periodData = response.result.map(
+      const periodData = response.map(
         (period: { id: UUID; ds_Period: string }) => ({
           id: period.id,
           period: period.ds_Period,

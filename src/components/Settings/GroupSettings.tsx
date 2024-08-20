@@ -46,7 +46,7 @@ const GroupSettings: React.FC = () => {
   const [value, setValue] = useState(2);
   const [formData, setFormData] = useState<any>({});
   const [groups, setGroups] = useState<Group[]>([]);
-  const [messageApi, contextHolder] = message.useMessage();
+
   const [fetchData, setFetchData] = useState(true);
 
   const { t } = useTranslation("layout");
@@ -56,27 +56,19 @@ const GroupSettings: React.FC = () => {
     setFormData({});
   };
 
-  const success = () => {
-    message
-      .open({
-        type: "loading",
-        content: "Salvando..",
-        duration: 2.5,
-      })
-      .then(async () => {
-        try {
-          if (formData.id) {
-            await Update(formData);
-          } else {
-            await Save(formData);
-            clearInputs();
-          }
-          setFetchData(true);
-          message.success("Salvo com sucesso!", 2.5);
-        } catch (error) {
-          message.error("Não foi possível salvar");
-        }
-      });
+  const success = async () => {
+    try {
+      if (formData.id) {
+        await Update(formData);
+      } else {
+        await Save(formData);
+      }
+      clearInputs();
+      setFetchData(true);
+      message.success("Salvo com sucesso!");
+    } catch (error) {
+      message.error("Não foi possível salvar");
+    }
   };
 
   const confirmDelete = () => {
@@ -104,7 +96,7 @@ const GroupSettings: React.FC = () => {
       if (fetchData) {
         try {
           const response = await GetAllGroup();
-          const groupData = response.result.map(
+          const groupData = response.map(
             (group: {
               id: any;
               ds_Group: string;
@@ -148,7 +140,6 @@ const GroupSettings: React.FC = () => {
       });
     }
     console.log(formData);
-    
   };
 
   const handleSelectChange = (value: string) => {
@@ -188,8 +179,10 @@ const GroupSettings: React.FC = () => {
             <Col span={24}>
               <Card title={t("titles.definition")} bodyStyle={{ padding: 10 }}>
                 <Form.Item
-                  label={t("labels.name")}
+                  name="group"
+                  rules={[{ required: true, message: "Preencha o Nome" }]}
                   style={formStyle("calc(33.33% - 8px)", "8px")}
+                  label={t("labels.name")}
                 >
                   <Input
                     disabled={value === 2}
@@ -200,6 +193,8 @@ const GroupSettings: React.FC = () => {
                 <Form.Item
                   label={t("labels.state")}
                   style={formStyle("calc(33.33% - 8px)", "8px")}
+                  rules={[{ required: true, message: "Preencha o Estado" }]}
+                  name="state"
                 >
                   <Select
                     disabled={value === 2}
@@ -209,8 +204,10 @@ const GroupSettings: React.FC = () => {
                   />
                 </Form.Item>
                 <Form.Item
+                  name="email"
                   label={t("labels.email")}
                   style={formStyle("calc(33.33%)")}
+                  rules={[{ required: true, message: "Preencha o Email" }]}
                 >
                   <Input
                     disabled={value === 2}
@@ -233,14 +230,13 @@ const GroupSettings: React.FC = () => {
             </Col>
           </Row>
         </div>
+        <div style={{ margin: 10, float: "right" }}>
+          <NewButton onClick={newFunction} />
+          <EditButton onClick={editFunction} />
+          <DeleteButton onClick={confirmDelete} />
+          <SaveButton onClick={success} />
+        </div>
       </Form>
-      <div style={{ margin: 10, float: "right" }}>
-        {contextHolder}
-        <NewButton onClick={newFunction} />
-        <EditButton onClick={editFunction} />
-        <DeleteButton onClick={confirmDelete} />
-        <SaveButton onClick={success} />
-      </div>
     </>
   );
 };
