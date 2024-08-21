@@ -9,6 +9,7 @@ interface FormData {
   group: UUID;
   modifiedUser: string;
   createdUser: string;
+  valueId: UUID;
 }
 
 export async function GetAllFamily() {
@@ -38,11 +39,12 @@ export async function Save(formData: FormData) {
     ds_Family_Planej: formData.plan,
     id_Group: formData.group,
     cd_Audit_Modified_User: "Eike",
-    cd_Audit_Created_User: "Eike"
+    cd_Audit_Created_User: "Eike",
+    valueId: formData.valueId,
   };
 
   try {
-    const response = await api.post(`/Family`, rec);
+    const response = await api.post(`/Family/SaveWithValue/${rec.valueId}`, rec);
     console.log(rec);
 
     return response.data;
