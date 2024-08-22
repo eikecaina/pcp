@@ -166,19 +166,21 @@ export const GeneralData: React.FC = () => {
           <Form layout="vertical">
             <Form.Item
               name="item"
-              required
               style={{
                 display: "inline-block",
                 width: "calc(50% - 8px)",
               }}
-              label={t("labels.client")}
+              label={t("labels.quotation")}
             >
               <Space.Compact style={{ width: "100%" }}>
-                <Input
-                  name="ds_Customer"
-                  value={formData.ds_Customer}
-                  onChange={(e) =>
-                    handleInputChange("ds_Customer", e.target.value)
+                <InputNumber
+                  style={{ width: "100%" }}
+                  name="ds_Quotation"
+                  value={formData.ds_Quotation}
+                  onChange={(value) =>
+                    typeof value === "number"
+                      ? handleInputChange("ds_Quotation", value)
+                      : handleInputChange("ds_Quotation", null)
                   }
                 />
                 <Tooltip title="Abrir Cotação">
@@ -228,17 +230,12 @@ export const GeneralData: React.FC = () => {
 
             <Form.Item
               style={{ display: "inline-block", width: "calc(50% - 8px)" }}
-              label={t("labels.quotation")}
-              required
+              label={t("labels.client")}
             >
               <InputNumber
-                name="ds_Quotation"
-                value={formData.ds_Quotation}
-                onChange={(value) =>
-                  typeof value === "number"
-                    ? handleInputChange("ds_Quotation", value)
-                    : handleInputChange("ds_Quotation", null)
-                }
+                name="ds_Customer"
+                value={formData.ds_Customer}
+                onChange={(value) => handleInputChange("ds_Customer", value)}
                 style={{ width: "100%" }}
               />
             </Form.Item>
@@ -250,7 +247,6 @@ export const GeneralData: React.FC = () => {
                 margin: "0 8px",
               }}
               label={t("labels.salesOrder")}
-              required
             >
               <CustomInputNumber
                 name="ds_Ov"
