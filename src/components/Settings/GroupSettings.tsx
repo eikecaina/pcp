@@ -51,7 +51,10 @@ interface Group {
 
 const GroupSettings: React.FC = () => {
   const [value, setValue] = useState(2);
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<any>({
+    idBlocked: false,
+    idAutoUnlocked: false
+  });
   const [groups, setGroups] = useState<Group[]>([]);
   const [fetchData, setFetchData] = useState(true);
   const { t } = useTranslation("layout");
@@ -273,7 +276,7 @@ const GroupSettings: React.FC = () => {
                       handleInputChange("idBlocked", e.target.checked)
                     }
                   >
-                    Estado
+                    Bloqueado
                   </Checkbox>
                 </Form.Item>
 
