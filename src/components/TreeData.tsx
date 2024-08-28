@@ -93,14 +93,28 @@ export const TreeValues: React.FC<TreeValuesProps> = ({
       setSelectedNodes(selectedNodes.filter((id) => id !== nodeId));
     }
 
-    setFormData((prevFormData: any) => ({
-      ...prevFormData,
-      parent_value_id: nodeId,
-      value_id: nodeId
-    }));
+    setFormData((prevFormData: any) => {
+      let newValueId;
+
+      if (checked) {
+        newValueId = Array.isArray(prevFormData.value_id)
+          ? [...prevFormData.value_id, nodeId]
+          : [prevFormData.value_id, nodeId];
+      } else {
+        newValueId = prevFormData.value_id.filter(
+          (id: string) => id !== nodeId
+        );
+      }
+
+      return {
+        ...prevFormData,
+        parent_value_id: nodeId,
+        value_id: newValueId.filter((id: UUID) => id !== undefined), // Filtra o undefined
+      };
+    });
+
     console.log(info.node);
   };
-
   useEffect(() => {
     if (fetchData) {
       fetchTree();
