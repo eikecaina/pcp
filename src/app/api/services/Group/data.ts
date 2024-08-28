@@ -6,13 +6,12 @@ interface FormData {
   id: UUID;
   group: string;
   desc: string;
-  status: string;
   email: string;
   auditCreated: Date;
   idBlocked: boolean;
-  unlockDateTime: Date;
+  dtAutoUnlocked: Date;
   idAutoUnlocked: boolean;
-  auditModifiedUser: boolean;
+  dsBlocked: string;
 }
 
 export async function GetAllGroup() {
@@ -41,12 +40,12 @@ export async function Save(formData: FormData) {
     ds_Group: formData.group,
     ds_Email: formData.email,
     ds_Desc: formData.desc,
-    ds_Blocked: formData.status,
-    dt_Auto_Unlocked: formData.unlockDateTime,
+    dt_Auto_Unlocked: formData.dtAutoUnlocked,
     cd_Audit_Created_User: new Date().toISOString(),
-    id_Blocked: true,
-    id_Auto_Unlocked: true,
+    id_Blocked: formData.idBlocked,
+    id_Auto_Unlocked: formData.idAutoUnlocked,
     cd_Audit_Modified_User: "Eike",
+    ds_Blocked: formData.dsBlocked,
   };
 
   try {
@@ -68,15 +67,16 @@ export async function Update(formData: FormData) {
       ds_Group: formData.group,
       ds_Email: formData.email,
       ds_Desc: formData.desc,
-      ds_Blocked: formData.status,
-      dt_Auto_Unlocked: formData.unlockDateTime,
+      dt_Auto_Unlocked: formData.dtAutoUnlocked,
       cd_Audit_Created_User: new Date().toISOString(),
-      id_Blocked: true,
-      id_Auto_Unlocked: true,
+      id_Blocked: formData.idBlocked,
+      id_Auto_Unlocked: formData.idAutoUnlocked,
       cd_Audit_Modified_User: "Eike",
+      ds_Blocked: formData.dsBlocked,
     };
 
     return await api.put(`/Group/Update`, data).then((res) => {
+      console.log(formData);
       return res.data;
     });
   } catch (error) {

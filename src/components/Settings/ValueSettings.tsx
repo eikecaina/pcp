@@ -236,6 +236,7 @@ const ValueSettings: React.FC = () => {
               setFormData={setFormData}
               fetchData={fetchData}
               setFetchData={setFetchData}
+              checkable
             />
           </Card>
         </Col>

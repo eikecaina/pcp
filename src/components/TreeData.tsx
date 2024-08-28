@@ -93,13 +93,28 @@ export const TreeValues: React.FC<TreeValuesProps> = ({
       setSelectedNodes(selectedNodes.filter((id) => id !== nodeId));
     }
 
-    setFormData((prevFormData: any) => ({
-      ...prevFormData,
-      parent_value_id: nodeId,
-    }));
+    setFormData((prevFormData: any) => {
+      let newValueId;
+
+      if (checked) {
+        newValueId = Array.isArray(prevFormData.value_id)
+          ? [...prevFormData.value_id, nodeId]
+          : [prevFormData.value_id, nodeId];
+      } else {
+        newValueId = prevFormData.value_id.filter(
+          (id: string) => id !== nodeId
+        );
+      }
+
+      return {
+        ...prevFormData,
+        parent_value_id: nodeId,
+        value_id: newValueId.filter((id: UUID) => id !== undefined), // Filtra o undefined
+      };
+    });
+
     console.log(info.node);
   };
-
   useEffect(() => {
     if (fetchData) {
       fetchTree();
@@ -130,7 +145,6 @@ export const TreeFamily: React.FC<TreeValuesProps> = ({
   checkable,
 }) => {
   const [treeData, setTreeData] = useState<ExtendedDataNode[]>([]);
-  const [selectedNodes, setSelectedNodes] = useState<any[]>([]);
   const rootId: UUID = "49f0343a-60ab-473a-b167-d893f52e6c35";
 
   function buildTree(
@@ -140,6 +154,7 @@ export const TreeFamily: React.FC<TreeValuesProps> = ({
     return nodes
       .filter((node) => node.parent_value_id === parentId)
       .map((node, index) => ({
+        id: node.value_id,
         title: node.characteristic_display + ": " + node.ds_Value,
         key: `${parentId ? parentId : "root"}-${index}`,
         children: buildTree(nodes, node.value_id),
@@ -165,7 +180,7 @@ export const TreeFamily: React.FC<TreeValuesProps> = ({
       ...prevFormData,
       valueId: info.node.id,
     }));
-    console.log(info.node.id);
+    console.log(info.node);
   };
 
   const onCheck: TreeProps<ExtendedDataNode>["onCheck"] = () => {};
