@@ -1,7 +1,5 @@
 import {
   CalendarOutlined,
-  EditOutlined,
-  ExclamationCircleOutlined,
   FileOutlined,
   MenuOutlined,
   MinusOutlined,
@@ -24,63 +22,77 @@ import {
   Tooltip,
   message,
 } from "antd";
-import React, { ChangeEvent, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 
 import ConfigModal from "./ConfigModal/ConfigModal";
 import PcpPage from "components/Pcp/PcpPage";
 import SearchQuotation from "./OpenQuotation/SearchQuotation";
 import { useTranslation } from "react-i18next";
-import CustomInputNumber from "components/CustomInputNumber";
+
 import PlanningMap from "components/MapQuotation/PlanningMap";
 import GeneralSettings from "components/Settings/GeneralSettings";
-import { saveDataForm } from "@/app/api/services/Example/apiUtils";
 
-import dayjs from "dayjs";
 import { TreeValues } from "../TreeData";
 
-interface FormData {
-  ds_Customer: string;
-  ds_Quotation: number | null;
-  ds_Ov: number | null;
-  dt_Created: string;
-  user: string;
-}
-
 export const GeneralData: React.FC = () => {
+  const [fetchData, setFetchData] = useState(true);
   const [selectOptions, setSelectOptions] = useState([{ value: "10" }]);
   const [selectedItem, setSelectedItem] = useState(10);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState<any>({
+    quotation_Item: [
+      {
+        cd_Quotation_Item: 10,
+        config_Item: [{ value: "" }],
+      },
+    ],
+  });
 
   const [isModalConfigOpen, setIsModalConfigOpen] = useState(false);
-  const [formValid, setValidForm] = useState(false);
-  const [alertInput, setAlertInput] = useState(true);
-  const [fetchData, setFetchData] = useState(true);
-
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
+
   const addOptions = () => {
-    const lastOptionValue = parseInt(
-      selectOptions[selectOptions.length - 1].value,
-      10
-    );
-    const newOptions = Array.from({ length: 1 }, (_, index) => ({
-      value: `${lastOptionValue + (index + 1) * 10}`,
+    const lastOptionValue =
+      selectOptions.length > 0
+        ? parseInt(selectOptions[selectOptions.length - 1].value, 10)
+        : 0;
+    const newItemValue = lastOptionValue + 10;
+
+    const newQuotationItem = {
+      cd_Quotation_Item: newItemValue,
+      config_Item: [{ value: formData.value }],
+    };
+
+    setFormData((prevFormData: any) => ({
+      ...prevFormData,
+      quotation_Item: [...prevFormData.quotation_Item, newQuotationItem],
     }));
 
-    setSelectedItem(parseInt(newOptions[newOptions.length - 1].value));
-    setSelectOptions((prevOptions) => [...prevOptions, ...newOptions]);
+    setSelectedItem(newItemValue);
     message.success("Item Criado");
   };
 
-  const confirmDelete = () => {
-    Modal.confirm({
-      title: t("generalButtons.deleteButton"),
-      icon: <ExclamationCircleOutlined />,
-      content: t("labels.deleteDays"),
-      okText: t("generalButtons.confirmButton"),
-      cancelText: t("generalButtons.cancelButton"),
-    });
+  const logJson = () => {
+    const data = {
+      id: "5f94a967-8f26-4531-aaf8-b431f0a679e8",
+      ds_Quotation: formData.ds_Quotation,
+      ds_Customer: formData.ds_Customer,
+      ds_Ov: formData.ds_Ov,
+      quotation_Item: formData.quotation_Item.map(
+        (item: any, index: number) => ({
+          ...item,
+          config_Item: item.config_Item.map(
+            (config: any, configIndex: number) => ({
+              value: formData.value_id,
+            })
+          ),
+        })
+      ),
+    };
+
+    console.log(data);
   };
 
   const removeOption = () => {
@@ -106,39 +118,6 @@ export const GeneralData: React.FC = () => {
 
   const { t } = useTranslation("layout");
 
-  const [formData, setFormData] = useState<FormData>({
-    user: "e-eike",
-    ds_Customer: "",
-    ds_Quotation: null,
-    ds_Ov: null,
-    dt_Created: dayjs().format("DD/MM/YYYY"),
-  });
-
-  const handleSaveClick = async (id: any) => {
-    setValidForm(true);
-    if (
-      formData.ds_Customer !== "" &&
-      formData.ds_Quotation !== null &&
-      formData.ds_Ov !== null
-    ) {
-      const success = await saveDataForm(id, formData);
-      if (success) {
-        setFormData({
-          user: "e-eike",
-          ds_Customer: "",
-          ds_Quotation: null,
-          ds_Ov: null,
-          dt_Created: dayjs().format("DD/MM/YYYY"),
-        });
-        setValidForm(false);
-        message.success("Nova cotação criada");
-      }
-    } else {
-      setAlertInput(false);
-      message.info("Preencha os campos");
-    }
-  };
-
   const handleRowSelect = (selectedData: any[]) => {
     if (selectedData && selectedData.length > 0) {
       const selectedRowData = selectedData[0];
@@ -152,11 +131,8 @@ export const GeneralData: React.FC = () => {
     }
   };
 
-  const handleInputChange = (name: string, value: string | number | null) => {
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+  const handleInputChange = (fieldName: string, value: any) => {
+    setFormData({ ...formData, [fieldName]: value });
   };
 
   return (
@@ -177,11 +153,7 @@ export const GeneralData: React.FC = () => {
                   style={{ width: "100%" }}
                   name="ds_Quotation"
                   value={formData.ds_Quotation}
-                  onChange={(value) =>
-                    typeof value === "number"
-                      ? handleInputChange("ds_Quotation", value)
-                      : handleInputChange("ds_Quotation", null)
-                  }
+                  onChange={(e) => handleInputChange("ds_Quotation", e)}
                 />
                 <Tooltip title="Abrir Cotação">
                   <Button
@@ -216,8 +188,10 @@ export const GeneralData: React.FC = () => {
                 </Tooltip>
 
                 <Select
-                  value={selectedItem}
-                  onChange={(value) => setSelectedItem(value)}
+                  defaultValue={selectedItem}
+                  onChange={(value) =>
+                    handleInputChange("cd_Quotation_Item", value)
+                  }
                   options={selectOptions}
                 />
                 <Tooltip title="Adicionar Item">
@@ -232,10 +206,11 @@ export const GeneralData: React.FC = () => {
               style={{ display: "inline-block", width: "calc(50% - 8px)" }}
               label={t("labels.client")}
             >
-              <InputNumber
+              <Input
                 name="ds_Customer"
-                value={formData.ds_Customer}
-                onChange={(value) => handleInputChange("ds_Customer", value)}
+                onChange={(e) =>
+                  handleInputChange("ds_Customer", e.target.value)
+                }
                 style={{ width: "100%" }}
               />
             </Form.Item>
@@ -248,14 +223,10 @@ export const GeneralData: React.FC = () => {
               }}
               label={t("labels.salesOrder")}
             >
-              <CustomInputNumber
+              <InputNumber
                 name="ds_Ov"
                 value={formData.ds_Ov}
-                onChange={(value) =>
-                  typeof value === "number"
-                    ? handleInputChange("ds_Ov", value)
-                    : handleInputChange("ds_Ov", null)
-                }
+                onChange={(e) => handleInputChange("ds_Ov", e)}
                 style={{ width: "100%" }}
               />
             </Form.Item>
@@ -267,10 +238,10 @@ export const GeneralData: React.FC = () => {
         <div style={{ overflowY: "auto", padding: 10, maxHeight: "40vh" }}>
           <Form layout="vertical">
             <TreeValues
-              setFormData={setFormData}
+              checkable
               fetchData={fetchData}
               setFetchData={setFetchData}
-              checkable
+              setFormData={setFormData}
             />
           </Form>
         </div>
@@ -299,7 +270,7 @@ export const GeneralData: React.FC = () => {
           </Button>
           <Button
             htmlType="submit"
-            onClick={handleSaveClick}
+            onClick={logJson}
             style={{ width: "24%" }}
             type="primary"
           >
@@ -403,3 +374,6 @@ export const FloatMenu: React.FC = () => {
     </>
   );
 };
+function uuidv4() {
+  throw new Error("Function not implemented.");
+}

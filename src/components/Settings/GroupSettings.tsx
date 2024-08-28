@@ -208,8 +208,8 @@ const GroupSettings: React.FC = () => {
         </div>
 
         <div>
-          <Row gutter={10}>
-            <Col span={12}>
+          <Row>
+            <Col span={24} style={{ marginBottom: 20 }}>
               <Card
                 style={{ height: 300 }}
                 title={t("titles.definition")}
@@ -255,7 +255,7 @@ const GroupSettings: React.FC = () => {
                 </Form.Item>
               </Card>
             </Col>
-            <Col span={12}>
+            <Col span={24}>
               <Card
                 style={{ height: 300 }}
                 title="Bloqueio Temporário"
