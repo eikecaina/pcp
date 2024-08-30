@@ -53,7 +53,7 @@ const GroupSettings: React.FC = () => {
   const [value, setValue] = useState(2);
   const [formData, setFormData] = useState<any>({
     idBlocked: false,
-    idAutoUnlocked: false
+    idAutoUnlocked: false,
   });
   const [groups, setGroups] = useState<Group[]>([]);
   const [fetchData, setFetchData] = useState(true);
@@ -105,6 +105,8 @@ const GroupSettings: React.FC = () => {
     if (fetchData) {
       try {
         const response = await GetAllGroup();
+        console.log(response);
+        
         const groupData = response.map(
           (group: {
             id: UUID;

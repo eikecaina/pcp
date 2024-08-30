@@ -1,6 +1,6 @@
 import { Tree } from "antd";
 import { useEffect, useState } from "react";
-import { GetDataFromId, GetWithChild } from "@/app/api/services/Value/data";
+import { GetWithChild } from "@/app/api/services/Value/data";
 import { UUID } from "crypto";
 import type { TreeProps } from "antd";
 import { GetAllFamily } from "@/app/api/services/Family/data";
@@ -109,7 +109,7 @@ export const TreeValues: React.FC<TreeValuesProps> = ({
       return {
         ...prevFormData,
         parent_value_id: nodeId,
-        value_id: newValueId.filter((id: UUID) => id !== undefined), // Filtra o undefined
+        value_id: newValueId.filter((id: UUID) => id !== undefined),
       };
     });
 
