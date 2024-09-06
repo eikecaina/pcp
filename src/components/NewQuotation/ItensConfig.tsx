@@ -22,7 +22,7 @@ import {
   Tooltip,
   message,
 } from "antd";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useState } from "react";
 
 import ConfigModal from "./ConfigModal/ConfigModal";
 import PcpPage from "components/Pcp/PcpPage";
@@ -182,7 +182,7 @@ export const GeneralData: React.FC = () => {
             >
               <Space.Compact style={{ width: "100%" }}>
                 <Tooltip title="Remover Item">
-                  <Button type="primary" onClick={removeOption}>
+                  <Button disabled type="primary" onClick={removeOption}>
                     <MinusOutlined />
                   </Button>
                 </Tooltip>
@@ -195,7 +195,7 @@ export const GeneralData: React.FC = () => {
                   options={selectOptions}
                 />
                 <Tooltip title="Adicionar Item">
-                  <Button type="primary" onClick={addOptions}>
+                  <Button disabled type="primary" onClick={addOptions}>
                     <PlusOutlined />
                   </Button>
                 </Tooltip>

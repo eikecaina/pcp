@@ -37,8 +37,9 @@ import {
 import { UUID } from "crypto";
 import { GetAllCalendar } from "@/app/api/services/Calendar/data";
 import { TreeFamily, TreeProcess, TreeProcessFamily } from "../TreeData";
-
+import dayjs, { Dayjs } from "dayjs";
 import { DatePicker, Space } from "antd";
+import { GetAllPeriod } from "@/app/api/services/Period/data";
 const { RangePicker } = DatePicker;
 
 const { Option } = Select;
@@ -67,6 +68,8 @@ const ResourceSettings: React.FC = () => {
   const [resource, setResource] = useState<Resource[]>([]);
   const [calendars, setCalendars] = useState<Calendar[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [period, setPeriod] = useState<any[]>([]);
+  const [daily, setDaily] = useState<String>();
 
   const clearInputs = () => {
     setFormData({});
@@ -105,6 +108,13 @@ const ResourceSettings: React.FC = () => {
         }
       },
     });
+  };
+
+  const handleDateChange = (date: [any, any]) => {
+    const startDate = date[0].toDate().toLocaleDateString("pt-BR");
+    const endDate = date[1].toDate().toLocaleDateString("pt-BR");
+
+    setFormData({ ...formData, startDate, endDate });
   };
 
   const handleInputChange = (fieldName: string, value: any) => {
@@ -163,6 +173,25 @@ const ResourceSettings: React.FC = () => {
     }
   };
 
+  const fetchPeriods = async () => {
+    try {
+      const response = await GetAllPeriod();
+      const periodData = response.map(
+        (period: { id: UUID; ds_Period: string }) => ({
+          id: period.id,
+          period: period.ds_Period,
+        })
+      );
+      setPeriod(periodData);
+    } catch (error) {
+      console.error("Erro ao buscar periodos", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPeriods();
+  });
+
   const fetchCalendar = async () => {
     try {
       const response = await GetAllCalendar();
@@ -188,18 +217,7 @@ const ResourceSettings: React.FC = () => {
     }
   }, [fetchData]);
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-
+ 
   const { t } = useTranslation("layout");
   return (
     <>
@@ -237,21 +255,39 @@ const ResourceSettings: React.FC = () => {
               </Form.Item>
 
               <Form.Item
-                style={{
-                  display: "inline-block",
-                  width: "calc(32.90% - 8px)",
-                  margin: "0 8px",
-                }}
+                colon={false}
+                style={formStyle("calc(10% - 5px)", "5px")}
                 label="Disponibilidade Diária"
               >
-                <Space.Compact style={{ width: "100%" }}>
-                  <Select />
-                  <Tooltip title="Adicionar Item">
-                    <Button onClick={showModal} type="primary">
-                      <PlusOutlined />
-                    </Button>
-                  </Tooltip>
-                </Space.Compact>
+                <InputNumber
+                   onChange={(e) => handleInputChange("vltTime", e)}
+                  style={{ width: "100%" }}
+                />
+              </Form.Item>
+              <Form.Item
+                colon={false}
+                style={formStyle("calc(10% - 5px)", "5px")}
+                label=" "
+              >
+                <Select onChange={(value) => handleInputChange("periodAvailableId", value)}>
+                  {period.map((period) => (
+                    <Option key={period.id} value={period.id}>
+                      {period.period}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+
+              <Form.Item
+                colon={false}
+                style={formStyle("calc(13.33% - 5px)", "5px")}
+                label=" "
+              >
+                <RangePicker
+                  onChange={handleDateChange}
+                  style={{ width: "100%" }}
+                  format={"DD/MM/YYYY"}
+                />
               </Form.Item>
 
               <Form.Item
@@ -329,39 +365,6 @@ const ResourceSettings: React.FC = () => {
           </div>
         </Form>
       </Card>
-
-      <Modal
-        title="Disponibilidade"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        width={1090}
-        okText={t("generalButtons.openButton")}
-        cancelText={t("generalButtons.cancelButton")}
-      >
-        <Form.Item
-          colon={false}
-          style={formStyle("calc(33.33% - 5px)", "5px")}
-          label="Disponibilidade Diária"
-        >
-          <Input />
-        </Form.Item>
-        <Form.Item
-          colon={false}
-          style={formStyle("calc(33.33% - 5px)", "5px")}
-          label=" "
-        >
-          <Select />
-        </Form.Item>
-
-        <Form.Item
-          colon={false}
-          style={formStyle("calc(33.33% - 5px)", "5px")}
-          label=" "
-        >
-          <RangePicker style={{ width: "100%" }} />
-        </Form.Item>
-      </Modal>
     </>
   );
 };

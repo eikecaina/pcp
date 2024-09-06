@@ -53,6 +53,8 @@ interface Family {
 }
 
 const FamilySttings: React.FC = () => {
+  const [form] = Form.useForm();
+
   const [value, setValue] = useState(2);
   const [formData, setFormData] = useState<any>({});
   const [groups, setGroups] = useState<Group[]>([]);
@@ -60,6 +62,7 @@ const FamilySttings: React.FC = () => {
   const [fetchData, setFetchData] = useState(true);
 
   const clearInputs = () => {
+    form.resetFields();
     setFormData({});
   };
 
@@ -131,7 +134,7 @@ const FamilySttings: React.FC = () => {
           family: family.ds_Family,
           group: family.id_Group,
           plan: family.ds_Family_Planej,
-          valueId: family.valueId
+          valueId: family.valueId,
         })
       );
       setFamilys(familyData);
@@ -157,6 +160,7 @@ const FamilySttings: React.FC = () => {
         plan: selectedFamily.plan,
         family: selectedFamily.family,
       });
+      form.setFieldValue("family", selectedFamily.family);
     }
     console.log(formData);
   };
@@ -167,7 +171,6 @@ const FamilySttings: React.FC = () => {
 
   const handleSelectGroupChange = (group: any) => {
     setFormData({ ...formData, group: group });
-    console.log(group);
   };
 
   const newFunction = () => {
@@ -181,9 +184,9 @@ const FamilySttings: React.FC = () => {
 
   const { t } = useTranslation("layout");
   return (
-    <>
+    <Form form={form} layout="vertical">
       <div style={{ display: "flex" }}>
-        <Form.Item style={{ width: "50%" }} label={t("labels.family")}>
+        <Form.Item name="familys" style={{ width: "50%" }} label={t("labels.family")}>
           <Select
             style={formStyle("calc(50% - 8px)", "8px")}
             value={value === 1 ? null : formData.family}
@@ -198,73 +201,71 @@ const FamilySttings: React.FC = () => {
           </Select>
         </Form.Item>
       </div>
-      <Form layout="vertical">
-        <div>
-          <Row gutter={10}>
-            <Col span={24}>
-              <Card title={t("titles.definition")} bodyStyle={{ padding: 10 }}>
-                <Form.Item
-                  name="name"
-                  rules={[{ required: true, message: "Preencha o Nome" }]}
-                  style={formStyle("calc(33% - 8px", "8px")}
-                  label={t("labels.name")}
-                >
-                  <Input
-                    disabled={value === 2}
-                    value={formData.family}
-                    onChange={(e) =>
-                      handleInputChange("family", e.target.value)
-                    }
-                  />
-                </Form.Item>
-                <Form.Item
-                  style={formStyle("calc(33% - 8px", "8px")}
-                  label={t("labels.planner")}
-                >
-                  <Input
-                    disabled={value === 2}
-                    value={formData.plan}
-                    onChange={(e) => handleInputChange("plan", e.target.value)}
-                  />
-                </Form.Item>
-                <Form.Item style={formStyle("33%")} label={t("labels.group")}>
-                  <Select
-                    disabled={value === 2}
-                    onChange={handleSelectGroupChange}
-                    value={formData.group}
-                  >
-                    {groups.map((group, index) => (
-                      <Option key={group.id || index} value={group.id}>
-                        {group.group}
-                      </Option>
-                    ))}
-                  </Select>
-                </Form.Item>
-              </Card>
-            </Col>
-            <Col span={24}>
-              <Card
-                style={{ marginTop: 10 }}
-                title={t("titles.valuesFamily")}
-                bodyStyle={{ height: "300px", overflowX: "auto", padding: 5 }}
+
+      <div>
+        <Row gutter={10}>
+          <Col span={24}>
+            <Card title={t("titles.definition")} bodyStyle={{ padding: 10 }}>
+              <Form.Item
+                name="family"
+                rules={[{ required: true, message: "Preencha o Nome" }]}
+                style={formStyle("calc(33% - 8px", "8px")}
+                label={t("labels.family")}
               >
-                <TreeFamily
-                  setFormData={setFormData}
-                  fetchData={fetchData}
-                  setFetchData={setFetchData}
+                <Input
+                  name="family"
+                  disabled={value === 2}
+                  value={formData.family}
+                  onChange={(e) => handleInputChange("family", e.target.value)}
                 />
-              </Card>
-            </Col>
-          </Row>
-        </div>
-        <div style={{ margin: 10, float: "right" }}>
-          <NewButton onClick={newFunction} />
-          <EditButton onClick={editFunction} />
-          <DeleteButton onClick={confirmDelete} />
-          <SaveButton onClick={success} />
-        </div>
-      </Form>
-    </>
+              </Form.Item>
+              <Form.Item
+                style={formStyle("calc(33% - 8px", "8px")}
+                label={t("labels.planner")}
+              >
+                <Input
+                  disabled={value === 2}
+                  value={formData.plan}
+                  onChange={(e) => handleInputChange("plan", e.target.value)}
+                />
+              </Form.Item>
+              <Form.Item style={formStyle("33%")} label={t("labels.group")}>
+                <Select
+                  disabled={value === 2}
+                  onChange={handleSelectGroupChange}
+                  value={formData.group}
+                >
+                  {groups.map((group, index) => (
+                    <Option key={group.id || index} value={group.id}>
+                      {group.group}
+                    </Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            </Card>
+          </Col>
+          <Col span={24}>
+            <Card
+              style={{ marginTop: 10 }}
+              title={t("titles.valuesFamily")}
+              bodyStyle={{ height: "300px", overflowX: "auto", padding: 5 }}
+            >
+              <TreeFamily
+                setFormData={setFormData}
+                fetchData={fetchData}
+                setFetchData={setFetchData}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </div>
+      <div style={{ margin: 10, float: "right" }}>
+        <NewButton onClick={newFunction} />
+        <EditButton onClick={editFunction} />
+        <DeleteButton onClick={confirmDelete} />
+        <SaveButton onClick={success} />
+      </div>
+    </Form>
   );
 };
 
