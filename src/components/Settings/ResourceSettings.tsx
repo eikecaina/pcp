@@ -254,8 +254,6 @@ const ResourceSettings: React.FC = () => {
 
   const { t } = useTranslation("layout");
 
-  const startDate = formData.startDate ? dayjs(formData.startDate) : null;
-  const endDate = formData.endDate ? dayjs(formData.endDate) : null;
   return (
     <Form layout="vertical">
       <div style={{ display: "flex" }}>
@@ -326,7 +324,7 @@ const ResourceSettings: React.FC = () => {
               label="Início"
             >
               <DatePicker
-                value={startDate}
+                value={dayjs(formData.resourcesAvailable?.[0].startDate)}
                 style={{ width: "100%" }}
                 format={"DD/MM/YYYY"}
                 onChange={(value) =>
@@ -341,7 +339,7 @@ const ResourceSettings: React.FC = () => {
               label="Final"
             >
               <DatePicker
-                value={endDate}
+                value={dayjs(formData.resourcesAvailable?.[0].endDate)}
                 style={{ width: "100%" }}
                 format={"DD/MM/YYYY"}
                 onChange={(value) =>
