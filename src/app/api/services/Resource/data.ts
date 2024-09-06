@@ -7,17 +7,23 @@ interface FormData {
   dsResource: string;
   dsNotes: string;
   cdCalendar: UUID;
-  dtAuditCreated: Date;
-  cdAuditCreatedUser: string;
-  dtAuditModified: Date;
-  cdAuditModifiedUser: string;
+  cdAuditModified_User: string;
+  processIds: UUID[];
+  familyIds: UUID[];
+  resourceAvailable: {};
+  startDate: Date;
+  endDate: Date;
+  vlTime: number;
+  periodAvailableId: UUID;
 }
 
 export async function GetAllResource() {
   try {
-    return await api.get(`/Resource/GetAll`).then((r) => {
-      return r.data;
-    });
+    return await api
+      .get(`/Resource/GetWithFamilyResourceAndAvailability`)
+      .then((r) => {
+        return r.data;
+      });
   } catch (error) {
     console.log("Erro ao Buscar:", error);
   }
@@ -25,9 +31,11 @@ export async function GetAllResource() {
 
 export async function GetDataFromId(id: UUID) {
   try {
-    return await api.get(`/Resource/Get/${id}`).then((res) => {
-      return res.data;
-    });
+    return await api
+      .get(`/Resource/GetWithFamiliesProcessesAndAvailabilityById/${id}`)
+      .then((res) => {
+        return res.data;
+      });
   } catch (error) {
     console.log("Erro ao salvar:", error);
   }
@@ -40,15 +48,26 @@ export async function Save(formData: FormData) {
       ds_Resource: formData.dsResource,
       ds_Notes: formData.dsNotes,
       cd_Calendar: formData.cdCalendar,
+      processIds: formData.processIds,
+      familyIds: formData.familyIds,
       dt_Audit_Created: new Date(),
-      cd_Audit_Created_User: 'Eike',
+      cd_Audit_Created_User: "Eike",
       dt_Audit_Modified: new Date(),
-      cd_Audit_Modified_User: 'Eike',
+      cd_Audit_Modified_User: "Eike",
+      resourceAvailable: {
+        vlTime: formData.vlTime,
+        startDate: formData.startDate.toISOString(),
+        endDate: formData.endDate.toISOString(),
+        periodAvailableId: formData.periodAvailableId,
+      },
     };
 
-    const response = await api.post(`/Resource`, rec);
     console.log(rec);
-
+    const response = await api.post(
+      `/Resource/SaveWithFamiliesProcessesAndAvailability`,
+      rec
+    );
+    console.log("Resposta da API:", response.data);
     return response.data;
   } catch (error) {
     console.error("Erro ao salvar:", error);
@@ -64,10 +83,12 @@ export async function Update(formData: any) {
       ds_Resource: formData.dsResource,
       ds_Notes: formData.dsNotes,
       cd_Calendar: formData.cdCalendar,
-      dt_Audit_Created: formData.dtAuditCreated,
-      cd_Audit_Created_User: 'Eike',
+      processIds: formData.processIds,
+      familyIds: formData.familyIds,
+      dt_Audit_Created: new Date(),
+      cd_Audit_Created_User: "Eike",
       dt_Audit_Modified: new Date(),
-      cd_Audit_Modified_User: 'Eike',
+      cd_Audit_Modified_User: "Eike",
     };
 
     return await api.put(`/Resource/Update`, data).then((res) => {
