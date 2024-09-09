@@ -2,6 +2,7 @@ import {
   Button,
   Card,
   Col,
+  ConfigProvider,
   Form,
   Input,
   InputNumber,
@@ -38,10 +39,13 @@ import {
 import { UUID } from "crypto";
 import { GetAllCalendar } from "@/app/api/services/Calendar/data";
 import { TreeFamily, TreeProcess, TreeProcessFamily } from "../TreeData";
-import dayjs, { Dayjs } from "dayjs";
 import { DatePicker, Space } from "antd";
 import { GetAllPeriod } from "@/app/api/services/Period/data";
 const { RangePicker } = DatePicker;
+import dayjs from "dayjs";
+import locale from "antd/locale/pt_BR";
+
+import "dayjs/locale/pt-br";
 
 const { Option } = Select;
 const { TextArea } = Input;
@@ -76,7 +80,10 @@ const ResourceSettings: React.FC = () => {
   const [calendars, setCalendars] = useState<Calendar[]>([]);
   const [period, setPeriod] = useState<any[]>([]);
 
+  const [form] = Form.useForm();
+
   const clearInputs = () => {
+    form.resetFields();
     setFormData({});
   };
 
@@ -149,11 +156,29 @@ const ResourceSettings: React.FC = () => {
               periodAvailableId: available.periodAvailableId,
             })) || [],
         });
+        form.setFieldValue("dsResource", selectedResource.dsResource);
+        form.setFieldValue("dsNotes", selectedResource.dsNotes);
+        form.setFieldValue("cdCalendar", selectedResource.cdCalendar);
+        form.setFieldValue(
+          "vlTime",
+          selectedResource.resourcesAvailable[0].vlTime
+        );
+        form.setFieldValue(
+          "periodAvailableId",
+          selectedResource.resourcesAvailable[0]
+        );
+        form.setFieldValue(
+          "startDate",
+          dayjs(selectedResource.resourcesAvailable[0].startDate)
+        );
+        form.setFieldValue(
+          "endDate",
+          dayjs(selectedResource.resourcesAvailable[0].endDate)
+        );
       }
     } catch (error) {
       console.error("Erro ao obter dados do recurso: ", error);
     }
-    console.log(formData);
   };
 
   const newFunction = () => {
@@ -255,7 +280,7 @@ const ResourceSettings: React.FC = () => {
   const { t } = useTranslation("layout");
 
   return (
-    <Form layout="vertical">
+    <Form layout="vertical" form={form}>
       <div style={{ display: "flex" }}>
         <Form.Item style={{ width: "50%" }} label={t("labels.resource")}>
           <Select
@@ -276,10 +301,12 @@ const ResourceSettings: React.FC = () => {
         <Row gutter={20}>
           <Col span={24}>
             <Form.Item
+              name={"dsResource"}
               style={formStyle("calc(22.15% - 5px)", "5px")}
               label={t("labels.name")}
             >
               <Input
+                name={"dsResource"}
                 disabled={value === 2}
                 value={formData.dsResource}
                 onChange={(e) =>
@@ -289,22 +316,27 @@ const ResourceSettings: React.FC = () => {
             </Form.Item>
 
             <Form.Item
+              name={"vlTime"}
               colon={false}
               style={formStyle("calc(16.66 - 5px)", "5px")}
               label="Disponibilidade Diária"
             >
               <InputNumber
+                name={"vlTime"}
+                disabled={value === 2}
                 value={formData.resourcesAvailable?.[0]?.vlTime}
                 onChange={(value) => handleInputChange("vlTime", value)}
                 style={{ width: "100%" }}
               />
             </Form.Item>
+
             <Form.Item
               colon={false}
               style={formStyle("calc(16.66% - 5px)", "5px")}
               label=" "
             >
               <Select
+                disabled={value === 2}
                 value={formData.resourcesAvailable?.[0]?.periodAvailableId}
                 onChange={(value) =>
                   handleInputChange("periodAvailableId", value)
@@ -319,17 +351,17 @@ const ResourceSettings: React.FC = () => {
             </Form.Item>
 
             <Form.Item
+              name="startDate"
               colon={false}
               style={formStyle("calc(16.66% - 5px)", "5px")}
               label="Início"
             >
               <DatePicker
-                value={dayjs(formData.resourcesAvailable?.[0].startDate)}
+                name="startDate"
+                disabled={value === 2}
                 style={{ width: "100%" }}
                 format={"DD/MM/YYYY"}
-                onChange={(value) =>
-                  handleInputChange("startDate", value?.toDate())
-                }
+                onChange={(value) => handleInputChange("startDate", value)}
               />
             </Form.Item>
 
@@ -337,18 +369,19 @@ const ResourceSettings: React.FC = () => {
               colon={false}
               style={formStyle("calc(16.66% - 5px)", "5px")}
               label="Final"
+              name="endDate"
             >
               <DatePicker
-                value={dayjs(formData.resourcesAvailable?.[0].endDate)}
+                name="endDate"
+                disabled={value === 2}
                 style={{ width: "100%" }}
                 format={"DD/MM/YYYY"}
-                onChange={(value) =>
-                  handleInputChange("endDate", value?.toDate())
-                }
+                onChange={(value) => handleInputChange("endDate", value)}
               />
             </Form.Item>
 
             <Form.Item
+              name={"cdCalendar"}
               style={formStyle("calc(17%)")}
               label={t("labels.calendar")}
             >

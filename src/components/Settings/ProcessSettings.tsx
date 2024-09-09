@@ -94,7 +94,7 @@ const ProcessSettings: React.FC = () => {
     Modal.confirm({
       title: t("generalButtons.deleteButton"),
       icon: <ExclamationCircleOutlined />,
-      content: "Deseja excluir o Valor?",
+      content: "Deseja excluir o Processo?",
       okText: t("generalButtons.confirmButton"),
       cancelText: t("generalButtons.cancelButton"),
       async onOk() {
@@ -165,7 +165,7 @@ const ProcessSettings: React.FC = () => {
       );
       setProcesses(processData);
     } catch (error) {
-      console.error("Erro ao buscar valores:", error);
+      console.error("Erro ao buscar processos:", error);
     }
   };
 
