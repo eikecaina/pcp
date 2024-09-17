@@ -10,6 +10,8 @@ import { TreeNode } from "antd/es/tree-select";
 interface ExtendedDataNode extends TreeDataNode {
   id?: UUID;
   disabled?: boolean;
+  familyId?: UUID;
+  processId?: UUID;
 }
 
 interface TreeNode {
@@ -17,8 +19,9 @@ interface TreeNode {
   characteristic_id: UUID;
   children_value_id: UUID[];
   parent_value_id: UUID | null;
-  ds_Value: string;
-  value_id: UUID;
+  ds_Value?: string;
+  value_id?: UUID;
+  familyId?: UUID;
 }
 
 interface TreeDataNode {
@@ -32,6 +35,7 @@ interface TreeValuesProps {
   fetchData: boolean;
   setFetchData: React.Dispatch<React.SetStateAction<boolean>>;
   checkable?: boolean;
+  checkedKeys?: any;
 }
 
 export const TreeValues: React.FC<TreeValuesProps> = ({
@@ -213,23 +217,24 @@ export const TreeProcess: React.FC<TreeValuesProps> = ({
   fetchData,
   setFetchData,
   checkable,
+  checkedKeys,
 }) => {
   const [treeData, setTreeData] = useState<ExtendedDataNode[]>([]);
+  const [selectedNodes, setSelectedNodes] = useState<any[]>([]);
 
   const buildTree = (data: any) => {
-    return data.map((item: { dsProcess: string }, index: number) => ({
+    return data.map((item: { dsProcess: string; id: UUID }, index: number) => ({
+      processId: item.id,
       title: item.dsProcess,
-      key: `0-${index}`,
+      key: item.id,
     }));
   };
 
   const fetchTree = async () => {
     try {
       const response = await GetAllProcess();
-      console.log(response);
-
       const treeData = response.map(
-        (process: { id: string; ds_Process: string }) => ({
+        (process: { id: UUID; ds_Process: string }) => ({
           id: process.id,
           dsProcess: process.ds_Process,
         })
@@ -240,7 +245,7 @@ export const TreeProcess: React.FC<TreeValuesProps> = ({
       setTreeData(tree);
       setFetchData(false);
     } catch (error) {
-      console.error("Erro ao buscar restritivos:", error);
+      console.error("Erro ao buscar processos:", error);
     }
   };
 
@@ -255,7 +260,37 @@ export const TreeProcess: React.FC<TreeValuesProps> = ({
     console.log(info.node);
   };
 
-  const onCheck: TreeProps<ExtendedDataNode>["onCheck"] = () => {};
+  const onCheck: TreeProps<ExtendedDataNode>["onCheck"] = (
+    checkedKeys,
+    info
+  ) => {
+    const { checked } = info;
+    const nodeId = info.node.processId;
+
+    if (checked) {
+      setSelectedNodes([...selectedNodes, nodeId]);
+    } else {
+      setSelectedNodes(selectedNodes.filter((id) => id !== nodeId));
+    }
+
+    setFormData((prevFormData: any) => {
+      let newProcessIds;
+
+      if (checked) {
+        newProcessIds = Array.isArray(prevFormData.processIds)
+          ? [...prevFormData.processIds, nodeId]
+          : [nodeId];
+      } else {
+        newProcessIds = prevFormData.processIds.filter(
+          (id: UUID) => id !== nodeId
+        );
+      }
+      return {
+        ...prevFormData,
+        processIds: newProcessIds,
+      };
+    });
+  };
 
   useEffect(() => {
     if (fetchData) {
@@ -265,6 +300,7 @@ export const TreeProcess: React.FC<TreeValuesProps> = ({
 
   return (
     <Tree
+      checkedKeys={checkedKeys}
       checkable={checkable}
       treeData={treeData}
       onSelect={onSelect}
@@ -285,13 +321,16 @@ export const TreeProcessFamily: React.FC<TreeValuesProps> = ({
   fetchData,
   setFetchData,
   checkable,
+  checkedKeys,
 }) => {
   const [treeData, setTreeData] = useState<ExtendedDataNode[]>([]);
+  const [selectedNodes, setSelectedNodes] = useState<any[]>([]);
 
   const buildTree = (data: any) => {
-    return data.map((item: { dsFamily: string }, index: number) => ({
+    return data.map((item: { dsFamily: string; id: UUID }, index: number) => ({
+      familyId: item.id,
       title: item.dsFamily,
-      key: `0-${index}`,
+      key: item.id,
     }));
   };
 
@@ -327,7 +366,38 @@ export const TreeProcessFamily: React.FC<TreeValuesProps> = ({
     console.log(info.node);
   };
 
-  const onCheck: TreeProps<ExtendedDataNode>["onCheck"] = () => {};
+  const onCheck: TreeProps<ExtendedDataNode>["onCheck"] = (
+    checkedKeys,
+    info
+  ) => {
+    const { checked } = info;
+    const nodeId = info.node.familyId;
+
+    if (checked) {
+      setSelectedNodes([...selectedNodes, nodeId]);
+    } else {
+      setSelectedNodes(selectedNodes.filter((id) => id !== nodeId));
+    }
+
+    setFormData((prevFormData: any) => {
+      let newFamilyIds;
+
+      if (checked) {
+        newFamilyIds = Array.isArray(prevFormData.familyIds)
+          ? [...prevFormData.familyIds, nodeId]
+          : [nodeId];
+      } else {
+        newFamilyIds = prevFormData.familyIds.filter(
+          (id: UUID) => id !== nodeId
+        );
+      }
+      console.log(info.node);
+      return {
+        ...prevFormData,
+        familyIds: newFamilyIds,
+      };
+    });
+  };
 
   useEffect(() => {
     if (fetchData) {
@@ -341,6 +411,7 @@ export const TreeProcessFamily: React.FC<TreeValuesProps> = ({
       treeData={treeData}
       onSelect={onSelect}
       onCheck={onCheck}
+      checkedKeys={checkedKeys}
       style={{
         height: "100%",
         maxHeight: 607,

@@ -105,7 +105,7 @@ const GroupSettings: React.FC = () => {
     if (fetchData) {
       try {
         const response = await GetAllGroup();
-        console.log(response);
+       
         
         const groupData = response.map(
           (group: {
@@ -172,7 +172,7 @@ const GroupSettings: React.FC = () => {
       form.setFieldValue("idAutoUnlocked", selectedGroup.idAutoUnlocked);
       form.setFieldValue("dtAutoUnlocked", dayjs(isoDate));
     }
-    console.log(formData);
+   
   };
 
   const newFunction = () => {

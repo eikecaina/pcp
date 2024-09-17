@@ -186,7 +186,11 @@ const FamilySttings: React.FC = () => {
   return (
     <Form form={form} layout="vertical">
       <div style={{ display: "flex" }}>
-        <Form.Item name="familys" style={{ width: "50%" }} label={t("labels.family")}>
+        <Form.Item
+          name="familys"
+          style={{ width: "50%" }}
+          label={t("labels.family")}
+        >
           <Select
             style={formStyle("calc(50% - 8px)", "8px")}
             value={value === 1 ? null : formData.family}
@@ -251,6 +255,7 @@ const FamilySttings: React.FC = () => {
               bodyStyle={{ height: "300px", overflowX: "auto", padding: 5 }}
             >
               <TreeFamily
+                checkable={true}
                 setFormData={setFormData}
                 fetchData={fetchData}
                 setFetchData={setFetchData}
