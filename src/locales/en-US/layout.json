@@ -63,7 +63,8 @@
     "resourcesButton": "Resources",
     "subResourcesButton": "Sub-Resource",
     "criticalMaterialsButton": "Critical Materials",
-    "calendarsButton": "Calendars"
+    "calendarsButton": "Calendars",
+    "recalc": "Recalculate"
   },
   "titles": {
     "itensConfig": "Item Setting",

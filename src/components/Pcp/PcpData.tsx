@@ -297,7 +297,7 @@ const PcpData: React.FC = () => {
                       }}
                       menu={{ items, onClick: onMenuClick }}
                     >
-                      {t("generalButtons.recalcButton")}
+                      {t("generalButtons.recalc")}
                     </Dropdown.Button>
                   </div>
                 </div>

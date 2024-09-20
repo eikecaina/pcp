@@ -29,6 +29,16 @@ export async function GetAllResource() {
   }
 }
 
+export async function GetByFamilyId(id: UUID) {
+  try {
+    return await api.get(`/Resource/GetByFamilyId/${id}`).then((res) => {
+      return res.data;
+    });
+  } catch (error) {
+    console.log("Erro ao buscar recursos");
+  }
+}
+
 export async function GetDataFromId(id: UUID) {
   try {
     return await api

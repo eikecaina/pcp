@@ -1,5 +1,5 @@
 import { Button, Card, Col, DatePicker, Form, Row, Select } from "antd";
-import { BarGraph } from "./PcpGraphs";
+
 
 import { useTranslation } from "react-i18next";
 import { FilterFilled } from "@ant-design/icons";
@@ -69,7 +69,7 @@ const PcpResources: React.FC = () => {
         </Form>
 
           <Col style={{ height: 580, marginTop: 100 }}>
-            <BarGraph />
+        
           </Col>
         
       </Col>

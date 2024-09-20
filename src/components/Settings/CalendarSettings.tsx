@@ -27,7 +27,7 @@ import {
   Delete,
   GetAllCalendar,
   GetCalendarWithDays,
-  GetDataFromId,
+  GetDataDaysFromId,
   Save,
   Update,
 } from "@/app/api/services/Calendar/data";
@@ -201,7 +201,7 @@ export const CalendarSettings = () => {
 
   const handleSelectCalendarChange = async (selectedCalendarId: UUID) => {
     try {
-      const selectedCalendar = await GetDataFromId(selectedCalendarId);
+      const selectedCalendar = await GetDataDaysFromId(selectedCalendarId);
       if (selectedCalendar) {
         setFormData({
           ...formData,
