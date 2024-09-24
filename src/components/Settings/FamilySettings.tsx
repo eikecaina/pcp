@@ -34,8 +34,7 @@ import {
 } from "@/app/api/services/Family/data";
 import { GetAllGroup } from "@/app/api/services/Group/data";
 import { ExclamationCircleOutlined } from "@ant-design/icons";
-import { GetAllValue } from "@/app/api/services/Value/data";
-import { TreeFamily, TreeValues } from "../TreeData";
+import { TreeFamily } from "../TreeData";
 
 const { Option } = Select;
 
@@ -49,7 +48,7 @@ interface Family {
   family: string;
   plan: string;
   group: UUID;
-  valueId: UUID;
+  values_ids: UUID[];
 }
 
 const FamilySttings: React.FC = () => {
@@ -122,26 +121,30 @@ const FamilySttings: React.FC = () => {
   const fetchFamilys = async () => {
     try {
       const response = await GetAllFamily();
+      console.log(response);
+
       const familyData = response.map(
         (family: {
           id: UUID;
           ds_Family: string;
           id_Group: UUID;
           ds_Family_Planej: string;
-          valueId: UUID;
+          value_ids: UUID[];
         }) => ({
           id: family.id,
           family: family.ds_Family,
           group: family.id_Group,
           plan: family.ds_Family_Planej,
-          valueId: family.valueId,
+          values_ids: family.value_ids,
         })
       );
       setFamilys(familyData);
+      console.log(familyData);
     } catch (error) {
       console.error("Erro ao buscar famílias:", error);
     }
   };
+
   useEffect(() => {
     if (fetchData) {
       fetchFamilys().then(() => setFetchData(false));
@@ -159,6 +162,7 @@ const FamilySttings: React.FC = () => {
         group: selectedFamily.group,
         plan: selectedFamily.plan,
         family: selectedFamily.family,
+        value_ids: selectedFamily.values_ids,
       });
       form.setFieldValue("family", selectedFamily.family);
     }
@@ -255,6 +259,7 @@ const FamilySttings: React.FC = () => {
               bodyStyle={{ height: "300px", overflowX: "auto", padding: 5 }}
             >
               <TreeFamily
+                checkedKeys={formData.value_ids}
                 checkable={true}
                 setFormData={setFormData}
                 fetchData={fetchData}

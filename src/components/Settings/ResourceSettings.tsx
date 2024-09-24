@@ -131,7 +131,7 @@ const ResourceSettings: React.FC = () => {
     setFormData({ ...formData, cdCalendar: cdCalendar });
   };
 
-  const handleSelectResourceChange = async (selectedResourceId: any) => {
+  const handleSelectResourceChange = (selectedResourceId: any) => {
     try {
       const selectedResource = resource.find(
         (resource) => resource.id === selectedResourceId

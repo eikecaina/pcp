@@ -1,6 +1,6 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import api from "../api";
-import { UUID } from 'crypto';
+import { UUID } from "crypto";
 
 interface FormData {
   id: UUID;
@@ -9,12 +9,12 @@ interface FormData {
   group: UUID;
   modifiedUser: string;
   createdUser: string;
-  valueId: UUID;
+  values: UUID[];
 }
 
 export async function GetAllFamily() {
   try {
-    return await api.get(`/Family/GetAll`).then((r) => {
+    return await api.get(`/Family/values`).then((r) => {
       return r.data;
     });
   } catch (error) {
@@ -40,11 +40,11 @@ export async function Save(formData: FormData) {
     id_Group: formData.group,
     cd_Audit_Modified_User: "Eike",
     cd_Audit_Created_User: "Eike",
-    valueId: formData.valueId,
+    values: formData.values,
   };
 
   try {
-    const response = await api.post(`/Family/SaveWithValue/${rec.valueId}`, rec);
+    const response = await api.post(`/Family/SaveWithValues/`, rec);
     console.log(rec);
 
     return response.data;
@@ -55,7 +55,7 @@ export async function Save(formData: FormData) {
   }
 }
 
-export async function Update( formData: any) {
+export async function Update(formData: any) {
   try {
     let data = {
       id: formData.id,
@@ -63,11 +63,10 @@ export async function Update( formData: any) {
       ds_Family_Planej: formData.plan,
       id_Group: formData.group,
       cd_Audit_Modified_User: "Eike",
-      cd_Audit_Created_User: "Eike"
+      cd_Audit_Created_User: "Eike",
     };
-  
 
-    return await api.put(`/Family/Update`, data ).then((res) => {
+    return await api.put(`/Family/Update`, data).then((res) => {
       console.log(data);
       return res.data;
     });
@@ -79,7 +78,7 @@ export async function Update( formData: any) {
 export async function Delete(formData: FormData) {
   const rec = {
     id: formData.id,
-  }
+  };
 
   try {
     return await api.delete(`/Family/Delete/${rec.id}`).then((res) => {
@@ -88,7 +87,5 @@ export async function Delete(formData: FormData) {
     });
   } catch (error) {
     console.log("Erro ao deletar:", error);
-   
-    
   }
 }

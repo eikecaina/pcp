@@ -3,13 +3,7 @@ export function isWorkDay(
 ): { date: Date; isWeekend: boolean }[] {
   return dates.map((date) => {
     const validDate = typeof date === "string" ? new Date(date) : date;
-
-    if (isNaN(validDate.getTime())) {
-      throw new Error(`Data inválida: ${date}`);
-    }
-
     const isWeekend = validDate.getDay() === 0 || validDate.getDay() === 6;
-
     return { date: validDate, isWeekend };
   });
 }

@@ -197,7 +197,6 @@ const Reports: React.FC = () => {
   const { startIndex, endIndex } = dateRange;
 
   if (startIndex !== null && endIndex !== null) {
-    // Cria o array inicial de vlTime para o intervalo de datas
     const initialVlTime = createVlTimeArray(
       dates,
       formData.vlTime,
@@ -205,26 +204,19 @@ const Reports: React.FC = () => {
       endIndex
     );
 
-    // Verifica se as datas são finais de semana ou dias úteis
     const workDaysStatus = isWorkDay(dates);
 
-    // Atualiza o vlTime baseado nos dias de semana e finais de semana
     const updatedVlTime = initialVlTime.map((time, index) => {
       const dayStatus = workDaysStatus[index];
 
-      // Se for final de semana, define vlTime como 0
       if (dayStatus.isWeekend) {
         return 0;
       }
-
-      // Caso contrário, mantém o valor original ou faz outra lógica
       return time;
     });
 
-    // Atualiza o estado com o novo array de tempos
     setTime(updatedVlTime);
   } else {
-    // Caso o intervalo não seja válido, preenche com null
     setTime(new Array(dates.length).fill(null));
   }
 };
