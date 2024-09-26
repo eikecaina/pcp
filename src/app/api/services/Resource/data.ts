@@ -39,6 +39,16 @@ export async function GetByFamilyId(id: UUID) {
   }
 }
 
+export async function GetConsumByResourceId(id: UUID) {
+  try {
+    return await api.get(`/ResourceConsumption/resource/${id}`).then((res) => {
+      return res.data;
+    });
+  } catch (error) {
+    console.log("Erro ao buscar recursos");
+  }
+}
+
 export async function GetDataFromId(id: UUID) {
   try {
     return await api

@@ -21,7 +21,10 @@ import { MixedGraph } from "../MixedGraph";
 import { UUID } from "crypto";
 import { GetAllFamily } from "@/app/api/services/Family/data";
 import { formStyle } from "../Settings/Style";
-import { GetByFamilyId } from "@/app/api/services/Resource/data";
+import {
+  GetByFamilyId,
+  GetConsumByResourceId,
+} from "@/app/api/services/Resource/data";
 import { GetDataFromId } from "@/app/api/services/Resource/data";
 import { GetDataDaysFromId } from "@/app/api/services/Calendar/data";
 import {
@@ -57,6 +60,7 @@ const Reports: React.FC = () => {
   const [calendarDays, setCalendarDays] = useState<Date[]>([]);
   const [dates, setDates] = useState([]);
   const [time, setTime] = useState<any[]>([]);
+  const [consum, setConsum] = useState<number[]>([]);
 
   const handleRadioChange = (e: RadioChangeEvent) => {
     setSelectedRadio(e.target.value);
@@ -147,30 +151,50 @@ const Reports: React.FC = () => {
     }
   }, [formData.family]);
 
+  const fetchConsumption = async () => {
+    try {
+      const response = await GetConsumByResourceId(formData.resource);
+      const dataObject = Object.assign({}, ...response);
+
+      setFormData((prevData: any) => ({
+        ...prevData,
+        vl_consumption: dataObject.vl_consumption,
+        consumption_date: new Date(dataObject.consumption_date),
+      }));
+    } catch (error) {
+      console.log(error, "Erro ao buscar consumo");
+    }
+  };
+
   const fetchCalendarAndAvailables = async () => {
     try {
       const response = await GetDataFromId(formData.resource);
 
-      setFormData({
-        ...formData,
+      setFormData((prevData: any) => ({
+        ...prevData,
         calendar: response.cd_Calendar,
         vlTime: response.resourcesAvailable[0].vlTime,
         startDate: new Date(response.resourcesAvailable[0].startDate),
         endDate: new Date(response.resourcesAvailable[0].endDate),
-      });
-
-      console.log(formData);
+      }));
     } catch (error) {
-      console.log(error, "Erro ao buscar");
+      console.log(error, "Erro ao buscar calendário e disponibilidade");
+    }
+  };
+
+  const fetchAllData = async () => {
+    try {
+      await Promise.all([fetchCalendarAndAvailables(), fetchConsumption()]);
+    } catch (error) {
+      console.log(error, "Erro ao buscar os dados");
     }
   };
 
   useEffect(() => {
     if (formData.resource) {
-      fetchCalendarAndAvailables();
+      fetchAllData();
     }
   }, [formData.resource]);
-
   const fetchCalendarDays = async () => {
     const response = await GetDataDaysFromId(formData.calendar);
     const days = response.calendarDays.map(
@@ -187,39 +211,91 @@ const Reports: React.FC = () => {
   }, [formData.calendar]);
 
   const dateInArray = () => {
-  // Verifica o intervalo de datas entre startDate e endDate no array de datas
-  const dateRange = checkDatesRange(
-    formatDate(formData.startDate),
-    formatDate(formData.endDate),
-    dates
-  );
-
-  const { startIndex, endIndex } = dateRange;
-
-  if (startIndex !== null && endIndex !== null) {
-    const initialVlTime = createVlTimeArray(
-      dates,
-      formData.vlTime,
-      startIndex,
-      endIndex
+    const dateRange = checkDatesRange(
+      formatDate(formData.startDate),
+      formatDate(formData.endDate),
+      formatDate(formData.consumption_date),
+      dates
     );
 
-    const workDaysStatus = isWorkDay(dates);
+    const { startIndex, endIndex, consumIndex } = dateRange;
 
-    const updatedVlTime = initialVlTime.map((time, index) => {
-      const dayStatus = workDaysStatus[index];
+    if (startIndex !== null && endIndex !== null) {
+      const initialVlTime = createVlTimeArray(
+        dates,
+        formData.vlTime,
+        startIndex,
+        endIndex
+      );
 
-      if (dayStatus.isWeekend) {
-        return 0;
+      const workDaysStatus = isWorkDay(dates);
+
+      const updatedVlTime = initialVlTime.map((time, index) => {
+        const dayStatus = workDaysStatus[index];
+
+        if (dayStatus.isWeekend) {
+          return 0;
+        }
+        return time;
+      });
+
+      setTime(updatedVlTime);
+      if (
+        consumIndex !== null &&
+        consumIndex >= startIndex &&
+        consumIndex <= endIndex
+      ) {
+        const updatedConsum = updatedVlTime.map((time, index) => {
+          return index === consumIndex ? formData.vl_consumption : null;
+        });
+
+        setConsum(updatedConsum);
+      } else {
+        setConsum(new Array(dates.length).fill(null));
       }
-      return time;
-    });
+    } else {
+      setTime(new Array(dates.length).fill(null));
+      setConsum(new Array(dates.length).fill(null));
+    }
+  };
 
-    setTime(updatedVlTime);
-  } else {
-    setTime(new Array(dates.length).fill(null));
-  }
-};
+  const transformConsumptionData = (
+    dates: string[],
+    consumptionValue: number | null,
+    consumptionDate: Date | null
+  ) => {
+    const consumptionArray = new Array(dates.length).fill(0);
+
+    if (consumptionDate) {
+      const formattedConsumptionDate = formatDate(consumptionDate);
+
+      const index = dates.findIndex(
+        (date) => date === formattedConsumptionDate
+      );
+
+      if (index !== -1 && consumptionValue !== null) {
+        consumptionArray[index] = consumptionValue;
+      }
+    }
+
+    return consumptionArray;
+  };
+
+  useEffect(() => {
+    if (formData.resource) {
+      fetchAllData();
+    }
+  }, [formData.resource]);
+
+  useEffect(() => {
+    const consumptionArray = transformConsumptionData(
+      dates,
+      formData.vl_consumption,
+      formData.consumption_date
+    );
+
+    setConsum(consumptionArray);
+  }, [formData.vl_consumption, formData.consumption_date, dates]);
 
   useEffect(() => {
     if (formData.startDate) {
@@ -316,7 +392,7 @@ const Reports: React.FC = () => {
 
       <div style={{ width: "100%" }}>
         <Col span={24} style={{ marginTop: 150 }}>
-          <MixedGraph labels={dates} time={time} />
+          <MixedGraph labels={dates} time={time} consum={consum} />
         </Col>
       </div>
 

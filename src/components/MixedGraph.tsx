@@ -27,9 +27,14 @@ ChartJS.register(
 interface MixedGraphProps {
   labels: Date[];
   time: number[];
+  consum: number[];
 }
 
-export const MixedGraph: React.FC<MixedGraphProps> = ({ labels, time }) => {
+export const MixedGraph: React.FC<MixedGraphProps> = ({
+  labels,
+  time,
+  consum,
+}) => {
   const options: ChartOptions<"bar"> = {
     responsive: true,
     scales: {
@@ -51,7 +56,13 @@ export const MixedGraph: React.FC<MixedGraphProps> = ({ labels, time }) => {
         borderWidth: 2,
         fill: true,
       },
-     
+      {
+        type: "bar",
+        label: "Consumo",
+        data: consum,
+        backgroundColor: "rgba(0, 0, 255, 0.6)",
+        borderColor: "rgba(75, 192, 192, 1)",
+      },
     ],
   };
 

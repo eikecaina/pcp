@@ -11,10 +11,16 @@ export function isWorkDay(
 export function checkDatesRange(
   startDate: string,
   endDate: string,
+  consumDate: string,  // Adicionando a data de consumo
   datesArray: string[]
-): { startIndex: number | null; endIndex: number | null } {
+): {
+  startIndex: number | null;
+  endIndex: number | null;
+  consumIndex: number | null;  // Adicionando retorno do índice da data de consumo
+} {
   const start = new Date(startDate);
   const end = new Date(endDate);
+  const consum = new Date(consumDate);  // Convertendo a data de consumo para objeto Date
 
   const startIndex = datesArray.findIndex((dateString) => {
     const date = new Date(dateString);
@@ -25,9 +31,16 @@ export function checkDatesRange(
     const date = new Date(dateString);
     return date.getTime() === end.getTime();
   });
+
+  const consumIndex = datesArray.findIndex((dateString) => {
+    const date = new Date(dateString);
+    return date.getTime() === consum.getTime();
+  });
+
   return {
     startIndex: startIndex !== -1 ? startIndex : null,
     endIndex: endIndex !== -1 ? endIndex : null,
+    consumIndex: consumIndex !== -1 ? consumIndex : null,  // Retorna consumIndex
   };
 }
 
@@ -46,6 +59,9 @@ export function createVlTimeArray(
   return vlTimeArray;
 }
 
-export const formatDate = (date: Date): string => {
+export const formatDate = (date?: Date): string => {
+  if (!date) {
+    return '';  // Retornar string vazia se a data for indefinida ou nula
+  }
   return date.toLocaleDateString("en-US");
 };
