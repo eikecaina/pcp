@@ -4,6 +4,7 @@ import {
   LinearScale,
   PointElement,
   LineElement,
+  LineController,
   BarElement,
   Title,
   Tooltip,
@@ -18,6 +19,7 @@ ChartJS.register(
   LinearScale,
   PointElement,
   LineElement,
+  LineController,
   BarElement,
   Title,
   Tooltip,
@@ -35,7 +37,7 @@ export const MixedGraph: React.FC<MixedGraphProps> = ({
   time,
   consum,
 }) => {
-  const options: ChartOptions<"bar"> = {
+  const options: ChartOptions<"bar" | "line"> = {
     responsive: true,
     scales: {
       y: {
@@ -44,7 +46,7 @@ export const MixedGraph: React.FC<MixedGraphProps> = ({
     },
   };
 
-  const data: ChartData<any> = {
+  const data: ChartData<"bar" | "line"> = {
     labels: labels,
     datasets: [
       {
@@ -68,7 +70,7 @@ export const MixedGraph: React.FC<MixedGraphProps> = ({
 
   return (
     <Chart
-      type="bar"
+      type="bar" // Define o tipo padrão aqui, pode ser "bar" ou "line"
       options={options}
       style={{ width: "100%" }}
       height={300}
