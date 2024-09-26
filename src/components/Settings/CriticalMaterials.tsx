@@ -23,7 +23,7 @@ import {
   SelectRadio,
 } from "./ButtonsComponent";
 import { formStyle } from "./Style";
-import { DataFetcher } from "components/DataFetcherJson";
+  
 import { searchOptions } from "./SearchFilter";
 import { EditOutlined, SaveOutlined } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";

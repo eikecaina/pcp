@@ -13,7 +13,7 @@ import {
 } from "antd";
 
 import { formStyle } from "./Style";
-import { DataFetcher } from "components/DataFetcherJson";
+  
 import {
   DeleteButton,
   EditButton,
