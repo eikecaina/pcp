@@ -17,7 +17,6 @@ const { RangePicker } = DatePicker;
 
 import CustomInputNumber from "components/CustomInputNumber";
 import { useTranslation } from "react-i18next";
-import { BarGraph } from "./PcpGraphs";
 const weekFormat = "DD/MM/YYYY";
 
 const { TextArea } = Input;
@@ -251,11 +250,7 @@ const PcpProcessResources: React.FC = () => {
         </Card>
       </Col>
       <Col span={14} style={{ height: 245 }}>
-        <BarGraph />
-
-        <BarGraph />
-
-        <BarGraph />
+    
       </Col>
     </Row>
   );

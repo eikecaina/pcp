@@ -22,13 +22,13 @@ export async function GetAllCalendar() {
   }
 }
 
-export async function GetDataFromId(id: UUID) {
+export async function GetDataDaysFromId(id: UUID) {
   try {
-    return await api.get(`/Calendar/Get/${id}`).then((res) => {
+    return await api.get(`/Calendar/GetWithDays/${id}`).then((res) => {
       return res.data;
     });
   } catch (error) {
-    console.log("Erro ao salvar:", error);
+    console.log("Erro ao Buscar:", error);
   }
 }
 

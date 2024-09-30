@@ -16,7 +16,7 @@ import {
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { formStyle } from "./Style";
-import { DataFetcher } from "components/DataFetcherJson";
+  
 import {
   DeleteButton,
   EditButton,
