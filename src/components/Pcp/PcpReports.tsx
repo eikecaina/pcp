@@ -169,6 +169,8 @@ const Reports: React.FC = () => {
   const fetchCalendarAndAvailables = async () => {
     try {
       const response = await GetDataFromId(formData.resource);
+      console.log(response);
+      
 
       setFormData((prevData: any) => ({
         ...prevData,
