@@ -7,6 +7,7 @@ import {
   Form,
   Input,
   InputNumber,
+  Modal,
   Radio,
   RadioChangeEvent,
   Row,
@@ -18,14 +19,20 @@ import {
 import React, { useState } from "react";
 import {
   DeleteButton,
+  EditButton,
+  NewButton,
   RadioButtons,
   SaveButton,
   SelectRadio,
 } from "./ButtonsComponent";
 import { formStyle } from "./Style";
-  
+
 import { searchOptions } from "./SearchFilter";
-import { EditOutlined, SaveOutlined } from "@ant-design/icons";
+import {
+  EditOutlined,
+  ExclamationCircleOutlined,
+  SaveOutlined,
+} from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 
 export const CriticalMaterials: React.FC = () => {
@@ -50,6 +57,13 @@ export const CriticalMaterials: React.FC = () => {
 
 export const Material: React.FC = () => {
   const [value, setValue] = useState(1);
+  const [form] = Form.useForm();
+  const [formData, setFormData] = useState<any>({});
+
+  const clearInputs = () => {
+    form.resetFields();
+    setFormData({});
+  };
 
   const onChange = (e: RadioChangeEvent) => {
     setValue(e.target.value);
@@ -58,6 +72,51 @@ export const Material: React.FC = () => {
 
   const onChangeMaterial = (e: RadioChangeEvent) => {
     setValueMaterial(e.target.value);
+  };
+
+  /*const success = async () => {
+    try {
+      if (formData.id) {
+        await Update(formData);
+      } else {
+        await Save(formData);
+      }
+
+      clearInputs();
+      setFetchData(true);
+      message.success("Salvo com sucesso!");
+    } catch (error) {
+      message.error("Não foi possível salvar");
+    }
+  };
+
+  const confirmDelete = () => {
+    Modal.confirm({
+      title: t("generalButtons.deleteButton"),
+      icon: <ExclamationCircleOutlined />,
+      content: "Deseja excluir o Valor?",
+      okText: t("generalButtons.confirmButton"),
+      cancelText: t("generalButtons.cancelButton"),
+      async onOk() {
+        try {
+          await Delete(formData);
+          clearInputs();
+          setFetchData(true);
+          message.success("Excluido com sucesso!");
+        } catch (error) {
+          message.error("Não foi possivel excluir!");
+        }
+      },
+    });
+  };*/
+
+  const newFunction = () => {
+    setValue(1);
+    clearInputs();
+  };
+
+  const editFunction = () => {
+    setValue(3);
   };
 
   const { t } = useTranslation("layout");
@@ -71,9 +130,6 @@ export const Material: React.FC = () => {
               bodyStyle={{ padding: 10 }}
               title={t("titles.characteristic")}
             >
-              <div style={{ marginTop: 5, width: "100%" }}>
-                <RadioButtons value={value} onChange={onChange} />
-              </div>
               <div
                 style={{
                   margin: "5px 0px 10px 0px",
@@ -100,6 +156,8 @@ export const Material: React.FC = () => {
                 onChange={onChange}
               />
               <div style={{ margin: 10, float: "right" }}>
+                <NewButton onClick={newFunction} />
+                <EditButton onClick={editFunction} />
                 <DeleteButton />
                 <SaveButton />
               </div>
@@ -107,16 +165,10 @@ export const Material: React.FC = () => {
           </Col>
           <Col span={12}>
             <Card
-              style={{ height: 527 }}
+              style={{ height: 480 }}
               title={t("titles.criticalMaterial")}
               bodyStyle={{ padding: 10 }}
             >
-              <div style={{ marginTop: 5, width: "100%" }}>
-                <RadioButtons
-                  value={valueMaterial}
-                  onChange={onChangeMaterial}
-                />
-              </div>
               <SelectRadio
                 style={formStyle("calc(50% - 5px)", "5px")}
                 type={t("labels.criticalMaterial")}
@@ -150,14 +202,9 @@ export const Material: React.FC = () => {
               <Checkbox style={{ marginTop: 5, width: "100%" }}>
                 {t("labels.deadline")}
               </Checkbox>
-              <div
-                style={{
-                  margin: 10,
-                  bottom: 8,
-                  position: "absolute",
-                  right: 6,
-                }}
-              >
+              <div style={{ margin: 10, float: "right" }}>
+                <NewButton onClick={newFunction} />
+                <EditButton onClick={editFunction} />
                 <DeleteButton />
                 <SaveButton />
               </div>
@@ -180,7 +227,26 @@ export const Impact: React.FC = () => {
   const handleChange = () => {
     setValue(value === 1 ? 2 : 1);
   };
+
   const { t } = useTranslation("layout");
+
+  const [form] = Form.useForm();
+  const [formData, setFormData] = useState<any>({});
+
+  const clearInputs = () => {
+    form.resetFields();
+    setFormData({});
+  };
+
+  const newFunction = () => {
+    setValue(1);
+    clearInputs();
+  };
+
+  const editFunction = () => {
+    setValue(3);
+  };
+
   return (
     <Form layout="vertical" style={{ marginTop: 10 }}>
       <Card title={t("titles.definition")} bodyStyle={{ padding: 10 }}>
@@ -232,10 +298,11 @@ export const Impact: React.FC = () => {
           <Select />
         </Form.Item>
       </Card>
-      <div style={{ float: "right", marginTop: 10 }}>
-        <Button type="primary" icon={<SaveOutlined />}>
-          {t("generalButtons.saveButton")}
-        </Button>
+      <div style={{ margin: 10, float: "right" }}>
+        <NewButton onClick={newFunction} />
+        <EditButton onClick={editFunction} />
+        <DeleteButton />
+        <SaveButton />
       </div>
     </Form>
   );
