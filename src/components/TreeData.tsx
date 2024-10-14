@@ -37,7 +37,111 @@ interface TreeValuesProps {
   setFetchData: React.Dispatch<React.SetStateAction<boolean>>;
   checkable?: boolean;
   checkedKeys?: any;
+  rootId?: UUID;
 }
+
+export const TreeQuotation: React.FC<TreeValuesProps> = ({
+  setFormData,
+  fetchData,
+  setFetchData,
+  checkable,
+  rootId,
+}) => {
+  const [oleo, setOleo] = useState<ExtendedDataNode[]>([]);
+  const [seco, setSeco] = useState<ExtendedDataNode[]>([]);
+  const [selectedNodes, setSelectedNodes] = useState<any[]>([]);
+
+  function buildTree(
+    nodes: TreeNode[],
+    parentId: UUID | null = null
+  ): TreeDataNode[] {
+    return nodes
+      .filter((node) => node.parent_value_id === parentId)
+      .map((node, index) => ({
+        id: node.value_id,
+        title: node.characteristic_display + ": " + node.ds_Value,
+        key: `${parentId ? parentId : "root"}-${index}`,
+        children: buildTree(nodes, node.value_id),
+      }));
+  }
+
+  const fetchTree = async (): Promise<void> => {
+    try {
+      const response: TreeNode[] = await GetWithChild();
+
+      const oleo = buildTree(response, "0e628b8a-bdc9-4bd7-999a-a7a5a3166372");
+      setOleo(oleo);
+
+      const seco = buildTree(response, "d782616f-44fb-493c-9bfa-e85b5c1c471a");
+      setSeco(seco);
+    } catch (error) {
+      console.error("Erro ao buscar dados:", error);
+    }
+  };
+
+  const onCheck: TreeProps<ExtendedDataNode>["onCheck"] = (
+    checkedKeys,
+    info
+  ) => {
+    const { checked } = info;
+    const nodeId = info.node.id;
+
+    // Atualiza o estado de selectedNodes
+    setSelectedNodes(
+      (prevSelectedNodes) =>
+        checked
+          ? [...prevSelectedNodes, nodeId] // Adiciona nodeId se marcado
+          : prevSelectedNodes.filter((id) => id !== nodeId) // Remove nodeId se desmarcado
+    );
+
+    // Atualiza o formData, garantindo que cada value_id seja único
+    setFormData((prevFormData: any) => {
+      let newValueId;
+
+      if (checked) {
+        // Adiciona o nodeId ao array, se ainda não existir
+        newValueId = Array.isArray(prevFormData.value_id)
+          ? [...prevFormData.value_id, nodeId]
+          : [prevFormData.value_id, nodeId];
+        // Remove duplicados (em caso de chamadas repetidas)
+        newValueId = Array.from(new Set(newValueId));
+      } else {
+        // Remove o nodeId do array se desmarcado
+        newValueId = prevFormData.value_id.filter(
+          (id: string) => id !== nodeId
+        );
+      }
+
+      return {
+        ...prevFormData,
+        value_id: newValueId.filter((id: UUID) => id !== undefined),
+      };
+    });
+
+    console.log(info.node);
+  };
+
+  useEffect(() => {
+    if (fetchData) {
+      fetchTree();
+    }
+  }, [fetchData]);
+
+  return (
+    <Tree
+      checkable={checkable}
+      treeData={rootId === "0e628b8a-bdc9-4bd7-999a-a7a5a3166372" ? oleo : seco} // Seleciona os dados conforme o rootId
+      onCheck={onCheck}
+      style={{
+        height: "100%",
+        maxHeight: 607,
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+      }}
+      showLine={true}
+    />
+  );
+};
 
 export const TreeValues: React.FC<TreeValuesProps> = ({
   setFormData,
@@ -72,17 +176,6 @@ export const TreeValues: React.FC<TreeValuesProps> = ({
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
     }
-  };
-
-  const onSelect: TreeProps<ExtendedDataNode>["onSelect"] = (
-    selectedKeys,
-    info
-  ) => {
-    setFormData((prevFormData: any) => ({
-      ...prevFormData,
-      parent_value_id: info.node.id,
-    }));
-    console.log(info.node);
   };
 
   const onCheck: TreeProps<ExtendedDataNode>["onCheck"] = (
@@ -131,7 +224,6 @@ export const TreeValues: React.FC<TreeValuesProps> = ({
     <Tree
       checkable={checkable}
       treeData={treeData}
-      onSelect={onSelect}
       onCheck={onCheck}
       style={{
         height: "100%",

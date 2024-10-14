@@ -16,6 +16,8 @@ import {
   Input,
   InputNumber,
   Modal,
+  Radio,
+  RadioChangeEvent,
   Row,
   Select,
   Space,
@@ -32,88 +34,171 @@ import { useTranslation } from "react-i18next";
 import PlanningMap from "components/MapQuotation/PlanningMap";
 import GeneralSettings from "components/Settings/GeneralSettings";
 
-import { TreeValues } from "../TreeData";
+import { TreeQuotation } from "../TreeData";
+import { UUID } from "crypto";
+
+type QuotationItem = {
+  quotation_Value: number;
+  config_Item: {
+    value: UUID[];
+  };
+};
 
 export const GeneralData: React.FC = () => {
+  const [data, setData] = useState<any>({});
   const [fetchData, setFetchData] = useState(true);
-  const [selectOptions, setSelectOptions] = useState([{ value: "10" }]);
-  const [selectedItem, setSelectedItem] = useState(10);
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [rootId, setRootId] = useState();
   const [formData, setFormData] = useState<any>({
-    quotation_Item: [
+    quotation_Items: [
       {
-        cd_Quotation_Item: 10,
-        config_Item: [{ value: "" }],
+        quotation_Value: 10,
+        config_Item: {
+          value: [],
+        },
       },
     ],
   });
 
   const [isModalConfigOpen, setIsModalConfigOpen] = useState(false);
+
   const handleOpenModal = () => {
     setIsModalOpen(true);
   };
 
-  const addOptions = () => {
-    const lastOptionValue =
-      selectOptions.length > 0
-        ? parseInt(selectOptions[selectOptions.length - 1].value, 10)
-        : 0;
-    const newItemValue = lastOptionValue + 10;
+  const findNextAvailableValue = (
+    items: QuotationItem[],
+    step: number = 10
+  ) => {
+    const existingValues = items.map((item) => item.quotation_Value);
+    let nextValue = step;
 
-    const newQuotationItem = {
-      cd_Quotation_Item: newItemValue,
-      config_Item: [{ value: formData.value }],
-    };
+    while (existingValues.includes(nextValue)) {
+      nextValue += step;
+    }
 
-    setFormData((prevFormData: any) => ({
-      ...prevFormData,
-      quotation_Item: [...prevFormData.quotation_Item, newQuotationItem],
-    }));
-
-    setSelectedItem(newItemValue);
-    message.success("Item Criado");
+    return nextValue;
   };
 
-  const logJson = () => {
-    const data = {
-      id: "5f94a967-8f26-4531-aaf8-b431f0a679e8",
-      ds_Quotation: formData.ds_Quotation,
-      ds_Customer: formData.ds_Customer,
-      ds_Ov: formData.ds_Ov,
-      quotation_Item: formData.quotation_Item.map(
-        (item: any, index: number) => ({
-          ...item,
-          config_Item: item.config_Item.map(
-            (config: any, configIndex: number) => ({
-              value: formData.value_id,
-            })
-          ),
-        })
-      ),
+  const sortQuotationItems = (items: QuotationItem[]) => {
+    return items.sort((a, b) => a.quotation_Value - b.quotation_Value);
+  };
+
+  const addOptions = () => {
+    const nextValue = findNextAvailableValue(formData.quotation_Items, 10);
+
+    const newItem: QuotationItem = {
+      quotation_Value: nextValue,
+      config_Item: {
+        value: [],
+      },
     };
+
+    setFormData((prevData: { quotation_Items: any }) => {
+      const updatedItems = [...prevData.quotation_Items, newItem];
+
+      const sortedItems = sortQuotationItems(updatedItems);
+
+      setSelectedIndex(sortedItems.length - 1);
+
+      return {
+        ...prevData,
+        quotation_Items: sortedItems,
+      };
+    });
+
+    message.success(`Item adicionado`);
+  };
+
+  const removeOption = () => {
+    if (selectedIndex !== null) {
+      setFormData((prevData: { quotation_Items: QuotationItem[] }) => {
+        const newItems = prevData.quotation_Items.filter(
+          (_, i: number) => i !== selectedIndex
+        );
+
+        const sortedItems = sortQuotationItems(newItems);
+
+        const newIndex =
+          sortedItems.length > 0
+            ? Math.min(selectedIndex, sortedItems.length - 1)
+            : null;
+
+        setSelectedIndex(newIndex);
+
+        return {
+          ...prevData,
+          quotation_Items: sortedItems,
+        };
+      });
+
+      message.success("Item Excluído");
+    } else {
+      message.error("Selecione um item para excluir");
+    }
+  };
+
+  const generateOptions = (quotationItems: { quotation_Value: any }[]) => {
+    const uniqueItems = Array.from(
+      new Set(quotationItems.map((item) => item.quotation_Value))
+    ).map((value) => {
+      return quotationItems.find((item) => item.quotation_Value === value);
+    });
+
+    const filteredItems = uniqueItems.filter(
+      (item): item is { quotation_Value: any } => item !== undefined
+    );
+
+    return filteredItems.map(
+      (item: { quotation_Value: any }, index: number) => ({
+        value: item.quotation_Value,
+        label: item.quotation_Value,
+        index,
+      })
+    );
+  };
+
+  const updateQuotationItemValue = (index: number, newValue: string) => {
+    setData((prevData: any) => {
+      const updatedData = {
+        ...prevData,
+        id: "5f94a967-8f26-4531-aaf8-b431f0a679e8",
+        ds_Quotation: formData.ds_Quotation,
+        ds_Customer: formData.ds_Customer,
+        ds_Ov: formData.ds_Ov,
+        quotation_Items: prevData.quotation_Items
+          ? [...prevData.quotation_Items]
+          : [],
+      };
+
+      if (!updatedData.quotation_Items[index]) {
+        updatedData.quotation_Items[index] = {
+          quotation_Value:
+            formData.quotation_Items[index]?.quotation_Value || 10,
+          config_Item: { value: [newValue] },
+        };
+      } else {
+        updatedData.quotation_Items[index].config_Item.value = [newValue];
+      }
+
+      return updatedData;
+    });
+  };
+
+  const saveLog = () => {
+    updateQuotationItemValue(selectedIndex ?? 0, formData.value_id);
 
     console.log(data);
   };
 
-  const removeOption = () => {
-    if (selectOptions.length === 0) {
-      message.error("Nenhum item para excluir");
-      return;
-    }
-
-    const newOptions = selectOptions.slice(0, -1);
-    const newSelectedItem: any =
-      newOptions.length > 0
-        ? parseInt(newOptions[newOptions.length - 1].value)
-        : null;
-
-    setSelectOptions(newOptions);
-    setSelectedItem(newSelectedItem);
-    message.success("Item Excluído");
-  };
-
   const openModalConfig = async () => {
     setIsModalConfigOpen(true);
+  };
+
+  const onChange = (e: RadioChangeEvent) => {
+    setRootId(e.target.value);
+    setFetchData(true);
   };
 
   const { t } = useTranslation("layout");
@@ -133,6 +218,30 @@ export const GeneralData: React.FC = () => {
 
   const handleInputChange = (fieldName: string, value: any) => {
     setFormData({ ...formData, [fieldName]: value });
+
+    const options = generateOptions(formData.quotation_Items);
+
+    const selectedOption = options.find(
+      (option: { value: any }) => option.value === value
+    );
+
+    if (selectedOption) {
+      const index = options.indexOf(selectedOption);
+      setSelectedIndex(index);
+
+      console.log("Posição atual do select:", index, value);
+
+      const selectedQuotationItem = formData.quotation_Items.find(
+        (item: { quotation_Value: number }) => item.quotation_Value === value
+      );
+
+      if (selectedQuotationItem) {
+        setFormData((prevFormData: any) => ({
+          ...prevFormData,
+          value_id: selectedQuotationItem.config_Item.value,
+        }));
+      }
+    }
   };
 
   return (
@@ -182,20 +291,29 @@ export const GeneralData: React.FC = () => {
             >
               <Space.Compact style={{ width: "100%" }}>
                 <Tooltip title="Remover Item">
-                  <Button disabled type="primary" onClick={removeOption}>
+                  <Button type="primary" onClick={removeOption}>
                     <MinusOutlined />
                   </Button>
                 </Tooltip>
 
                 <Select
-                  defaultValue={selectedItem}
-                  onChange={(value) =>
-                    handleInputChange("cd_Quotation_Item", value)
+                  defaultValue={
+                    generateOptions(formData.quotation_Items)[0]?.value
                   }
-                  options={selectOptions}
+                  value={
+                    selectedIndex !== null
+                      ? generateOptions(formData.quotation_Items)[selectedIndex]
+                          ?.value
+                      : undefined
+                  }
+                  onChange={(value) =>
+                    handleInputChange("quotation_Item", value)
+                  }
+                  options={generateOptions(formData.quotation_Items)}
                 />
+
                 <Tooltip title="Adicionar Item">
-                  <Button disabled type="primary" onClick={addOptions}>
+                  <Button type="primary" onClick={addOptions}>
                     <PlusOutlined />
                   </Button>
                 </Tooltip>
@@ -237,12 +355,29 @@ export const GeneralData: React.FC = () => {
         </Divider>
         <div style={{ overflowY: "auto", padding: 10, maxHeight: "40vh" }}>
           <Form layout="vertical">
-            <TreeValues
-              checkable
-              fetchData={fetchData}
-              setFetchData={setFetchData}
-              setFormData={setFormData}
-            />
+            <Radio.Group
+              defaultValue={"d782616f-44fb-493c-9bfa-e85b5c1c471a"}
+              onChange={onChange}
+              value={rootId}
+            >
+              <Radio value={"d782616f-44fb-493c-9bfa-e85b5c1c471a"}>
+                Meio de Operação: Seco
+              </Radio>
+
+              <Radio value={"0e628b8a-bdc9-4bd7-999a-a7a5a3166372"}>
+                Meio de Operação: Óleo
+              </Radio>
+            </Radio.Group>
+
+            <div style={{ marginTop: 20 }}>
+              <TreeQuotation
+                checkable
+                fetchData={fetchData}
+                setFetchData={setFetchData}
+                setFormData={setFormData}
+                rootId={rootId}
+              />
+            </div>
           </Form>
         </div>
 
@@ -270,14 +405,13 @@ export const GeneralData: React.FC = () => {
           </Button>
           <Button
             htmlType="submit"
-            onClick={logJson}
+            onClick={saveLog}
             style={{ width: "24%" }}
             type="primary"
           >
             {t("generalButtons.saveButton")}
           </Button>
         </div>
-
         {isModalConfigOpen && (
           <ConfigModal setIsModalConfigOpen={setIsModalConfigOpen} />
         )}
@@ -374,6 +508,3 @@ export const FloatMenu: React.FC = () => {
     </>
   );
 };
-function uuidv4() {
-  throw new Error("Function not implemented.");
-}
