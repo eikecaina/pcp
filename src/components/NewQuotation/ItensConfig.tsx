@@ -113,28 +113,42 @@ export const GeneralData: React.FC = () => {
 
   const removeOption = () => {
     if (selectedIndex !== null) {
+      // Atualiza o estado com setFormData
       setFormData((prevData: { quotation_Items: QuotationItem[] }) => {
+        // Filtra os items que não estão no índice a ser removido
         const newItems = prevData.quotation_Items.filter(
           (_, i: number) => i !== selectedIndex
         );
 
+        // Ordena os itens após a remoção
         const sortedItems = sortQuotationItems(newItems);
 
+        // Atualiza o índice selecionado
         const newIndex =
           sortedItems.length > 0
             ? Math.min(selectedIndex, sortedItems.length - 1)
             : null;
 
+        // Atualiza o selectedIndex para o novo valor
         setSelectedIndex(newIndex);
 
+        // Atualiza o estado do setData para manter sincronizado
+        setData((prevState: any) => ({
+          ...prevState,
+          quotation_Items: sortedItems,
+        }));
+
+        // Retorna o novo estado do setFormData
         return {
           ...prevData,
           quotation_Items: sortedItems,
         };
       });
 
-      message.success("Item Excluído");
+      // Exibe uma mensagem de sucesso
+      message.success("Item excluído com sucesso");
     } else {
+      // Exibe uma mensagem de erro se nenhum item foi selecionado
       message.error("Selecione um item para excluir");
     }
   };
