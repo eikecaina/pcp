@@ -46,6 +46,7 @@ export const TreeQuotation: React.FC<TreeValuesProps> = ({
   setFetchData,
   checkable,
   rootId,
+  checkedKeys
 }) => {
   const [oleo, setOleo] = useState<ExtendedDataNode[]>([]);
   const [seco, setSeco] = useState<ExtendedDataNode[]>([]);
@@ -60,7 +61,7 @@ export const TreeQuotation: React.FC<TreeValuesProps> = ({
       .map((node, index) => ({
         id: node.value_id,
         title: node.characteristic_display + ": " + node.ds_Value,
-        key: `${parentId ? parentId : "root"}-${index}`,
+         key: node.value_id || 'default-key',
         children: buildTree(nodes, node.value_id),
       }));
   }
@@ -86,27 +87,23 @@ export const TreeQuotation: React.FC<TreeValuesProps> = ({
     const { checked } = info;
     const nodeId = info.node.id;
 
-    // Atualiza o estado de selectedNodes
+    
     setSelectedNodes(
       (prevSelectedNodes) =>
         checked
-          ? [...prevSelectedNodes, nodeId] // Adiciona nodeId se marcado
-          : prevSelectedNodes.filter((id) => id !== nodeId) // Remove nodeId se desmarcado
+          ? [...prevSelectedNodes, nodeId]
+          : prevSelectedNodes.filter((id) => id !== nodeId)
     );
 
-    // Atualiza o formData, garantindo que cada value_id seja único
     setFormData((prevFormData: any) => {
       let newValueId;
 
       if (checked) {
-        // Adiciona o nodeId ao array, se ainda não existir
         newValueId = Array.isArray(prevFormData.value_id)
           ? [...prevFormData.value_id, nodeId]
           : [prevFormData.value_id, nodeId];
-        // Remove duplicados (em caso de chamadas repetidas)
         newValueId = Array.from(new Set(newValueId));
       } else {
-        // Remove o nodeId do array se desmarcado
         newValueId = prevFormData.value_id.filter(
           (id: string) => id !== nodeId
         );
@@ -130,8 +127,9 @@ export const TreeQuotation: React.FC<TreeValuesProps> = ({
   return (
     <Tree
       checkable={checkable}
-      treeData={rootId === "0e628b8a-bdc9-4bd7-999a-a7a5a3166372" ? oleo : seco} // Seleciona os dados conforme o rootId
+      treeData={rootId === "0e628b8a-bdc9-4bd7-999a-a7a5a3166372" ? oleo : seco}
       onCheck={onCheck}
+      checkedKeys={checkedKeys}
       style={{
         height: "100%",
         maxHeight: 607,

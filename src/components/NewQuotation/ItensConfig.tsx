@@ -60,8 +60,9 @@ export const GeneralData: React.FC = () => {
       },
     ],
   });
-
   const [isModalConfigOpen, setIsModalConfigOpen] = useState(false);
+
+  const [form] = Form.useForm();
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -107,48 +108,38 @@ export const GeneralData: React.FC = () => {
         quotation_Items: sortedItems,
       };
     });
-
+  
     message.success(`Item adicionado`);
   };
 
   const removeOption = () => {
     if (selectedIndex !== null) {
-      // Atualiza o estado com setFormData
       setFormData((prevData: { quotation_Items: QuotationItem[] }) => {
-        // Filtra os items que não estão no índice a ser removido
         const newItems = prevData.quotation_Items.filter(
           (_, i: number) => i !== selectedIndex
         );
 
-        // Ordena os itens após a remoção
         const sortedItems = sortQuotationItems(newItems);
 
-        // Atualiza o índice selecionado
         const newIndex =
           sortedItems.length > 0
             ? Math.min(selectedIndex, sortedItems.length - 1)
             : null;
-
-        // Atualiza o selectedIndex para o novo valor
         setSelectedIndex(newIndex);
 
-        // Atualiza o estado do setData para manter sincronizado
         setData((prevState: any) => ({
           ...prevState,
           quotation_Items: sortedItems,
         }));
 
-        // Retorna o novo estado do setFormData
         return {
           ...prevData,
           quotation_Items: sortedItems,
         };
       });
 
-      // Exibe uma mensagem de sucesso
       message.success("Item excluído com sucesso");
     } else {
-      // Exibe uma mensagem de erro se nenhum item foi selecionado
       message.error("Selecione um item para excluir");
     }
   };
@@ -174,7 +165,7 @@ export const GeneralData: React.FC = () => {
   };
 
   const updateQuotationItemValue = (index: number, newValue: string) => {
-    setData((prevData: any) => {
+    setFormData((prevData: any) => {
       const updatedData = {
         ...prevData,
         id: "5f94a967-8f26-4531-aaf8-b431f0a679e8",
@@ -202,8 +193,7 @@ export const GeneralData: React.FC = () => {
 
   const saveLog = () => {
     updateQuotationItemValue(selectedIndex ?? 0, formData.value_id);
-
-    console.log(data);
+    console.log(formData.quotation_Items);
   };
 
   const openModalConfig = async () => {
@@ -243,8 +233,6 @@ export const GeneralData: React.FC = () => {
       const index = options.indexOf(selectedOption);
       setSelectedIndex(index);
 
-      console.log("Posição atual do select:", index, value);
-
       const selectedQuotationItem = formData.quotation_Items.find(
         (item: { quotation_Value: number }) => item.quotation_Value === value
       );
@@ -255,6 +243,8 @@ export const GeneralData: React.FC = () => {
           value_id: selectedQuotationItem.config_Item.value,
         }));
       }
+   
+      console.log(selectedQuotationItem.config_Item.value);
     }
   };
 
@@ -262,7 +252,7 @@ export const GeneralData: React.FC = () => {
     <>
       <div style={{ height: "100%" }}>
         <Row style={{ padding: 10 }}>
-          <Form layout="vertical">
+          <Form layout="vertical" form={form}>
             <Form.Item
               name="item"
               style={{
@@ -390,6 +380,7 @@ export const GeneralData: React.FC = () => {
                 setFetchData={setFetchData}
                 setFormData={setFormData}
                 rootId={rootId}
+                checkedKeys={formData.value_id}
               />
             </div>
           </Form>
