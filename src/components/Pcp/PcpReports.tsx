@@ -28,6 +28,7 @@ import {
 import { GetDataFromId } from "@/app/api/services/Resource/data";
 import { GetDataDaysFromId } from "@/app/api/services/Calendar/data";
 import {
+  checkConsumDates,
   checkDatesRange,
   createVlTimeArray,
   formatDate,
@@ -58,7 +59,9 @@ const Reports: React.FC = () => {
   const [familys, setFamilys] = useState<Family[]>([]);
   const [resources, setResources] = useState<Resource[]>([]);
   const [calendarDays, setCalendarDays] = useState<Date[]>([]);
-  const [dates, setDates] = useState([]);
+  const [dates, setDates] = useState<string[]>([]);
+  const [indexDateReturn, setIndexDateReturn] = useState<number[]>([]);
+  const [indexDateInput, setIndexDateInput] = useState<number[]>([]);
   const [time, setTime] = useState<any[]>([]);
   const [consum, setConsum] = useState<number[]>([]);
 
@@ -75,6 +78,21 @@ const Reports: React.FC = () => {
     exportToExcel(inputValue);
   };
 
+  /*Pegar is indeces do array de datas*/
+  const handleIndexDate = (
+    datesArray: any[],
+    setIndex: React.Dispatch<React.SetStateAction<number[]>>
+  ) => {
+    if (!datesArray) {
+      console.warn("datesArray is undefined or null");
+      return;
+    }
+
+    const index = datesArray.map((_, index) => index);
+    setIndex(index);
+  };
+
+  /*Transforma as duas datas de inicio e fim do rangepicker em um array*/
   const getDatesInRange = (start: Date, end: Date): string[] => {
     const datesArray: string[] = [];
     let currentDate = new Date(start);
@@ -88,6 +106,7 @@ const Reports: React.FC = () => {
     return datesArray;
   };
 
+  /*Pegar datas do rangepicker*/
   const handleChangeDate = (selectedDays: any[]) => {
     if (selectedDays && selectedDays[0] && selectedDays[1]) {
       const [startDate, endDate] = selectedDays;
@@ -98,23 +117,11 @@ const Reports: React.FC = () => {
       console.log("Datas:", allDates);
 
       setDates(allDates);
+
+      handleIndexDate(dates, setIndexDateInput);
     } else {
       setDates([]);
     }
-  };
-
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-    handleExport();
-    setInputValue("");
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
   };
 
   const fetchFamilys = async () => {
@@ -151,26 +158,46 @@ const Reports: React.FC = () => {
     }
   }, [formData.family]);
 
+  /*Requisição de recusrsos para pegar o consumo e a data*/
   const fetchConsumption = async () => {
     try {
       const response = await GetConsumByResourceId(formData.resource);
-      const dataObject = Object.assign({}, ...response);
+
+      const consumptionData = response.map(
+        (item: { consumption_date: string }) => ({
+          consumption_date: formatDate(item.consumption_date),
+        })
+      );
+
+      const vlConsumption = response.map(
+        (item: { vl_consumption: number }) => item.vl_consumption
+      );
 
       setFormData((prevData: any) => ({
         ...prevData,
-        vl_consumption: dataObject.vl_consumption,
-        consumption_date: new Date(dataObject.consumption_date),
+        consumption_date: consumptionData.map(
+          (data: { consumption_date: any }) => data.consumption_date
+        ),
+        vl_consumption: vlConsumption,
       }));
+
+      handleIndexDate(formData.consumption_date, setIndexDateReturn);
     } catch (error) {
       console.log(error, "Erro ao buscar consumo");
     }
   };
 
+  useEffect(() => {
+    if (formData.resource) {
+      console.log("Datas: ", formData.consumption_date);
+      console.log("Consumo: ", formData.vl_consumption);
+    }
+  }, [formData.resource]);
+
   const fetchCalendarAndAvailables = async () => {
     try {
       const response = await GetDataFromId(formData.resource);
       console.log(response);
-      
 
       setFormData((prevData: any) => ({
         ...prevData,
@@ -212,92 +239,37 @@ const Reports: React.FC = () => {
     }
   }, [formData.calendar]);
 
+  /* Comparativo de index */
   const dateInArray = () => {
-    const dateRange = checkDatesRange(
-      formatDate(formData.startDate),
-      formatDate(formData.endDate),
-      formatDate(formData.consumption_date),
+    if (!Array.isArray(formData.consumption_date)) {
+      console.warn("formData.consumption_date deve ser um array de strings");
+      return;
+    }
+
+    const dateRange = checkConsumDates(
+      formData.consumption_date,
       dates
     );
 
-    const { startIndex, endIndex, consumIndex } = dateRange;
+    const { consumIndex } = dateRange;
 
-    if (startIndex !== null && endIndex !== null) {
-      const initialVlTime = createVlTimeArray(
-        dates,
-        formData.vlTime,
-        startIndex,
-        endIndex
-      );
-
-      const workDaysStatus = isWorkDay(dates);
-
-      const updatedVlTime = initialVlTime.map((time, index) => {
-        const dayStatus = workDaysStatus[index];
-
-        if (dayStatus.isWeekend) {
-          return 0;
-        }
-        return time;
+    console.log(dateRange);
+    console.log(formatDate(formData.startDate));
+    console.log(formatDate(formData.endDate));
+    
+    const consumExists =
+      consumIndex !== null &&
+      consumIndex.some((index) => {
+        const consumDateString = formatDate(formData.consumption_date[index]);
+        return dates.includes(consumDateString);
       });
 
-      setTime(updatedVlTime);
-      if (
-        consumIndex !== null &&
-        consumIndex >= startIndex &&
-        consumIndex <= endIndex
-      ) {
-        const updatedConsum = updatedVlTime.map((time, index) => {
-          return index === consumIndex ? formData.vl_consumption : null;
-        });
-
-        setConsum(updatedConsum);
-      } else {
-        setConsum(new Array(dates.length).fill(null));
-      }
+    if (consumExists) {
+      setConsum(formData.vl_consumption);
     } else {
-      setTime(new Array(dates.length).fill(null));
       setConsum(new Array(dates.length).fill(null));
     }
   };
-
-  const transformConsumptionData = (
-    dates: string[],
-    consumptionValue: number | null,
-    consumptionDate: Date | null
-  ) => {
-    const consumptionArray = new Array(dates.length).fill(0);
-
-    if (consumptionDate) {
-      const formattedConsumptionDate = formatDate(consumptionDate);
-
-      const index = dates.findIndex(
-        (date) => date === formattedConsumptionDate
-      );
-
-      if (index !== -1 && consumptionValue !== null) {
-        consumptionArray[index] = consumptionValue;
-      }
-    }
-
-    return consumptionArray;
-  };
-
-  useEffect(() => {
-    if (formData.resource) {
-      fetchAllData();
-    }
-  }, [formData.resource]);
-
-  useEffect(() => {
-    const consumptionArray = transformConsumptionData(
-      dates,
-      formData.vl_consumption,
-      formData.consumption_date
-    );
-
-    setConsum(consumptionArray);
-  }, [formData.vl_consumption, formData.consumption_date, dates]);
 
   useEffect(() => {
     if (formData.startDate) {
@@ -332,7 +304,7 @@ const Reports: React.FC = () => {
                 label={t("labels.family")}
                 style={formStyle("calc(50% - 8px)", "8px")}
               >
-                <Select onSelect={(e) => handleInputChange("family", e)}>
+                <Select showSearch onSelect={(e) => handleInputChange("family", e)}>
                   {familys.map((family) => (
                     <Option key={family.id} value={family.id}>
                       {family.family}
@@ -377,12 +349,12 @@ const Reports: React.FC = () => {
             </div>
 
             <Button
+              disabled
               style={{
                 width: "10%",
                 position: "relative",
                 float: "right",
               }}
-              onClick={showModal}
               type="primary"
               icon={<FileExcelOutlined />}
             >
@@ -397,19 +369,21 @@ const Reports: React.FC = () => {
           <MixedGraph labels={dates} time={time} consum={consum} />
         </Col>
       </div>
-
+      {/*
       <Modal
         open={isModalOpen}
         onOk={handleOk}
         onCancel={handleCancel}
         okText="Gerar"
       >
+            
         <Form layout="vertical">
           <Form.Item label={t("labels.nameArchive")}>
             <Input value={inputValue} />
           </Form.Item>
         </Form>
       </Modal>
+      */}
     </Row>
   );
 };
