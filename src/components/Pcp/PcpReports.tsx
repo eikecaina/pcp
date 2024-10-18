@@ -28,9 +28,9 @@ import {
 import { GetDataFromId } from "@/app/api/services/Resource/data";
 import { GetDataDaysFromId } from "@/app/api/services/Calendar/data";
 import {
-  checkConsumDates,
   checkDatesRange,
   createVlTimeArray,
+  findMatchingDates,
   formatDate,
   isWorkDay,
 } from "../utilsDays";
@@ -52,7 +52,9 @@ const { RangePicker } = DatePicker;
 
 const Reports: React.FC = () => {
   const { t } = useTranslation("layout");
-  const [formData, setFormData] = useState<any>({});
+  const [formData, setFormData] = useState<any>({
+    vl_consumption: [],
+  });
   const [selectedRadio, setSelectedRadio] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
@@ -60,10 +62,10 @@ const Reports: React.FC = () => {
   const [resources, setResources] = useState<Resource[]>([]);
   const [calendarDays, setCalendarDays] = useState<Date[]>([]);
   const [dates, setDates] = useState<string[]>([]);
-  const [indexDateReturn, setIndexDateReturn] = useState<number[]>([]);
-  const [indexDateInput, setIndexDateInput] = useState<number[]>([]);
   const [time, setTime] = useState<any[]>([]);
   const [consum, setConsum] = useState<number[]>([]);
+  const [indexDate, setIndexDate] = useState<number[]>([]);
+  const [consumIndexArray, setConsumIndexArray] = useState<number[]>([]);
 
   const handleRadioChange = (e: RadioChangeEvent) => {
     setSelectedRadio(e.target.value);
@@ -114,11 +116,9 @@ const Reports: React.FC = () => {
         startDate.toDate(),
         endDate.toDate()
       );
-      console.log("Datas:", allDates);
+      console.log("Datas do Input:", allDates);
 
       setDates(allDates);
-
-      handleIndexDate(dates, setIndexDateInput);
     } else {
       setDates([]);
     }
@@ -180,8 +180,6 @@ const Reports: React.FC = () => {
         ),
         vl_consumption: vlConsumption,
       }));
-
-      handleIndexDate(formData.consumption_date, setIndexDateReturn);
     } catch (error) {
       console.log(error, "Erro ao buscar consumo");
     }
@@ -197,7 +195,6 @@ const Reports: React.FC = () => {
   const fetchCalendarAndAvailables = async () => {
     try {
       const response = await GetDataFromId(formData.resource);
-      console.log(response);
 
       setFormData((prevData: any) => ({
         ...prevData,
@@ -241,39 +238,57 @@ const Reports: React.FC = () => {
 
   /* Comparativo de index */
   const dateInArray = () => {
-    if (!Array.isArray(formData.consumption_date)) {
-      console.warn("formData.consumption_date deve ser um array de strings");
-      return;
-    }
+    const dateIndex = findMatchingDates(formData.consumption_date, dates);
+    const consumIndex = findMatchingDates(dates, formData.consumption_date);
 
-    const dateRange = checkConsumDates(
-      formData.consumption_date,
-      dates
-    );
-
-    const { consumIndex } = dateRange;
-
-    console.log(dateRange);
-    console.log(formatDate(formData.startDate));
-    console.log(formatDate(formData.endDate));
-    
-    const consumExists =
-      consumIndex !== null &&
-      consumIndex.some((index) => {
-        const consumDateString = formatDate(formData.consumption_date[index]);
-        return dates.includes(consumDateString);
-      });
-
-    if (consumExists) {
-      setConsum(formData.vl_consumption);
+    if (dateIndex.length > 0) {
+      setIndexDate(dateIndex);
+      setConsumIndexArray(consumIndex);
     } else {
-      setConsum(new Array(dates.length).fill(null));
+      console.log("Nenhum índice encontrado.");
     }
   };
 
   useEffect(() => {
     if (formData.startDate) {
       dateInArray();
+    }
+  }, [formData.startDate]);
+
+  useEffect(() => {
+    console.log("Índice encontrado:", indexDate);
+    console.log("Índice encontrado consum:", consumIndexArray);
+  }, [indexDate]);
+
+  const updateConsum = (
+    arrayDateIndices: number[],
+    consumIndices: number[]
+  ) => {
+    // Verifica se vl_consumption está definido
+    if (formData.vl_consumption) {
+      setConsum((prevConsum) => {
+        const newConsum = [...prevConsum]; // Faz uma cópia do estado anterior
+
+        // Itera sobre os índices para atualizar o novo array de consumo
+        arrayDateIndices.forEach((arrayDateIndex, i) => {
+          const consumIndex = consumIndices[i]; // Obtém o índice correspondente do array consumIndices
+          if (arrayDateIndex >= 0 && consumIndex >= 0) {
+            newConsum[arrayDateIndex] = formData.vl_consumption[consumIndex]; // Atualiza o valor no índice correspondente
+          }
+        });
+
+        return newConsum; // Retorna o novo array de consumo
+      });
+    } else {
+      console.log("vl_consumption não definido.");
+    }
+  };
+
+  useEffect(() => {
+    if (formData.startDate) {
+      updateConsum(indexDate, consumIndexArray);
+      console.log(consum);
+      
     }
   }, [formData.startDate]);
 
@@ -304,7 +319,10 @@ const Reports: React.FC = () => {
                 label={t("labels.family")}
                 style={formStyle("calc(50% - 8px)", "8px")}
               >
-                <Select showSearch onSelect={(e) => handleInputChange("family", e)}>
+                <Select
+                  showSearch
+                  onSelect={(e) => handleInputChange("family", e)}
+                >
                   {familys.map((family) => (
                     <Option key={family.id} value={family.id}>
                       {family.family}

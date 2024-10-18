@@ -1,3 +1,5 @@
+import { Dispatch, SetStateAction } from "react";
+
 export function isWorkDay(
   dates: (Date | string)[]
 ): { date: Date; isWeekend: boolean }[] {
@@ -11,7 +13,7 @@ export function isWorkDay(
 export function checkDatesRange(
   startDate: string,
   endDate: string,
-  consumDate: string[] | undefined, // Permitir que consumDate seja indefinido
+  consumDate: string[] | undefined,
   datesArray: string[]
 ): {
   startIndex: number | null;
@@ -21,19 +23,16 @@ export function checkDatesRange(
   const start = new Date(startDate);
   const end = new Date(endDate);
 
-  // Encontrar o índice da data de início
   const startIndex = datesArray.findIndex((dateString) => {
     const date = new Date(dateString);
     return date.getTime() === start.getTime();
   });
 
-  // Encontrar o índice da data de fim
   const endIndex = datesArray.findIndex((dateString) => {
     const date = new Date(dateString);
     return date.getTime() === end.getTime();
   });
 
-  // Verifica se consumDate está definido e se não é nulo
   const consumIndex = consumDate
     ? consumDate
         .map((consum) => {
@@ -42,7 +41,7 @@ export function checkDatesRange(
             return date.getTime() === new Date(consum).getTime();
           });
         })
-        .filter((index) => index !== -1) // Filtra os índices inválidos
+        .filter((index) => index !== -1)
     : [];
 
   return {
@@ -52,27 +51,59 @@ export function checkDatesRange(
   };
 }
 
-export function checkConsumDates(
-  consumDate: string[] | undefined, // Permitir que consumDate seja indefinido
-  datesArray: string[]
-): {
-  consumIndex: number[] | null;
-} {
-  // Verifica se consumDate está definido e se não é nulo
-  const consumIndex = consumDate
-    ? consumDate
-        .map((consum) => {
-          return datesArray.findIndex((dateString) => {
-            const date = new Date(dateString);
-            return date.getTime() === new Date(consum).getTime();
-          });
-        })
-        .filter((index) => index !== -1) // Filtra os índices inválidos
-    : [];
+export function findMatchingDates(
+  datesArray: string[] | undefined,
+  consumDate: string[] | undefined
+): number[] {
+  const logs: {
+    message: string;
+    date?: string;
+    index?: number;
+    from?: string;
+    consumIndex?: number;
+  }[] = [];
 
-  return {
-    consumIndex: consumIndex.length > 0 ? consumIndex : null,
-  };
+  if (!consumDate || consumDate.length === 0) {
+    logs.push({
+      message: "Datas não encontradas",
+    });
+    console.log(logs);
+    return []; // Retorna um array vazio se consumDate estiver vazio
+  }
+
+  if (!datesArray || datesArray.length === 0) {
+    logs.push({
+      message: "Datas não encontradas",
+    });
+    console.log(logs);
+    return []; // Retorna um array vazio se datesArray estiver vazio
+  }
+
+  const matchingDates = consumDate
+    .map((consum, consumIndex) => {
+      const consumDateObj = new Date(consum);
+
+      const index = datesArray.findIndex((dateString) => {
+        return new Date(dateString).getTime() === consumDateObj.getTime();
+      });
+
+      if (index !== -1) {
+        logs.push({
+          message: "Datas encontradas",
+          date: consum,
+          index,
+          consumIndex,
+          from: "datesArray",
+        });
+        return consumIndex; // Retorna apenas o consumIndex
+      }
+      return null; // Retorna null se não houver correspondência
+    })
+    .filter((item) => item !== null); // Filtra os itens nulos
+
+  console.log(logs);
+
+  return matchingDates as number[]; // Retorna todos os consumIndex encontrados
 }
 
 export function createVlTimeArray(
