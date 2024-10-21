@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Button,
   Card,
@@ -17,23 +17,101 @@ const { RangePicker } = DatePicker;
 
 import CustomInputNumber from "components/CustomInputNumber";
 import { useTranslation } from "react-i18next";
+import { useForm } from "antd/es/form/Form";
+import { GetAllFamily } from "@/app/api/services/Family/data";
+import { UUID } from "crypto";
+import { GetByFamilyId } from "@/app/api/services/Resource/data";
 const weekFormat = "DD/MM/YYYY";
 
 const { TextArea } = Input;
 
+type Family = {
+  id: UUID;
+  dsFamily: string;
+};
+
+type Resource = {
+  id: UUID;
+  dsResource: string;
+};
+
 const PcpProcessResources: React.FC = () => {
   const { t } = useTranslation("layout");
+  const [form] = Form.useForm();
+  const { Option } = Select;
 
   const [selectedRadio, setSelectedRadio] = useState(1);
+  const [formData, setFormData] = useState<any>({});
+  const [familys, setFamilys] = useState<Family[]>([]);
+  const [resources, setResources] = useState<Resource[]>([]);
+
+  /* Get all familys */
+  const getFamilys = async () => {
+    try {
+      const response = await GetAllFamily();
+
+      const familyData = response.map(
+        (familys: { id: UUID; ds_Family: string }) => ({
+          id: familys.id,
+          dsFamily: familys.ds_Family,
+        })
+      );
+
+      setFamilys(familyData);
+    } catch (error) {
+      console.error("Erro ao buscar familias", error);
+    }
+  };
+
+  useEffect(() => {
+    getFamilys();
+  }, []);
+
+  /* Set family IDs */
+  const handleSelectChange = (key: string, value: any) => {
+    setFormData((prevData: any) => ({
+      ...prevData,
+      [key]: value,
+    }));
+  };
+
+  /* Get all resources */
+  const getResourceByFamilyId = async () => {
+    if (formData.familyId) {
+      try {
+        const response = await GetByFamilyId(formData.familyId);
+
+        const resourceData = response.map(
+          (resources: { id: UUID; ds_Resource: string }) => ({
+            id: resources.id,
+            dsResource: resources.ds_Resource,
+          })
+        );
+        setResources(resourceData);
+      } catch (error) {
+        console.error("Não foi possivel carregar recursos", error);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getResourceByFamilyId();
+  }, [formData.familyId]);
+
+  useEffect(() => {
+    if (resources.length > 0) {
+      console.log(resources);
+    }
+  }, [resources]);
+
+  useEffect(() => {
+    if (formData.resourceId) {
+      console.log(formData.resourceId);
+    }
+  }, [formData.resourceId]);
 
   const handleRadioChange = (e: RadioChangeEvent) => {
     setSelectedRadio(e.target.value);
-  };
-
-  const [selectedUniversity, setSelectedUniversity] = useState(null);
-
-  const handleSelectChange = (value: React.SetStateAction<null>) => {
-    setSelectedUniversity(value);
   };
 
   return (
@@ -49,7 +127,7 @@ const PcpProcessResources: React.FC = () => {
           <div style={{ padding: "5px 10px 5px 10px" }}>
             <Form layout="vertical">
               <Form.Item
-                label={t("labels.type")}
+                label="Familia"
                 style={{
                   width: "calc(50% - 8px)",
                   display: "inline-block",
@@ -57,19 +135,14 @@ const PcpProcessResources: React.FC = () => {
                 }}
               >
                 <Select
-                  defaultValue={"Transformador de Distribuição"}
-                  options={[
-                    {
-                      value: "Transformador de Distribuição",
-                    },
-                    {
-                      value: "Transformador a Seco",
-                    },
-                    {
-                      value: "Transformador de Meia Força",
-                    },
-                  ]}
-                />
+                  onChange={(value) => handleSelectChange("familyId", value)}
+                >
+                  {familys.map((family: any) => (
+                    <Option key={family.id} value={family.id}>
+                      {family.dsFamily}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
               <Form.Item
                 label={t("labels.selectDate")}
@@ -111,11 +184,8 @@ const PcpProcessResources: React.FC = () => {
                 <Select
                   placeholder="Selecione o processo"
                   showSearch
-                  onChange={(value) => handleSelectChange(value)}
                   disabled={selectedRadio === 2}
-                >
-                  
-                </Select>
+                ></Select>
               </Form.Item>
               <Form.Item
                 style={{
@@ -126,9 +196,15 @@ const PcpProcessResources: React.FC = () => {
                 <Select
                   placeholder="Selecione o recurso"
                   showSearch
-                  onChange={(value) => handleSelectChange(value)}
                   disabled={selectedRadio === 1}
-                ></Select>
+                  onChange={(value) => handleSelectChange("resourceId", value)}
+                >
+                  {resources.map((resources: any) => (
+                    <Option key={resources.id} value={resources.id}>
+                      {resources.dsResource}
+                    </Option>
+                  ))}
+                </Select>
               </Form.Item>
             </div>
             <div>
@@ -249,9 +325,7 @@ const PcpProcessResources: React.FC = () => {
           </div>
         </Card>
       </Col>
-      <Col span={14} style={{ height: 245 }}>
-    
-      </Col>
+      <Col span={14} style={{ height: 245 }}></Col>
     </Row>
   );
 };

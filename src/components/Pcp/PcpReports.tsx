@@ -79,21 +79,7 @@ const Reports: React.FC = () => {
   const handleExport = () => {
     exportToExcel(inputValue);
   };
-
-  /*Pegar is indeces do array de datas*/
-  const handleIndexDate = (
-    datesArray: any[],
-    setIndex: React.Dispatch<React.SetStateAction<number[]>>
-  ) => {
-    if (!datesArray) {
-      console.warn("datesArray is undefined or null");
-      return;
-    }
-
-    const index = datesArray.map((_, index) => index);
-    setIndex(index);
-  };
-
+ 
   /*Transforma as duas datas de inicio e fim do rangepicker em um array*/
   const getDatesInRange = (start: Date, end: Date): string[] => {
     const datesArray: string[] = [];
@@ -258,26 +244,24 @@ const Reports: React.FC = () => {
   useEffect(() => {
     console.log("Índice encontrado:", indexDate);
     console.log("Índice encontrado consum:", consumIndexArray);
-  }, [indexDate]);
+  }, [formData.startDate]);
 
   const updateConsum = (
     arrayDateIndices: number[],
     consumIndices: number[]
   ) => {
-    // Verifica se vl_consumption está definido
     if (formData.vl_consumption) {
       setConsum((prevConsum) => {
-        const newConsum = [...prevConsum]; // Faz uma cópia do estado anterior
+        const newConsum = [...prevConsum];
 
-        // Itera sobre os índices para atualizar o novo array de consumo
         arrayDateIndices.forEach((arrayDateIndex, i) => {
-          const consumIndex = consumIndices[i]; // Obtém o índice correspondente do array consumIndices
+          const consumIndex = consumIndices[i];
           if (arrayDateIndex >= 0 && consumIndex >= 0) {
-            newConsum[arrayDateIndex] = formData.vl_consumption[consumIndex]; // Atualiza o valor no índice correspondente
+            newConsum[arrayDateIndex] = formData.vl_consumption[consumIndex];
           }
         });
 
-        return newConsum; // Retorna o novo array de consumo
+        return newConsum;
       });
     } else {
       console.log("vl_consumption não definido.");
@@ -287,8 +271,7 @@ const Reports: React.FC = () => {
   useEffect(() => {
     if (formData.startDate) {
       updateConsum(indexDate, consumIndexArray);
-      console.log(consum);
-      
+      console.log(consum);      
     }
   }, [formData.startDate]);
 
