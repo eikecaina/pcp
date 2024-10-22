@@ -29,7 +29,7 @@ ChartJS.register(
 );
 
 interface MixedGraphProps {
-  labels: Date[];
+  labels: string[];
   time: number[];
   consum: number[];
 }
@@ -39,6 +39,9 @@ export const MixedGraph: React.FC<MixedGraphProps> = ({
   time,
   consum,
 }) => {
+  // Truncar consum para ter o mesmo tamanho que labels
+  const truncatedConsum = consum.slice(0, labels.length);
+
   const options: ChartOptions<"bar" | "line"> = {
     responsive: true,
     scales: {
@@ -63,7 +66,7 @@ export const MixedGraph: React.FC<MixedGraphProps> = ({
       {
         type: "bar",
         label: "Consumo",
-        data: consum,
+        data: truncatedConsum, // Usar o consum truncado
         backgroundColor: "rgba(0, 0, 255, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
       },
