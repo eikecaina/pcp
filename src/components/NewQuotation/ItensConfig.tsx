@@ -24,7 +24,11 @@ import {
   Tooltip,
   message,
 } from "antd";
+<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
+=======
+import React, { useState } from "react";
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
 
 import ConfigModal from "./ConfigModal/ConfigModal";
 import PcpPage from "components/Pcp/PcpPage";
@@ -37,6 +41,7 @@ import GeneralSettings from "components/Settings/GeneralSettings";
 import { TreeQuotation } from "../TreeData";
 import { UUID } from "crypto";
 
+<<<<<<< HEAD
 interface Option {
   value: any;
   label: string;
@@ -44,18 +49,27 @@ interface Option {
   key?: string;
 }
 
+=======
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
 type QuotationItem = {
   quotation_Value: number;
   config_Item: {
     value: UUID[];
+<<<<<<< HEAD
     key: string[];
+=======
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
   };
 };
 
 export const GeneralData: React.FC = () => {
   const [data, setData] = useState<any>({});
   const [fetchData, setFetchData] = useState(true);
+<<<<<<< HEAD
   const [selectedIndex, setSelectedIndex] = useState<any>(0);
+=======
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rootId, setRootId] = useState();
   const [formData, setFormData] = useState<any>({
@@ -64,7 +78,10 @@ export const GeneralData: React.FC = () => {
         quotation_Value: 10,
         config_Item: {
           value: [],
+<<<<<<< HEAD
           key: [],
+=======
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
         },
       },
     ],
@@ -102,7 +119,10 @@ export const GeneralData: React.FC = () => {
       quotation_Value: nextValue,
       config_Item: {
         value: [],
+<<<<<<< HEAD
         key: [], // Inicialize o array key aqui
+=======
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
       },
     };
 
@@ -118,7 +138,11 @@ export const GeneralData: React.FC = () => {
         quotation_Items: sortedItems,
       };
     });
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
     message.success(`Item adicionado`);
   };
 
@@ -174,11 +198,15 @@ export const GeneralData: React.FC = () => {
     );
   };
 
+<<<<<<< HEAD
   const updateQuotationItemValue = (
     index: number,
     newValues: string[], // Recebe um array de novos valores
     newKeys: string[] // Recebe um array de novas keys
   ) => {
+=======
+  const updateQuotationItemValue = (index: number, newValue: string) => {
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
     setFormData((prevData: any) => {
       const updatedData = {
         ...prevData,
@@ -191,11 +219,15 @@ export const GeneralData: React.FC = () => {
           : [],
       };
 
+<<<<<<< HEAD
       // Verifica se o item de cotação no índice existe
+=======
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
       if (!updatedData.quotation_Items[index]) {
         updatedData.quotation_Items[index] = {
           quotation_Value:
             formData.quotation_Items[index]?.quotation_Value || 10,
+<<<<<<< HEAD
           config_Item: {
             value: [...newValues], // Garante que cada valor seja adicionado individualmente
             key: [...newKeys], // Garante que cada key seja adicionada individualmente
@@ -227,6 +259,12 @@ export const GeneralData: React.FC = () => {
               !updatedData.quotation_Items[index].config_Item.key.includes(key)
           ),
         ]; // Adiciona cada key ao array, sem criar arrays aninhados
+=======
+          config_Item: { value: [newValue] },
+        };
+      } else {
+        updatedData.quotation_Items[index].config_Item.value = [newValue];
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
       }
 
       return updatedData;
@@ -234,12 +272,17 @@ export const GeneralData: React.FC = () => {
   };
 
   const saveLog = () => {
+<<<<<<< HEAD
     updateQuotationItemValue(
       selectedIndex ?? 0, // O índice que deseja atualizar
       formData.value_id, // Todos os valores de value_id que você deseja adicionar
       formData.key // Todos os valores de key que você deseja adicionar
     );
     console.log(formData);
+=======
+    updateQuotationItemValue(selectedIndex ?? 0, formData.value_id);
+    console.log(formData.quotation_Items);
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
   };
 
   const openModalConfig = async () => {
@@ -268,10 +311,15 @@ export const GeneralData: React.FC = () => {
 
   const handleInputChange = (fieldName: string, value: any) => {
     setFormData({ ...formData, [fieldName]: value });
+<<<<<<< HEAD
   };
 
   const handleSelectChange = (value: any) => {
     const options: Option[] = generateOptions(formData.quotation_Items);
+=======
+
+    const options = generateOptions(formData.quotation_Items);
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
 
     const selectedOption = options.find(
       (option: { value: any }) => option.value === value
@@ -280,6 +328,7 @@ export const GeneralData: React.FC = () => {
     if (selectedOption) {
       const index = options.indexOf(selectedOption);
       setSelectedIndex(index);
+<<<<<<< HEAD
     }
 
     console.log(formData);
@@ -302,6 +351,24 @@ export const GeneralData: React.FC = () => {
     }
   }, [selectedIndex, formData.quotation_Items, setFormData]);
 
+=======
+
+      const selectedQuotationItem = formData.quotation_Items.find(
+        (item: { quotation_Value: number }) => item.quotation_Value === value
+      );
+
+      if (selectedQuotationItem) {
+        setFormData((prevFormData: any) => ({
+          ...prevFormData,
+          value_id: selectedQuotationItem.config_Item.value,
+        }));
+      }
+   
+      console.log(selectedQuotationItem.config_Item.value);
+    }
+  };
+
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
   return (
     <>
       <div style={{ height: "100%" }}>
@@ -364,7 +431,13 @@ export const GeneralData: React.FC = () => {
                           ?.value
                       : undefined
                   }
+<<<<<<< HEAD
                   onChange={(value) => handleSelectChange(value)}
+=======
+                  onChange={(value) =>
+                    handleInputChange("quotation_Item", value)
+                  }
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
                   options={generateOptions(formData.quotation_Items)}
                 />
 
@@ -411,6 +484,7 @@ export const GeneralData: React.FC = () => {
         </Divider>
         <div style={{ overflowY: "auto", padding: 10, maxHeight: "40vh" }}>
           <Form layout="vertical">
+<<<<<<< HEAD
             <TreeQuotation
               checkable
               fetchData={fetchData}
@@ -419,6 +493,32 @@ export const GeneralData: React.FC = () => {
               rootId={rootId}
               checkedKeys={formData.key}
             />
+=======
+            <Radio.Group
+              defaultValue={"d782616f-44fb-493c-9bfa-e85b5c1c471a"}
+              onChange={onChange}
+              value={rootId}
+            >
+              <Radio value={"d782616f-44fb-493c-9bfa-e85b5c1c471a"}>
+                Meio de Operação: Seco
+              </Radio>
+
+              <Radio value={"0e628b8a-bdc9-4bd7-999a-a7a5a3166372"}>
+                Meio de Operação: Óleo
+              </Radio>
+            </Radio.Group>
+
+            <div style={{ marginTop: 20 }}>
+              <TreeQuotation
+                checkable
+                fetchData={fetchData}
+                setFetchData={setFetchData}
+                setFormData={setFormData}
+                rootId={rootId}
+                checkedKeys={formData.value_id}
+              />
+            </div>
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
           </Form>
         </div>
 

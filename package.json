@@ -5,8 +5,12 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+<<<<<<< HEAD
     "start": "next start",
     "lint": "next lint"
+=======
+    "start": "next start"
+>>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
   },
   "dependencies": {
     "@ant-design/icons": "^5.3.1",
