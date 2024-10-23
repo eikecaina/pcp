@@ -119,6 +119,11 @@ export const GeneralData: React.FC = () => {
         quotation_Items: sortedItems,
       };
     });
+    updateQuotationItemValue(
+      selectedIndex ?? 0,
+      formData.value_id,
+      formData.key
+    );
     message.success(`Item adicionado`);
   };
 
@@ -176,8 +181,8 @@ export const GeneralData: React.FC = () => {
 
   const updateQuotationItemValue = (
     index: number,
-    newValues: string[], // Recebe um array de novos valores
-    newKeys: string[] // Recebe um array de novas keys
+    newValues: string[],
+    newKeys: string[]
   ) => {
     setFormData((prevData: any) => {
       const updatedData = {
@@ -191,18 +196,16 @@ export const GeneralData: React.FC = () => {
           : [],
       };
 
-      // Verifica se o item de cotação no índice existe
       if (!updatedData.quotation_Items[index]) {
         updatedData.quotation_Items[index] = {
           quotation_Value:
             formData.quotation_Items[index]?.quotation_Value || 10,
           config_Item: {
-            value: [...newValues], // Garante que cada valor seja adicionado individualmente
-            key: [...newKeys], // Garante que cada key seja adicionada individualmente
+            value: [...newValues],
+            key: [...newKeys],
           },
         };
       } else {
-        // Inicializa config_Item se não existir
         if (!updatedData.quotation_Items[index].config_Item) {
           updatedData.quotation_Items[index].config_Item = {
             value: [],
@@ -218,7 +221,7 @@ export const GeneralData: React.FC = () => {
                 val
               )
           ),
-        ]; // Adiciona cada valor ao array, sem criar arrays aninhados
+        ];
 
         updatedData.quotation_Items[index].config_Item.key = [
           ...updatedData.quotation_Items[index].config_Item.key,
@@ -226,7 +229,7 @@ export const GeneralData: React.FC = () => {
             (key) =>
               !updatedData.quotation_Items[index].config_Item.key.includes(key)
           ),
-        ]; // Adiciona cada key ao array, sem criar arrays aninhados
+        ];
       }
 
       return updatedData;
@@ -235,9 +238,9 @@ export const GeneralData: React.FC = () => {
 
   const saveLog = () => {
     updateQuotationItemValue(
-      selectedIndex ?? 0, // O índice que deseja atualizar
-      formData.value_id, // Todos os valores de value_id que você deseja adicionar
-      formData.key // Todos os valores de key que você deseja adicionar
+      selectedIndex ?? 0,
+      formData.value_id,
+      formData.key
     );
     console.log(formData);
   };
@@ -281,7 +284,11 @@ export const GeneralData: React.FC = () => {
       const index = options.indexOf(selectedOption);
       setSelectedIndex(index);
     }
-
+    updateQuotationItemValue(
+      selectedIndex ?? 0,
+      formData.value_id,
+      formData.key
+    );
     console.log(formData);
   };
 
@@ -297,7 +304,7 @@ export const GeneralData: React.FC = () => {
       const selectedItem = formData.quotation_Items[selectedIndex];
       setFormData((prev: any) => ({
         ...prev,
-        key: selectedItem.config_Item.key, // Atualiza o key
+        key: selectedItem.config_Item.key,
       }));
     }
   }, [selectedIndex, formData.quotation_Items, setFormData]);
