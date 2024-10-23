@@ -45,7 +45,6 @@ export const TreeQuotation: React.FC<TreeValuesProps> = ({
   fetchData,
   setFetchData,
   checkable,
-<<<<<<< HEAD
   rootId, // Mantém o rootId como parâmetro
   checkedKeys,
 }) => {
@@ -72,44 +71,15 @@ export const TreeQuotation: React.FC<TreeValuesProps> = ({
           children: buildTree(nodes, node.value_id, key),
         };
       });
-=======
-  rootId,
-  checkedKeys
-}) => {
-  const [oleo, setOleo] = useState<ExtendedDataNode[]>([]);
-  const [seco, setSeco] = useState<ExtendedDataNode[]>([]);
-  const [selectedNodes, setSelectedNodes] = useState<any[]>([]);
-
-  function buildTree(
-    nodes: TreeNode[],
-    parentId: UUID | null = null
-  ): TreeDataNode[] {
-    return nodes
-      .filter((node) => node.parent_value_id === parentId)
-      .map((node, index) => ({
-        id: node.value_id,
-        title: node.characteristic_display + ": " + node.ds_Value,
-         key: node.value_id || 'default-key',
-        children: buildTree(nodes, node.value_id),
-      }));
->>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
   }
 
   const fetchTree = async (): Promise<void> => {
     try {
       const response: TreeNode[] = await GetWithChild();
 
-<<<<<<< HEAD
       // Utiliza o rootId para construir a árvore
       const data = buildTree(response, defaultRootId);
       setTreeData(data);
-=======
-      const oleo = buildTree(response, "0e628b8a-bdc9-4bd7-999a-a7a5a3166372");
-      setOleo(oleo);
-
-      const seco = buildTree(response, "d782616f-44fb-493c-9bfa-e85b5c1c471a");
-      setSeco(seco);
->>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
     } catch (error) {
       console.error("Erro ao buscar dados:", error);
     }
@@ -121,30 +91,17 @@ export const TreeQuotation: React.FC<TreeValuesProps> = ({
   ) => {
     const { checked } = info;
     const nodeId = info.node.id;
-<<<<<<< HEAD
     const nodeKey = info.node.key;
 
     setSelectedNodes((prevSelectedNodes) =>
       checked
         ? [...prevSelectedNodes, nodeId]
         : prevSelectedNodes.filter((id) => id !== nodeId)
-=======
-
-    
-    setSelectedNodes(
-      (prevSelectedNodes) =>
-        checked
-          ? [...prevSelectedNodes, nodeId]
-          : prevSelectedNodes.filter((id) => id !== nodeId)
->>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
     );
 
     setFormData((prevFormData: any) => {
       let newValueId;
-<<<<<<< HEAD
       let newKeys;
-=======
->>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
 
       if (checked) {
         newValueId = Array.isArray(prevFormData.value_id)
@@ -157,7 +114,6 @@ export const TreeQuotation: React.FC<TreeValuesProps> = ({
         );
       }
 
-<<<<<<< HEAD
       if (checked) {
         newKeys = Array.isArray(prevFormData.key)
           ? [...prevFormData.key, nodeKey]
@@ -171,11 +127,6 @@ export const TreeQuotation: React.FC<TreeValuesProps> = ({
         ...prevFormData,
         value_id: newValueId.filter((id: UUID) => id !== undefined),
         key: newKeys.filter((key: string) => key !== undefined),
-=======
-      return {
-        ...prevFormData,
-        value_id: newValueId.filter((id: UUID) => id !== undefined),
->>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
       };
     });
 
@@ -191,11 +142,7 @@ export const TreeQuotation: React.FC<TreeValuesProps> = ({
   return (
     <Tree
       checkable={checkable}
-<<<<<<< HEAD
       treeData={treeData} // Utilize treeData que foi construída
-=======
-      treeData={rootId === "0e628b8a-bdc9-4bd7-999a-a7a5a3166372" ? oleo : seco}
->>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
       onCheck={onCheck}
       checkedKeys={checkedKeys}
       style={{
@@ -208,103 +155,6 @@ export const TreeQuotation: React.FC<TreeValuesProps> = ({
     />
   );
 };
-<<<<<<< HEAD
-=======
-
-export const TreeValues: React.FC<TreeValuesProps> = ({
-  setFormData,
-  fetchData,
-  setFetchData,
-  checkable,
-}) => {
-  const [treeData, setTreeData] = useState<ExtendedDataNode[]>([]);
-  const [selectedNodes, setSelectedNodes] = useState<any[]>([]);
-  const rootId: UUID = "49f0343a-60ab-473a-b167-d893f52e6c35";
-
-  function buildTree(
-    nodes: TreeNode[],
-    parentId: UUID | null = null
-  ): TreeDataNode[] {
-    return nodes
-      .filter((node) => node.parent_value_id === parentId)
-      .map((node, index) => ({
-        id: node.value_id,
-        title: node.characteristic_display + ": " + node.ds_Value,
-        key: `${parentId ? parentId : "root"}-${index}`,
-        children: buildTree(nodes, node.value_id),
-      }));
-  }
-
-  const fetchTree = async (): Promise<void> => {
-    try {
-      const response: TreeNode[] = await GetWithChild();
-
-      const data = buildTree(response, rootId);
-      setTreeData(data);
-    } catch (error) {
-      console.error("Erro ao buscar dados:", error);
-    }
-  };
-
-  const onCheck: TreeProps<ExtendedDataNode>["onCheck"] = (
-    checkedKeys,
-    info
-  ) => {
-    const { checked } = info;
-    const nodeId = info.node.id;
-
-    if (checked) {
-      setSelectedNodes([...selectedNodes, nodeId]);
-    } else {
-      setSelectedNodes(selectedNodes.filter((id) => id !== nodeId));
-    }
-
-    setFormData((prevFormData: any) => {
-      let newValueId;
-
-      if (checked) {
-        newValueId = Array.isArray(prevFormData.value_id)
-          ? [...prevFormData.value_id, nodeId]
-          : [prevFormData.value_id, nodeId];
-      } else {
-        newValueId = prevFormData.value_id.filter(
-          (id: string) => id !== nodeId
-        );
-      }
-
-      return {
-        ...prevFormData,
-        parent_value_id: nodeId,
-        value_id: newValueId.filter((id: UUID) => id !== undefined),
-      };
-    });
-
-    console.log(info.node);
-  };
-
-  useEffect(() => {
-    if (fetchData) {
-      fetchTree();
-    }
-  }, [fetchData]);
-
-  return (
-    <Tree
-      checkable={checkable}
-      treeData={treeData}
-      onCheck={onCheck}
-      style={{
-        height: "100%",
-        maxHeight: 607,
-        textOverflow: "ellipsis",
-        whiteSpace: "nowrap",
-      }}
-      showLine={true}
-    />
-  );
-};
-
->>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
 export const TreeFamily: React.FC<TreeValuesProps> = ({
   setFormData,
   fetchData,
@@ -318,7 +168,6 @@ export const TreeFamily: React.FC<TreeValuesProps> = ({
 
   function buildTree(
     nodes: TreeNode[],
-<<<<<<< HEAD
     parentId: UUID | null = null,
     prefix: string = "0" // Inicia o prefixo em '0' para a raiz
   ): TreeDataNode[] {
@@ -336,28 +185,11 @@ export const TreeFamily: React.FC<TreeValuesProps> = ({
           children: buildTree(nodes, node.value_id, newKey), // Passa a nova chave como prefixo para os filhos
         };
       });
-=======
-    parentId: UUID | null = null
-  ): TreeDataNode[] {
-    return nodes
-      .filter((node) => node.parent_value_id === parentId)
-      .map((node) => ({
-        values: node.value_id,
-        parent_value_id: node.parent_value_id,
-        title: node.characteristic_display + ": " + node.ds_Value,
-        key: node.value_id ?? `default-key-${parentId}-${Math.random()}`,
-        children: buildTree(nodes, node.value_id),
-      }));
->>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
   }
 
   const fetchTree = async (): Promise<void> => {
     try {
       const response: TreeNode[] = await GetWithChild();
-<<<<<<< HEAD
-=======
-
->>>>>>> 62c339a5a734b5ec1d52d53d5b0cd38ad7364452
       const data = buildTree(response, rootId);
       setTreeData(data);
     } catch (error) {
@@ -618,6 +450,99 @@ export const TreeProcessFamily: React.FC<TreeValuesProps> = ({
       onSelect={onSelect}
       onCheck={onCheck}
       checkedKeys={checkedKeys}
+      style={{
+        height: "100%",
+        maxHeight: 607,
+        textOverflow: "ellipsis",
+        whiteSpace: "nowrap",
+      }}
+      showLine={true}
+    />
+  );
+};
+
+export const TreeValues: React.FC<TreeValuesProps> = ({
+  setFormData,
+  fetchData,
+  setFetchData,
+  checkable,
+}) => {
+  const [treeData, setTreeData] = useState<ExtendedDataNode[]>([]);
+  const [selectedNodes, setSelectedNodes] = useState<any[]>([]);
+  const rootId: UUID = "49f0343a-60ab-473a-b167-d893f52e6c35";
+
+  function buildTree(
+    nodes: TreeNode[],
+    parentId: UUID | null = null
+  ): TreeDataNode[] {
+    return nodes
+      .filter((node) => node.parent_value_id === parentId)
+      .map((node, index) => ({
+        id: node.value_id,
+        title: node.characteristic_display + ": " + node.ds_Value,
+        key: `${parentId ? parentId : "root"}-${index}`,
+        children: buildTree(nodes, node.value_id),
+      }));
+  }
+
+  const fetchTree = async (): Promise<void> => {
+    try {
+      const response: TreeNode[] = await GetWithChild();
+
+      const data = buildTree(response, rootId);
+      setTreeData(data);
+    } catch (error) {
+      console.error("Erro ao buscar dados:", error);
+    }
+  };
+
+  const onCheck: TreeProps<ExtendedDataNode>["onCheck"] = (
+    checkedKeys,
+    info
+  ) => {
+    const { checked } = info;
+    const nodeId = info.node.id;
+
+    if (checked) {
+      setSelectedNodes([...selectedNodes, nodeId]);
+    } else {
+      setSelectedNodes(selectedNodes.filter((id) => id !== nodeId));
+    }
+
+    setFormData((prevFormData: any) => {
+      let newValueId;
+
+      if (checked) {
+        newValueId = Array.isArray(prevFormData.value_id)
+          ? [...prevFormData.value_id, nodeId]
+          : [prevFormData.value_id, nodeId];
+      } else {
+        newValueId = prevFormData.value_id.filter(
+          (id: string) => id !== nodeId
+        );
+      }
+
+      return {
+        ...prevFormData,
+        parent_value_id: nodeId,
+        value_id: newValueId.filter((id: UUID) => id !== undefined),
+      };
+    });
+
+    console.log(info.node);
+  };
+
+  useEffect(() => {
+    if (fetchData) {
+      fetchTree();
+    }
+  }, [fetchData]);
+
+  return (
+    <Tree
+      checkable={checkable}
+      treeData={treeData}
+      onCheck={onCheck}
       style={{
         height: "100%",
         maxHeight: 607,
