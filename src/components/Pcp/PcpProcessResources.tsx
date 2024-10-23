@@ -20,7 +20,10 @@ import { useTranslation } from "react-i18next";
 import { useForm } from "antd/es/form/Form";
 import { GetAllFamily } from "@/app/api/services/Family/data";
 import { UUID } from "crypto";
-import { GetByFamilyId } from "@/app/api/services/Resource/data";
+import {
+  GetByFamilyId,
+  GetConsumByResourceId,
+} from "@/app/api/services/Resource/data";
 const weekFormat = "DD/MM/YYYY";
 
 const { TextArea } = Input;
@@ -67,7 +70,7 @@ const PcpProcessResources: React.FC = () => {
     getFamilys();
   }, []);
 
-  /* Set family IDs */
+  /* Set IDs */
   const handleSelectChange = (key: string, value: any) => {
     setFormData((prevData: any) => ({
       ...prevData,
@@ -94,16 +97,48 @@ const PcpProcessResources: React.FC = () => {
     }
   };
 
+  const getResourceConsumption = async () => {
+    const response = await GetConsumByResourceId(formData.resourceId);
+
+    const processIds = response.map(
+      (consumption: { process_id: UUID }) => consumption.process_id
+    );
+
+    const resourceIds = response.map(
+      (consumption: { resource_id: UUID }) => consumption.resource_id
+    );
+
+    setFormData((prevData: any) => ({
+      ...prevData,
+      processId: processIds,
+      resourceId: resourceIds,
+    }));
+  };
+
+  useEffect(() => {
+    if (formData.resourceId) {
+      getResourceConsumption();
+
+      console.log("Recurso ID:", formData.resourceId);
+      console.log("Processo ID:", formData.processId);
+    }
+  }, [formData.resourceId]);
+
+  /* Render resource */
   useEffect(() => {
     getResourceByFamilyId();
   }, [formData.familyId]);
 
+  /* Log de recursos */
+  /*
   useEffect(() => {
     if (resources.length > 0) {
       console.log(resources);
     }
   }, [resources]);
+  */
 
+  /*Log recurso id */
   useEffect(() => {
     if (formData.resourceId) {
       console.log(formData.resourceId);
@@ -220,7 +255,7 @@ const PcpProcessResources: React.FC = () => {
                   <Select />
                 </Form.Item>
                 <Form.Item
-                  label={t("labels.salesOrder")}
+                  label={t("labels.client")}
                   style={{
                     display: "inline-block",
                     width: "calc(50% - 8px)",
@@ -239,7 +274,7 @@ const PcpProcessResources: React.FC = () => {
                   <Select></Select>
                 </Form.Item>
                 <Form.Item
-                  label={t("labels.client")}
+                  label={t("labels.salesOrder")}
                   style={{
                     display: "inline-block",
                     width: "calc(50% - 8px)",
@@ -248,21 +283,26 @@ const PcpProcessResources: React.FC = () => {
                   <Input />
                 </Form.Item>
 
-                <Form.Item label={t("labels.processResource")}>
-                  <Select
-                    style={{
-                      display: "inline-block",
-                      width: "calc(50% - 8px)",
-                    }}
-                  />
-                  <Select
-                    style={{
-                      display: "inline-block",
-                      width: "calc(50% - 8px)",
-                      margin: "0 0px 0 15px",
-                    }}
-                  />
+                <Form.Item
+                  label="Processo consumido"
+                  style={{
+                    width: "calc(50% - 8px)",
+                    display: "inline-block",
+                    margin: "0px 15px 0 0px",
+                  }}
+                >
+                  <Select></Select>
                 </Form.Item>
+                <Form.Item
+                  label="Recurso consumido"
+                  style={{
+                    display: "inline-block",
+                    width: "calc(50% - 8px)",
+                  }}
+                >
+                  <Select></Select>
+                </Form.Item>
+
                 <Form.Item
                   label={t("labels.secondsConsum")}
                   style={{
