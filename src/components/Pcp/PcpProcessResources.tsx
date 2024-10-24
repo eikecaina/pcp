@@ -30,7 +30,7 @@ import {
   SaveConsum,
 } from "@/app/api/services/Resource/data";
 import { GetAllProcess, GetByProcessId } from "@/app/api/services/Process/data";
-import { formatDateEn, formatDateEnBr } from "../utilsDays";
+import { formatDateEn, formatDateBr } from "../utilsDays";
 const weekFormat = "DD/MM/YYYY";
 
 const { TextArea } = Input;
@@ -65,6 +65,7 @@ const PcpProcessResources: React.FC = () => {
   const { t } = useTranslation("layout");
   const [form] = Form.useForm();
   const { Option } = Select;
+  const formatDate = (date: string) => date?.split("T")[0];
 
   const [selectedRadio, setSelectedRadio] = useState(1);
   const [formData, setFormData] = useState<any>({});
@@ -231,9 +232,20 @@ const PcpProcessResources: React.FC = () => {
 
   useEffect(() => {
     if (consumption.length > 0) {
-      console.log(consumption);
+      console.log(formData.consumDate);
+      // Extrai apenas a parte da data antes do "T"
+
+      console.log(
+        consumption
+          .filter(
+            (item: any) =>
+              formatDate(item.consumptionDate) ===
+              formatDate(formData.consumDate)
+          )
+          .map((date: any) => date.consumptionDate)
+      );
     }
-  }, [consumption]);
+  }, [consumption, formData.consumDate]);
 
   /* Log de recursos */
   /*
@@ -252,7 +264,7 @@ const PcpProcessResources: React.FC = () => {
     }
   }, [formData.resourceId]);
   */
-  
+
   const handleRadioChange = (e: RadioChangeEvent) => {
     setSelectedRadio(e.target.value);
   };
@@ -306,7 +318,7 @@ const PcpProcessResources: React.FC = () => {
                   width: "calc(50% - 8px)",
                 }}
               >
-                <RangePicker style={{ width: "100%" }} format={weekFormat} />
+                <DatePicker style={{ width: "100%" }} format={weekFormat} />
               </Form.Item>
             </Form>
             <div>
@@ -373,12 +385,19 @@ const PcpProcessResources: React.FC = () => {
                   }}
                 >
                   <Select>
-                    {consumption.map((consumption: any) => (
-                      <Option key={consumption.id} value={consumption.id}>
-                        Data: {formatDateEnBr(consumption.consumptionDate)}{" "}
-                        Consumo: {consumption.vlConsum}
-                      </Option>
-                    ))}
+                    {consumption
+                      .filter(
+                        (item: any) =>
+                          formatDate(item.consumptionDate) ===
+                          formatDate(formData.consumDate)
+                      )
+                      .map((consumption: any) => (
+                        <Option key={consumption.id} value={consumption.id}>
+                          Data: {formatDateBr(consumption.consumptionDate)}{" "}
+                          Consumo: {consumption.vlConsum}
+                        </Option>
+                      ))}
+                    );
                   </Select>
                 </Form.Item>
                 <Form.Item
