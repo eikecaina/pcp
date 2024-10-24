@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from "uuid";
 import api from "../api";
 import { UUID } from "crypto";
 
@@ -15,6 +14,15 @@ interface FormData {
   endDate: Date;
   vlTime: number;
   periodAvailableId: UUID;
+}
+
+interface Consumption {
+  period: UUID;
+  process: UUID;
+  resource: UUID;
+  consumDate: UUID;
+  vlConsum: UUID;
+  note: string;
 }
 
 export async function GetAllResource() {
@@ -93,6 +101,26 @@ export async function Save(formData: FormData) {
     console.error("Erro ao salvar:", error);
     console.log(formData);
     throw error;
+  }
+}
+
+export async function SaveConsum(formData: Consumption) {
+  try {
+    const rec = {
+      consumption_date: formData.consumDate,
+      note_description: formData.note,
+      period_id: "3b090b38-28e8-490b-9438-c54936f47b65",
+      process_id: formData.process,
+      resource_id: formData.resource,
+      vl_consumption: formData.vlConsum,
+    };
+    console.log(rec);
+    const response = await api.post(`/ResourceConsumption`, rec);
+    console.log("Resposta da API:", response.data);
+
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao salvar: ", error);
   }
 }
 

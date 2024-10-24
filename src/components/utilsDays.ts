@@ -121,7 +121,12 @@ export function createVlTimeArray(
   return vlTimeArray;
 }
 
-export const formatDate = (isoString: Date | string): string => {
+export const formatDateEn = (isoString: Date | string): string => {
   const date = new Date(isoString);
   return date.toLocaleDateString("en-US"); // Formato MM/DD/YYYY
+};
+
+export const formatDateBr = (isoString: Date | string): string => {
+  const date = new Date(isoString);
+  return date.toLocaleDateString("pt-BR"); // Formato MM/DD/YYYY
 };

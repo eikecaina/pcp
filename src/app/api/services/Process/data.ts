@@ -13,8 +13,8 @@ interface FormData {
   definition: UUID;
   time: number;
   calendar: UUID;
-  cdAuditModifiedUser: string,
-  dsAuditModifiedUser: string
+  cdAuditModifiedUser: string;
+  dsAuditModifiedUser: string;
 }
 
 export async function GetAllProcess() {
@@ -29,12 +29,24 @@ export async function GetAllProcess() {
 
 export async function GetConnectionsByProcess(id: UUID) {
   try {
-    return await api.get(`/Process/GetConnectionsByProcess/${id}`).then((res) => {
-      return res.data;
-    });
-    
+    return await api
+      .get(`/Process/GetConnectionsByProcess/${id}`)
+      .then((res) => {
+        return res.data;
+      });
   } catch (error) {
     console.log("Erro ao salvar:", error);
+  }
+}
+
+export async function GetByProcessId(id: UUID) {
+  try {
+    return await api.get(`/Resource/GetByProcessId/${id}`).then((res) => {
+      return res.data;
+    });
+  } catch (error) {
+    console.error("Erro ao buscar", error);
+    
   }
 }
 
@@ -50,8 +62,8 @@ export async function Save(formData: FormData) {
     id_Definition: uuidv4(),
     vl_Time: formData.time,
     cd_Calendar: uuidv4(),
-    cdAuditModifiedUser: 'Eike',
-    dsAuditModifiedUser: 'Eike',
+    cdAuditModifiedUser: "Eike",
+    dsAuditModifiedUser: "Eike",
   };
 
   try {
@@ -80,11 +92,11 @@ export async function Update(formData: any) {
       vl_Time: formData.time,
       cd_Calendar: formData.calendar,
       dt_Audit_Created: Date.now,
-      cd_Audit_Created_User: '',
+      cd_Audit_Created_User: "",
       dt_Audit_Modified: Date.now,
-      cd_Audit_Modified_User: '',
-      ds_Audit_Created_User: '',
-      ds_Audit_Modified_User: ''
+      cd_Audit_Modified_User: "",
+      ds_Audit_Created_User: "",
+      ds_Audit_Modified_User: "",
     };
 
     return await api.put(`/Process/Update`, data).then((res) => {

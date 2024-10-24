@@ -3,12 +3,15 @@ import {
   Button,
   Card,
   Col,
+  DatePickerProps,
   Divider,
   Form,
   Input,
+  InputNumber,
   Radio,
   Row,
   Select,
+  message,
 } from "antd";
 import { DatePicker } from "antd";
 import { RadioChangeEvent } from "antd/lib";
@@ -21,9 +24,13 @@ import { useForm } from "antd/es/form/Form";
 import { GetAllFamily } from "@/app/api/services/Family/data";
 import { UUID } from "crypto";
 import {
+  GetAllResource,
   GetByFamilyId,
   GetConsumByResourceId,
+  SaveConsum,
 } from "@/app/api/services/Resource/data";
+import { GetAllProcess, GetByProcessId } from "@/app/api/services/Process/data";
+import { formatDateEn, formatDateBr } from "../utilsDays";
 const weekFormat = "DD/MM/YYYY";
 
 const { TextArea } = Input;
@@ -38,6 +45,22 @@ type Resource = {
   dsResource: string;
 };
 
+type Process = {
+  id: UUID;
+  dsProcess: string;
+};
+
+type ProcessResources = {
+  id: UUID;
+  dsResource: string;
+};
+
+type Consumption = {
+  id: UUID;
+  consumptionDate: Date;
+  vlConsumption: number;
+};
+
 const PcpProcessResources: React.FC = () => {
   const { t } = useTranslation("layout");
   const [form] = Form.useForm();
@@ -47,6 +70,26 @@ const PcpProcessResources: React.FC = () => {
   const [formData, setFormData] = useState<any>({});
   const [familys, setFamilys] = useState<Family[]>([]);
   const [resources, setResources] = useState<Resource[]>([]);
+  const [process, setProcess] = useState<Process[]>([]);
+  const [processResources, setprocessResources] = useState<ProcessResources[]>(
+    []
+  );
+  const [consumption, setConsumption] = useState<Consumption[]>([]);
+
+  const clearInputs = () => {
+    form.resetFields();
+    setFormData({});
+  };
+
+  const success = async () => {
+    try {
+      await SaveConsum(formData);
+      clearInputs();
+      message.success("Salvo com sucesso!");
+    } catch (error) {
+      message.error("Não foi possível salvar");
+    }
+  };
 
   /* Get all familys */
   const getFamilys = async () => {
@@ -76,6 +119,7 @@ const PcpProcessResources: React.FC = () => {
       ...prevData,
       [key]: value,
     }));
+    console.log(formData);
   };
 
   /* Get all resources */
@@ -97,37 +141,99 @@ const PcpProcessResources: React.FC = () => {
     }
   };
 
-  const getResourceConsumption = async () => {
-    const response = await GetConsumByResourceId(formData.resourceId);
-
-    const processIds = response.map(
-      (consumption: { process_id: UUID }) => consumption.process_id
-    );
-
-    const resourceIds = response.map(
-      (consumption: { resource_id: UUID }) => consumption.resource_id
-    );
-
-    setFormData((prevData: any) => ({
-      ...prevData,
-      processId: processIds,
-      resourceId: resourceIds,
-    }));
-  };
-
-  useEffect(() => {
-    if (formData.resourceId) {
-      getResourceConsumption();
-
-      console.log("Recurso ID:", formData.resourceId);
-      console.log("Processo ID:", formData.processId);
-    }
-  }, [formData.resourceId]);
-
   /* Render resource */
   useEffect(() => {
     getResourceByFamilyId();
   }, [formData.familyId]);
+
+  /* Get processos */
+  const getAllProcess = async () => {
+    try {
+      const response = await GetAllProcess();
+
+      const processData = response.map(
+        (processes: { id: UUID; ds_Process: string }) => ({
+          id: processes.id,
+          dsProcess: processes.ds_Process,
+        })
+      );
+      setProcess(processData);
+    } catch (error) {
+      console.error("Erro ao carregar processos", error);
+    }
+  };
+
+  /* Render process */
+  useEffect(() => {
+    getAllProcess();
+  }, []);
+
+  //Log process
+  useEffect(() => {
+    if (process.length > 0) {
+      console.log(process);
+    }
+  }, [process]);
+
+  /* Get processResources */
+  const getByProcessId = async () => {
+    const response = await GetByProcessId(formData.process);
+    console.log(response);
+
+    const resourcesData = response.map(
+      (resources: { id: UUID; ds_Resource: string }) => ({
+        id: resources.id,
+        dsResource: resources.ds_Resource,
+      })
+    );
+    setprocessResources(resourcesData);
+  };
+
+  //Log resources
+  useEffect(() => {
+    if (formData.process) {
+      getByProcessId();
+    }
+  }, [formData.process]);
+
+  useEffect(() => {
+    if (process.length > 0) {
+      console.log(processResources);
+    }
+  }, [processResources]);
+
+  const getResourceConsumption = async () => {
+    const response = await GetConsumByResourceId(formData.resource);
+    console.log(response);
+
+    const consumptionData = response.map(
+      (consumption: {
+        id: UUID;
+        vl_consumption: number;
+        consumption_date: Date;
+      }) => ({
+        id: consumption.id,
+        vlConsum: consumption.vl_consumption,
+        consumptionDate: consumption.consumption_date,
+      })
+    );
+
+    setConsumption(consumptionData);
+  };
+
+  /* Render Consumption */
+
+  useEffect(() => {
+    if (formData.resource) {
+      getResourceConsumption();
+    }
+  }, [formData.resource]);
+
+  useEffect(() => {
+    if (consumption.length > 0) {
+      console.log(consumption);
+    }
+  }, [consumption]);
 
   /* Log de recursos */
   /*
@@ -138,15 +244,29 @@ const PcpProcessResources: React.FC = () => {
   }, [resources]);
   */
 
-  /*Log recurso id */
+  /* Log recurso id */
+  /*
   useEffect(() => {
     if (formData.resourceId) {
       console.log(formData.resourceId);
     }
   }, [formData.resourceId]);
-
+  */
+  
   const handleRadioChange = (e: RadioChangeEvent) => {
     setSelectedRadio(e.target.value);
+  };
+
+  const handleInputChange = (fieldName: string, value: any) => {
+    setFormData((prevData: any) => ({
+      ...prevData,
+      [fieldName]: value,
+    }));
+  };
+
+  const handleDateChange = (fieldName: string) => (date: any) => {
+    const formattedDate = date ? date.toDate().toISOString() : "";
+    setFormData({ ...formData, [fieldName]: formattedDate });
   };
 
   return (
@@ -160,7 +280,7 @@ const PcpProcessResources: React.FC = () => {
         >
           <Divider orientation="left">{t("titles.group")}</Divider>
           <div style={{ padding: "5px 10px 5px 10px" }}>
-            <Form layout="vertical">
+            <Form layout="vertical" form={form}>
               <Form.Item
                 label="Familia"
                 style={{
@@ -243,16 +363,23 @@ const PcpProcessResources: React.FC = () => {
               </Form.Item>
             </div>
             <div>
-              <Form layout="vertical">
+              <Form layout="vertical" form={form}>
                 <Form.Item
-                  label="Controle"
+                  label="Controle final de fila"
                   style={{
                     display: "inline-block",
                     width: "calc(50% - 8px)",
                     margin: "0 15px 0 0",
                   }}
                 >
-                  <Select />
+                  <Select>
+                    {consumption.map((consumption: any) => (
+                      <Option key={consumption.id} value={consumption.id}>
+                        Data: {formatDateBr(consumption.consumptionDate)}{" "}
+                        Consumo: {consumption.vlConsum}
+                      </Option>
+                    ))}
+                  </Select>
                 </Form.Item>
                 <Form.Item
                   label={t("labels.client")}
@@ -284,6 +411,7 @@ const PcpProcessResources: React.FC = () => {
                 </Form.Item>
 
                 <Form.Item
+                  name="process"
                   label="Processo consumido"
                   style={{
                     width: "calc(50% - 8px)",
@@ -291,19 +419,37 @@ const PcpProcessResources: React.FC = () => {
                     margin: "0px 15px 0 0px",
                   }}
                 >
-                  <Select></Select>
+                  <Select
+                    onChange={(value) => handleSelectChange("process", value)}
+                  >
+                    {process.map((process: any) => (
+                      <Option key={process.id} value={process.id}>
+                        {process.dsProcess}
+                      </Option>
+                    ))}
+                  </Select>
                 </Form.Item>
                 <Form.Item
+                  name="resource"
                   label="Recurso consumido"
                   style={{
                     display: "inline-block",
                     width: "calc(50% - 8px)",
                   }}
                 >
-                  <Select></Select>
+                  <Select
+                    onChange={(value) => handleSelectChange("resource", value)}
+                  >
+                    {processResources.map((resources: any) => (
+                      <Option key={resources.id} value={resources.id}>
+                        {resources.dsResource}
+                      </Option>
+                    ))}
+                  </Select>
                 </Form.Item>
 
                 <Form.Item
+                  name="vlConsum"
                   label={t("labels.secondsConsum")}
                   style={{
                     width: "calc(50% - 8px)",
@@ -311,19 +457,33 @@ const PcpProcessResources: React.FC = () => {
                     margin: "0px 15px 0 0px",
                   }}
                 >
-                  <CustomInputNumber style={{ width: "100%" }} />
+                  <InputNumber
+                    name="vlConsum"
+                    onChange={(value) => handleInputChange("vlConsum", value)}
+                    style={{ width: "100%" }}
+                  />
                 </Form.Item>
                 <Form.Item
+                  name="consumDate"
                   label={t("labels.selectDate")}
                   style={{
                     display: "inline-block",
                     width: "calc(50% - 8px)",
                   }}
                 >
-                  <DatePicker style={{ width: "100%" }} format={weekFormat} />
+                  <DatePicker
+                    onChange={handleDateChange("consumDate")}
+                    style={{ width: "100%" }}
+                    format={weekFormat}
+                  />
                 </Form.Item>
-                <Form.Item label={t("labels.notes")}>
-                  <TextArea style={{ height: 50, resize: "none" }} />
+                <Form.Item name="note" label={t("labels.notes")}>
+                  <TextArea
+                    onChange={(value) =>
+                      handleInputChange("note", value.target.value)
+                    }
+                    style={{ height: 50, resize: "none" }}
+                  />
                 </Form.Item>
               </Form>
               <div
@@ -335,6 +495,7 @@ const PcpProcessResources: React.FC = () => {
               >
                 <Button
                   type="primary"
+                  onClick={success}
                   style={{
                     display: "inline-block",
                     width: "calc(25% - 8px)",
