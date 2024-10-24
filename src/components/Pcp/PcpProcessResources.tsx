@@ -30,7 +30,7 @@ import {
   SaveConsum,
 } from "@/app/api/services/Resource/data";
 import { GetAllProcess, GetByProcessId } from "@/app/api/services/Process/data";
-import { formatDateEn, formatDateBr } from "../utilsDays";
+import { formatDateEn, formatDateEnBr } from "../utilsDays";
 const weekFormat = "DD/MM/YYYY";
 
 const { TextArea } = Input;
@@ -375,7 +375,7 @@ const PcpProcessResources: React.FC = () => {
                   <Select>
                     {consumption.map((consumption: any) => (
                       <Option key={consumption.id} value={consumption.id}>
-                        Data: {formatDateBr(consumption.consumptionDate)}{" "}
+                        Data: {formatDateEnBr(consumption.consumptionDate)}{" "}
                         Consumo: {consumption.vlConsum}
                       </Option>
                     ))}

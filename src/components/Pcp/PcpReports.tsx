@@ -31,7 +31,7 @@ import {
   checkDatesRange,
   createVlTimeArray,
   findMatchingDates,
-  formatDate,
+  formatDateEn,
   isWorkDay,
 } from "../utilsDays";
 
@@ -87,7 +87,7 @@ const Reports: React.FC = () => {
     end = new Date(end);
 
     while (currentDate <= end) {
-      datesArray.push(formatDate(currentDate));
+      datesArray.push(formatDateEn(currentDate));
       currentDate.setDate(currentDate.getDate() + 1);
     }
 
@@ -151,7 +151,7 @@ const Reports: React.FC = () => {
 
       const consumptionData = response.map(
         (item: { consumption_date: string }) => ({
-          consumption_date: formatDate(item.consumption_date),
+          consumption_date: formatDateEn(item.consumption_date),
         })
       );
 
