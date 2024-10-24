@@ -56,7 +56,6 @@ const Reports: React.FC = () => {
     vl_consumption: [],
   });
   const [selectedRadio, setSelectedRadio] = useState(1);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [familys, setFamilys] = useState<Family[]>([]);
   const [resources, setResources] = useState<Resource[]>([]);
@@ -79,7 +78,7 @@ const Reports: React.FC = () => {
   const handleExport = () => {
     exportToExcel(inputValue);
   };
- 
+
   /*Transforma as duas datas de inicio e fim do rangepicker em um array*/
   const getDatesInRange = (start: Date, end: Date): string[] => {
     const datesArray: string[] = [];
@@ -172,7 +171,7 @@ const Reports: React.FC = () => {
   };
 
   useEffect(() => {
-    if (formData.resource) {
+    if (formData.consumpition_date.length > 0) {
       console.log("Datas: ", formData.consumption_date);
       console.log("Consumo: ", formData.vl_consumption);
     }
@@ -236,15 +235,17 @@ const Reports: React.FC = () => {
   };
 
   useEffect(() => {
-    if (formData.startDate) {
+    if (indexDate.length > 0 || consumIndexArray.length > 0) {
       dateInArray();
     }
-  }, [formData.startDate]);
+  }, [indexDate, consumIndexArray]);
 
   useEffect(() => {
-    console.log("Índice encontrado:", indexDate);
-    console.log("Índice encontrado consum:", consumIndexArray);
-  }, [formData.startDate]);
+    if (indexDate.length > 0 || consumIndexArray.length > 0) {
+      console.log("Índice encontrado:", indexDate);
+      console.log("Índice encontrado consum:", consumIndexArray);
+    }
+  }, [indexDate, consumIndexArray]);
 
   const updateConsum = (
     arrayDateIndices: number[],
@@ -269,9 +270,9 @@ const Reports: React.FC = () => {
   };
 
   useEffect(() => {
-    if (formData.startDate) {
-      updateConsum(indexDate, consumIndexArray);
-      console.log(consum);      
+    updateConsum(indexDate, consumIndexArray);
+    if (consum.length > 0) {
+      console.log(consum);
     }
   }, [formData.startDate]);
 
