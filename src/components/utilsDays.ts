@@ -54,56 +54,38 @@ export function checkDatesRange(
 export function findMatchingDates(
   datesArray: string[] | undefined,
   consumDate: string[] | undefined
-): number[] {
-  const logs: {
-    message: string;
-    date?: string;
-    index?: number;
-    from?: string;
-    consumIndex?: number;
-  }[] = [];
-
-  if (!consumDate || consumDate.length === 0) {
-    logs.push({
-      message: "Datas não encontradas",
-    });
-    console.log(logs);
-    return []; // Retorna um array vazio se consumDate estiver vazio
+): Record<string, number[]> {
+  if (
+    !consumDate ||
+    consumDate.length === 0 ||
+    !datesArray ||
+    datesArray.length === 0
+  ) {
+    return {};
   }
 
-  if (!datesArray || datesArray.length === 0) {
-    logs.push({
-      message: "Datas não encontradas",
-    });
-    console.log(logs);
-    return []; // Retorna um array vazio se datesArray estiver vazio
-  }
+  const matchingDates: Record<string, number[]> = {};
 
-  const matchingDates = consumDate
-    .map((consum, consumIndex) => {
-      const consumDateObj = new Date(consum);
+  consumDate.forEach((consum) => {
+    const consumDateObj = new Date(consum);
 
-      const index = datesArray.findIndex((dateString) => {
-        return new Date(dateString).getTime() === consumDateObj.getTime();
-      });
-
-      if (index !== -1) {
-        logs.push({
-          message: "Datas encontradas",
-          date: consum,
-          index,
-          consumIndex,
-          from: "datesArray",
-        });
-        return consumIndex; // Retorna apenas o consumIndex
+    datesArray.forEach((dateString, index) => {
+      const datesArrayObj = new Date(dateString);
+      if (
+        consumDateObj.getFullYear() === datesArrayObj.getFullYear() &&
+        consumDateObj.getMonth() === datesArrayObj.getMonth() &&
+        consumDateObj.getDate() === datesArrayObj.getDate()
+      ) {
+        // Adiciona o índice ao array correspondente à data
+        if (!matchingDates[consum]) {
+          matchingDates[consum] = [];
+        }
+        matchingDates[consum].push(index);
       }
-      return null; // Retorna null se não houver correspondência
-    })
-    .filter((item) => item !== null); // Filtra os itens nulos
+    });
+  });
 
-  console.log(logs);
-
-  return matchingDates as number[]; // Retorna todos os consumIndex encontrados
+  return matchingDates;
 }
 
 export function createVlTimeArray(
@@ -121,12 +103,14 @@ export function createVlTimeArray(
   return vlTimeArray;
 }
 
-export const formatDateEn = (isoString: Date | string): string => {
-  const date = new Date(isoString);
-  return date.toLocaleDateString("en-US"); // Formato MM/DD/YYYY
+export const formatDateEn = (date: Date): string => {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
 };
 
 export const formatDateBr = (isoString: Date | string): string => {
   const date = new Date(isoString);
-  return date.toLocaleDateString("pt-BR"); // Formato MM/DD/YYYY
+  return date.toLocaleDateString("pt-BR");
 };

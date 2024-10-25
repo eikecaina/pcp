@@ -31,6 +31,7 @@ import {
   checkDatesRange,
   createVlTimeArray,
   findMatchingDates,
+  formatDateBr,
   formatDateEn,
   isWorkDay,
 } from "../utilsDays";
@@ -48,6 +49,11 @@ interface Resource {
   calendar: UUID;
 }
 
+type Consumption = {
+  date: Date;
+  vlConsum: number;
+};
+
 const { RangePicker } = DatePicker;
 
 const Reports: React.FC = () => {
@@ -59,12 +65,11 @@ const Reports: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
   const [familys, setFamilys] = useState<Family[]>([]);
   const [resources, setResources] = useState<Resource[]>([]);
-  const [calendarDays, setCalendarDays] = useState<Date[]>([]);
   const [dates, setDates] = useState<string[]>([]);
   const [time, setTime] = useState<any[]>([]);
-  const [consum, setConsum] = useState<number[]>([]);
-  const [indexDate, setIndexDate] = useState<number[]>([]);
-  const [consumIndexArray, setConsumIndexArray] = useState<number[]>([]);
+  const [consum, setConsum] = useState<(number | null)[]>([]);
+  const [consumption, setConsumption] = useState<Consumption[]>([]);
+  const [datesCompared, setDatesCompared] = useState<Date[]>([]);
 
   const handleRadioChange = (e: RadioChangeEvent) => {
     setSelectedRadio(e.target.value);
@@ -79,7 +84,7 @@ const Reports: React.FC = () => {
     exportToExcel(inputValue);
   };
 
-  /*Transforma as duas datas de inicio e fim do rangepicker em um array*/
+  /* Transforma as duas datas de inicio e fim do rangepicker em um array */
   const getDatesInRange = (start: Date, end: Date): string[] => {
     const datesArray: string[] = [];
     let currentDate = new Date(start);
@@ -93,7 +98,7 @@ const Reports: React.FC = () => {
     return datesArray;
   };
 
-  /*Pegar datas do rangepicker*/
+  /* Pegar datas do rangepicker */
   const handleChangeDate = (selectedDays: any[]) => {
     if (selectedDays && selectedDays[0] && selectedDays[1]) {
       const [startDate, endDate] = selectedDays;
@@ -109,6 +114,7 @@ const Reports: React.FC = () => {
     }
   };
 
+  /* Get all familys */
   const fetchFamilys = async () => {
     try {
       const response = await GetAllFamily();
@@ -128,6 +134,7 @@ const Reports: React.FC = () => {
     fetchFamilys();
   }, []);
 
+  /*Get Resources com base na familia */
   const fetchResources = async () => {
     try {
       const response = await GetByFamilyId(formData.family);
@@ -143,40 +150,35 @@ const Reports: React.FC = () => {
     }
   }, [formData.family]);
 
-  /*Requisição de recusrsos para pegar o consumo e a data*/
+  //Requisição de recursos para pegar o consumo e a data
   const fetchConsumption = async () => {
     try {
       const response = await GetConsumByResourceId(formData.resource);
 
-      const consumptionData = response.map(
-        (item: { consumption_date: string }) => ({
-          consumption_date: formatDateEn(item.consumption_date),
+      const consumption = response.map(
+        (item: { consumption_date: string; vl_consumption: number }) => ({
+          date: new Date(item.consumption_date),
+          vlConsum: item.vl_consumption,
         })
       );
 
-      const vlConsumption = response.map(
-        (item: { vl_consumption: number }) => item.vl_consumption
-      );
-
-      setFormData((prevData: any) => ({
-        ...prevData,
-        consumption_date: consumptionData.map(
-          (data: { consumption_date: any }) => data.consumption_date
-        ),
-        vl_consumption: vlConsumption,
-      }));
+      setConsumption(consumption);
     } catch (error) {
       console.log(error, "Erro ao buscar consumo");
     }
   };
 
+  const consumDates = consumption.map((item: Consumption) =>
+    formatDateEn(item.date)
+  );
+
   useEffect(() => {
-    if (formData.consumpition_date.length > 0) {
-      console.log("Datas: ", formData.consumption_date);
-      console.log("Consumo: ", formData.vl_consumption);
+    if (formData.resource) {
+      fetchConsumption();
     }
   }, [formData.resource]);
 
+  /*
   const fetchCalendarAndAvailables = async () => {
     try {
       const response = await GetDataFromId(formData.resource);
@@ -192,7 +194,9 @@ const Reports: React.FC = () => {
       console.log(error, "Erro ao buscar calendário e disponibilidade");
     }
   };
+  
 
+  
   const fetchAllData = async () => {
     try {
       await Promise.all([fetchCalendarAndAvailables(), fetchConsumption()]);
@@ -220,61 +224,87 @@ const Reports: React.FC = () => {
       fetchCalendarDays();
     }
   }, [formData.calendar]);
+  */
 
-  /* Comparativo de index */
-  const dateInArray = () => {
-    const dateIndex = findMatchingDates(formData.consumption_date, dates);
-    const consumIndex = findMatchingDates(dates, formData.consumption_date);
+  /* Comparativo de datas */
+  useEffect(() => {
+    if (formData.resource) {
+      const result: Date[] = [];
+      const timestamps2 = new Set(
+        consumDates
+          .map((date) => new Date(date).getTime())
+          .filter((time) => !isNaN(time))
+      );
 
-    if (dateIndex.length > 0) {
-      setIndexDate(dateIndex);
-      setConsumIndexArray(consumIndex);
-    } else {
-      console.log("Nenhum índice encontrado.");
+      for (const date1 of dates) {
+        const time1 = new Date(date1).getTime();
+        if (!isNaN(time1) && timestamps2.has(time1)) {
+          result.push(new Date(time1));
+        }
+      }
+
+      if (
+        result.length !== datesCompared.length ||
+        !result.every(
+          (date, index) => date.getTime() === datesCompared[index]?.getTime()
+        )
+      ) {
+        setDatesCompared(result);
+      }
+
+      if (datesCompared.length > 0) {
+        const formattedDates = datesCompared.map((date) => formatDateEn(date));
+        console.log("Datas comparadas formatadas: ", formattedDates);
+      } else {
+        console.log("Não há datas comparadas para formatar.");
+      }
     }
-  };
+  }, [formData.resource, dates, consumDates, datesCompared]);
+
+  /* Pegar consumo correto */
+  function getConsumValues(
+    datesCompared: string[],
+    consumData: Consumption[],
+    formatDateFunc: (date: Date) => string
+  ): (number | null)[] {
+    const consumMap: Record<string, number> = {};
+
+    consumData.forEach((data) => {
+      const dateKey = formatDateFunc(new Date(data.date));
+
+      if (consumMap[dateKey]) {
+        consumMap[dateKey] += data.vlConsum;
+      } else {
+        consumMap[dateKey] = data.vlConsum;
+      }
+    });
+
+    const values: (number | null)[] = Array(datesCompared.length).fill(null);
+
+    datesCompared.forEach((comparedDate, index) => {
+      const value =
+        consumMap[comparedDate] !== undefined ? consumMap[comparedDate] : null;
+
+      if (comparedDate === "21") {
+        values[index] = 100;
+      } else if (value !== null) {
+        values[index] = value;
+      }
+    });
+    console.log("Consum Map:", consumMap);
+
+    return values;
+  }
 
   useEffect(() => {
-    if (indexDate.length > 0 || consumIndexArray.length > 0) {
-      dateInArray();
+    if (dates.length > 0) {
+      const vlConsumValues = getConsumValues(dates, consumption, formatDateEn);
+
+      setConsum(vlConsumValues);
+
+      console.log("Valores de consumo:", vlConsumValues);
     }
-  }, [indexDate, consumIndexArray]);
-
-  useEffect(() => {
-    if (indexDate.length > 0 || consumIndexArray.length > 0) {
-      console.log("Índice encontrado:", indexDate);
-      console.log("Índice encontrado consum:", consumIndexArray);
-    }
-  }, [indexDate, consumIndexArray]);
-
-  const updateConsum = (
-    arrayDateIndices: number[],
-    consumIndices: number[]
-  ) => {
-    if (formData.vl_consumption) {
-      setConsum((prevConsum) => {
-        const newConsum = [...prevConsum];
-
-        arrayDateIndices.forEach((arrayDateIndex, i) => {
-          const consumIndex = consumIndices[i];
-          if (arrayDateIndex >= 0 && consumIndex >= 0) {
-            newConsum[arrayDateIndex] = formData.vl_consumption[consumIndex];
-          }
-        });
-
-        return newConsum;
-      });
-    } else {
-      console.log("vl_consumption não definido.");
-    }
-  };
-
-  useEffect(() => {
-    updateConsum(indexDate, consumIndexArray);
-    if (consum.length > 0) {
-      console.log(consum);
-    }
-  }, [formData.startDate]);
+  }, [dates, consumption]);
 
   return (
     <Row>

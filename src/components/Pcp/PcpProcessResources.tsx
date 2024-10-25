@@ -203,6 +203,7 @@ const PcpProcessResources: React.FC = () => {
     }
   }, [processResources]);
 
+  /* Get consumption */
   const getResourceConsumption = async () => {
     const response = await GetConsumByResourceId(formData.resource);
     console.log(response);

@@ -12,6 +12,7 @@ import {
   Legend,
   ChartData,
   ChartOptions,
+  Filler
 } from "chart.js";
 import { Chart } from "react-chartjs-2";
 
@@ -23,6 +24,7 @@ ChartJS.register(
   LineController,
   BarController,
   BarElement,
+  Filler,
   Title,
   Tooltip,
   Legend
@@ -31,7 +33,7 @@ ChartJS.register(
 interface MixedGraphProps {
   labels: string[];
   time: number[];
-  consum: number[];
+  consum: (number | null)[];
 }
 
 export const MixedGraph: React.FC<MixedGraphProps> = ({
