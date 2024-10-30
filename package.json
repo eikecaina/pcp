@@ -8,11 +8,13 @@
     "start": "next start"
   },
   "dependencies": {
+    "@ag-grid-enterprise/side-bar": "^32.3.1",
     "@ant-design/icons": "^5.3.1",
     "@emotion/styled": "^11.11.0",
     "@wmo-dev/language-selector": "^1.2.1",
     "ag-charts-react": "^9.2.1",
     "ag-grid-community": "^31.2.1",
+    "ag-grid-enterprise": "^32.3.1",
     "ag-grid-react": "^31.2.1",
     "antd": "^5.15.2",
     "axios": "^1.6.8",

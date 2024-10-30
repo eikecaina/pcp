@@ -53,12 +53,22 @@ type QuotationItem = {
   };
 };
 
+type Quotation = {
+  created: Date;
+  customer: string;
+  id: UUID;
+  ov: number;
+  quotation: string;
+  user: string;
+};
+
 export const GeneralData: React.FC = () => {
   const [data, setData] = useState<any>({});
   const [fetchData, setFetchData] = useState(true);
   const [selectedIndex, setSelectedIndex] = useState<any>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [rootId, setRootId] = useState();
+  const [quotation, setQuotation] = useState<Quotation>();
   const [formData, setFormData] = useState<any>({
     quotation_Items: [
       {
@@ -70,6 +80,7 @@ export const GeneralData: React.FC = () => {
       },
     ],
   });
+
   const [isModalConfigOpen, setIsModalConfigOpen] = useState(false);
 
   const [form] = Form.useForm();
@@ -103,7 +114,7 @@ export const GeneralData: React.FC = () => {
       quotation_Value: nextValue,
       config_Item: {
         value: [],
-        key: [], // Inicialize o array key aqui
+        key: [],
       },
     };
 
@@ -119,11 +130,6 @@ export const GeneralData: React.FC = () => {
         quotation_Items: sortedItems,
       };
     });
-    updateQuotationItemValue(
-      selectedIndex ?? 0,
-      formData.value_id,
-      formData.key
-    );
     message.success(`Item adicionado`);
   };
 
@@ -256,18 +262,15 @@ export const GeneralData: React.FC = () => {
 
   const { t } = useTranslation("layout");
 
-  const handleRowSelect = (selectedData: any[]) => {
-    if (selectedData && selectedData.length > 0) {
-      const selectedRowData = selectedData[0];
-      setFormData({
-        user: selectedRowData.user || "",
-        ds_Customer: selectedRowData.ds_Customer || "",
-        ds_Quotation: selectedRowData.ds_Quotation || null,
-        ds_Ov: selectedRowData.ds_Ov || null,
-        dt_Created: selectedRowData.dt_Created || "",
-      });
-    }
+  const handleRowSelect = (selectedData: any) => {
+    setQuotation(selectedData);
   };
+
+  useEffect(() => {
+    if (quotation) {
+      console.log("Atualizado:", quotation);
+    }
+  }, [quotation]);
 
   const handleInputChange = (fieldName: string, value: any) => {
     setFormData({ ...formData, [fieldName]: value });
@@ -325,8 +328,8 @@ export const GeneralData: React.FC = () => {
               <Space.Compact style={{ width: "100%" }}>
                 <InputNumber
                   style={{ width: "100%" }}
-                  name="ds_Quotation"
-                  value={formData.ds_Quotation}
+                  name="quotation"
+                  value={quotation?.quotation}
                   onChange={(e) => handleInputChange("ds_Quotation", e)}
                 />
                 <Tooltip title="Abrir Cotação">
@@ -388,10 +391,9 @@ export const GeneralData: React.FC = () => {
               label={t("labels.client")}
             >
               <Input
-                name="ds_Customer"
-                onChange={(e) =>
-                  handleInputChange("ds_Customer", e.target.value)
-                }
+                name="customer"
+                value={quotation?.customer}
+                onChange={(e) => handleInputChange("customer", e.target.value)}
                 style={{ width: "100%" }}
               />
             </Form.Item>
@@ -405,9 +407,9 @@ export const GeneralData: React.FC = () => {
               label={t("labels.salesOrder")}
             >
               <InputNumber
-                name="ds_Ov"
-                value={formData.ds_Ov}
-                onChange={(e) => handleInputChange("ds_Ov", e)}
+                name="ov"
+                value={quotation?.ov}
+                onChange={(e) => handleInputChange("ov", e)}
                 style={{ width: "100%" }}
               />
             </Form.Item>

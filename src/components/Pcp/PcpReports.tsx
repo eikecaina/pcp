@@ -25,12 +25,7 @@ import {
   GetByFamilyId,
   GetConsumByResourceId,
 } from "@/app/api/services/Resource/data";
-import { GetDataFromId } from "@/app/api/services/Resource/data";
-import { GetDataDaysFromId } from "@/app/api/services/Calendar/data";
 import {
-  checkDatesRange,
-  createVlTimeArray,
-  findMatchingDates,
   formatDateBr,
   formatDateEn,
   isWorkDay,
@@ -282,15 +277,10 @@ const Reports: React.FC = () => {
     const values: (number | null)[] = Array(datesCompared.length).fill(null);
 
     datesCompared.forEach((comparedDate, index) => {
-      const value =
+      values[index] =
         consumMap[comparedDate] !== undefined ? consumMap[comparedDate] : null;
-
-      if (comparedDate === "21") {
-        values[index] = 100;
-      } else if (value !== null) {
-        values[index] = value;
-      }
     });
+
     console.log("Consum Map:", consumMap);
 
     return values;
@@ -299,10 +289,7 @@ const Reports: React.FC = () => {
   useEffect(() => {
     if (dates.length > 0) {
       const vlConsumValues = getConsumValues(dates, consumption, formatDateEn);
-
       setConsum(vlConsumValues);
-
-      console.log("Valores de consumo:", vlConsumValues);
     }
   }, [dates, consumption]);
 
